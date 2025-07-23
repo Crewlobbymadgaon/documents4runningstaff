@@ -1,15 +1,16 @@
 const CACHE_NAME = 'library-cache-v1';
 const urlsToCache = [
-  '/',
-  '/index.html',
-  '/manifest.json',
-  '/favicon.ico',
-  '/icon-192.png',
-  '/icon-512.png',
-  'https://cdn.tailwindcss.com',
-  'https://fonts.googleapis.com/css2?family=Rajdhani:wght@600&display=swap',
-  // Add other local files if needed
+  '/documents4runningstaff/',
+  '/documents4runningstaff/index.html',
+  '/documents4runningstaff/manifest.json',
+  '/documents4runningstaff/favicon.ico',
+  '/documents4runningstaff/icon-192.png',
+  '/documents4runningstaff/icon-512.png',
+  // Add your JS/CSS assets too, like:
+  '/documents4runningstaff/styles.css',
+  '/documents4runningstaff/app.js'
 ];
+
 
 // Install event
 self.addEventListener('install', event => {
