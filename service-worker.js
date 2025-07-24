@@ -2,6 +2,7 @@ const CACHE_NAME = 'library-cache-v1';
 const urlsToCache = [
   '/documents4runningstaff/',
   '/documents4runningstaff/index.html',
+  '/documents4runningstaff/offline.html',
   '/documents4runningstaff/manifest.json',
   '/documents4runningstaff/favicon.ico',
   '/documents4runningstaff/icon-192.png',
