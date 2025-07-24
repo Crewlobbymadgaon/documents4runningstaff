@@ -1,4 +1,4 @@
-// Open DB
+// Open IndexedDB
 const dbPromise = idb.openDB('library-db', 1, {
   upgrade(db) {
     if (!db.objectStoreNames.contains('acknowledgements')) {
@@ -7,7 +7,7 @@ const dbPromise = idb.openDB('library-db', 1, {
   }
 });
 
-// Save acknowledgement
+// Save Acknowledgement
 async function saveAcknowledgement(docId) {
   const db = await dbPromise;
   await db.put('acknowledgements', {
@@ -16,21 +16,21 @@ async function saveAcknowledgement(docId) {
   });
 }
 
-// Check if already acknowledged
+// Check Acknowledgement
 async function isAcknowledged(docId) {
   const db = await dbPromise;
   const entry = await db.get('acknowledgements', docId);
   return !!entry;
 }
 
-// Handle button click
+// Handle Button Click
 async function handleAcknowledge(docId, button) {
   await saveAcknowledgement(docId);
   button.textContent = '✅ Acknowledged';
   button.disabled = true;
 }
 
-// Auto-mark acknowledged buttons on load
+// On Load, Check All Acknowledgement Buttons
 window.addEventListener('DOMContentLoaded', async () => {
   const buttons = document.querySelectorAll('[data-doc-id]');
   for (const button of buttons) {
