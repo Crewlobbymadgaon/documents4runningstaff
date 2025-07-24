@@ -9,7 +9,6 @@ const STATIC_FILES = [
   '/documents4runningstaff/icon-192.png',
   '/documents4runningstaff/icon-512.png',
   '/documents4runningstaff/styles.css',
-  '/documents4runningstaff/script.js',
 ];
 
 // Install event: cache static files
