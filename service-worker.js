@@ -7,15 +7,12 @@ const urlsToCache = [
   '/documents4runningstaff/favicon.ico',
   '/documents4runningstaff/icon-192.png',
   '/documents4runningstaff/icon-512.png',
-  '/documents4runningstaff/script.js', // your JS file(s)
-  '/documents4runningstaff/styles.css', // optional if any
-  // include each image used in menu items
+  '/documents4runningstaff/script.js',
+  '/documents4runningstaff/styles.css',
   '/documents4runningstaff/img/shedorder.png',
   '/documents4runningstaff/img/safety.png',
-  // add all such assets
+  // add more assets here as needed
 ];
-
-
 
 // Install event
 self.addEventListener('install', event => {
@@ -26,7 +23,6 @@ self.addEventListener('install', event => {
   );
   self.skipWaiting();
 });
-
 
 // Activate event
 self.addEventListener('activate', event => {
@@ -40,11 +36,11 @@ self.addEventListener('activate', event => {
   self.clients.claim();
 });
 
+// Fetch event
 self.addEventListener('fetch', event => {
   event.respondWith(
     caches.match(event.request, { ignoreSearch: true }).then(response => {
       return response || fetch(event.request).catch(() => {
-        // Optional fallback: return a default offline page or icon
         if (event.request.destination === 'document') {
           return caches.match('/documents4runningstaff/offline.html');
         }
@@ -52,6 +48,3 @@ self.addEventListener('fetch', event => {
     })
   );
 });
-
-
-
