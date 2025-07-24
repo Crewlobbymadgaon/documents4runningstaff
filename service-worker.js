@@ -12,21 +12,19 @@ const urlsToCache = [
   '/documents4runningstaff/styles.css',
   '/documents4runningstaff/img/shedorder.png',
   '/documents4runningstaff/img/safety.png',
-  '/documents4runningstaff/img/placeholder.png', // ✅ added fallback image
-  // Add more static assets like PDFs here if needed
+  '/documents4runningstaff/img/placeholder.png',
+  // Add more static files or PDFs if needed
 ];
 
-// Install event – cache essential assets
+// Install event – cache essential static assets
 self.addEventListener('install', event => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => {
-      return cache.addAll(urlsToCache);
-    })
+    caches.open(CACHE_NAME).then(cache => cache.addAll(urlsToCache))
   );
-  self.skipWaiting();
+  self.skipWaiting(); // Activate service worker immediately
 });
 
-// Activate event – clear old caches
+// Activate event – delete old caches if any
 self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys().then(keys =>
@@ -37,35 +35,46 @@ self.addEventListener('activate', event => {
       )
     )
   );
-  self.clients.claim();
+  self.clients.claim(); // Take control of all pages
 });
 
-// Fetch event – cache with network fallback and update
+// Fetch event – network-first, fallback to cache or offline.html
 self.addEventListener('fetch', event => {
   event.respondWith(
-    caches.open(CACHE_NAME).then(cache =>
-      cache.match(event.request, { ignoreSearch: true }).then(response => {
-        const fetchPromise = fetch(event.request).then(networkResponse => {
-          // If valid, clone and store in cache
-          if (networkResponse && networkResponse.status === 200 && event.request.method === 'GET') {
+    fetch(event.request)
+      .then(networkResponse => {
+        // If successful, clone and store in cache
+        return caches.open(CACHE_NAME).then(cache => {
+          if (
+            networkResponse &&
+            networkResponse.status === 200 &&
+            event.request.method === 'GET'
+          ) {
             cache.put(event.request, networkResponse.clone());
           }
           return networkResponse;
-        }).catch(() => {
-          // Offline fallback logic
+        });
+      })
+      .catch(() => {
+        // If network fails (offline), try cache
+        return caches.match(event.request, { ignoreSearch: true }).then(response => {
+          if (response) return response;
+
+          // Fallbacks based on request type
           if (event.request.destination === 'document') {
             return caches.match('/documents4runningstaff/offline.html');
           } else if (event.request.destination === 'image') {
             return caches.match('/documents4runningstaff/img/placeholder.png');
           } else if (event.request.destination === 'style') {
-            return new Response('', { headers: { 'Content-Type': 'text/css' } });
+            return new Response('', {
+              headers: { 'Content-Type': 'text/css' },
+            });
           } else if (event.request.destination === 'script') {
-            return new Response('', { headers: { 'Content-Type': 'application/javascript' } });
+            return new Response('', {
+              headers: { 'Content-Type': 'application/javascript' },
+            });
           }
         });
-
-        return response || fetchPromise;
       })
-    )
   );
 });
