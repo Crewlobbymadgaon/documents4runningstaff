@@ -1,80 +1,72 @@
-const CACHE_NAME = 'library-cache-v1';
-const urlsToCache = [
+const CACHE_NAME = 'library-cache-v2';
+const STATIC_ASSETS = [
   '/documents4runningstaff/',
   '/documents4runningstaff/index.html',
   '/documents4runningstaff/offline.html',
-  '/documents4runningstaff/shed_order.html',
   '/documents4runningstaff/manifest.json',
   '/documents4runningstaff/favicon.ico',
   '/documents4runningstaff/icon-192.png',
   '/documents4runningstaff/icon-512.png',
-  '/documents4runningstaff/script.js',
   '/documents4runningstaff/styles.css',
-  '/documents4runningstaff/img/shedorder.png',
-  '/documents4runningstaff/img/safety.png',
+  '/documents4runningstaff/script.js',
   '/documents4runningstaff/img/placeholder.png',
-  // Add more static files or PDFs if needed
 ];
 
-// Install event – cache essential static assets
+// Install: cache static assets
 self.addEventListener('install', event => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => cache.addAll(urlsToCache))
+    caches.open(CACHE_NAME).then(cache => cache.addAll(STATIC_ASSETS))
   );
-  self.skipWaiting(); // Activate service worker immediately
+  self.skipWaiting();
 });
 
-// Activate event – delete old caches if any
+// Activate: clear old caches
 self.addEventListener('activate', event => {
   event.waitUntil(
-    caches.keys().then(keys =>
-      Promise.all(
-        keys
-          .filter(key => key !== CACHE_NAME)
-          .map(key => caches.delete(key))
-      )
+    caches.keys().then(keys => 
+      Promise.all(keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)))
     )
   );
-  self.clients.claim(); // Take control of all pages
+  self.clients.claim();
 });
 
-// Fetch event – network-first, fallback to cache or offline.html
+// Fetch: handle requests
 self.addEventListener('fetch', event => {
-  event.respondWith(
-    fetch(event.request)
-      .then(networkResponse => {
-        // If successful, clone and store in cache
-        return caches.open(CACHE_NAME).then(cache => {
-          if (
-            networkResponse &&
-            networkResponse.status === 200 &&
-            event.request.method === 'GET'
-          ) {
-            cache.put(event.request, networkResponse.clone());
-          }
-          return networkResponse;
-        });
-      })
-      .catch(() => {
-        // If network fails (offline), try cache
-        return caches.match(event.request, { ignoreSearch: true }).then(response => {
-          if (response) return response;
+  const req = event.request;
 
-          // Fallbacks based on request type
-          if (event.request.destination === 'document') {
-            return caches.match('/documents4runningstaff/offline.html');
-          } else if (event.request.destination === 'image') {
-            return caches.match('/documents4runningstaff/img/placeholder.png');
-          } else if (event.request.destination === 'style') {
-            return new Response('', {
-              headers: { 'Content-Type': 'text/css' },
-            });
-          } else if (event.request.destination === 'script') {
-            return new Response('', {
-              headers: { 'Content-Type': 'application/javascript' },
-            });
-          }
-        });
-      })
-  );
+  if (req.mode === 'navigate') {
+    event.respondWith(
+      fetch(req)
+        .then(res => {
+          const copy = res.clone();
+          caches.open(CACHE_NAME).then(cache => cache.put(req, copy));
+          return res;
+        })
+        .catch(() =>
+          caches.match(req).then(res => res || caches.match('/documents4runningstaff/offline.html'))
+        )
+    );
+  } else {
+    event.respondWith(
+      caches.match(req).then(res => 
+        res || fetch(req)
+          .then(netRes => {
+            if (req.method === 'GET') {
+              const copy = netRes.clone();
+              caches.open(CACHE_NAME).then(cache => cache.put(req, copy));
+            }
+            return netRes;
+          })
+          .catch(() => {
+            if (req.destination === 'image') {
+              return caches.match('/documents4runningstaff/img/placeholder.png');
+            } else if (req.destination === 'style') {
+              return new Response('', { headers: { 'Content-Type': 'text/css' } });
+            } else if (req.destination === 'script') {
+              return new Response('', { headers: { 'Content-Type': 'application/javascript' } });
+            }
+          })
+      )
+    );
+  }
 });
