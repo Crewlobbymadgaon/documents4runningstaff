@@ -1,5 +1,6 @@
 const CACHE_NAME = 'library-cache-v2';
-const STATIC_ASSETS = [
+const STATIC_FILES = [
+  '/',
   '/documents4runningstaff/',
   '/documents4runningstaff/index.html',
   '/documents4runningstaff/offline.html',
@@ -9,63 +10,47 @@ const STATIC_ASSETS = [
   '/documents4runningstaff/icon-512.png',
   '/documents4runningstaff/styles.css',
   '/documents4runningstaff/script.js',
-  '/documents4runningstaff/img/placeholder.png',
 ];
 
-// Install: cache static assets
+// Install event: cache static files
 self.addEventListener('install', event => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => cache.addAll(STATIC_ASSETS))
+    caches.open(CACHE_NAME).then(cache => cache.addAll(STATIC_FILES))
   );
   self.skipWaiting();
 });
 
-// Activate: clear old caches
+// Activate: delete old caches
 self.addEventListener('activate', event => {
   event.waitUntil(
-    caches.keys().then(keys => 
+    caches.keys().then(keys =>
       Promise.all(keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)))
     )
   );
   self.clients.claim();
 });
 
-// Fetch: handle requests
+// Fetch: serve cached first, then network
 self.addEventListener('fetch', event => {
-  const req = event.request;
+  const url = new URL(event.request.url);
 
-  if (req.mode === 'navigate') {
+  // If it's a PDF, cache it dynamically
+  if (url.pathname.endsWith('.pdf')) {
     event.respondWith(
-      fetch(req)
-        .then(res => {
-          const copy = res.clone();
-          caches.open(CACHE_NAME).then(cache => cache.put(req, copy));
-          return res;
-        })
-        .catch(() =>
-          caches.match(req).then(res => res || caches.match('/documents4runningstaff/offline.html'))
-        )
+      caches.open(CACHE_NAME).then(cache =>
+        fetch(event.request)
+          .then(response => {
+            cache.put(event.request, response.clone());
+            return response;
+          })
+          .catch(() => cache.match(event.request))
+      )
     );
   } else {
+    // For everything else
     event.respondWith(
-      caches.match(req).then(res => 
-        res || fetch(req)
-          .then(netRes => {
-            if (req.method === 'GET') {
-              const copy = netRes.clone();
-              caches.open(CACHE_NAME).then(cache => cache.put(req, copy));
-            }
-            return netRes;
-          })
-          .catch(() => {
-            if (req.destination === 'image') {
-              return caches.match('/documents4runningstaff/img/placeholder.png');
-            } else if (req.destination === 'style') {
-              return new Response('', { headers: { 'Content-Type': 'text/css' } });
-            } else if (req.destination === 'script') {
-              return new Response('', { headers: { 'Content-Type': 'application/javascript' } });
-            }
-          })
+      caches.match(event.request).then(response =>
+        response || fetch(event.request).catch(() => caches.match('/documents4runningstaff/offline.html'))
       )
     );
   }
