@@ -7,11 +7,10 @@
     <link rel="manifest" href="/documents4runningstaff/manifest.json" />
     <link rel="icon" href="/documents4runningstaff/favicon.ico" />
     <link rel="apple-touch-icon" href="/documents4runningstaff/icon-192.png" />
-
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600&display=swap" rel="stylesheet" />
+    
     
     <meta name="theme-color" content="#1f2937" />
-
-    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600&display=swap" rel="stylesheet" />
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/idb@7/build/iife/index-min.js"></script>
     <style>
@@ -50,7 +49,6 @@
 </div>
 
 <!-- ONE Menu Grid: Same for all screens<!-- Google Font -->
-<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600&display=swap" rel="stylesheet" />
 
 <!-- Menu Grid -->
 <div id="menu-items"
@@ -262,7 +260,7 @@
   <div id="modal" class="fixed inset-0 bg-black bg-opacity-50 hidden justify-center items-center z-50">
     <div class="bg-white p-6 rounded-lg shadow-lg w-[95%] sm:w-[500px] relative">
       <h2 class="text-xl font-bold mb-2" id="modalTitle">Document Title</h2>
-      <p class="text-sm text-gray-600 mb-4">[Preview of the document content here]</p>
+      <div id="modalContent" class="mb-4"></div>
       
       <!-- Action Buttons -->
       <div class="flex flex-col gap-3">
@@ -290,25 +288,46 @@
   </div>
 
   <!-- JS -->
-  <script>
-    function openModal(title) {
-      document.getElementById('modalTitle').innerText = title;
-      document.getElementById('modal').classList.remove('hidden');
-      document.getElementById('modal').classList.add('flex');
-    }
+    <script>
+  function openModal(title) {
+    const modal = document.getElementById("modal");
+    const modalTitle = document.getElementById("modalTitle");
+    const modalContent = document.getElementById("modalContent");
 
-    function closeModal() {
-      document.getElementById('modal').classList.add('hidden');
-    }
+    // Map title to file path
+    const fileMap = {
+      "Shed Order": "/documents4runningstaff/doc_shed_order_mao_2025/01-2025.pdf,
+      "Safety Circular": "/documents4runningstaff/safety-circular.pdf",
+      "Counselling Subject": "/documents4runningstaff/counselling.pdf",
+      "G&SR Correction Slip": "/documents4runningstaff/gsr-correction.pdf",
+      "WTT Correction Slip": "/documents4runningstaff/wtt-correction.pdf",
+      "Accident Manual Correction": "/documents4runningstaff/accident-manual.pdf",
+    };
 
+    modalTitle.textContent = title;
+
+    // Embed the PDF using iframe
+    modalContent.innerHTML = `
+      <iframe src="${fileMap[title]}" class="w-full h-[400px]" frameborder="0"></iframe>
+    `;
+
+    modal.classList.remove("hidden");
+    modal.classList.add("flex");
+  }
+
+  function closeModal() {
+    const modal = document.getElementById("modal");
+    modal.classList.add("hidden");
+    modal.classList.remove("flex");
+  }
+
+    
     function openAcknowledgeBox() {
       document.getElementById('ackBox').classList.remove('hidden');
       document.getElementById('ackBox').classList.add('flex');
     }
 
-    function closeAcknowledgeBox() {
-      document.getElementById('ackBox').classList.add('hidden');
-    }
+    
 
     function submitAcknowledgement() {
       const confirmed = document.getElementById('readConfirm').checked;
