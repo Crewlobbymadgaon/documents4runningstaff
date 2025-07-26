@@ -20,6 +20,7 @@
       }
     </style>
   </head>
+
   <body class="bg-gray-50 text-gray-800">
 
     <!-- Header -->
@@ -48,104 +49,280 @@
   </div>
 </div>
 
-<!-- ONE Menu Grid: Same for all screens -->
+<!-- ONE Menu Grid: Same for all screens<!-- Google Font -->
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600&display=swap" rel="stylesheet" />
+
+<!-- Menu Grid -->
 <div id="menu-items"
      class="hidden mt-4 md:mt-5 pb-4 
-            grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 
-            gap-y-2 sm:gap-y-5 lg:gap-y-8 
-            gap-x-2 sm:gap-x-3 lg:gap-x-2 
-            px-2 sm:px-3 md:px-4 
-            pt-4 sm:pt-5 
-            text-lg font-bold max-w-screen-xl mx-auto">
+            grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 
+            gap-y-3 gap-x-2 sm:gap-x-4 
+            px-2 sm:px-4 
+            text-base font-bold max-w-screen-xl mx-auto font-[Rajdhani]">
 
+  <!-- Shed Order -->
+  <a href="#shed-order"
+     class="relative w-full aspect-[6/1.2] sm:aspect-[6/1.8] 
+            flex items-center 
+            bg-gradient-to-br from-red-500 to-red-700 text-white 
+            p-2 sm:p-3 rounded-xl shadow-md hover:scale-105 transition-transform duration-200 ease-in-out mx-auto overflow-hidden">
+    <div class="w-10 h-10 sm:w-12 sm:h-12 bg-white rounded shadow-inner flex items-center justify-center overflow-hidden z-10">
+      <img src="https://example.com/icon1.png" alt="Shed Order Icon" class="w-full h-full object-contain" />
+    </div>
+    <div class="absolute inset-0 flex items-center justify-center">
+      <span class="text-lg sm:text-xl font-bold tracking-wide text-center">Shed Order</span>
+    </div>
+  </a>
 
-  <!-- Menu Items -->
-  <a href="shed_order.html"
-   class="flex flex-col items-center justify-center p-2 sm:p-3 rounded-xl 
-          bg-gradient-to-br from-red-500 to-red-700 shadow-md hover:scale-105 transition 
-          aspect-[2/3] lg:aspect-[3/4] max-w-[200px] w-full mx-auto">
-  <div class="w-10 h-12 sm:w-12 sm:h-14 bg-white rounded shadow-inner mb-2 flex items-center justify-center overflow-hidden">
-  <img src="https://example.com/icon.png" alt="Icon" class="w-6 h-6 object-contain" />
+  <!-- Safety Circular -->
+  <a href="#safety-circular"
+     class="relative w-full aspect-[6/1.2] sm:aspect-[6/1.8] 
+            flex items-center 
+            bg-gradient-to-br from-orange-500 to-orange-700 text-white 
+            p-2 sm:p-3 rounded-xl shadow-md hover:scale-105 transition-transform duration-200 ease-in-out mx-auto overflow-hidden">
+    <div class="w-10 h-10 sm:w-12 sm:h-12 bg-white rounded shadow-inner flex items-center justify-center overflow-hidden z-10">
+      <img src="https://example.com/icon2.png" alt="Safety Icon" class="w-full h-full object-contain" />
+    </div>
+    <div class="absolute inset-0 flex items-center justify-center">
+      <span class="text-lg sm:text-xl font-bold tracking-wide text-center">Safety Circular</span>
+    </div>
+  </a>
+
+  <!-- Counselling Subjects -->
+  <a href="#counselling"
+     class="relative w-full aspect-[6/1.2] sm:aspect-[6/1.8] 
+            flex items-center 
+            bg-gradient-to-br from-yellow-500 to-yellow-700 text-white 
+            p-2 sm:p-3 rounded-xl shadow-md hover:scale-105 transition-transform duration-200 ease-in-out mx-auto overflow-hidden">
+    <div class="w-10 h-10 sm:w-12 sm:h-12 bg-white rounded shadow-inner flex items-center justify-center overflow-hidden z-10">
+      <img src="https://example.com/icon3.png" alt="Counselling Icon" class="w-full h-full object-contain" />
+    </div>
+    <div class="absolute inset-0 flex items-center justify-center">
+      <span class="text-lg sm:text-xl font-bold tracking-wide text-center">Counselling Topics</span>
+    </div>
+  </a>
+
+  <!-- Other Circulars -->
+  <a href="#other-circulars"
+     class="relative w-full aspect-[6/1.2] sm:aspect-[6/1.8] 
+            flex items-center 
+            bg-gradient-to-br from-green-500 to-green-700 text-white 
+            p-2 sm:p-3 rounded-xl shadow-md hover:scale-105 transition-transform duration-200 ease-in-out mx-auto overflow-hidden">
+    <div class="w-10 h-10 sm:w-12 sm:h-12 bg-white rounded shadow-inner flex items-center justify-center overflow-hidden z-10">
+      <img src="https://example.com/icon4.png" alt="Other Circulars Icon" class="w-full h-full object-contain" />
+    </div>
+    <div class="absolute inset-0 flex items-center justify-center">
+      <span class="text-lg sm:text-xl font-bold tracking-wide text-center">Other Circulars</span>
+    </div>
+  </a>
+
+  <!-- G&SR -->
+  <a href="#gsr"
+     class="relative w-full aspect-[6/1.2] sm:aspect-[6/1.8] 
+            flex items-center 
+            bg-gradient-to-br from-blue-500 to-blue-700 text-white 
+            p-2 sm:p-3 rounded-xl shadow-md hover:scale-105 transition-transform duration-200 ease-in-out mx-auto overflow-hidden">
+    <div class="w-10 h-10 sm:w-12 sm:h-12 bg-white rounded shadow-inner flex items-center justify-center overflow-hidden z-10">
+      <img src="https://example.com/icon5.png" alt="G&SR Icon" class="w-full h-full object-contain" />
+    </div>
+    <div class="absolute inset-0 flex items-center justify-center">
+      <span class="text-lg sm:text-xl font-bold tracking-wide text-center">G&SR</span>
+    </div>
+  </a>
+
+  <!-- Accident Manual -->
+  <a href="#accident-manual"
+     class="relative w-full aspect-[6/1.2] sm:aspect-[6/1.8] 
+            flex items-center 
+            bg-gradient-to-br from-purple-500 to-purple-700 text-white 
+            p-2 sm:p-3 rounded-xl shadow-md hover:scale-105 transition-transform duration-200 ease-in-out mx-auto overflow-hidden">
+    <div class="w-10 h-10 sm:w-12 sm:h-12 bg-white rounded shadow-inner flex items-center justify-center overflow-hidden z-10">
+      <img src="https://example.com/icon6.png" alt="Accident Manual Icon" class="w-full h-full object-contain" />
+    </div>
+    <div class="absolute inset-0 flex items-center justify-center">
+      <span class="text-lg sm:text-xl font-bold tracking-wide text-center">Accident Manual</span>
+    </div>
+  </a>
+
+  <!-- WTT -->
+  <a href="#wtt"
+     class="relative w-full aspect-[6/1.2] sm:aspect-[6/1.8] 
+            flex items-center 
+            bg-gradient-to-br from-pink-500 to-pink-700 text-white 
+            p-2 sm:p-3 rounded-xl shadow-md hover:scale-105 transition-transform duration-200 ease-in-out mx-auto overflow-hidden">
+    <div class="w-10 h-10 sm:w-12 sm:h-12 bg-white rounded shadow-inner flex items-center justify-center overflow-hidden z-10">
+      <img src="https://example.com/icon7.png" alt="WTT Icon" class="w-full h-full object-contain" />
+    </div>
+    <div class="absolute inset-0 flex items-center justify-center">
+      <span class="text-lg sm:text-xl font-bold tracking-wide text-center">WTT</span>
+    </div>
+  </a>
+
+  <!-- Reading Materials -->
+  <a href="#reading-materials"
+     class="relative w-full aspect-[6/1.2] sm:aspect-[6/1.8] 
+            flex items-center 
+            bg-gradient-to-br from-teal-500 to-teal-700 text-white 
+            p-2 sm:p-3 rounded-xl shadow-md hover:scale-105 transition-transform duration-200 ease-in-out mx-auto overflow-hidden">
+    <div class="w-10 h-10 sm:w-12 sm:h-12 bg-white rounded shadow-inner flex items-center justify-center overflow-hidden z-10">
+      <img src="https://example.com/icon8.png" alt="Reading Icon" class="w-full h-full object-contain" />
+    </div>
+    <div class="absolute inset-0 flex items-center justify-center">
+      <span class="text-lg sm:text-xl font-bold tracking-wide text-center">Reading Materials</span>
+    </div>
+  </a>
+
+  <!-- TSD -->
+  <a href="#tsd"
+     class="relative w-full aspect-[6/1.2] sm:aspect-[6/1.8] 
+            flex items-center 
+            bg-gradient-to-br from-cyan-500 to-cyan-700 text-white 
+            p-2 sm:p-3 rounded-xl shadow-md hover:scale-105 transition-transform duration-200 ease-in-out mx-auto overflow-hidden">
+    <div class="w-10 h-10 sm:w-12 sm:h-12 bg-white rounded shadow-inner flex items-center justify-center overflow-hidden z-10">
+      <img src="https://example.com/icon9.png" alt="TSD Icon" class="w-full h-full object-contain" />
+    </div>
+    <div class="absolute inset-0 flex items-center justify-center">
+      <span class="text-lg sm:text-xl font-bold tracking-wide text-center">TSD</span>
+    </div>
+  </a>
 </div>
-  <span class="text-white text-center text-xs">Shed Order</span>
-</a>
 
-<a href="#"
-   class="flex flex-col items-center justify-center p-2 sm:p-3 rounded-xl 
-          bg-gradient-to-br from-yellow-500 to-yellow-700 shadow-md hover:scale-105 transition
-          aspect-[2/3] lg:aspect-[3/4] max-w-[200px] w-full mx-auto">
-  <div class="w-10 h-12 sm:w-12 sm:h-14 bg-white rounded shadow-inner mb-2 flex items-center justify-center overflow-hidden">
-  <img src="https://example.com/icon.png" alt="Icon" class="w-6 h-6 object-contain" />
-</div>
-  <span class="text-white text-center text-xs">Safety Circular</span>
-</a>
+<!-- Main Content -->
+<div class="p-4 space-y-6 max-w-3xl mx-auto">
 
-<a href="#"
-   class="flex flex-col items-center justify-center p-2 sm:p-3 rounded-xl 
-          bg-gradient-to-br from-green-500 to-green-700 shadow-md hover:scale-105 transition
-          aspect-[2/3] lg:aspect-[3/4] max-w-[200px] w-full mx-auto">
-  <div class="w-10 h-12 sm:w-12 sm:h-14 bg-white rounded shadow-inner mb-2 flex items-center justify-center overflow-hidden">
-  <img src="https://example.com/icon.png" alt="Icon" class="w-6 h-6 object-contain" />
-</div>
-  <span class="text-white text-center text-xs">Counselling Topics</span>
-</a>
+ 
+
+
+  <!-- 🔺 Latest Banner -->
+  <div class="text-center font-bold text-xl text-red-700 animate-pulse mt-4">
+    🚨 Latest Document for Running Staff  
+  </div>
+
+  <!-- 🔻 Document Sections -->
+  <div class="p-4 space-y-6 max-w-3xl mx-auto mt-4">
+
+    <!-- 1. Shed Order -->
+    <div class="bg-red-100 border-l-4 border-red-600 p-4 rounded shadow">
+      <h2 class="text-lg font-bold text-red-800 mb-2">📄 Shed Order</h2>
+      <p class="text-sm mb-3">Guidelines for loco maintenance – July 2025.</p>
+      <div class="flex gap-3">
+        <button onclick="openModal('Shed Order')" class="bg-red-600 hover:bg-red-700 text-white px-4 py-1.5 rounded text-sm">View</button>
+      </div>
+    </div>
+
+    <!-- 2. Safety Circular -->
+    <div class="bg-yellow-100 border-l-4 border-yellow-600 p-4 rounded shadow">
+      <h2 class="text-lg font-bold text-yellow-800 mb-2">⚠️ Safety Circular</h2>
+      <p class="text-sm mb-3">Monsoon safety precautions – July 2025.</p>
+      <div class="flex gap-3">
+        <button onclick="openModal('Safety Circular')" class="bg-yellow-600 hover:bg-yellow-700 text-white px-4 py-1.5 rounded text-sm">View</button>
+      </div>
+    </div>
+
+    <!-- 3. Counselling Subject -->
+    <div class="bg-blue-100 border-l-4 border-blue-600 p-4 rounded shadow">
+      <h2 class="text-lg font-bold text-blue-800 mb-2">🧠 Counselling Subject</h2>
+      <p class="text-sm mb-3">Alertness and rest management instructions.</p>
+      <div class="flex gap-3">
+        <button onclick="openModal('Counselling Subject')" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-1.5 rounded text-sm">View</button>
+      </div>
+    </div>
+
+    <!-- 4. G&SR Correction Slip -->
+    <div class="bg-green-100 border-l-4 border-green-600 p-4 rounded shadow">
+      <h2 class="text-lg font-bold text-green-800 mb-2">📘 G&SR Correction Slip</h2>
+      <p class="text-sm mb-3">Latest updates in G&SR effective July 2025.</p>
+      <div class="flex gap-3">
+        <button onclick="openModal('G&SR Correction Slip')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-1.5 rounded text-sm">View</button>
+      </div>
+    </div>
+
+    <!-- 5. WTT Correction Slip -->
+    <div class="bg-indigo-100 border-l-4 border-indigo-600 p-4 rounded shadow">
+      <h2 class="text-lg font-bold text-indigo-800 mb-2">🕓 WTT Correction Slip</h2>
+      <p class="text-sm mb-3">Time table changes for monsoon 2025.</p>
+      <div class="flex gap-3">
+        <button onclick="openModal('WTT Correction Slip')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-1.5 rounded text-sm">View</button>
+      </div>
+    </div>
+
+    <!-- 6. Accident Manual Correction -->
+    <div class="bg-gray-200 border-l-4 border-gray-500 p-4 rounded shadow">
+      <h2 class="text-lg font-bold text-gray-800 mb-2">🚨 Accident Manual Correction</h2>
+      <p class="text-sm mb-3">Revised procedures for accident reporting.</p>
+      <div class="flex gap-3">
+        <button onclick="openModal('Accident Manual Correction')" class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-1.5 rounded text-sm">View</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- 🔳 Modal -->
+  <div id="modal" class="fixed inset-0 bg-black bg-opacity-50 hidden justify-center items-center z-50">
+    <div class="bg-white p-6 rounded-lg shadow-lg w-[95%] sm:w-[500px] relative">
+      <h2 class="text-xl font-bold mb-2" id="modalTitle">Document Title</h2>
+      <p class="text-sm text-gray-600 mb-4">[Preview of the document content here]</p>
+      
+      <!-- Action Buttons -->
+      <div class="flex flex-col gap-3">
+        <button onclick="openAcknowledgeBox()" class="bg-green-600 hover:bg-green-700 text-white px-4 py-1.5 rounded text-sm">Acknowledge</button>
+        <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-1.5 rounded text-sm">Mark as Offline</button>
+        <button onclick="closeModal()" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-1.5 rounded text-sm">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 🔘 Acknowledge Dialog -->
+  <div id="ackBox" class="fixed inset-0 bg-black bg-opacity-50 hidden justify-center items-center z-50">
+    <div class="bg-white p-6 rounded-lg shadow-lg w-[95%] sm:w-[500px]">
+      <h3 class="text-lg font-bold mb-3">Acknowledge Document</h3>
+      <label class="flex items-start space-x-2 mb-3">
+        <input type="checkbox" id="readConfirm" class="mt-1">
+        <span>I have read the document and understood its content.</span>
+      </label>
+      <textarea id="doubtText" rows="3" class="w-full border border-gray-300 rounded p-2 mb-4" placeholder="If you have any doubts, mention here..."></textarea>
+      <div class="flex gap-3">
+        <button onclick="submitAcknowledgement()" class="bg-green-600 hover:bg-green-700 text-white px-4 py-1.5 rounded text-sm">Submit</button>
+        <button onclick="closeAcknowledgeBox()" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-1.5 rounded text-sm">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- JS -->
+  <script>
+    function openModal(title) {
+      document.getElementById('modalTitle').innerText = title;
+      document.getElementById('modal').classList.remove('hidden');
+      document.getElementById('modal').classList.add('flex');
+    }
+
+    function closeModal() {
+      document.getElementById('modal').classList.add('hidden');
+    }
+
+    function openAcknowledgeBox() {
+      document.getElementById('ackBox').classList.remove('hidden');
+      document.getElementById('ackBox').classList.add('flex');
+    }
+
+    function closeAcknowledgeBox() {
+      document.getElementById('ackBox').classList.add('hidden');
+    }
+
+    function submitAcknowledgement() {
+      const confirmed = document.getElementById('readConfirm').checked;
+      const doubt = document.getElementById('doubtText').value.trim();
+      if (!confirmed) {
+        alert("Please confirm you have read and understood the document.");
+        return;
+      }
+      alert("Acknowledged successfully!" + (doubt ? "\nDoubt: " + doubt : ""));
+      closeAcknowledgeBox();
+      closeModal();
+    }
   
-  <a href="#"
-   class="flex flex-col items-center justify-center p-2 sm:p-3 rounded-xl 
-          bg-gradient-to-br from-blue-500 to-blue-700 shadow-md hover:scale-105 transition
-          aspect-[2/3] lg:aspect-[3/4] max-w-[200px] w-full mx-auto">
-  <div class="w-10 h-12 sm:w-12 sm:h-14 bg-white rounded shadow-inner mb-2 flex items-center justify-center overflow-hidden">
-  <img src="https://example.com/icon.png" alt="Icon" class="w-6 h-6 object-contain" />
-</div>
-  <span class="text-white text-center text-xs">G&amp;SR</span>
-</a>
-  
-<a href="#"
-   class="flex flex-col items-center justify-center p-2 sm:p-3 rounded-xl 
-          bg-gradient-to-br from-pink-500 to-pink-700 shadow-md hover:scale-105 transition
-          aspect-[2/3] lg:aspect-[3/4] max-w-[200px] w-full mx-auto">
-  <div class="w-10 h-12 sm:w-12 sm:h-14 bg-white rounded shadow-inner mb-2 flex items-center justify-center overflow-hidden">
-  <img src="https://example.com/icon.png" alt="Icon" class="w-6 h-6 object-contain" />
-</div>
-  <span class="text-white text-center text-xs">Accident Manual</span>
-</a>  
-
-<a href="#"
-   class="flex flex-col items-center justify-center p-2 sm:p-3 rounded-xl 
-          bg-gradient-to-br from-purple-500 to-purple-700 shadow-md hover:scale-105 transition
-          aspect-[2/3] lg:aspect-[3/4] max-w-[200px] w-full mx-auto">
-  <div class="w-10 h-12 sm:w-12 sm:h-14 bg-white rounded shadow-inner mb-2 flex items-center justify-center overflow-hidden">
-  <img src="https://example.com/icon.png" alt="Icon" class="w-6 h-6 object-contain" />
-</div>
-  <span class="text-white text-center text-xs">WTT</span>
-</a>    
-
-
-<a href="#"
-   class="flex flex-col items-center justify-center p-2 sm:p-3 rounded-xl 
-          bg-gradient-to-br from-indigo-500 to-indigo-700 shadow-md hover:scale-105 transition
-          aspect-[2/3] lg:aspect-[3/4] max-w-[200px] w-full mx-auto">
-  <div class="w-10 h-12 sm:w-12 sm:h-14 bg-white rounded shadow-inner mb-2 flex items-center justify-center overflow-hidden">
-  <img src="https://example.com/icon.png" alt="Icon" class="w-6 h-6 object-contain" />
-</div>
-  <span class="text-white text-center text-xs">TSD</span>
-</a> 
-  
-  
-  <a href="#"
-   class="flex flex-col items-center justify-center p-2 sm:p-3 rounded-xl 
-          bg-gradient-to-br from-teal-500 to-teal-700 shadow-md hover:scale-105 transition
-          aspect-[2/3] lg:aspect-[3/4] max-w-[200px] w-full mx-auto">
-  <div class="w-10 h-12 sm:w-12 sm:h-14 bg-white rounded shadow-inner mb-2 flex items-center justify-center overflow-hidden">
-  <img src="https://example.com/icon.png" alt="Icon" class="w-6 h-6 object-contain" />
-</div>
-  <span class="text-white text-center text-xs">Reading Materials</span>
-</a> 
-
-</div>
 
 <!-- Toggle Script -->
-<script>
   const menuBtn = document.getElementById("menu-button");
   const menuItems = document.getElementById("menu-items");
 
@@ -180,22 +357,9 @@
   });
 });
 
- if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/documents4runningstaff/service-worker.js')
-      .then(reg => console.log("SW registered", reg))
-      .catch(err => console.error("SW registration failed", err));
-  }
-
-  if (navigator.storage && navigator.storage.persist) {
-  navigator.storage.persist().then(granted => {
-    console.log(granted
-      ? '✅ Persistent storage granted. Offline data will survive browser cleanup.'
-      : '⚠️ Storage may be cleared by the browser if space is low.');
-  });
-  }
 </script>
 
-<script src="script.js"></script>
 
- </body>
+
+  </body>
 </html>
