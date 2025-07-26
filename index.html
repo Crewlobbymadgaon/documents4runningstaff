@@ -287,8 +287,8 @@
     </div>
   </div>
 
-  <!-- JS -->
-    <script>
+<script>
+  // 📄 Open Modal
   function openModal(title) {
     const modal = document.getElementById("modal");
     const modalTitle = document.getElementById("modalTitle");
@@ -305,44 +305,49 @@
     };
 
     modalTitle.textContent = title;
-
-    // Embed the PDF using iframe
     modalContent.innerHTML = `
       <iframe src="${fileMap[title]}" class="w-full h-[400px]" frameborder="0"></iframe>
     `;
 
     modal.classList.remove("hidden");
     modal.classList.add("flex");
+    document.body.style.overflow = "hidden"; // prevent background scroll
   }
 
   function closeModal() {
     const modal = document.getElementById("modal");
     modal.classList.add("hidden");
     modal.classList.remove("flex");
+    document.body.style.overflow = ""; // restore scroll
   }
 
-    
-    function openAcknowledgeBox() {
-      document.getElementById('ackBox').classList.remove('hidden');
-      document.getElementById('ackBox').classList.add('flex');
+  // ✅ Open Acknowledge Box
+  function openAcknowledgeBox() {
+    document.getElementById('ackBox').classList.remove('hidden');
+    document.getElementById('ackBox').classList.add('flex');
+  }
+
+  function closeAcknowledgeBox() {
+    document.getElementById('ackBox').classList.add('hidden');
+    document.getElementById('ackBox').classList.remove('flex');
+  }
+
+  // ✅ Acknowledge Submit
+  function submitAcknowledgement() {
+    const confirmed = document.getElementById('readConfirm').checked;
+    const doubt = document.getElementById('doubtText').value.trim();
+
+    if (!confirmed) {
+      alert("Please confirm you have read and understood the document.");
+      return;
     }
 
-    
+    alert("Acknowledged successfully!" + (doubt ? "\nDoubt: " + doubt : ""));
+    closeAcknowledgeBox();
+    closeModal();
+  }
 
-    function submitAcknowledgement() {
-      const confirmed = document.getElementById('readConfirm').checked;
-      const doubt = document.getElementById('doubtText').value.trim();
-      if (!confirmed) {
-        alert("Please confirm you have read and understood the document.");
-        return;
-      }
-      alert("Acknowledged successfully!" + (doubt ? "\nDoubt: " + doubt : ""));
-      closeAcknowledgeBox();
-      closeModal();
-    }
-  
-
-<!-- Toggle Script -->
+  // ✅ Menu Toggle for Mobile
   const menuBtn = document.getElementById("menu-button");
   const menuItems = document.getElementById("menu-items");
 
@@ -350,35 +355,34 @@
     menuItems.classList.toggle("hidden");
   });
 
-
-      // Rotating slogans
-      const slogans = [
-        'Our Mission: Zero SPAD – हमारा लक्ष्य: शून्य SPAD',
-        'Safety First, Always!',
-        'Alert Today – Alive Tomorrow',
-        'Better Late Than Never – Drive Safe!'
-      ];
-      let currentSlogan = 0;
-      const sloganEl = document.getElementById('slogan');
-
-      function rotateSlogan() {
-        sloganEl.textContent = slogans[currentSlogan];
-        currentSlogan = (currentSlogan + 1) % slogans.length;
+  // ✅ Auto-collapse menu on link click (mobile)
+  document.querySelectorAll('#menu-items a').forEach(link => {
+    link.addEventListener('click', () => {
+      if (window.innerWidth < 640) {
+        menuItems.classList.add('hidden');
       }
-
-      rotateSlogan();
-      setInterval(rotateSlogan, 3000);
-      
-      document.querySelectorAll('#menu-items a').forEach(link => {
-  link.addEventListener('click', () => {
-    if (window.innerWidth < 640) { // collapse on small screens
-      menuItems.classList.add('hidden');
-    }
+    });
   });
-});
 
+  // ✅ Rotating slogans
+  const slogans = [
+    'Our Mission: Zero SPAD – हमारा लक्ष्य: शून्य SPAD',
+    'Safety First, Always!',
+    'Alert Today – Alive Tomorrow',
+    'Better Late Than Never – Drive Safe!'
+  ];
+
+  let currentSlogan = 0;
+  const sloganEl = document.getElementById('slogan');
+
+  function rotateSlogan() {
+    sloganEl.textContent = slogans[currentSlogan];
+    currentSlogan = (currentSlogan + 1) % slogans.length;
+  }
+
+  rotateSlogan();
+  setInterval(rotateSlogan, 3000);
 </script>
-
 
 
   </body>
