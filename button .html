@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Shed Order</title>
+    <link rel="manifest" href="/documents4runningstaff/manifest.json" />
+    <link rel="icon" href="/documents4runningstaff/favicon.ico" />
+    <link rel="apple-touch-icon" href="/documents4runningstaff/icon-192.png" />
+
+    
+    <meta name="theme-color" content="#1f2937" />
+
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600&display=swap" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+      <script defer src="main.js"></script>
+
+    <style>
+      .font-rajdhani {
+        font-family: 'Rajdhani', sans-serif;
+      }
+      
+    </style>
+  </head>
+  <body class="bg-gray-50 text-gray-800">
+
+<header class="relative bg-gradient-to-r from-blue-900 via-blue-700 to-blue-900 text-white py-6 shadow-md">
+  <div class="px-4 max-w-screen-xl mx-auto">
+    
+    <!-- Centered Title -->
+    <div class="text-center">
+      <h1 class="font-rajdhani text-xl sm:text-2xl md:text-3xl font-extrabold leading-tight">
+        Digital Library for Running Staff
+      </h1>
+      <h2 class="font-rajdhani text-3xl sm:text-4xl md:text-5xl font-extrabold mt-1">
+        Shed Order
+      </h2>
+      <h3 class="font-rajdhani text-2xl sm:text-3xl md:text-4xl font-extrabold mt-1">
+        Madgaon Lobby
+      </h3>
+    </div>
+
+    <!-- Bottom row: Year & Hamburger -->
+    <div class="flex justify-between items-center mt-6">
+      
+      <!-- Year Selector -->
+<select id="yearSelect" onchange="highlightSelectedYear()"
+  class="bg-gradient-to-b from-blue-900 via-blue-500 to-blue-900 text-white text-base font-semibold px-4 py-2 rounded-md border border-blue-950 focus:outline-none focus:ring-1 focus:ring-blue-950 shadow">
+  <option value="">Year</option>
+  <option value="2025">2025</option>
+
+</select>
+
+      <!-- Hamburger Button -->
+     <button id="hamburgerBtn"
+  class="bg-gradient-to-b from-blue-900 via-blue-600 to-blue-900 
+         hover:from-blue-800 hover:to-blue-950 
+         text-white p-2 rounded-md 
+         border border-blue-950 
+         shadow-lg 
+         focus:outline-none focus:ring-2 focus:ring-blue-900 
+         transition duration-150 ease-in-out">
+  <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"
+    viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <path stroke-linecap="round" stroke-linejoin="round"
+      d="M4 6h16M4 12h16M4 18h16"></path>
+  </svg>
+</button>
+    </div>
+  </div>
+</header>
+
+<!-- Dropdown menu: right side below header -->
+<div id="dropdownMenu" class="hidden absolute right-4 mt-1 bg-white border border-blue-800 shadow-lg z-50 rounded-md w-52">
+  <a href="index.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Home</a>
+    <a href="shedorder.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Shed Order</a>
+  <a href="safetycircular.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Safety Circular</a>
+  <a href="counselling.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Counselling Topics</a>
+  <a href="othercirculars.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Other Circulars</a>
+  <a href="gnsr.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">G&SR</a>
+  <a href="accidentmanual.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Accident Manual</a>
+  <a href="wtt.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">WTT</a>
+  <a href="readingmaterials.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Reading Materials</a>
+  <a href="tsd.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">TSD</a>
+</div>
+
+
+
+  <!-- Shed Order List -->
+  <section class="px-4 mt-8">
+    
+    <div id="shedOrderList" class="grid gap-4 max-w-2xl mx-auto"></div>
+    
+  </section>
+
+<!-- Modal -->
+<div id="pdfModal" class="fixed inset-0 z-50 bg-black bg-opacity-80 flex items-center justify-center p-2 hidden">
+  <div class="bg-white rounded-lg shadow-xl w-full max-w-5xl h-full sm:h-[90vh] overflow-hidden flex flex-col">
+    <!-- Modal Header -->
+    <div class="flex justify-between items-center p-4 bg-blue-800 text-white">
+      <h2 id="modalTitle" class="text-lg font-bold">Document Title</h2>
+      <button onclick="closeModal()" class="text-white text-xl font-bold">&times;</button>
+    </div>
+
+    <!-- PDF Viewer -->
+    <iframe id="pdfViewer" class="flex-1 w-full" frameborder="0"></iframe>
+
+    <!-- Acknowledgement Section -->
+    <div class="p-4 border-t space-y-3 bg-gray-50">
+      <label class="flex items-start gap-2">
+        <input type="checkbox" id="ackCheckbox" class="mt-1 accent-blue-600" />
+        <span class="text-sm sm:text-base">I have read and understood the contents of this Shed Order.</span>
+      </label>
+      <button onclick="submitAcknowledgement()" class="bg-blue-700 hover:bg-blue-800 text-white px-4 py-2 rounded-md disabled:opacity-50" disabled id="ackBtn">Acknowledge</button>
+    </div>
+  </div>
+</div>
+  <!-- JavaScript -->
+  <script>
+const shedOrders = {
+  "2025": [
+    { number: "01/2025", topic: "Safety Guidelines for Monsoon", file: "01-2025.pdf" },
+    { number: "02/2025", topic: "Loco Operations in Rain", file: "02-2025.pdf" }
+  ],
+  "2024": [
+    { number: "01/2024", topic: "Summer Schedule Instructions", file: "01-2024.pdf" }
+  ],
+  "2023": [
+    { number: "12/2023", topic: "End Year Summary", file: "12-2023.pdf" }
+  ]
+};
+
+    function loadShedOrders() {
+  const year = document.getElementById("yearSelect").value;
+  const container = document.getElementById("shedOrderList");
+  container.innerHTML = "";
+
+  if (!year || !shedOrders[year]) {
+    container.innerHTML = "<p class='text-center text-gray-500'>No shed orders available.</p>";
+    return;
+  }
+
+  shedOrders[year].forEach(order => {
+    const link = document.createElement("a");
+    link.href = `/documents4runningstaff/doc_shed_order_mao_${year}/${order.file}`;
+    link.target = "_blank";
+    link.className = "block bg-white border border-gray-300 hover:border-blue-400 text-blue-800 font-semibold px-4 py-3 rounded-lg shadow transition-all";
+    link.textContent = order.title;
+    container.appendChild(link);
+  });
+
+  // Auto scroll to list
+  container.scrollIntoView({ behavior: "smooth" });
+}
+    
+  // Toggle Dropdown
+  const hamburgerBtn = document.getElementById("hamburgerBtn");
+  const dropdownMenu = document.getElementById("dropdownMenu");
+
+  hamburgerBtn.addEventListener("click", () => {
+    dropdownMenu.classList.toggle("hidden");
+  });
+
+  dropdownMenu.querySelectorAll("a").forEach(link => {
+    link.addEventListener("click", () => {
+      dropdownMenu.classList.add("hidden");
+    });
+  });
+  
+  
+  function highlightSelectedYear() {
+  const selectedYear = document.getElementById("yearSelect").value;
+  const shedOrderList = document.getElementById("shedOrderList");
+  shedOrderList.innerHTML = "";
+
+  if (!shedOrders[selectedYear]) return;
+
+  shedOrders[selectedYear].forEach((order, index) => {
+    const isAcknowledged = localStorage.getItem(`ack_${selectedYear}_${index}`) === "true";
+
+    const card = document.createElement("div");
+    card.className = "bg-white relative rounded-lg p-4 shadow-md border border-blue-100";
+
+    // Badge showing status
+    const statusBadge = isAcknowledged
+      ? `<span class="absolute top-2 right-2 bg-green-600 text-white text-xs px-2 py-1 rounded-full">✅ Acknowledged</span>`
+      : `<span class="absolute top-2 right-2 bg-gray-400 text-white text-xs px-2 py-1 rounded-full">❌ Not Acknowledged</span>`;
+
+    card.innerHTML = `
+  <div class="font-bold text-lg text-blue-900 mb-2">${order.number}</div>
+  <div class="text-gray-700 mb-4">${order.topic}</div>
+  <div class="flex justify-between items-end mt-4">
+    <button onclick="openModal('${order.number} - ${order.topic}', '/documents4runningstaff/doc_shed_order_${selectedYear.toLowerCase()}/${order.file}', '${selectedYear}', ${index})"
+      class="bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-4 py-2 rounded">
+      View
+    </button>
+    <span class="${isAcknowledged ? 'bg-green-600' : 'bg-gray-400'} text-white text-xs px-2 py-1 rounded-full text-right">
+      ${isAcknowledged ? '✅ Acknowledged' : '❌ Not Acknowledged'}
+    </span>
+  </div>
+`;
+
+    shedOrderList.appendChild(card);
+  });
+}
+
+function toggleAcknowledge(year, index, button) {
+  const key = `ack_${year}_${index}`;
+  const acknowledged = localStorage.getItem(key) === "true";
+  localStorage.setItem(key, !acknowledged);
+  highlightSelectedYear(); // Refresh the list to show updated status
+}
+
+
+function openModal(title, filePath, year, index) {
+  currentYear = year;
+  currentIndex = index;
+
+  document.getElementById('modalTitle').textContent = title;
+  document.getElementById('pdfViewer').src = filePath;
+
+  const isAcknowledged = localStorage.getItem(`ack_${year}_${index}`) === "true";
+
+  const ackSection = document.querySelector('.p-4.border-t');
+  const ackCheckbox = document.getElementById('ackCheckbox');
+  const ackBtn = document.getElementById('ackBtn');
+
+  if (isAcknowledged) {
+    ackSection.classList.add('hidden');
+  } else {
+    ackCheckbox.checked = false;
+    ackBtn.disabled = true;
+    ackSection.classList.remove('hidden');
+  }
+
+  document.getElementById('pdfModal').classList.remove('hidden');
+}
+
+  function closeModal() {
+    document.getElementById('pdfModal').classList.add('hidden');
+    document.getElementById('pdfViewer').src = ""; // reset PDF
+  }
+
+  document.getElementById('ackCheckbox').addEventListener('change', function () {
+    document.getElementById('ackBtn').disabled = !this.checked;
+  });
+
+  function submitAcknowledgement() {
+  if (currentYear !== null && currentIndex !== null) {
+    const key = `ack_${currentYear}_${currentIndex}`;
+    localStorage.setItem(key, "true");
+    highlightSelectedYear(); // Refresh shed order cards with updated status
+  }
+
+  closeModal();
+}
+
+  </script>
+</body>
+</html>
