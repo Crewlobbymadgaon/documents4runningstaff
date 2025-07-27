@@ -17,7 +17,19 @@
       .font-rajdhani {
         font-family: 'Rajdhani', sans-serif;
       }
-    </style>
+      
+      
+      
+  #menu-items, #main-content {
+    transition: opacity 0.3s ease;
+  }
+
+  .hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
+</style>
+    
   </head>
 
   <body class="bg-gray-50 text-gray-800">
@@ -54,14 +66,12 @@
 
 <!-- ONE Menu Grid: Same for all screens<!-- Google Font -->
 
-<!-- Menu Grid -->
 <div id="menu-items"
      class="hidden mt-4 md:mt-5 pb-4 
             grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 
             gap-y-3 gap-x-2 sm:gap-x-4 
             px-2 sm:px-4 
             text-base font-bold max-w-screen-xl mx-auto font-[Rajdhani]">
-
   <!-- Shed Order -->
   <a href="shed_order.html"
      class="relative w-full aspect-[6/1.2] sm:aspect-[6/1.8] 
@@ -189,6 +199,10 @@
   </a>
 </div>
 
+
+<!-- Main Content Wrapper -->
+<div id="main-content">
+
 <!-- Main Content -->
 <div class="p-4 space-y-6 max-w-3xl mx-auto">
 
@@ -206,7 +220,7 @@
     <!-- 1. Shed Order -->
     <div class="bg-red-100 border-l-4 border-red-600 p-4 rounded shadow">
       <h2 class="text-lg font-bold text-red-800 mb-2">📄 Shed Order</h2>
-      <p class="text-sm mb-3">Provision of Additional Stoppages for trains 10105/10106, 10107/10108 on Konkan Railway
+      <p class="text-base mb-3">Provision of Additional Stoppages for trains 10105/10106, 10107/10108 on Konkan Railway
 </p>
       <div class="flex gap-3">
         <button onclick="openModal('Shed Order')" class="bg-red-600 hover:bg-red-700 text-white px-4 py-1.5 rounded text-sm">View</button>
@@ -257,7 +271,7 @@
         <button onclick="openModal('Accident Manual Correction')" class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-1.5 rounded text-sm">View</button>
       </div>
     </div>
-
+</div>
   </div>
 
   <!-- 🔳 Modal -->
@@ -351,22 +365,24 @@
     closeModal();
   }
 
-  // ✅ Menu Toggle for Mobile
   const menuBtn = document.getElementById("menu-button");
   const menuItems = document.getElementById("menu-items");
+  const mainContent = document.getElementById("main-content");
 
   menuBtn.addEventListener("click", () => {
-    menuItems.classList.toggle("hidden");
+    const isMenuOpen = !menuItems.classList.contains("hidden");
+    menuItems.classList.toggle("hidden", isMenuOpen);
+    mainContent.classList.toggle("hidden", !isMenuOpen);
   });
 
-  // ✅ Auto-collapse menu on link click (mobile)
+  // ✅ Auto-hide menu and show main when link is clicked (for mobile)
   document.querySelectorAll('#menu-items a').forEach(link => {
     link.addEventListener('click', () => {
-      if (window.innerWidth < 640) {
-        menuItems.classList.add('hidden');
-      }
+      menuItems.classList.add('hidden');
+      mainContent.classList.remove('hidden');
     });
   });
+
 
   // ✅ Rotating slogans
   const slogans = [
@@ -390,4 +406,4 @@
 
 
   </body>
-</html>
+    </html>
