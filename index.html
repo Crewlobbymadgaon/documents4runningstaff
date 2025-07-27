@@ -48,23 +48,26 @@
   </div>
 </header>
 
-<!-- Menu Icon -->
+<!-- Header with Menu and Home Icons -->
 <div class="bg-gradient-to-r from-blue-900 via-blue-700 to-blue-900 px-4 sm:px-6 md:px-8">
   <div class="max-w-7xl mx-auto">
     <div class="text-center">
-      <div class="flex justify-center items-center">
-        <button id="menu-button"
-          class="transition transform hover:scale-105 active:scale-95 focus:outline-none">
-          <img src="/documents4runningstaff/menu.png"
-               alt="Menu Icon"
-               class="h-12 object-contain select-none" />
+      <div class="flex justify-center items-center gap-4 py-2">
+
+        <!-- Menu Icon Button -->
+        <button id="menu-button" class="transition hover:scale-105 focus:outline-none">
+          <img src="/documents4runningstaff/menu.png" alt="Menu" class="h-10 sm:h-12 select-none" />
         </button>
+
+        <!-- Home Icon Button (initially hidden) -->
+        <button id="home-button" class="transition hover:scale-105 focus:outline-none hidden">
+          <img src="/documents4runningstaff/home.png" alt="Home" class="h-10 sm:h-12 select-none" />
+        </button>
+
       </div>
     </div>
   </div>
 </div>
-
-<!-- ONE Menu Grid: Same for all screens<!-- Google Font -->
 
 <div id="menu-items"
      class="hidden mt-4 md:mt-5 pb-4 
@@ -365,23 +368,36 @@
     closeModal();
   }
 
+  <script>
   const menuBtn = document.getElementById("menu-button");
+  const homeBtn = document.getElementById("home-button");
   const menuItems = document.getElementById("menu-items");
   const mainContent = document.getElementById("main-content");
 
   menuBtn.addEventListener("click", () => {
-    const isMenuOpen = !menuItems.classList.contains("hidden");
-    menuItems.classList.toggle("hidden", isMenuOpen);
-    mainContent.classList.toggle("hidden", !isMenuOpen);
+    menuBtn.classList.add("hidden");
+    homeBtn.classList.remove("hidden");
+    menuItems.classList.remove("hidden");
+    mainContent.classList.add("hidden");
   });
 
-  // ✅ Auto-hide menu and show main when link is clicked (for mobile)
+  homeBtn.addEventListener("click", () => {
+    homeBtn.classList.add("hidden");
+    menuBtn.classList.remove("hidden");
+    menuItems.classList.add("hidden");
+    mainContent.classList.remove("hidden");
+  });
+
+  // Auto-hide menu and show main when a menu link is clicked
   document.querySelectorAll('#menu-items a').forEach(link => {
     link.addEventListener('click', () => {
-      menuItems.classList.add('hidden');
-      mainContent.classList.remove('hidden');
+      homeBtn.classList.add("hidden");
+      menuBtn.classList.remove("hidden");
+      menuItems.classList.add("hidden");
+      mainContent.classList.remove("hidden");
     });
   });
+</script>
 
 
   // ✅ Rotating slogans
