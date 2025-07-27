@@ -19,21 +19,38 @@
   
   
 
-<div class="relative w-full max-w-xs mx-auto">
-<button onclick="toggleDropdown()" 
-  class="w-full bg-gradient-to-r from-blue-700 to-blue-900 text-white text-lg font-bold px-5 py-3 rounded-xl shadow-md flex justify-between items-center transition-all duration-200 hover:scale-105 focus:scale-100 active:scale-100">
-    <span id="lobbyLabel" class="w-full text-center">Select Lobby</span>
-    <svg class="w-5 h-5 ml-2 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-    </svg>
-  </button>
+<div class="w-full flex justify-center my-4">
+  <div class="relative w-full max-w-xs">
+    <!-- Button -->
+    <button onclick="toggleDropdown()" 
+      class="relative bg-gradient-to-b from-blue-900 via-blue-500 to-blue-900 text-white text-lg font-bold px-5 py-3 rounded-md border border-blue-950 
+             focus:outline-none focus:ring-1 focus:ring-blue-950 
+             shadow-lg shadow-blue-900/80 
+             w-full flex items-center justify-between">
 
-  <ul id="lobbyMenu" class="absolute left-0 right-0 z-10 hidden bg-white text-blue-900 mt-2 rounded-xl shadow-lg overflow-hidden">
-    <li class="px-5 py-3 hover:bg-blue-50 cursor-pointer text-center text-base font-bold" onclick="selectLobby('MAO')">Madgaon</li>
-    <li class="px-5 py-3 hover:bg-blue-50 cursor-pointer text-center text-base font-bold" onclick="selectLobby('RN')">Ratnagiri</li>
-    <li class="px-5 py-3 hover:bg-blue-50 cursor-pointer text-center text-base font-bold" onclick="selectLobby('VSG')">Verna</li>
-    <li class="px-5 py-3 hover:bg-blue-50 cursor-pointer text-center text-base font-bold" onclick="selectLobby('SL')">Suratkal</li>
-  </ul>
+      <!-- Centered label -->
+      <span id="lobbyLabel" 
+        class="absolute left-1/2 transform -translate-x-1/2 drop-shadow-[0_1px_2px_rgba(0,0,80,0.9)]">
+        Select Lobby
+      </span>
+
+      <!-- Invisible placeholder to balance layout -->
+      <span class="invisible">Select Lobby</span>
+
+      <!-- Down arrow -->
+      <svg class="w-5 h-5 ml-2 shrink-0 z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+      </svg>
+    </button>
+
+    <!-- Dropdown Menu (inside the same relative container) -->
+    <ul id="lobbyMenu" class="absolute left-0 right-0 z-10 hidden bg-white text-blue-900 mt-2 rounded-xl shadow-lg overflow-hidden">
+      <li class="px-5 py-3 hover:bg-blue-50 cursor-pointer text-center text-base font-bold" onclick="selectLobby('MAO')">Madgaon</li>
+      <li class="px-5 py-3 hover:bg-blue-50 cursor-pointer text-center text-base font-bold" onclick="selectLobby('RN')">Ratnagiri</li>
+      <li class="px-5 py-3 hover:bg-blue-50 cursor-pointer text-center text-base font-bold" onclick="selectLobby('VSG')">Verna</li>
+      <li class="px-5 py-3 hover:bg-blue-50 cursor-pointer text-center text-base font-bold" onclick="selectLobby('SL')">Suratkal</li>
+    </ul>
+  </div>
 </div>
 
  <script>
