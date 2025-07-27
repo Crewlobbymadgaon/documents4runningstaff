@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Select Lobby</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-gradient-to-br from-blue-900 via-blue-800 to-blue-900 text-white h-screen flex flex-col justify-start items-center px-4 pt-10 space-y-10">
+
+<div class="text-center px-4">
+    <h1 class="font-rajdhani text-xl sm:text-2xl md:text-3xl leading-tight font-extrabold">
+      Digital Library for Running Staff
+    </h1>
+    <h2 class="font-rajdhani text-3xl sm:text-4xl md:text-5xl font-extrabold mt-3">
+      Shed Order
+    </h2>
+  </div>
+  
+  
+
+<div class="relative w-full max-w-xs mx-auto">
+<button onclick="toggleDropdown()" 
+  class="w-full bg-gradient-to-r from-blue-700 to-blue-900 text-white text-lg font-bold px-5 py-3 rounded-xl shadow-md flex justify-between items-center transition-all duration-200 hover:scale-105 focus:scale-100 active:scale-100">
+    <span id="lobbyLabel" class="w-full text-center">Select Lobby</span>
+    <svg class="w-5 h-5 ml-2 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+    </svg>
+  </button>
+
+  <ul id="lobbyMenu" class="absolute left-0 right-0 z-10 hidden bg-white text-blue-900 mt-2 rounded-xl shadow-lg overflow-hidden">
+    <li class="px-5 py-3 hover:bg-blue-50 cursor-pointer text-center text-base font-bold" onclick="selectLobby('MAO')">Madgaon</li>
+    <li class="px-5 py-3 hover:bg-blue-50 cursor-pointer text-center text-base font-bold" onclick="selectLobby('RN')">Ratnagiri</li>
+    <li class="px-5 py-3 hover:bg-blue-50 cursor-pointer text-center text-base font-bold" onclick="selectLobby('VSG')">Verna</li>
+    <li class="px-5 py-3 hover:bg-blue-50 cursor-pointer text-center text-base font-bold" onclick="selectLobby('SL')">Suratkal</li>
+  </ul>
+</div>
+
+ <script>
+  function toggleDropdown() {
+    document.getElementById("lobbyMenu").classList.toggle("hidden");
+  }
+
+  function selectLobby(lobbyCode) {
+    const labelMap = {
+      MAO: "Madgaon",
+      RN: "Ratnagiri",
+      VSG: "Verna",
+      SL: "Suratkal"
+    };
+    document.getElementById("lobbyLabel").textContent = labelMap[lobbyCode];
+    document.getElementById("lobbyMenu").classList.add("hidden");
+    
+    // Redirect to shed order page
+    window.location.href = `/shedorder-${lobbyCode.toLowerCase()}.html`;
+  }
+</script>
+  </body>
+</html>
