@@ -123,10 +123,6 @@
     let currentYear = null;
     let currentIndex = null;
 
-const shedOrders = {
-  "2024": shedOrders2024, // from external file
-  "2025": shedOrders2025,
-};
 
    
 
@@ -157,7 +153,8 @@ const shedOrders = {
   } else {
     // Dynamically load year script
     const script = document.createElement('script');
-    script.src = `/documents4runningstaff/js/shed_order_${selectedYear}.js`;
+    script.src = `/documents4runningstaff/js/shed_order/${selectedYear}/shed_order_${selectedYear}.js`;
+
     script.onload = () => {
       if (window.shedOrdersByYear?.[selectedYear]) {
         renderShedOrders(selectedYear);
@@ -264,12 +261,6 @@ if (savedYear) {
   highlightSelectedYear();
 }
 
-// On year change
-function highlightSelectedYear() {
-  const selectedYear = document.getElementById("yearSelect").value;
-  localStorage.setItem("selectedYear", selectedYear);
-  ...
-}
 
 
   </script>
