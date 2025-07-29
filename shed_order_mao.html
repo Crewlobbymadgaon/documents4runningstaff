@@ -153,7 +153,7 @@
   } else {
     // Dynamically load year script
     const script = document.createElement('script');
-    script.src = `/documents4runningstaff/js/shed_order/${selectedYear}/shed_order_${selectedYear}.js`;
+    script.src = `/documents4runningstaff/js/shed_order_${selectedYear}.js`;
 
     script.onload = () => {
       if (window.shedOrdersByYear?.[selectedYear]) {
