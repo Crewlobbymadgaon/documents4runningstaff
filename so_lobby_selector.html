@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en" class="h-full">
-  <head>
+<head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Select Lobby</title>
-  
-  <!-- Faster Tailwind CSS load -->
+
+  <!-- Tailwind CSS -->
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 
   <!-- Rajdhani Font -->
@@ -16,71 +16,63 @@
     }
   </style>
 </head>
-  <body class="bg-gradient-to-br from-blue-900 via-blue-800 to-blue-900 text-white h-screen flex flex-col justify-start items-center px-4 pt-10 space-y-10">
+<body class="bg-gradient-to-br from-blue-900 via-blue-800 to-blue-900 text-white min-h-screen flex flex-col items-center px-4 pt-6 sm:pt-10 space-y-10">
 
-<div class="text-center px-4">
-    <h1 class="font-rajdhani text-xl sm:text-2xl md:text-3xl leading-tight font-extrabold">
-      Digital Library for Running Staff
-    </h1>
-    <h2 class="font-rajdhani text-3xl sm:text-4xl md:text-5xl font-extrabold mt-3">
-      Shed Order
-    </h2>
-  </div>
-  
-  
+  <header class="text-center w-full max-w-3xl mx-auto">
+  <!-- Main Heading -->
+  <h1 class="font-rajdhani text-2xl sm:text-3xl md:text-4xl font-extrabold leading-tight">
+    Digital Library for Running Staff
+  </h1>
 
-<div class="w-full flex justify-center my-4">
-  <div class="relative w-full max-w-xs">
-    <!-- Button -->
-    <button onclick="toggleDropdown()" 
-      class="relative bg-gradient-to-b from-blue-900 via-blue-500 to-blue-900 text-white text-lg font-bold px-5 py-3 rounded-md border border-blue-950 
-             focus:outline-none focus:ring-1 focus:ring-blue-950 
-             shadow-lg shadow-blue-900/80 
-             w-full flex items-center justify-between">
+  <!-- Subheading -->
+  <h2 class="font-rajdhani text-4xl sm:text-5xl md:text-6xl font-extrabold mt-2">
+    Shed Order
+  </h2>
 
-      <!-- Centered label -->
-      <span id="lobbyLabel" 
-        class="absolute left-1/2 transform -translate-x-1/2 drop-shadow-[0_1px_2px_rgba(0,0,80,0.9)]">
-        Select Lobby
-      </span>
-
-      <!-- Invisible placeholder to balance layout -->
-      <span class="invisible">Select Lobby</span>
-
-      <!-- Down arrow -->
-      <svg class="w-5 h-5 ml-2 shrink-0 z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+  <!-- Centered Home Button -->
+  <div class="mt-4 flex justify-center">
+    <a href="/index.html"
+       class="inline-flex items-center gap-2 text-sm sm:text-base font-bold text-white bg-gradient-to-b from-blue-900 via-blue-500 to-blue-900 hover:scale-105 transform transition duration-200 px-4 py-2 rounded-md border border-blue-950 shadow-lg">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="white" viewBox="0 0 24 24" class="w-5 h-5">
+        <path d="M3 9.75L12 3l9 6.75v9.75A1.5 1.5 0 0 1 19.5 21h-3.75V13.5h-7.5V21H4.5A1.5 1.5 0 0 1 3 19.5V9.75Z" />
       </svg>
-    </button>
-
-    <!-- Dropdown Menu (inside the same relative container) -->
-    <ul id="lobbyMenu" class="absolute left-0 right-0 z-10 hidden bg-white text-blue-900 mt-2 rounded-xl shadow-lg overflow-hidden">
-      <li class="px-5 py-3 hover:bg-blue-50 cursor-pointer text-center text-base font-bold" onclick="selectLobby('MAO')">Madgaon</li>
-      <li class="px-5 py-3 hover:bg-blue-50 cursor-pointer text-center text-base font-bold" onclick="selectLobby('RN')">Ratnagiri</li>
-      <li class="px-5 py-3 hover:bg-blue-50 cursor-pointer text-center text-base font-bold" onclick="selectLobby('VEN')">Verna</li>
-      <li class="px-5 py-3 hover:bg-blue-50 cursor-pointer text-center text-base font-bold" onclick="selectLobby('SL')">Suratkal</li>
-    </ul>
+      Home
+    </a>
   </div>
-</div>
+</header>
 
- <script>
-  function toggleDropdown() {
-    document.getElementById("lobbyMenu").classList.toggle("hidden");
-  }
+<!-- Full-width Divider below header -->
+<hr class="mt-6 mb-8 border-t-2 border-blue-400 w-full">
 
-  function selectLobby(lobbyCode) {
-    const labelMap = {
-      MAO: "Madgaon",
-      RN: "Ratnagiri",
-      VEN: "Verna",
-      SL: "Suratkal"
-    };
-    document.getElementById("lobbyLabel").textContent = labelMap[lobbyCode];
-    document.getElementById("lobbyMenu").classList.add("hidden");
-    
-    // Redirect to shed order page
-    window.location.href = `/documents4runningstaff/shed_order_${lobbyCode.toLowerCase()}.html`;
-  }
-</script>
-  </body>
+
+<!-- Moved Outside the Header -->
+<p class="mt-6 text-xl sm:text-xl font-bold text-blue-200 text-center">
+  Select Lobby
+</p>
+
+
+  <!-- Lobby Buttons Grid -->
+  <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 w-full max-w-4xl px-2 sm:px-4">
+    <button onclick="goToLobby('mao')" class="bg-gradient-to-b from-blue-900 via-blue-500 to-blue-900 w-full px-6 py-4 rounded-xl text-lg font-bold border border-blue-950 shadow-lg hover:scale-105 transform transition duration-200">
+      Madgaon
+    </button>
+    <button onclick="goToLobby('rn')" class="bg-gradient-to-b from-blue-900 via-blue-500 to-blue-900 w-full px-6 py-4 rounded-xl text-lg font-bold border border-blue-950 shadow-lg hover:scale-105 transform transition duration-200">
+      Ratnagiri
+    </button>
+    <button onclick="goToLobby('ven')" class="bg-gradient-to-b from-blue-900 via-blue-500 to-blue-900 w-full px-6 py-4 rounded-xl text-lg font-bold border border-blue-950 shadow-lg hover:scale-105 transform transition duration-200">
+      Verna
+    </button>
+    <button onclick="goToLobby('sl')" class="bg-gradient-to-b from-blue-900 via-blue-500 to-blue-900 w-full px-6 py-4 rounded-xl text-lg font-bold border border-blue-950 shadow-lg hover:scale-105 transform transition duration-200">
+      Suratkal
+    </button>
+  </div>
+
+  <!-- Redirect Logic -->
+  <script>
+    function goToLobby(code) {
+      window.location.href = `/documents4runningstaff/shed_order_${code}.html`;
+    }
+  </script>
+
+</body>
 </html>
