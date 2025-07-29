@@ -180,9 +180,8 @@ function renderShedOrders(year) {
   // 🔄 Reverse the order to show latest at the top
   const reversedOrders = [...orders].reverse();
 
-  reversedOrders.forEach((order, index) => {
   reversedOrders.forEach((order, reversedIndex) => {
-  const actualIndex = orders.indexOf(order); // Use original index for localStorage key
+  const actualIndex = orders.length - 1 - reversedIndex; // ✅ correct original index
   const isAcknowledged = localStorage.getItem(`ack_${year}_${actualIndex}`) === "true";
 
   const card = document.createElement("div");
@@ -287,10 +286,14 @@ function openModal(title, filePath, year, index) {
   closeModal();
 }
 
-    // On page load
-const savedYear = localStorage.getItem("selectedYear");
-if (savedYear) {
-  document.getElementById("yearSelect").value = savedYear;
+
+// On page load
+const currentYear = new Date().getFullYear();
+const yearSelect = document.getElementById("yearSelect");
+
+// Set current year as selected if available in options
+if ([...yearSelect.options].some(opt => opt.value === String(currentYear))) {
+  yearSelect.value = currentYear;
   highlightSelectedYear();
 }
     function acknowledge(year, index) {
