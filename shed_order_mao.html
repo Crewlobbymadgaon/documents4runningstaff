@@ -215,12 +215,7 @@ function renderShedOrders(year) {
   shedOrderList.appendChild(card);
 });
 
-function toggleAcknowledge(year, index, button) {
-  const key = `ack_${year}_${index}`;
-  const acknowledged = localStorage.getItem(key) === "true";
-  localStorage.setItem(key, !acknowledged);
-  highlightSelectedYear(); // Refresh the list to show updated status
-}
+
 
 
 function openModal(title, filePath, year, index) {
@@ -287,9 +282,11 @@ function openModal(title, filePath, year, index) {
 }
 
 
-// On page load
-const currentYear = new Date().getFullYear();
-const yearSelect = document.getElementById("yearSelect");
+const detectedYear = new Date().getFullYear();
+if ([...yearSelect.options].some(opt => opt.value === String(detectedYear))) {
+  yearSelect.value = detectedYear;
+  highlightSelectedYear();
+}
 
 // Set current year as selected if available in options
 if ([...yearSelect.options].some(opt => opt.value === String(currentYear))) {
