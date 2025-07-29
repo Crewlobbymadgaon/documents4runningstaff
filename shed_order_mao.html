@@ -177,45 +177,43 @@ function renderShedOrders(year) {
     return;
   }
 
-  // 🔄 Reverse the order to show latest at the top
   const reversedOrders = [...orders].reverse();
 
   reversedOrders.forEach((order, reversedIndex) => {
-  const actualIndex = orders.length - 1 - reversedIndex; // ✅ correct original index
-  const isAcknowledged = localStorage.getItem(`ack_${year}_${actualIndex}`) === "true";
+    const actualIndex = orders.length - 1 - reversedIndex;
+    const isAcknowledged = localStorage.getItem(`ack_${year}_${actualIndex}`) === "true";
 
-  const card = document.createElement("div");
-  card.className = "bg-white relative rounded-lg p-4 shadow-md border border-blue-100";
+    const card = document.createElement("div");
+    card.className = "bg-white relative rounded-lg p-4 shadow-md border border-blue-100";
 
-  card.innerHTML = `
-    <div class="font-bold text-lg text-blue-900 mb-2">${order.number}</div>
-    <div class="text-gray-700 mb-4">${order.topic}</div>
-    <div class="flex justify-between items-end mt-4">
-      <a href="/documents4runningstaff/doc_shed_order_mao_${year}/${order.file}" 
-         target="_blank"
-         class="bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-4 py-2 rounded">
-        View
-      </a>
-      <span id="status_${year}_${actualIndex}"
-        class="${isAcknowledged ? 'bg-green-600' : 'bg-gray-400'} text-white text-xs px-2 py-1 rounded-full text-right">
-        ${isAcknowledged ? '✅ Acknowledged' : '❌ Not Acknowledged'}
-      </span>
-    </div>
-    <div class="mt-3 text-right">
-      <button 
-        onclick="acknowledge('${year}', ${actualIndex})"
-        id="ackBtn_${year}_${actualIndex}"
-        class="mt-2 bg-blue-700 hover:bg-blue-800 text-white px-3 py-1 rounded-md text-sm disabled:opacity-50"
-        ${isAcknowledged ? "disabled" : ""}>
-        ${isAcknowledged ? "Acknowledged" : "Mark as Acknowledged"}
-      </button>
-    </div>
-  `;
+    const filePath = `/documents4runningstaff/doc_shed_order_mao_${year}/${order.file}`;
 
-  shedOrderList.appendChild(card);
-});
+    card.innerHTML = `
+      <div class="font-bold text-lg text-blue-900 mb-2">${order.number}</div>
+      <div class="text-gray-700 mb-4">${order.topic}</div>
+      
+      <div class="flex flex-wrap justify-between items-center gap-2 mt-4">
+        <button 
+          onclick="openModal('${order.number}', '${filePath}', '${year}', ${actualIndex})"
+          class="bg-blue-700 hover:bg-blue-800 text-white text-sm font-semibold px-4 py-2 rounded">
+          Read & Acknowledge
+        </button>
 
+        <a href="${filePath}" target="_blank"
+          class="bg-gray-600 hover:bg-gray-700 text-white text-sm font-semibold px-4 py-2 rounded">
+          Download / Open
+        </a>
 
+        <span id="status_${year}_${actualIndex}"
+          class="${isAcknowledged ? 'bg-green-600' : 'bg-gray-400'} text-white text-xs px-2 py-1 rounded-full">
+          ${isAcknowledged ? '✅ Acknowledged' : '❌ Not Acknowledged'}
+        </span>
+      </div>
+    `;
+
+    shedOrderList.appendChild(card);
+  });
+}
 
 
 function openModal(title, filePath, year, index) {
