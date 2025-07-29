@@ -218,15 +218,39 @@ function openModal(title, filePath, year, index) {
   currentYear = year;
   currentIndex = index;
 
-  document.getElementById('modalTitle').textContent = title;
-  document.getElementById('pdfViewer').src = filePath;
-
-  const isAcknowledged = localStorage.getItem(`ack_${year}_${index}`) === "true";
-
+  const modal = document.getElementById('pdfModal');
+  const viewer = document.getElementById('pdfViewer');
+  const modalTitle = document.getElementById('modalTitle');
+  const loading = document.getElementById('pdfLoading');
   const ackSection = document.querySelector('.p-4.border-t');
   const ackCheckbox = document.getElementById('ackCheckbox');
   const ackBtn = document.getElementById('ackBtn');
 
+  // Reset PDF
+  viewer.src = "";
+  viewer.style.display = "none";
+
+  // Set title
+  modalTitle.textContent = title;
+
+  // Show loading screen
+  loading.classList.remove('hidden');
+
+  // Load PDF
+  viewer.onload = () => {
+    loading.classList.add('hidden');
+    modal.classList.remove('hidden');
+    viewer.style.display = "block";
+  };
+
+  viewer.onerror = () => {
+    loading.textContent = "⚠️ Failed to load document. Try again later.";
+  };
+
+  viewer.src = filePath;
+
+  // Show/hide acknowledgement section
+  const isAcknowledged = localStorage.getItem(`ack_${year}_${index}`) === "true";
   if (isAcknowledged) {
     ackSection.classList.add('hidden');
   } else {
@@ -234,18 +258,14 @@ function openModal(title, filePath, year, index) {
     ackBtn.disabled = true;
     ackSection.classList.remove('hidden');
   }
-
-  document.getElementById('pdfModal').classList.remove('hidden');
 }
 
   function closeModal() {
-    document.getElementById('pdfModal').classList.add('hidden');
-    document.getElementById('pdfViewer').src = ""; // reset PDF
-  }
-
-  document.getElementById('ackCheckbox').addEventListener('change', function () {
-    document.getElementById('ackBtn').disabled = !this.checked;
-  });
+  document.getElementById('pdfModal').classList.add('hidden');
+  document.getElementById('pdfViewer').src = "";
+  document.getElementById('pdfViewer').style.display = "none";
+  document.getElementById('pdfLoading').classList.add('hidden');
+}
 
   function submitAcknowledgement() {
   if (currentYear !== null && currentIndex !== null) {
@@ -267,5 +287,8 @@ if (savedYear) {
 
 
   </script>
+    <div id="pdfLoading" class="fixed inset-0 z-40 bg-black bg-opacity-80 text-white flex items-center justify-center text-xl font-semibold hidden">
+  Loading document...
+    </div>
 </body>
 </html>
