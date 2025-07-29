@@ -111,12 +111,15 @@
       window.location.href = `/documents4runningstaff/shed_order_${code}.html`;
     }
   
+  
+    
   window.addEventListener("pageshow", () => {
-    // Reset all transform styles on lobby buttons
-    document.querySelectorAll(".lobby-button").forEach(btn => {
-      btn.classList.remove("scale-105");
+    document.querySelectorAll('.lobby-button').forEach(btn => {
+      btn.style.transform = 'scale(1)';       // Reset any stuck scale
+      btn.classList.remove('scale-105');      // Also remove any leftover class
     });
   });
+
 </script>
 
 </body>
