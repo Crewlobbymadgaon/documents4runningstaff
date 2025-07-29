@@ -181,30 +181,40 @@ function renderShedOrders(year) {
   const reversedOrders = [...orders].reverse();
 
   reversedOrders.forEach((order, index) => {
-    const isAcknowledged = localStorage.getItem(`ack_${year}_${orders.indexOf(order)}`) === "true";
+  reversedOrders.forEach((order, reversedIndex) => {
+  const actualIndex = orders.indexOf(order); // Use original index for localStorage key
+  const isAcknowledged = localStorage.getItem(`ack_${year}_${actualIndex}`) === "true";
 
-    const card = document.createElement("div");
-    card.className = "bg-white relative rounded-lg p-4 shadow-md border border-blue-100";
+  const card = document.createElement("div");
+  card.className = "bg-white relative rounded-lg p-4 shadow-md border border-blue-100";
 
-    card.innerHTML = `
-      <div class="font-bold text-lg text-blue-900 mb-2">${order.number}</div>
-      <div class="text-gray-700 mb-4">${order.topic}</div>
-      <div class="flex justify-between items-end mt-4">
-        <button onclick="openModal('${order.number} - ${order.topic}', '/documents4runningstaff/doc_shed_order_mao_${year}/${order.file}', '${year}', ${orders.indexOf(order)})"
-          class="bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-4 py-2 rounded">
-          View
-        </button>
-        <span class="${isAcknowledged ? 'bg-green-600' : 'bg-gray-400'} text-white text-xs px-2 py-1 rounded-full text-right">
-          ${isAcknowledged ? '✅ Acknowledged' : '❌ Not Acknowledged'}
-        </span>
-      </div>
-    `;
+  card.innerHTML = `
+    <div class="font-bold text-lg text-blue-900 mb-2">${order.number}</div>
+    <div class="text-gray-700 mb-4">${order.topic}</div>
+    <div class="flex justify-between items-end mt-4">
+      <a href="/documents4runningstaff/doc_shed_order_mao_${year}/${order.file}" 
+         target="_blank"
+         class="bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-4 py-2 rounded">
+        View
+      </a>
+      <span id="status_${year}_${actualIndex}"
+        class="${isAcknowledged ? 'bg-green-600' : 'bg-gray-400'} text-white text-xs px-2 py-1 rounded-full text-right">
+        ${isAcknowledged ? '✅ Acknowledged' : '❌ Not Acknowledged'}
+      </span>
+    </div>
+    <div class="mt-3 text-right">
+      <button 
+        onclick="acknowledge('${year}', ${actualIndex})"
+        id="ackBtn_${year}_${actualIndex}"
+        class="mt-2 bg-blue-700 hover:bg-blue-800 text-white px-3 py-1 rounded-md text-sm disabled:opacity-50"
+        ${isAcknowledged ? "disabled" : ""}>
+        ${isAcknowledged ? "Acknowledged" : "Mark as Acknowledged"}
+      </button>
+    </div>
+  `;
 
-    shedOrderList.appendChild(card);
-  });
-
-  shedOrderList.scrollIntoView({ behavior: "smooth" });
-}
+  shedOrderList.appendChild(card);
+});
 
 function toggleAcknowledge(year, index, button) {
   const key = `ack_${year}_${index}`;
@@ -283,6 +293,23 @@ if (savedYear) {
   document.getElementById("yearSelect").value = savedYear;
   highlightSelectedYear();
 }
+    function acknowledge(year, index) {
+  localStorage.setItem(`ack_${year}_${index}`, "true");
+
+  // Update status text
+  const status = document.getElementById(`status_${year}_${index}`);
+  if (status) {
+    status.textContent = '✅ Acknowledged';
+    status.className = "bg-green-600 text-white text-xs px-2 py-1 rounded-full text-right";
+  }
+
+  // Disable the button
+  const btn = document.getElementById(`ackBtn_${year}_${index}`);
+  if (btn) {
+    btn.disabled = true;
+    btn.textContent = 'Acknowledged';
+  }
+    }
 
 
 
