@@ -441,13 +441,14 @@ document.querySelectorAll('#menu-items a').forEach(link => {
   rotateSlogan();
   setInterval(rotateSlogan, 3000);
 
-    window.addEventListener("pageshow", () => {
-  document.querySelectorAll("#menu-items a").forEach(link => {
-    link.classList.remove("selected-tile");
-    link.style.background = "";
-    link.style.transform = "";
+ window.addEventListener("pageshow", () => {
+    // Remove focus and transform effects from all menu tiles
+    document.querySelectorAll('#menu-items a').forEach(link => {
+      link.blur(); // Remove focus from the link
+      link.style.transform = 'none'; // Reset transform (scale)
+      link.classList.remove("ring-2", "ring-white", "ring-offset-2", "ring-offset-blue-700");
+    });
   });
-})
 
   
 </script>
