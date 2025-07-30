@@ -444,6 +444,13 @@ document.querySelectorAll('#menu-items a').forEach(link => {
 
   rotateSlogan();
   setInterval(rotateSlogan, 3000);
+
+  window.addEventListener('pageshow', () => {
+  // Remove transform styles that may persist from back-forward cache
+  document.querySelectorAll('.hover\\:scale-105').forEach(el => {
+    el.style.transform = 'none';
+  });
+});
 </script>
 
 
