@@ -411,16 +411,19 @@
     mainContent.classList.remove("hidden");
   });
 
-  // Auto-hide menu and show main when a menu link is clicked
-  document.querySelectorAll('#menu-items a').forEach(link => {
-    link.addEventListener('click', () => {
+document.querySelectorAll('#menu-items a').forEach(link => {
+  link.addEventListener('click', (e) => {
+    const href = link.getAttribute('href');
+    if (href.startsWith("#")) {
+      // Only toggle views for internal section links
       homeBtn.classList.add("hidden");
       menuBtn.classList.remove("hidden");
       menuItems.classList.add("hidden");
       mainContent.classList.remove("hidden");
-    });
+    }
+    // For actual navigation (like shed order), do nothing — browser handles it
   });
-
+});
 
 
   // ✅ Rotating slogans
