@@ -98,13 +98,18 @@
   <!-- Shed Order -->
   <a href="so_lobby_selector.html"
    class="block w-full aspect-[6/1.2] sm:aspect-[6/1.8] 
-          flex items-center justify-center 
-          bg-gradient-to-b from-red-900 via-red-500 to-red-900 
-          hover:from-red-800 hover:via-red-400 hover:to-red-800 
+          flex items-center gap-3 justify-start 
+          bg-gradient-to-b from-red-900 via-red-500 to-red-900
+          hover:from-red-800 hover:via-red-400 hover:to-red-800
           text-white text-lg font-semibold 
-          rounded-xl p-3 
-          shadow-lg transition-colors duration-300">
-   Shed Order
+          rounded-xl p-3 shadow-lg transition-all duration-300 overflow-hidden">
+  
+  <!-- Icon/Image -->
+  <img src="img/shed.png" alt="Shed Order Icon" 
+       class="h-10 w-10 object-contain shrink-0" />
+
+  <!-- Text -->
+  <span>Shed Order</span>
 </a>
 
   <!-- Safety Circular -->
@@ -441,15 +446,13 @@ document.querySelectorAll('#menu-items a').forEach(link => {
   rotateSlogan();
   setInterval(rotateSlogan, 3000);
 
- window.addEventListener("pageshow", () => {
-    // Remove focus and transform effects from all menu tiles
+window.addEventListener("pageshow", () => {
     document.querySelectorAll('#menu-items a').forEach(link => {
-      link.blur(); // Remove focus from the link
-      link.style.transform = 'none'; // Reset transform (scale)
+      link.blur(); // Remove keyboard focus
+      link.style.transform = 'none'; // Reset scale if stuck
       link.classList.remove("ring-2", "ring-white", "ring-offset-2", "ring-offset-blue-700");
     });
   });
-
   
 </script>
 
