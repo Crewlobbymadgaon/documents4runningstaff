@@ -448,6 +448,14 @@ document.querySelectorAll('#menu-items a').forEach(link => {
   rotateSlogan();
   setInterval(rotateSlogan, 3000);
 
+    window.addEventListener("pageshow", () => {
+  document.querySelectorAll("#menu-items a").forEach(link => {
+    link.classList.remove("selected-tile");
+    link.style.background = "";
+    link.style.transform = "";
+  });
+})
+
   
 </script>
 
