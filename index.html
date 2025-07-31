@@ -105,7 +105,8 @@
     <img src="https://example.com/icon2.png" alt="Safety Icon" class="w-full h-full object-contain" />
   </div>
   <div class="absolute inset-0 flex items-center justify-center">
-    <span class="menu-text text-xl sm:text-2xl font-bold tracking-wide text-center">Shed Order</span>
+    <span class="menu-text text-xl sm:text-2xl font-bold tracking-wide text-center transition-all duration-200">Shed Order</span>
+
   </div>
 </a>
 
@@ -445,26 +446,33 @@ document.querySelectorAll('#menu-items a').forEach(link => {
   setInterval(rotateSlogan, 3000);
 
   
+
   document.querySelectorAll("a").forEach(link => {
     link.addEventListener("click", () => {
       const textSpan = link.querySelector(".menu-text");
       if (!textSpan) return;
 
-      textSpan.classList.add("scale-110");
+      // Remove base sizes temporarily
+      textSpan.classList.remove("text-xl", "sm:text-2xl");
 
+      // Add enlarged size
+      textSpan.classList.add("text-3xl");
+
+      // Revert back after short delay
       setTimeout(() => {
-        textSpan.classList.remove("scale-110");
-      }, 150); // shorter duration for snappy feel
+        textSpan.classList.remove("text-3xl");
+        textSpan.classList.add("text-xl", "sm:text-2xl");
+      }, 200);
     });
   });
 
-  // Clean up enlarged text if user comes back via browser back button
+  // Reset font size if coming back via back button
   window.addEventListener("pageshow", () => {
     document.querySelectorAll(".menu-text").forEach(span => {
-      span.classList.remove("scale-110");
+      span.classList.remove("text-3xl");
+      span.classList.add("text-xl", "sm:text-2xl");
     });
   });
-
 </script>
 
   </body>
