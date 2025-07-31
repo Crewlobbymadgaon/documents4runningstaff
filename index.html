@@ -459,6 +459,15 @@ document.querySelectorAll('#menu-items a').forEach(link => {
       }, 300);
     });
   });
+
+  document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState === "visible") {
+    document.querySelectorAll(".menu-text").forEach(span => {
+      span.classList.remove("scale-125");
+    });
+  }
+});
+
 </script>
 
   </body>
