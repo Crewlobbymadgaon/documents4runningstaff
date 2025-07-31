@@ -6,7 +6,7 @@
   <title>Select Lobby</title>
 
   <!-- Tailwind CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    
     <script src="https://cdn.jsdelivr.net/npm/idb@7/build/iife/index-min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
@@ -75,51 +75,71 @@
 <div class="flex justify-center mt-4">
   <!-- Lobby Buttons Grid -->
   <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 w-full max-w-4xl px-2 sm:px-4">
-    <button onclick="goToLobby('mao')" 
-  class="lobby-button bg-gradient-to-b from-blue-900 via-blue-500 to-blue-900 w-full px-6 py-4 rounded-xl text-lg font-bold text-white border border-blue-950 shadow-lg 
-         transform transition duration-200 ease-in-out 
-         hover:scale-105 active:scale-95">
-  <span style="text-shadow: 1px 1px 2px black;">Madgaon</span>
-</button>
+
+      <a href="shed_order_mao.html"
+   class="relative bg-gradient-to-b from-blue-900 via-blue-500 to-blue-900 w-full px-6 py-4 
+          rounded-xl text-lg font-bold text-white border border-blue-950 shadow-lg 
+          transition duration-200 ease-in-out flex items-center justify-center">
+  <span class="menu-text text-lg sm:text-xl font-bold tracking-wide text-center" 
+        style="text-shadow: 1px 1px 2px black;">
+    Madgaon
+  </span>
+</a>
     
-    <button onclick="goToLobby('rn')" 
-  class="lobby-button bg-gradient-to-b from-blue-900 via-blue-500 to-blue-900 w-full px-6 py-4 rounded-xl text-lg font-bold text-white border border-blue-950 shadow-lg 
-         transform transition duration-200 ease-in-out 
-         hover:scale-105 active:scale-95">
-  <span style="text-shadow: 1px 1px 2px black;">Ratnagiri</span>
-</button>
     
-    <button onclick="goToLobby('ven')" 
-  class="lobby-button bg-gradient-to-b from-blue-900 via-blue-500 to-blue-900 w-full px-6 py-4 rounded-xl text-lg font-bold text-white border border-blue-950 shadow-lg 
-         transform transition duration-200 ease-in-out 
-         hover:scale-105 active:scale-95">
-  <span style="text-shadow: 1px 1px 2px black;">Verna</span>
-</button>
+   <a href="shed_order_rn.html"
+   class="relative bg-gradient-to-b from-blue-900 via-blue-500 to-blue-900 w-full px-6 py-4 
+          rounded-xl text-lg font-bold text-white border border-blue-950 shadow-lg 
+          transition duration-200 ease-in-out flex items-center justify-center">
+  <span class="menu-text text-lg sm:text-xl font-bold tracking-wide text-center" 
+        style="text-shadow: 1px 1px 2px black;">
+    Ratnagiri
+  </span>
+</a>
     
-    <button onclick="goToLobby('sl')" 
-  class="lobby-button bg-gradient-to-b from-blue-900 via-blue-500 to-blue-900 w-full px-6 py-4 rounded-xl text-lg font-bold text-white border border-blue-950 shadow-lg 
-         transform transition duration-200 ease-in-out 
-         hover:scale-105 active:scale-95">
-  <span style="text-shadow: 1px 1px 2px black;">Suratkal</span>
-</button>
+    <a href="shed_order_ven.html"
+   class="relative bg-gradient-to-b from-blue-900 via-blue-500 to-blue-900 w-full px-6 py-4 
+          rounded-xl text-lg font-bold text-white border border-blue-950 shadow-lg 
+          transition duration-200 ease-in-out flex items-center justify-center">
+  <span class="menu-text text-lg sm:text-xl font-bold tracking-wide text-center" 
+        style="text-shadow: 1px 1px 2px black;">
+    Verna
+  </span>
+</a>
+    
+    <a href="shed_order_sl.html"
+   class="relative bg-gradient-to-b from-blue-900 via-blue-500 to-blue-900 w-full px-6 py-4 
+          rounded-xl text-lg font-bold text-white border border-blue-950 shadow-lg 
+          transition duration-200 ease-in-out flex items-center justify-center">
+  <span class="menu-text text-lg sm:text-xl font-bold tracking-wide text-center" 
+        style="text-shadow: 1px 1px 2px black;">
+    Suratkal
+  </span>
+</a>
   </div>
 </div>
 
   <!-- Redirect Logic -->
   <script>
-    function goToLobby(code) {
-      window.location.href = `/documents4runningstaff/shed_order_${code}.html`;
-    }
-  
-  
-    
-  window.addEventListener("pageshow", () => {
-    document.querySelectorAll('.lobby-button').forEach(btn => {
-      btn.style.transform = 'scale(1)';       // Reset any stuck scale
-      btn.classList.remove('scale-105');      // Also remove any leftover class
+    document.querySelectorAll("a").forEach(link => {
+    link.addEventListener("click", () => {
+      const textSpan = link.querySelector(".menu-text");
+      if (!textSpan) return;
+
+      textSpan.classList.add("scale-110");
+
+      setTimeout(() => {
+        textSpan.classList.remove("scale-110");
+      }, 200); // shorter duration for snappy feel
     });
   });
 
+  // Clean up enlarged text if user comes back via browser back button
+  window.addEventListener("pageshow", () => {
+    document.querySelectorAll(".menu-text").forEach(span => {
+      span.classList.remove("scale-110");
+    });
+  });
 </script>
 
 </body>
