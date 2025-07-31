@@ -447,33 +447,28 @@ document.querySelectorAll('#menu-items a').forEach(link => {
 
   
 
+
   document.querySelectorAll("a").forEach(link => {
     link.addEventListener("click", () => {
       const textSpan = link.querySelector(".menu-text");
       if (!textSpan) return;
 
-      // Remove base sizes temporarily
-      textSpan.classList.remove("text-xl", "sm:text-2xl");
+      textSpan.classList.add("scale-110");
 
-      // Add enlarged size
-      textSpan.classList.add("text-3xl");
-
-      // Revert back after short delay
       setTimeout(() => {
-        textSpan.classList.remove("text-3xl");
-        textSpan.classList.add("text-xl", "sm:text-2xl");
-      }, 200);
+        textSpan.classList.remove("scale-110");
+      }, 150); // shorter duration for snappy feel
     });
   });
 
-  // Reset font size if coming back via back button
+  // Clean up enlarged text if user comes back via browser back button
   window.addEventListener("pageshow", () => {
     document.querySelectorAll(".menu-text").forEach(span => {
-      span.classList.remove("text-3xl");
-      span.classList.add("text-xl", "sm:text-2xl");
+      span.classList.remove("scale-110");
     });
   });
 </script>
+
 
   </body>
     </html>
