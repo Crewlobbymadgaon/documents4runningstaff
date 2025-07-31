@@ -105,8 +105,10 @@
       <img src="https://example.com/icon2.png" alt="Safety Icon" class="w-full h-full object-contain" />
     </div>
     <div class="absolute inset-0 flex items-center justify-center">
-      <span class="text-lg sm:text-xl font-bold tracking-wide text-center">Shed Order</span>
-    </div>
+      <span class="text-white text-center text-xs sm:text-sm font-semibold transition-transform duration-300 menu-text">
+  Shed Order
+</span>
+</div>
   </a>
   <!-- Safety Circular -->
   <a href="#safety-circular"
@@ -442,13 +444,7 @@ document.querySelectorAll('#menu-items a').forEach(link => {
   rotateSlogan();
   setInterval(rotateSlogan, 3000);
 
-window.addEventListener("pageshow", () => {
-    document.querySelectorAll('#menu-items a').forEach(link => {
-      link.blur(); // Remove keyboard focus
-      link.style.transform = 'none'; // Reset scale if stuck
-      link.classList.remove("ring-2", "ring-white", "ring-offset-2", "ring-offset-blue-700");
-    });
-  });
+
   
 </script>
 
