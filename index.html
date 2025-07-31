@@ -105,7 +105,10 @@
       <img src="https://example.com/icon2.png" alt="Safety Icon" class="w-full h-full object-contain" />
     </div>
     <div class="absolute inset-0 flex items-center justify-center">
-      <span class="text-lg sm:text-xl font-bold tracking-wide text-center">Shed Order</span>
+      <span class="menu-text transition-transform duration-300 text-lg sm:text-xl font-bold tracking-wide text-center">
+  Shed Order
+</span>
+
     </div>
   </a>
 
@@ -444,29 +447,27 @@ document.querySelectorAll('#menu-items a').forEach(link => {
   setInterval(rotateSlogan, 3000);
 
   
-  // Select all menu links
-  document.querySelectorAll("#menu-items a").forEach(link => {
-    link.addEventListener("click", (e) => {
+  
+
+  document.querySelectorAll("a").forEach(link => {
+    link.addEventListener("click", () => {
       const textSpan = link.querySelector(".menu-text");
       if (!textSpan) return;
 
-      // Add scale class
       textSpan.classList.add("scale-125");
 
-      // Remove it after 300ms
       setTimeout(() => {
         textSpan.classList.remove("scale-125");
       }, 300);
     });
   });
 
-  document.addEventListener("visibilitychange", () => {
-  if (document.visibilityState === "visible") {
+  // Cleanup when coming back via browser back button
+  window.addEventListener("pageshow", () => {
     document.querySelectorAll(".menu-text").forEach(span => {
       span.classList.remove("scale-125");
     });
-  }
-});
+  });
 
 </script>
 
