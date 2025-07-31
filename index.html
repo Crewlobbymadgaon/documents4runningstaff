@@ -444,10 +444,23 @@ document.querySelectorAll('#menu-items a').forEach(link => {
   rotateSlogan();
   setInterval(rotateSlogan, 3000);
 
-
   
-</script>
+  // Select all menu links
+  document.querySelectorAll("#menu-items a").forEach(link => {
+    link.addEventListener("click", (e) => {
+      const textSpan = link.querySelector(".menu-text");
+      if (!textSpan) return;
 
+      // Add scale class
+      textSpan.classList.add("scale-125");
+
+      // Remove it after 300ms
+      setTimeout(() => {
+        textSpan.classList.remove("scale-125");
+      }, 300);
+    });
+  });
+</script>
 
   </body>
     </html>
