@@ -546,7 +546,49 @@ if ([...yearSelect.options].some(opt => opt.value === String(currentYear))) {
     btn.textContent = 'Acknowledged';
   }
     }
+    
 
+
+  function loadShedOrders(year) {
+    const existingScript = document.getElementById("shed-script");
+    if (existingScript) existingScript.remove();
+
+    const script = document.createElement("script");
+    script.id = "shed-script";
+    script.src = `scripts/shed_order_mao_${year}.js`;
+
+    script.onload = () => {
+      if (
+        window.shedOrdersByYear &&
+        Array.isArray(window.shedOrdersByYear[year]) &&
+        window.shedOrdersByYear[year].length > 0
+      ) {
+        displayShedOrders(year);
+      } else {
+        showNoDataMessage();
+      }
+    };
+
+    script.onerror = showNoDataMessage;
+
+    document.body.appendChild(script);
+  }
+
+  function showNoDataMessage() {
+    const container = document.getElementById("shedOrderList");
+    container.innerHTML = `<div class="text-center text-red-600 font-semibold p-4">Data not available</div>`;
+  }
+
+  function highlightSelectedYear() {
+    const year = document.getElementById("yearSelect").value;
+    loadShedOrders(year);
+  }
+
+  // Load default year on page load
+  window.addEventListener("DOMContentLoaded", () => {
+    const currentYear = document.getElementById("yearSelect").value;
+    loadShedOrders(currentYear);
+  });
 
 
   </script>
