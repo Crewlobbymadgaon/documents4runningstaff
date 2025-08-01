@@ -153,9 +153,21 @@
   });
   
   
+ 
+
+function renderShedOrders(year) {
+  const orders = window.shedOrdersByYear[year];
+  const shedOrderList = document. dropdownMenu.classList.add("hidden");
+    });
+  });
+  
+  
  function highlightSelectedYear() {
   const selectedYear = document.getElementById("yearSelect").value;
   if (!selectedYear) return;
+
+  // Clear previous content
+  document.getElementById("shedOrdersContainer").innerHTML = "<p class='text-white text-center p-4'>Loading...</p>";
 
   // If already loaded
   if (window.shedOrdersByYear?.[selectedYear]) {
@@ -169,21 +181,20 @@
       if (window.shedOrdersByYear?.[selectedYear]) {
         renderShedOrders(selectedYear);
       } else {
-        alert(`No data found for ${selectedYear}`);
+        displayNoDataMessage(selectedYear);
       }
     };
-    script.onerror = () => alert(`Failed to load shed orders for ${selectedYear}`);
+
+    script.onerror = () => {
+      displayNoDataMessage(selectedYear);
+    };
+
     document.body.appendChild(script);
   }
 }
 
 function renderShedOrders(year) {
-  const orders = window.shedOrdersByYear[year];
-  const shedOrderList = document.getElementById("shedOrderList");
-  shedOrderList.innerHTML = "";
-
-  if (!orders || orders.length === 0) {
-    shedOrderList.innerHTML = "<p class='text-center text-gray-500'>No shed orders available.</p>";
+  const orders = window.shedOrderList.innerHTML = "<p class='text-center text-gray-500'>No shed orders available.</p>";
     return;
   }
 
@@ -565,52 +576,45 @@ if ([...yearSelect.options].some(opt => opt.value === String(currentYear))) {
     }
     
   function loadShedOrders(year) {
-    const scriptId = "shed-script";
-    const container = document.getElementById("shedOrderList");
+  const shedOrderContainer = document.getElementById("shed-order-list");
+  shedOrderContainer.innerHTML = "Loading...";
 
-    // Clear any previous data
-    container.innerHTML = `<div class="text-center text-blue-600 font-semibold p-4">Loading...</div>`;
+  // Remove any previously loaded shed order script
+  const existingScript = document.getElementById("shedOrderScript");
+  if (existingScript) existingScript.remove();
 
-    const scriptUrl = `scripts/shed_order_mao_${year}.js`;
+  // Create new script tag for the selected year's file
+  const script = document.createElement("script");
+  script.id = "shedOrderScript";
+  script.src = `shed_order_mao_${year}.js`;
 
-    fetch(scriptUrl, { method: 'HEAD' })
-      .then(response => {
-        if (!response.ok) {
-          showNoDataMessage();
-          return;
-        }
+  // When the script loads successfully
+  script.onload = () => {
+    if (window.shedOrdersByYear && window.shedOrdersByYear[year]) {
+      displayShedOrders(year);
+    } else {
+      displayNoDataMessage(year);
+    }
+  };
 
-        // Remove old script if exists
-        const oldScript = document.getElementById(scriptId);
-        if (oldScript) oldScript.remove();
+  // When the script fails to load (file not found)
+  script.onerror = () => {
+    console.error(`Failed to load data for ${year}`);
+    delete window.shedOrdersByYear?.[year];
+    displayNoDataMessage(year);
+  };
 
-        const script = document.createElement("script");
-        script.id = scriptId;
-        script.src = scriptUrl;
+  document.body.appendChild(script);
+}
 
-        script.onload = () => {
-          if (
-            window.shedOrdersByYear &&
-            Array.isArray(window.shedOrdersByYear[year]) &&
-            window.shedOrdersByYear[year].length > 0
-          ) {
-            displayShedOrders(year);
-          } else {
-            showNoDataMessage();
-          }
-        };
-
-        script.onerror = showNoDataMessage;
-
-        document.body.appendChild(script);
-      })
-      .catch(showNoDataMessage);
-  }
-
-  function showNoDataMessage() {
-    const container = document.getElementById("shedOrderList");
-    container.innerHTML = `<div class="text-center text-red-600 font-semibold p-4">Data not available</div>`;
-  }
+  function displayNoDataMessage(year) {
+  const shedOrderContainer = document.getElementById("shed-order-list");
+  shedOrderContainer.innerHTML = `
+    <div class="text-center text-red-600 font-bold mt-4">
+      🚫 No shed order data available for ${year}.
+    </div>
+  `;
+}
 
   function highlightSelectedYear() {
     const year = document.getElementById("yearSelect").value;
