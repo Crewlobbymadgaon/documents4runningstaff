@@ -136,7 +136,12 @@
 
       const card = document.createElement("div");
       
-card.className = "bg-white relative rounded-xl p-4 border border-blue-200 shadow-md hover:shadow-blue-400 hover:shadow-xl hover:bg-blue-50 transition duration-300";
+card.className = `
+  bg-white relative rounded-xl p-4 
+  border-2 border-blue-300 shadow-md 
+  transition duration-300 
+  text-gray-800 text-base leading-relaxed break-words
+`;
       card.innerHTML = `
         <div class="font-bold text-lg text-blue-900 mb-2">${order.number}</div>
         <div class="text-gray-700 mb-4">${order.topic}</div>
