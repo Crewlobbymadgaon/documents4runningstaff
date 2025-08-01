@@ -99,35 +99,10 @@
 
 
 
-  <!-- Shed Order List -->
-  <section class="px-4 mt-8">
-    
-    <div id="shedOrderList" class="grid gap-4 max-w-2xl mx-auto"></div>
-    
-  </section>
+  <!<section class="px-4 mt-8">
+  <div id="shedOrderList" class="grid gap-4 max-w-2xl mx-auto"></div>
+</section>
 
-<!-- Modal -->
-<div id="pdfModal" class="fixed inset-0 z-50 bg-black bg-opacity-80 flex items-center justify-center p-2 hidden">
-  <div class="bg-white rounded-lg shadow-xl w-full max-w-5xl h-full sm:h-[90vh] overflow-hidden flex flex-col">
-    <!-- Modal Header -->
-    <div class="flex justify-between items-center p-4 bg-blue-800 text-white">
-      <h2 id="modalTitle" class="text-lg font-bold">Document Title</h2>
-      <button onclick="closeModal()" class="text-white text-xl font-bold">&times;</button>
-    </div>
-
-    <!-- PDF Viewer -->
-    <iframe id="pdfViewer" class="flex-1 w-full" frameborder="0"></iframe>
-
-    <!-- Acknowledgement Section -->
-    <div class="p-4 border-t space-y-3 bg-gray-50">
-      <label class="flex items-start gap-2">
-        <input type="checkbox" id="ackCheckbox" class="mt-1 accent-blue-600" />
-        <span class="text-sm sm:text-base">I have read and understood the contents of this Shed Order.</span>
-      </label>
-      <button onclick="submitAcknowledgement()" class="bg-blue-700 hover:bg-blue-800 text-white px-4 py-2 rounded-md disabled:opacity-50" disabled id="ackBtn">Acknowledge</button>
-    </div>
-  </div>
-</div>
   <!-- JavaScript -->
   <script>
   // Toggle Dropdown
