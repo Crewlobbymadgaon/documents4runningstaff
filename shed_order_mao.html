@@ -130,14 +130,6 @@
 </div>
   <!-- JavaScript -->
   <script>
-    let currentYear = null;
-    let currentIndex = null;
-
-
-   
-
-  
-    
   // Toggle Dropdown
   const hamburgerBtn = document.getElementById("hamburgerBtn");
   const dropdownMenu = document.getElementById("dropdownMenu");
@@ -151,162 +143,44 @@
       dropdownMenu.classList.add("hidden");
     });
   });
-  
-  
- 
 
-function renderShedOrders(year) {
-  const orders = window.shedOrdersByYear[year];
-  const shedOrderList = document.getElementById("shedOrderList");
-  shedOrderList.innerHTML = "";
+  function renderShedOrders(year) {
+    const orders = window.shedOrdersByYear[year];
+    const shedOrderList = document.getElementById("shedOrderList");
+    shedOrderList.innerHTML = "";
 
-  if (!orders || orders.length === 0) {
-    shedOrderList.innerHTML = "<p class='text-center text-gray-500'>No shed orders available.</p>";
-    return;
-  }
-
-  const reversedOrders = [...orders].reverse();
-
-  reversedOrders.forEach((order, reversedIndex) => {
-    const actualIndex = orders.length - 1 - reversedIndex;
-    const isAcknowledged = localStorage.getItem(`ack_${year}_${actualIndex}`) === "true";
-
-    const card = document.createElement("div");
-    card.className = "bg-white relative rounded-lg p-4 shadow-md border border-blue-100";
-
-    const filePath = `/documents4runningstaff/doc_shed_order_mao_${year}/${order.file}`;
-
-    card.innerHTML = `
-      <div class="font-bold text-lg text-blue-900 mb-2">${order.number}</div>
-      <div class="text-gray-700 mb-4">${order.topic}</div>
-      
-      <div class="flex flex-wrap justify-between items-center gap-2 mt-4">
-        <button 
-          onclick="openModal('${order.number}', '${filePath}', '${year}', ${actualIndex})"
-          class="bg-blue-700 hover:bg-blue-800 text-white text-sm font-semibold px-4 py-2 rounded">
-          Read & Acknowledge
-        </button>
-
-        <a href="${filePath}" target="_blank"
-          class="bg-gray-600 hover:bg-gray-700 text-white text-sm font-semibold px-4 py-2 rounded">
-          Download / Open
-        </a>
-
-        <span id="status_${year}_${actualIndex}"
-          class="${isAcknowledged ? 'bg-green-600' : 'bg-gray-400'} text-white text-xs px-2 py-1 rounded-full">
-          ${isAcknowledged ? '✅ Acknowledged' : '❌ Not Acknowledged'}
-        </span>
-      </div>
-    `;
-
-    shedOrderList.appendChild(card);
-  });
-}
-
-window.addEventListener("DOMContentLoaded", () => {
-  const yearSelect = document.getElementById("yearSelect");
-  const currentYear = new Date().getFullYear();
-
-  // Check if the current year exists in the dropdown
-  const optionExists = [...yearSelect.options].some(opt => opt.value === String(currentYear));
-
-  if (optionExists) {
-    yearSelect.value = currentYear;
-    highlightSelectedYear(); // Automatically load current year's data
-  } else {
-    yearSelect.selectedIndex = 0; // Fallback to first option
-    highlightSelectedYear();      // Load default year
-  }
-});
-
-
-function openModal(title, filePath, year, index) {
-  currentYear = year;
-  currentIndex = index;
-
-  const modal = document.getElementById('pdfModal');
-  const viewer = document.getElementById('pdfViewer');
-  const modalTitle = document.getElementById('modalTitle');
-  const loading = document.getElementById('pdfLoading');
-  const ackSection = document.querySelector('.p-4.border-t');
-  const ackCheckbox = document.getElementById('ackCheckbox');
-  const ackBtn = document.getElementById('ackBtn');
-
-  // Reset PDF
-  viewer.src = "";
-  viewer.style.display = "none";
-
-  // Set title
-  modalTitle.textContent = title;
-
-  // Show loading screen
-  loading.classList.remove('hidden');
-
-  // Load PDF
-  viewer.onload = () => {
-    loading.classList.add('hidden');
-    modal.classList.remove('hidden');
-    viewer.style.display = "block";
-  };
-
-  viewer.onerror = () => {
-    loading.textContent = "⚠️ Failed to load document. Try again later.";
-  };
-
-  viewer.src = filePath;
-
-  // Show/hide acknowledgement section
-  const isAcknowledged = localStorage.getItem(`ack_${year}_${index}`) === "true";
-  if (isAcknowledged) {
-    ackSection.classList.add('hidden');
-  } else {
-    ackCheckbox.checked = false;
-    ackBtn.disabled = true;
-    ackSection.classList.remove('hidden');
-  }
-}
-
-  function closeModal() {
-  document.getElementById('pdfModal').classList.add('hidden');
-  document.getElementById('pdfViewer').src = "";
-  document.getElementById('pdfViewer').style.display = "none";
-  document.getElementById('pdfLoading').classList.add('hidden');
-}
-
-  function submitAcknowledgement() {
-  if (currentYear !== null && currentIndex !== null) {
-    const key = `ack_${currentYear}_${currentIndex}`;
-    localStorage.setItem(key, "true");
-    highlightSelectedYear(); // Refresh shed order cards with updated status
-  }
-
-  closeModal();
-}
-
-
-
-// Set current year as selected if available in options
-if ([...yearSelect.options].some(opt => opt.value === String(currentYear))) {
-  yearSelect.value = currentYear;
-  highlightSelectedYear();
-}
-    function acknowledge(year, index) {
-  localStorage.setItem(`ack_${year}_${index}`, "true");
-
-  // Update status text
-  const status = document.getElementById(`status_${year}_${index}`);
-  if (status) {
-    status.textContent = '✅ Acknowledged';
-    status.className = "bg-green-600 text-white text-xs px-2 py-1 rounded-full text-right";
-  }
-
-  // Disable the button
-  const btn = document.getElementById(`ackBtn_${year}_${index}`);
-  if (btn) {
-    btn.disabled = true;
-    btn.textContent = 'Acknowledged';
-  }
+    if (!orders || orders.length === 0) {
+      shedOrderList.innerHTML = "<p class='text-center text-gray-500'>No shed orders available.</p>";
+      return;
     }
+
+    const reversedOrders = [...orders].reverse();
+
+    reversedOrders.forEach(order => {
+      const filePath = `/documents4runningstaff/doc_shed_order_mao_${year}/${order.file}`;
+
+      const card = document.createElement("div");
+      card.className = "bg-white relative rounded-lg p-4 shadow-md border border-blue-100";
+
+      card.innerHTML = `
+        <div class="font-bold text-lg text-blue-900 mb-2">${order.number}</div>
+        <div class="text-gray-700 mb-4">${order.topic}</div>
+
+        <div class="flex flex-wrap gap-3 mt-4">
+          <a href="${filePath}" target="_blank"
+            class="bg-blue-700 hover:bg-blue-800 text-white text-sm font-semibold px-4 py-2 rounded">
+            View
+          </a>
+          <a href="${filePath}" target="_blank" download
+            class="bg-gray-600 hover:bg-gray-700 text-white text-sm font-semibold px-4 py-2 rounded">
+            Download / Open
+          </a>
+        </div>
+      `;
+
+      shedOrderList.appendChild(card);
+    });
+  }
 
   function loadShedOrders(year) {
     const existingScript = document.getElementById("shed-script");
@@ -343,9 +217,21 @@ if ([...yearSelect.options].some(opt => opt.value === String(currentYear))) {
     loadShedOrders(year);
   }
 
+  window.addEventListener("DOMContentLoaded", () => {
+    const yearSelect = document.getElementById("yearSelect");
+    const currentYear = new Date().getFullYear();
 
+    const optionExists = [...yearSelect.options].some(opt => opt.value === String(currentYear));
+    yearSelect.value = optionExists ? currentYear : yearSelect.options[0].value;
 
+    highlightSelectedYear();
+  });
+                         
   </script>
+  
+  
+ 
+    
     <div id="pdfLoading" class="fixed inset-0 z-40 bg-black bg-opacity-80 text-white flex items-center justify-center text-xl font-semibold hidden">
   Loading document...
     </div>
