@@ -166,46 +166,36 @@
         <div class="font-bold text-lg text-blue-900 mb-2">${order.number}</div>
         <div class="text-gray-700 mb-4">${order.topic}</div>
 
-        <div class="bg-gradient-to-r from-blue-900 via-blue-700 to-blue-900 px-4 sm:px-6 md:px-8">
-  <div class="max-w-7xl mx-auto">
-    <div class="flex justify-between flex-wrap gap-3 py-2 sm:py-3">
+        <div class="flex justify-between items-center px-4 sm:px-6 md:px-8 py-2 sm:py-3">
+  <!-- View Button -->
+  <a href="${filePath}" target="_blank" title="View Document"
+     class="flex items-center gap-2 
+            text-xs sm:text-sm font-bold text-white 
+            bg-gradient-to-b from-blue-900 via-blue-500 to-blue-900 
+            hover:scale-105 transform transition duration-200 
+            px-3 py-1.5 sm:px-4 sm:py-2 
+            rounded-md border border-blue-950 shadow-lg 
+            focus:outline-none">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="white" viewBox="0 0 24 24" class="w-4 h-4 sm:w-5 sm:h-5">
+      <path d="M12 5c-7 0-9 7-9 7s2 7 9 7 9-7 9-7-2-7-9-7zm0 12a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"/>
+    </svg>
+    <span>View</span>
+  </a>
 
-      <!-- View Button -->
-      <a href="${filePath}" target="_blank" title="View Document"
-         class="flex items-center gap-2 
-                text-xs sm:text-sm font-bold text-white 
-                bg-gradient-to-b from-blue-900 via-blue-500 to-blue-900 
-                hover:scale-105 transform transition duration-200 
-                px-3 py-1.5 sm:px-4 sm:py-2 
-                rounded-md border border-blue-950 shadow-lg 
-                focus:outline-none">
-        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 sm:w-5 sm:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-        </svg>
-        <span>View</span>
-      </a>
-
-      <!-- Download Button -->
-      <a href="${filePath}" download title="Download Document"
-         class="flex items-center gap-2 
-                text-xs sm:text-sm font-bold text-white 
-                bg-gradient-to-b from-gray-700 via-gray-500 to-gray-700 
-                hover:scale-105 transform transition duration-200 
-                px-3 py-1.5 sm:px-4 sm:py-2 
-                rounded-md border border-gray-900 shadow-lg 
-                focus:outline-none">
-        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 sm:w-5 sm:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1M12 12v6m0 0l-3-3m3 3l3-3M12 4v8" />
-        </svg>
-        <span>Download</span>
-      </a>
-
-    </div>
-  </div>
+  <!-- Download Button -->
+  <a href="${filePath}" download title="Download Document"
+     class="flex items-center gap-2 
+            text-xs sm:text-sm font-bold text-white 
+            bg-gradient-to-b from-blue-900 via-blue-500 to-blue-900 
+            hover:scale-105 transform transition duration-200 
+            px-3 py-1.5 sm:px-4 sm:py-2 
+            rounded-md border border-blue-950 shadow-lg 
+            focus:outline-none">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="white" viewBox="0 0 24 24" class="w-4 h-4 sm:w-5 sm:h-5">
+      <path d="M12 16.5l4.5-4.5h-3V3h-3v9h-3l4.5 4.5zm-9 3h18v-2H3v2z"/>
+    </svg>
+    <span>Download</span>
+  </a>
 </div>
       `;
 
