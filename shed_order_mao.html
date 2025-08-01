@@ -157,44 +157,11 @@
 
 function renderShedOrders(year) {
   const orders = window.shedOrdersByYear[year];
-  const shedOrderList = document. dropdownMenu.classList.add("hidden");
-    });
-  });
-  
-  
- function highlightSelectedYear() {
-  const selectedYear = document.getElementById("yearSelect").value;
-  if (!selectedYear) return;
+  const shedOrderList = document.getElementById("shedOrderList");
+  shedOrderList.innerHTML = "";
 
-  // Clear previous content
-  document.getElementById("shedOrdersContainer").innerHTML = "<p class='text-white text-center p-4'>Loading...</p>";
-
-  // If already loaded
-  if (window.shedOrdersByYear?.[selectedYear]) {
-    renderShedOrders(selectedYear);
-  } else {
-    // Dynamically load year script
-    const script = document.createElement('script');
-    script.src = `/documents4runningstaff/js/shed_order_${selectedYear}.js`;
-
-    script.onload = () => {
-      if (window.shedOrdersByYear?.[selectedYear]) {
-        renderShedOrders(selectedYear);
-      } else {
-        displayNoDataMessage(selectedYear);
-      }
-    };
-
-    script.onerror = () => {
-      displayNoDataMessage(selectedYear);
-    };
-
-    document.body.appendChild(script);
-  }
-}
-
-function renderShedOrders(year) {
-  const orders = window.shedOrderList.innerHTML = "<p class='text-center text-gray-500'>No shed orders available.</p>";
+  if (!orders || orders.length === 0) {
+    shedOrderList.innerHTML = "<p class='text-center text-gray-500'>No shed orders available.</p>";
     return;
   }
 
@@ -317,11 +284,6 @@ function openModal(title, filePath, year, index) {
 }
 
 
-const detectedYear = new Date().getFullYear();
-if ([...yearSelect.options].some(opt => opt.value === String(detectedYear))) {
-  yearSelect.value = detectedYear;
-  highlightSelectedYear();
-}
 
 // Set current year as selected if available in options
 if ([...yearSelect.options].some(opt => opt.value === String(currentYear))) {
@@ -346,6 +308,41 @@ if ([...yearSelect.options].some(opt => opt.value === String(currentYear))) {
   }
     }
 
+  function loadShedOrders(year) {
+    const existingScript = document.getElementById("shed-script");
+    if (existingScript) existingScript.remove();
+
+    const script = document.createElement("script");
+    script.id = "shed-script";
+    script.src = `scripts/shed_order_mao_${year}.js`;
+
+    script.onload = () => {
+      if (
+        window.shedOrdersByYear &&
+        Array.isArray(window.shedOrdersByYear[year]) &&
+        window.shedOrdersByYear[year].length > 0
+      ) {
+        renderShedOrders(year);
+      } else {
+        showNoDataMessage();
+      }
+    };
+
+    script.onerror = showNoDataMessage;
+
+    document.body.appendChild(script);
+  }
+
+  function showNoDataMessage() {
+    const container = document.getElementById("shedOrderList");
+    container.innerHTML = `<div class="text-center text-red-600 font-semibold p-4">Data not available</div>`;
+  }
+
+  function highlightSelectedYear() {
+    const year = document.getElementById("yearSelect").value;
+    loadShedOrders(year);
+  }
+
 
 
   </script>
@@ -353,5 +350,4 @@ if ([...yearSelect.options].some(opt => opt.value === String(currentYear))) {
   Loading document...
     </div>
 </body>
-</html
-    
+  </html
