@@ -390,9 +390,26 @@ if ([...yearSelect.options].some(opt => opt.value === String(currentYear))) {
     renderShedOrders(selectedYear);
   } else {
     // Dynamically load year script
-    const script = document.createElement('script');
-    script.src = `/documents4runningstaff/js/shed_order_${selectedYear}.js`;
+    const script = document.createElement("script");
+script.src = `shed_order_mao_${year}.js`;
+script.onload = () => {
+  if (window.shedOrdersByYear && window.shedOrdersByYear[year]) {
+    displayShedOrders(year);
+  } else {
+    displayNoDataMessage(year);
+  }
+};
+script.onerror = () => {
+  displayNoDataMessage(year);
+};
+document.body.appendChild(script);
 
+
+    function displayNoDataMessage(year) {
+  const container = document.getElementById("shed-orders-container");
+  container.innerHTML = `<p class="text-red-600 font-semibold text-center">Shed Orders not available for ${year}</p>`;
+    }
+    
     script.onload = () => {
       if (window.shedOrdersByYear?.[selectedYear]) {
         renderShedOrders(selectedYear);
