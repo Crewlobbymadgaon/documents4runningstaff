@@ -19,5 +19,25 @@ window.shedOrdersByYear["2025"] = [
     number: "04/2025",
     topic: "Action plan to avoid SPAD cases in Konkan Railway ",
     file: "04_2025.pdf"
+  },
+  {
+    number: "05/2025",
+    topic: "New Location of TOK/SP PTFE type Neutral Section",
+    file: "05_2025.pdf"
+  },
+  {
+    number: "06/2025",
+    topic: "Withdrawal of Operational Halt of Train No : 2011120112 w.e.f 10/02/2025 from VERNA Station",
+    file: "06_2025.pdf"
+  },
+  {
+    number: "07/2025",
+    topic: "Maintenance and Operation of NMG Coaches",
+    file: "07_2025.pdf"
+  },
+  {
+    number: "08/2025",
+    topic: "Action plan to avoid SPAD cases in Konkan Railway ",
+    file: "08_2025.pdf"
   }
 ];
