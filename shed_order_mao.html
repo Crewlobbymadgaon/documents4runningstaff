@@ -167,15 +167,18 @@
         <div class="text-gray-700 mb-4">${order.topic}</div>
 
         <div class="flex flex-wrap gap-3 mt-4">
-          <a href="${filePath}" target="_blank"
-            class="bg-blue-700 hover:bg-blue-800 text-white text-sm font-semibold px-4 py-2 rounded">
-            View
-          </a>
-          <a href="${filePath}" target="_blank" download
-            class="bg-gray-600 hover:bg-gray-700 text-white text-sm font-semibold px-4 py-2 rounded">
-            Download / Open
-          </a>
-        </div>
+  <!-- View Icon Button -->
+  <a href="${filePath}" target="_blank" title="View"
+    class="bg-blue-700 hover:bg-blue-800 text-white text-lg px-4 py-2 rounded flex items-center gap-2">
+    👁️ <span class="hidden sm:inline">View</span>
+  </a>
+
+  <!-- Download Icon Button -->
+  <a href="${filePath}" download title="Download"
+    class="bg-gray-600 hover:bg-gray-700 text-white text-lg px-4 py-2 rounded flex items-center gap-2">
+    ⬇️ <span class="hidden sm:inline">Download</span>
+  </a>
+</div>
       `;
 
       shedOrderList.appendChild(card);
@@ -227,7 +230,14 @@
     highlightSelectedYear();
   });
                          
-  </script>
+  
+  function cachePDF(url) {
+    if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+      // Trigger fetch to store in cache
+      fetch(url, { mode: 'no-cors' }).catch(() => {});
+    }
+  }
+</script>
   
   
  
