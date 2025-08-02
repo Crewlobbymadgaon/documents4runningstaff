@@ -346,7 +346,7 @@ function openModal(filePath, docId) {
 
         page.render({ canvasContext: context, viewport: viewport }).promise.then(() => {
           const wrapper = document.createElement("div");
-          wrapper.className = "flex justify-center w-full overflow-x-auto px-2";
+          wrapper.className = "w-full flex justify-center mb-4";
 
           canvas.style.maxWidth = "100%";
           canvas.className = "shadow border";
