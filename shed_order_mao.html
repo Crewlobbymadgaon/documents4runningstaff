@@ -410,38 +410,40 @@ document.addEventListener("keydown", (e) => {
   
   
 let scale = 1;
-let lastTouchDistance = 0;
+let lastTouchDistance = null;
+const viewer = document.getElementById("pdfViewer");
 
-function getDistance(touches) {
-  const [touch1, touch2] = touches;
-  const dx = touch1.clientX - touch2.clientX;
-  const dy = touch1.clientY - touch2.clientY;
-  return Math.sqrt(dx * dx + dy * dy);
+function applyZoom() {
+  viewer.style.transform = `scale(${scale})`;
 }
 
-const zoomWrapper = document.getElementById("zoomWrapper");
-const pdfViewer = document.getElementById("pdfViewer");
+const wrapper = document.getElementById("zoomWrapper");
 
-zoomWrapper.addEventListener("touchstart", (e) => {
-  if (e.touches.length === 2) {
-    lastTouchDistance = getDistance(e.touches);
-  }
-}, { passive: false });
-
-zoomWrapper.addEventListener("touchmove", (e) => {
+wrapper.addEventListener("touchmove", function (e) {
   if (e.touches.length === 2) {
     e.preventDefault();
-    const currentDistance = getDistance(e.touches);
-    const delta = currentDistance - lastTouchDistance;
 
-    if (Math.abs(delta) > 5) {
+    const dx = e.touches[0].clientX - e.touches[1].clientX;
+    const dy = e.touches[0].clientY - e.touches[1].clientY;
+    const distance = Math.sqrt(dx * dx + dy * dy);
+
+    if (lastTouchDistance) {
+      const delta = distance - lastTouchDistance;
       scale += delta * 0.005;
-      scale = Math.max(0.5, Math.min(scale, 3)); // Limit scale between 0.5x and 3x
-      pdfViewer.style.transform = `scale(${scale})`;
-      lastTouchDistance = currentDistance;
+
+      // Clamp scale between 1 (default) and 3 (max zoom)
+      scale = Math.max(1, Math.min(3, scale));
+
+      applyZoom();
     }
+
+    lastTouchDistance = distance;
   }
 }, { passive: false });
+
+wrapper.addEventListener("touchend", () => {
+  lastTouchDistance = null;
+});
 </script>
   
  <div id="pdfLoading" class="fixed inset-0 z-40 bg-black bg-opacity-80 text-white flex items-center justify-center text-xl font-semibold hidden">
