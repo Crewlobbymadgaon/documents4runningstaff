@@ -103,15 +103,18 @@
   </section>
 
   
-  
-    <div id="docModal" class="fixed inset-0 z-50 hidden bg-black bg-opacity-60 flex items-center justify-center p-4">
-  <div class="bg-white rounded-xl overflow-hidden shadow-2xl w-full max-w-4xl h-[80vh] relative flex flex-col">
-    <button onclick="closeModal()" class="absolute top-2 right-2 text-white bg-red-600 hover:bg-red-700 rounded-full w-8 h-8 flex items-center justify-center z-10">
+  <div id="docModal" class="fixed inset-0 z-50 hidden bg-black bg-opacity-70 flex items-center justify-center p-4">
+  <div class="bg-white rounded-xl shadow-2xl w-full h-full relative flex flex-col overflow-hidden">
+    <button onclick="closeModal()" 
+            class="absolute top-2 right-2 text-white bg-red-600 hover:bg-red-700 rounded-full w-8 h-8 z-10 flex items-center justify-center">
       &times;
     </button>
-    <canvas id="pdfCanvas" class="w-full h-full object-contain"></canvas>
-  </div>
+    <div id="pdfViewer" class="flex-1 overflow-y-auto p-4 space-y-4">
+      <!-- Pages will be rendered here -->
     </div>
+  </div>
+  </div>
+    
 
   <!-- JavaScript -->
   <script>
@@ -248,24 +251,26 @@ card.className = `
 
     function openModal(filePath) {
   const modal = document.getElementById("docModal");
-  const canvas = document.getElementById("pdfCanvas");
-  const context = canvas.getContext("2d");
+  const container = document.getElementById("pdfViewer");
+  container.innerHTML = ''; // Clear previous pages
   modal.classList.remove("hidden");
 
   pdfjsLib.getDocument(filePath).promise.then(function (pdf) {
-    // Load first page
-    pdf.getPage(1).then(function (page) {
-      const viewport = page.getViewport({ scale: 1.5 });
-      canvas.height = viewport.height;
-      canvas.width = viewport.width;
-      const renderContext = {
-        canvasContext: context,
-        viewport: viewport
-      };
-      page.render(renderContext);
-    });
+    for (let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber++) {
+      pdf.getPage(pageNumber).then(function (page) {
+        const viewport = page.getViewport({ scale: 1.5 });
+        const canvas = document.createElement("canvas");
+        const context = canvas.getContext("2d");
+        canvas.width = viewport.width;
+        canvas.height = viewport.height;
+
+        page.render({ canvasContext: context, viewport: viewport }).promise.then(() => {
+          container.appendChild(canvas);
+        });
+      });
+    }
   }).catch(err => {
-    alert("Failed to load PDF. It might not be cached offline.");
+    alert("Failed to load PDF. Try again online.");
     closeModal();
   });
 }
@@ -273,10 +278,8 @@ card.className = `
 function closeModal() {
   const modal = document.getElementById("docModal");
   modal.classList.add("hidden");
-  const canvas = document.getElementById("pdfCanvas");
-  const ctx = canvas.getContext("2d");
-  ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear old content
-  }
+  document.getElementById("pdfViewer").innerHTML = '';
+}
 </script>
   
   
