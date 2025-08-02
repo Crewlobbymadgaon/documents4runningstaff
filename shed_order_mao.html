@@ -140,11 +140,7 @@
   </div>
 </div>
 
-    <div class="absolute bottom-4 right-4 space-x-2 z-50">
-  <button onclick="zoomIn()" class="bg-blue-600 text-white px-3 py-1 rounded shadow">+</button>
-  <button onclick="zoomOut()" class="bg-blue-600 text-white px-3 py-1 rounded shadow">−</button>
-  <button onclick="resetZoom()" class="bg-blue-600 text-white px-3 py-1 rounded shadow">Reset</button>
-    </div>
+    
 
     
 
@@ -396,26 +392,7 @@ document.addEventListener("keydown", (e) => {
 });
 
     
-  let zoomLevel = 1;
-
-  function zoomIn() {
-    zoomLevel += 0.1;
-    applyZoom();
-  }
-
-  function zoomOut() {
-    zoomLevel = Math.max(0.5, zoomLevel - 0.1);
-    applyZoom();
-  }
-
-  function resetZoom() {
-    zoomLevel = 1;
-    applyZoom();
-  }
-
-  function applyZoom() {
-    document.getElementById('zoomableContent').style.transform = `scale(${zoomLevel})`;
-  }
+  
 
   </script>
   
