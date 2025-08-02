@@ -22,6 +22,22 @@
         font-family: 'Rajdhani', sans-serif;
       }
       
+  .touch-zoom {
+    touch-action: none;
+    overflow: hidden;
+    position: relative;
+  }
+
+  #pdfViewer {
+    transform-origin: 0 0;
+    transition: transform 0.2s ease;
+  }
+
+  .pinch-container {
+    transform-origin: 0 0;
+  }
+
+      
     </style>
   </head>
   <body class="bg-gray-50 text-gray-800">
@@ -133,15 +149,9 @@
     <!-- Scrollable + Zoomable area -->
     <div id="pdfViewerContainer" class="flex-1 overflow-auto bg-gray-100 p-2 sm:p-4">
       <div id="zoomWrapper"
-           class="min-w-full"
-           style="touch-action: pan-x pan-y; overflow: auto;">
-        <div id="pdfViewer"
-             style="transform-origin: top left; touch-action: none;">
-          <!-- Your PDF or content goes here -->
-          <img src="https://via.placeholder.com/800x1000?text=PDF+Page+1" class="mb-4 w-full max-w-full" />
-          <img src="https://via.placeholder.com/800x1000?text=PDF+Page+2" class="mb-4 w-full max-w-full" />
-        </div>
-      </div>
+     class="overflow-auto max-h-[80vh] bg-gray-100 p-4 rounded relative touch-zoom">
+  <div id="pdfViewer" class="w-full h-auto touch-pan-y"></div>
+</div>
     </div>
 
   </div>
@@ -398,37 +408,40 @@ document.addEventListener("keydown", (e) => {
 
     
   
-  let scale = 1;
-  const viewer = document.getElementById("pdfViewer");
+  
+let scale = 1;
+let lastTouchDistance = 0;
 
-  function applyZoom() {
-    viewer.style.transform = `scale(${scale})`;
+function getDistance(touches) {
+  const [touch1, touch2] = touches;
+  const dx = touch1.clientX - touch2.clientX;
+  const dy = touch1.clientY - touch2.clientY;
+  return Math.sqrt(dx * dx + dy * dy);
+}
+
+const zoomWrapper = document.getElementById("zoomWrapper");
+const pdfViewer = document.getElementById("pdfViewer");
+
+zoomWrapper.addEventListener("touchstart", (e) => {
+  if (e.touches.length === 2) {
+    lastTouchDistance = getDistance(e.touches);
   }
+}, { passive: false });
 
-  function zoomIn() {
-    scale = Math.min(3, scale + 0.1);
-    applyZoom();
-  }
+zoomWrapper.addEventListener("touchmove", (e) => {
+  if (e.touches.length === 2) {
+    e.preventDefault();
+    const currentDistance = getDistance(e.touches);
+    const delta = currentDistance - lastTouchDistance;
 
-  function zoomOut() {
-    scale = Math.max(0.5, scale - 0.1);
-    applyZoom();
-  }
-
-  function resetZoom() {
-    scale = 1;
-    applyZoom();
-  }
-
-  // Ctrl + Scroll Zoom (desktop)
-  document.getElementById("zoomWrapper").addEventListener("wheel", function (e) {
-    if (e.ctrlKey) {
-      e.preventDefault();
-      scale += e.deltaY < 0 ? 0.1 : -0.1;
-      scale = Math.max(0.5, Math.min(3, scale));
-      applyZoom();
+    if (Math.abs(delta) > 5) {
+      scale += delta * 0.005;
+      scale = Math.max(0.5, Math.min(scale, 3)); // Limit scale between 0.5x and 3x
+      pdfViewer.style.transform = `scale(${scale})`;
+      lastTouchDistance = currentDistance;
     }
-  }, { passive: false });
+  }
+}, { passive: false });
 </script>
   
  <div id="pdfLoading" class="fixed inset-0 z-40 bg-black bg-opacity-80 text-white flex items-center justify-center text-xl font-semibold hidden">
