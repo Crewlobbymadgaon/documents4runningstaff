@@ -287,13 +287,16 @@ function closeModal() {
 
     page.render({ canvasContext: context, viewport: viewport }).promise.then(() => {
   const wrapper = document.createElement("div");
-  wrapper.className = "flex justify-center w-full overflow-x-auto";
+  wrapper.className = "flex justify-center w-full overflow-x-auto px-2";
+
+  // Style canvas
+  canvas.style.maxWidth = "100%"; // fit mobile screen
+  canvas.style.height = "auto";   // keep aspect ratio
+  canvas.style.width = "auto";    // important to avoid stretching
+  canvas.className = "shadow border";
+
   wrapper.appendChild(canvas);
   container.appendChild(wrapper);
-
-  // Responsive scaling for small screens
-  canvas.style.width = "100%";
-  canvas.style.height = "auto";
 });
 </script>
   
