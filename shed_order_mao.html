@@ -50,14 +50,15 @@
   <div class="w-12"></div>
 
 <!-- Centered Year Selector with padding compensation -->
-<div class="relative inline-block">
+<div class="relative inline-block w-40">
   <select id="yearSelect" onchange="highlightSelectedYear()"
-  class="appearance-none bg-gradient-to-b from-blue-900 via-blue-500 to-blue-900 
-         text-white text-lg font-bold text-center
-         px-4 py-2 pr-10 rounded-md border border-blue-950 
-         focus:bg-blue-950 focus:outline-none focus:ring-1 focus:ring-blue-950 shadow">
-    <option value="2024">2024</option>
-    <option value="2025">2025</option>
+    class="appearance-none w-full bg-gradient-to-b from-blue-900 via-blue-500 to-blue-900
+           text-white text-xl font-bold 
+           px-0 py-2 rounded-md border border-blue-950 
+           focus:bg-blue-950 focus:outline-none focus:ring-1 focus:ring-blue-950 shadow 
+           text-center">
+    <option class="bg-white text-blue-900 hover:bg-blue-100 transition duration-150 ease-in-out" value="2024">&nbsp;&nbsp;&nbsp;&nbsp;2024&nbsp;&nbsp;&nbsp;&nbsp;</option>
+    <option class="bg-white text-blue-900 hover:bg-blue-100 transition duration-150 ease-in-out" value="2025">&nbsp;&nbsp;&nbsp;&nbsp;2025&nbsp;&nbsp;&nbsp;&nbsp;</option>
   </select>
 
   <!-- Custom dropdown arrow -->
@@ -130,7 +131,7 @@
 
   <!-- JavaScript -->
   <script>
-  // Toggle Dropdown
+ 
  // Toggle Dropdown
 const hamburgerBtn = document.getElementById("hamburgerBtn");
 const dropdownMenu = document.getElementById("dropdownMenu");
