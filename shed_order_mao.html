@@ -33,13 +33,28 @@
   max-width: 100%;
 }
 
-#pdfViewer {
-  display: block;
-  overflow-y: auto;
-  overflow-x: hidden;
-  padding: 10px;
+
+html, body {
+  height: 100%;
+  overflow: hidden; /* Prevent scroll bouncing */
+  margin: 0;
+  padding: 0;
 }
 
+#zoomWrapper {
+  overflow: auto;
+  touch-action: none; /* Important for manual panning after zoom */
+  -webkit-overflow-scrolling: touch;
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+#pdfViewer {
+  transform-origin: top left;
+  transition: transform 0.2s ease-out;
+  display: inline-block;
+}
       
   .touch-zoom {
     touch-action: none;
@@ -478,6 +493,35 @@ document.addEventListener("keydown", (e) => {
   wrapper.addEventListener("touchend", function () {
     lastDist = null;
   });
+
+    let isDragging = false;
+let startX, startY, scrollLeft, scrollTop;
+
+wrapper.addEventListener("touchstart", function (e) {
+  if (e.touches.length === 1) {
+    isDragging = true;
+    startX = e.touches[0].pageX - wrapper.offsetLeft;
+    startY = e.touches[0].pageY - wrapper.offsetTop;
+    scrollLeft = wrapper.scrollLeft;
+    scrollTop = wrapper.scrollTop;
+  }
+}, { passive: false });
+
+wrapper.addEventListener("touchmove", function (e) {
+  if (isDragging && e.touches.length === 1) {
+    e.preventDefault();
+    const x = e.touches[0].pageX - wrapper.offsetLeft;
+    const y = e.touches[0].pageY - wrapper.offsetTop;
+    const walkX = startX - x;
+    const walkY = startY - y;
+    wrapper.scrollLeft = scrollLeft + walkX;
+    wrapper.scrollTop = scrollTop + walkY;
+  }
+}, { passive: false });
+
+wrapper.addEventListener("touchend", function () {
+  isDragging = false;
+});
 
 </script>
 
