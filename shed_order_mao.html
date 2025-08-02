@@ -65,7 +65,8 @@
     ▼
   </div>
 </div>
-
+  <!-- Hamburger + Dropdown: wrapped in a relative container -->
+<div class="relative">
   <!-- Hamburger Button (right) -->
   <button id="hamburgerBtn"
     class="bg-gradient-to-b from-blue-900 via-blue-500 to-blue-900 
@@ -74,29 +75,35 @@
            border border-blue-950 
            shadow-lg 
            focus:outline-none focus:ring-2 focus:ring-blue-900 
-           transition duration-150 ease-in-out">
+           transition duration-150 ease-in-out"
+    aria-label="Toggle Menu" aria-expanded="false">
     <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"
       viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
       <path stroke-linecap="round" stroke-linejoin="round"
         d="M4 6h16M4 12h16M4 18h16"></path>
     </svg>
   </button>
+
+  <!-- Dropdown menu (now correctly aligned below hamburger) -->
+  <div id="dropdownMenu"
+    class="hidden absolute right-0 mt-2 bg-white border border-blue-800 shadow-lg z-50 rounded-md w-52">
+    <a href="index.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Home</a>
+    <a href="so_lobby_selector.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Shed Order</a>
+    <a href="safetycircular.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Safety Circular</a>
+    <a href="counselling.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Counselling Topics</a>
+    <a href="othercirculars.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Other Circulars</a>
+    <a href="gnsr.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">G&SR</a>
+    <a href="accidentmanual.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Accident Manual</a>
+    <a href="wtt.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">WTT</a>
+    <a href="readingmaterials.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Reading Materials</a>
+    <a href="tsd.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">TSD</a>
+  </div>
 </div>
+</div> <!-- Ends the flex row: justify-between -->
 </header>
 
-<!-- Dropdown menu: right side below header -->
-<div id="dropdownMenu" class="hidden absolute right-4 mt-1 bg-white border border-blue-800 shadow-lg z-50 rounded-md w-52">
-  <a href="index.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Home</a>
-    <a href="so_lobby_selector.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Shed Order</a>
-  <a href="safetycircular.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Safety Circular</a>
-  <a href="counselling.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Counselling Topics</a>
-  <a href="othercirculars.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Other Circulars</a>
-  <a href="gnsr.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">G&SR</a>
-  <a href="accidentmanual.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Accident Manual</a>
-  <a href="wtt.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">WTT</a>
-  <a href="readingmaterials.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Reading Materials</a>
-  <a href="tsd.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">TSD</a>
-</div>
+
+
 
 
   <section class="px-4 mt-8">
