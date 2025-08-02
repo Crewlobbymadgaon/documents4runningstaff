@@ -112,21 +112,30 @@
   </section>
 
   
-  <div id="docModal" class="fixed inset-0 z-50 hidden bg-black">
+  <div id="docModal" class="fixed inset-0 z-50 hidden bg-black bg-opacity-70">
   <div class="absolute inset-0 bg-white flex flex-col">
-    
-    <!-- Top bar with close button -->
+
+    <!-- Top Bar -->
     <div class="flex justify-between items-center bg-blue-900 text-white px-4 py-2">
       <div class="text-sm sm:text-base font-semibold">Document Viewer</div>
       <button onclick="closeModal()" class="text-xl font-bold hover:text-red-300">&times;</button>
     </div>
 
-    <!-- Scrollable content area for PDF -->
+    <!-- Scrollable PDF Viewer -->
     <div id="pdfViewer" class="flex-1 overflow-y-auto p-4 space-y-6 bg-gray-100">
-      <!-- PDF pages will render here -->
+      <!-- PDF pages will be injected here -->
     </div>
+
+    <!-- Acknowledge Button -->
+    <div class="p-4 bg-gray-100 border-t border-gray-300 text-center">
+      <button onclick="acknowledgeDocument()"
+        class="bg-green-600 text-white font-semibold px-6 py-2 rounded-lg shadow-md hover:bg-green-700 transition">
+        ✅ Acknowledge
+      </button>
+    </div>
+
   </div>
-  </div>
+</div>
     
 
   <!-- JavaScript -->
@@ -288,20 +297,17 @@ card.className = `
     }
   }
 
- function openModal(filePath) {
+let currentDocId = null; // global tracker
+
+function openModal(filePath, docId) {
+  currentDocId = docId; // track for acknowledgment
   const modal = document.getElementById("docModal");
   const container = document.getElementById("pdfViewer");
-
   container.innerHTML = '';
   modal.classList.remove("hidden");
-
-  // Prevent background scroll
-  document.body.style.overflow = "hidden";
-
-  // Push a fake history state to intercept back button
+  document.body.style.overflow = "hidden"; // Prevent scroll
   history.pushState({ modalOpen: true }, "", "#doc");
 
-  // Load PDF using pdf.js
   pdfjsLib.getDocument(filePath).promise.then(function (pdf) {
     for (let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber++) {
       pdf.getPage(pageNumber).then(function (page) {
@@ -312,13 +318,10 @@ card.className = `
         canvas.height = viewport.height;
 
         page.render({ canvasContext: context, viewport: viewport }).promise.then(() => {
-          // Responsive canvas wrapper
           const wrapper = document.createElement("div");
           wrapper.className = "flex justify-center w-full overflow-x-auto px-2";
 
           canvas.style.maxWidth = "100%";
-          canvas.style.width = "auto";
-          canvas.style.height = "auto";
           canvas.className = "shadow border";
 
           wrapper.appendChild(canvas);
@@ -335,18 +338,36 @@ card.className = `
 function closeModal() {
   const modal = document.getElementById("docModal");
   const container = document.getElementById("pdfViewer");
-
   modal.classList.add("hidden");
   container.innerHTML = '';
   document.body.style.overflow = "";
 
-  // Remove fake history if modal was opened
   if (location.hash === "#doc") {
     history.back();
   }
 }
 
-// Handle back button (popstate)
+function acknowledgeDocument() {
+  const empId = prompt("Enter your Employee ID:");
+  const password = prompt("Enter your Password:");
+
+  if (empId && password) {
+    // Fake authentication for now
+    alert("Acknowledged successfully.");
+    
+    // Save acknowledgment locally (temporary method)
+    localStorage.setItem(`ack_${currentDocId}_${empId}`, true);
+    
+    closeModal();
+
+    // Optional: visually update UI
+    // updateAcknowledgementStatus(currentDocId, empId);
+  } else {
+    alert("Acknowledgement failed. Please enter both Employee ID and Password.");
+  }
+}
+
+// Handle back button
 window.addEventListener("popstate", () => {
   const modal = document.getElementById("docModal");
   if (!modal.classList.contains("hidden")) {
@@ -354,7 +375,7 @@ window.addEventListener("popstate", () => {
   }
 });
 
-// Handle Escape key
+// Escape key closes modal
 document.addEventListener("keydown", (e) => {
   if (e.key === "Escape") {
     const modal = document.getElementById("docModal");
@@ -363,8 +384,7 @@ document.addEventListener("keydown", (e) => {
     }
   }
 });
-
-</script>
+  </script>
   
   
  
