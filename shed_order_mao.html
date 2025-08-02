@@ -116,7 +116,7 @@
 <div id="docModal" class="fixed inset-0 z-50 bg-black bg-opacity-70 hidden">
   <div class="absolute inset-0 flex flex-col bg-white max-h-screen sm:max-w-4xl sm:mx-auto sm:my-8 sm:rounded-xl shadow-lg">
 
-    <!-- Top Bar: NOT zoomable -->
+    <!-- Top Bar (fixed size) -->
     <div class="flex justify-between items-center bg-blue-900 text-white px-4 py-2">
       <div class="text-sm sm:text-base font-semibold">Document Viewer</div>
       <div class="flex items-center gap-2">
@@ -130,17 +130,21 @@
       </div>
     </div>
 
-    <!-- Scrollable + Zoomable PDF Viewer ONLY -->
-    <div id="pdfViewer" 
-         class="flex-1 overflow-y-auto p-4 bg-gray-100 space-y-4 touch-auto"
-         style="touch-action: auto;">
-      <!-- PDF pages will be injected here -->
+    <!-- Scrollable PDF Viewer -->
+    <div id="pdfViewerContainer" class="flex-1 overflow-auto p-4 bg-gray-100">
+      <div id="zoomableContent" class="origin-top-left" style="transform: scale(1);">
+        <!-- PDF pages injected here -->
+      </div>
     </div>
 
   </div>
 </div>
 
-    
+    <div class="absolute bottom-4 right-4 space-x-2 z-50">
+  <button onclick="zoomIn()" class="bg-blue-600 text-white px-3 py-1 rounded shadow">+</button>
+  <button onclick="zoomOut()" class="bg-blue-600 text-white px-3 py-1 rounded shadow">−</button>
+  <button onclick="resetZoom()" class="bg-blue-600 text-white px-3 py-1 rounded shadow">Reset</button>
+    </div>
 
     
 
@@ -390,6 +394,29 @@ document.addEventListener("keydown", (e) => {
     }
   }
 });
+
+    
+  let zoomLevel = 1;
+
+  function zoomIn() {
+    zoomLevel += 0.1;
+    applyZoom();
+  }
+
+  function zoomOut() {
+    zoomLevel = Math.max(0.5, zoomLevel - 0.1);
+    applyZoom();
+  }
+
+  function resetZoom() {
+    zoomLevel = 1;
+    applyZoom();
+  }
+
+  function applyZoom() {
+    document.getElementById('zoomableContent').style.transform = `scale(${zoomLevel})`;
+  }
+
   </script>
   
   
