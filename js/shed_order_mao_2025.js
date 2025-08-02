@@ -32,12 +32,12 @@ window.shedOrdersByYear["2025"] = [
   },
   {
     number: "07/2025",
-    topic: "Maintenance and Operation of NMG Coaches",
+    topic: "Joint Procedure Order for issue of Caution Order for Up trains from MAJN/MAQ (SR) towards KRCL",
     file: "07_2025.pdf"
   },
   {
     number: "08/2025",
-    topic: "Action plan to avoid SPAD cases in Konkan Railway ",
+    topic: "Correction Slip No : 03 to Non-monsoon Working Time Table No : 32 Part B 2024 ",
     file: "08_2025.pdf"
   }
 ];
