@@ -27,11 +27,18 @@
     touch-action: none; /* Prevent default pinch gestures */
   }
 
-  #pdfViewer {
-    transform-origin: center center;
-    will-change: transform;
-    transition: transform 0.2s ease-out;
-  }
+  #pdfViewer canvas {
+  display: block;
+  margin: 0 auto;
+  max-width: 100%;
+}
+
+#pdfViewer {
+  display: block;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 10px;
+}
 
       
   .touch-zoom {
@@ -66,8 +73,7 @@
   <h2 class="font-rajdhani text-4xl sm:text-4xl md:text-5xl font-extrabold mt-2">
     Shed Order
   </h2>
-      <h3 class="font-rajdhani text-2xl sm:text-2xl md:text-3xl font-extrabold mt-2">
-        Madgaon Lobby
+      <h3 class="font-rajdhani text-2xl sm:text-2xl md:text-3xl font-extrabold mt-2">Madgaon Lobby
       </h3>
     </div>
 
