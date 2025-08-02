@@ -288,12 +288,20 @@ card.className = `
     }
   }
 
-    function openModal(filePath) {
+ function openModal(filePath) {
   const modal = document.getElementById("docModal");
   const container = document.getElementById("pdfViewer");
+
   container.innerHTML = '';
   modal.classList.remove("hidden");
 
+  // Prevent background scroll
+  document.body.style.overflow = "hidden";
+
+  // Push a fake history state to intercept back button
+  history.pushState({ modalOpen: true }, "", "#doc");
+
+  // Load PDF using pdf.js
   pdfjsLib.getDocument(filePath).promise.then(function (pdf) {
     for (let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber++) {
       pdf.getPage(pageNumber).then(function (page) {
@@ -323,12 +331,39 @@ card.className = `
     closeModal();
   });
 }
-    function closeModal() {
+
+function closeModal() {
   const modal = document.getElementById("docModal");
   const container = document.getElementById("pdfViewer");
+
   modal.classList.add("hidden");
-  container.innerHTML = ''; // optional: clears PDF content
+  container.innerHTML = '';
+  document.body.style.overflow = "";
+
+  // Remove fake history if modal was opened
+  if (location.hash === "#doc") {
+    history.back();
+  }
+}
+
+// Handle back button (popstate)
+window.addEventListener("popstate", () => {
+  const modal = document.getElementById("docModal");
+  if (!modal.classList.contains("hidden")) {
+    closeModal();
+  }
+});
+
+// Handle Escape key
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") {
+    const modal = document.getElementById("docModal");
+    if (!modal.classList.contains("hidden")) {
+      closeModal();
     }
+  }
+});
+
 </script>
   
   
