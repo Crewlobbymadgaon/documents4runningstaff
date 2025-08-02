@@ -289,6 +289,12 @@ card.className = `
     closeModal();
   });
 }
+    function closeModal() {
+  const modal = document.getElementById("docModal");
+  const container = document.getElementById("pdfViewer");
+  modal.classList.add("hidden");
+  container.innerHTML = ''; // optional: clears PDF content
+    }
 </script>
   
   
