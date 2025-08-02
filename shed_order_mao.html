@@ -129,31 +129,25 @@
 
   <!-- Modal -->
 
-<div id="docModal" class="fixed inset-0 z-50 bg-black bg-opacity-70 hidden">
-  <div class="absolute inset-0 flex flex-col bg-white max-h-screen sm:max-w-4xl sm:mx-auto sm:my-8 sm:rounded-xl shadow-lg">
+<!-- Modal -->
+<div id="documentModal" class="fixed inset-0 bg-black bg-opacity-70 z-50 flex items-center justify-center hidden">
+  <div class="bg-white w-full max-w-4xl h-[90vh] flex flex-col rounded-lg shadow-lg relative overflow-hidden">
 
-    <!-- Top Bar: not zoomed -->
-    <div class="flex justify-between items-center bg-blue-900 text-white px-4 py-2 flex-shrink-0">
-      <div class="text-sm sm:text-base font-semibold">Document Viewer</div>
-      <div class="flex items-center gap-2">
-        <button
-          onclick="acknowledgeDocument()"
-          class="bg-green-500 hover:bg-green-600 text-white text-xs sm:text-sm font-semibold px-3 py-1 sm:px-4 sm:py-2 rounded-md shadow"
-        >
-          ✅ Acknowledge
-        </button>
-        <button onclick="closeModal()" class="text-xl font-bold hover:text-red-300">&times;</button>
+    <!-- Header -->
+    <div class="flex justify-between items-center px-4 py-2 bg-blue-700 text-white text-lg font-semibold">
+      <span id="documentTitle">Document Viewer</span>
+      <div class="flex items-center space-x-2">
+        <button onclick="acknowledgeDocument()" class="bg-green-600 px-3 py-1 rounded text-sm hover:bg-green-700">Acknowledge</button>
+        <button onclick="closeModal()" class="text-white text-2xl">&times;</button>
       </div>
     </div>
 
-    <!-- Scrollable + Zoomable area -->
-    <div id="pdfViewerContainer" class="flex-1 overflow-auto bg-gray-100 p-2 sm:p-4">
-      <div id="zoomWrapper"
-     class="overflow-auto max-h-[80vh] bg-gray-100 p-4 rounded relative touch-zoom">
-  <div id="pdfViewer" class="w-full h-auto touch-pan-y"></div>
-</div>
+    <!-- Zoom Wrapper -->
+    <div id="zoomWrapper" class="flex-1 overflow-hidden relative touch-none bg-gray-100">
+      <div id="pdfViewer" class="w-full h-full transform transition-transform duration-100 ease-out origin-center flex items-center justify-center">
+        <img id="documentImage" src="" alt="Document" class="w-full h-auto max-w-none" />
+      </div>
     </div>
-
   </div>
 </div>
 
@@ -408,18 +402,30 @@ document.addEventListener("keydown", (e) => {
 
     
   
-  
 let scale = 1;
 let lastTouchDistance = null;
-const viewer = document.getElementById("pdfViewer");
+let startCenter = { x: 0, y: 0 };
 
-function applyZoom() {
+const viewer = document.getElementById("pdfViewer");
+const wrapper = document.getElementById("zoomWrapper");
+
+function applyZoom(originX, originY) {
+  viewer.style.transformOrigin = `${originX}px ${originY}px`;
   viewer.style.transform = `scale(${scale})`;
 }
 
-const wrapper = document.getElementById("zoomWrapper");
+// Touch pinch zoom
+wrapper.addEventListener("touchstart", (e) => {
+  if (e.touches.length === 2) {
+    const rect = viewer.getBoundingClientRect();
+    startCenter = {
+      x: (e.touches[0].clientX + e.touches[1].clientX) / 2 - rect.left,
+      y: (e.touches[0].clientY + e.touches[1].clientY) / 2 - rect.top,
+    };
+  }
+}, { passive: false });
 
-wrapper.addEventListener("touchmove", function (e) {
+wrapper.addEventListener("touchmove", (e) => {
   if (e.touches.length === 2) {
     e.preventDefault();
 
@@ -431,10 +437,8 @@ wrapper.addEventListener("touchmove", function (e) {
       const delta = distance - lastTouchDistance;
       scale += delta * 0.005;
 
-      // Clamp scale between 1 (default) and 3 (max zoom)
-      scale = Math.max(1, Math.min(3, scale));
-
-      applyZoom();
+      scale = Math.max(1, Math.min(3, scale)); // Limit zoom between 1 and 3
+      applyZoom(startCenter.x, startCenter.y);
     }
 
     lastTouchDistance = distance;
@@ -444,7 +448,27 @@ wrapper.addEventListener("touchmove", function (e) {
 wrapper.addEventListener("touchend", () => {
   lastTouchDistance = null;
 });
+
+// Modal control
+function openModal(imageUrl, title = "Document Viewer") {
+  document.getElementById("documentModal").classList.remove("hidden");
+  document.getElementById("documentImage").src = imageUrl;
+  document.getElementById("documentTitle").innerText = title;
+  scale = 1;
+  viewer.style.transform = "scale(1)";
+  viewer.style.transformOrigin = "center center";
+}
+
+function closeModal() {
+  document.getElementById("documentModal").classList.add("hidden");
+  document.getElementById("documentImage").src = "";
+}
+
+function acknowledgeDocument() {
+  alert("Acknowledged!");
+}
 </script>
+
   
  <div id="pdfLoading" class="fixed inset-0 z-40 bg-black bg-opacity-80 text-white flex items-center justify-center text-xl font-semibold hidden">
   Loading document...
