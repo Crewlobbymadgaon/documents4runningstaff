@@ -116,31 +116,31 @@
 <div id="docModal" class="fixed inset-0 z-50 bg-black bg-opacity-70 hidden">
   <div class="absolute inset-0 flex flex-col bg-white max-h-screen sm:max-w-4xl sm:mx-auto sm:my-8 sm:rounded-xl shadow-lg">
 
-    <!-- Top Bar -->
+    <!-- Top Bar: NOT zoomable -->
     <div class="flex justify-between items-center bg-blue-900 text-white px-4 py-2">
       <div class="text-sm sm:text-base font-semibold">Document Viewer</div>
-
       <div class="flex items-center gap-2">
-        <!-- Acknowledge Button -->
         <button
           onclick="acknowledgeDocument()"
           class="bg-green-500 hover:bg-green-600 text-white text-xs sm:text-sm font-semibold px-3 py-1 sm:px-4 sm:py-2 rounded-md shadow"
         >
           ✅ Acknowledge
         </button>
-
-        <!-- Close Button -->
         <button onclick="closeModal()" class="text-xl font-bold hover:text-red-300">&times;</button>
       </div>
     </div>
 
-    <!-- Scrollable PDF Viewer -->
-    <div id="pdfViewer" class="flex-1 overflow-y-auto p-4 bg-gray-100 space-y-4">
+    <!-- Scrollable + Zoomable PDF Viewer ONLY -->
+    <div id="pdfViewer" 
+         class="flex-1 overflow-y-auto p-4 bg-gray-100 space-y-4 touch-auto"
+         style="touch-action: auto;">
       <!-- PDF pages will be injected here -->
     </div>
 
   </div>
 </div>
+
+    
 
     
 
