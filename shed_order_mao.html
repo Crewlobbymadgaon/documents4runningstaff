@@ -257,7 +257,7 @@ card.className = `
     function openModal(filePath) {
   const modal = document.getElementById("docModal");
   const container = document.getElementById("pdfViewer");
-  container.innerHTML = ''; // Clear previous pages
+  container.innerHTML = '';
   modal.classList.remove("hidden");
 
   pdfjsLib.getDocument(filePath).promise.then(function (pdf) {
@@ -270,7 +270,17 @@ card.className = `
         canvas.height = viewport.height;
 
         page.render({ canvasContext: context, viewport: viewport }).promise.then(() => {
-          container.appendChild(canvas);
+          // Responsive canvas wrapper
+          const wrapper = document.createElement("div");
+          wrapper.className = "flex justify-center w-full overflow-x-auto px-2";
+
+          canvas.style.maxWidth = "100%";
+          canvas.style.width = "auto";
+          canvas.style.height = "auto";
+          canvas.className = "shadow border";
+
+          wrapper.appendChild(canvas);
+          container.appendChild(wrapper);
         });
       });
     }
@@ -279,25 +289,6 @@ card.className = `
     closeModal();
   });
 }
-
-function closeModal() {
-  document.getElementById("docModal").classList.add("hidden");
-  document.getElementById("pdfViewer").innerHTML = '';
-}
-
-    page.render({ canvasContext: context, viewport: viewport }).promise.then(() => {
-  const wrapper = document.createElement("div");
-  wrapper.className = "flex justify-center w-full overflow-x-auto px-2";
-
-  // Style canvas
-  canvas.style.maxWidth = "100%"; // fit mobile screen
-  canvas.style.height = "auto";   // keep aspect ratio
-  canvas.style.width = "auto";    // important to avoid stretching
-  canvas.className = "shadow border";
-
-  wrapper.appendChild(canvas);
-  container.appendChild(wrapper);
-});
 </script>
   
   
