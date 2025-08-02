@@ -2,7 +2,8 @@
 <html lang="en" class="h-full">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes">
+    
     <title>Shed Order</title>
     <link rel="manifest" href="/documents4runningstaff/manifest.json" />
     <link rel="icon" href="/documents4runningstaff/favicon.ico" />
@@ -283,6 +284,17 @@ function closeModal() {
   document.getElementById("docModal").classList.add("hidden");
   document.getElementById("pdfViewer").innerHTML = '';
 }
+
+    page.render({ canvasContext: context, viewport: viewport }).promise.then(() => {
+  const wrapper = document.createElement("div");
+  wrapper.className = "flex justify-center w-full overflow-x-auto";
+  wrapper.appendChild(canvas);
+  container.appendChild(wrapper);
+
+  // Responsive scaling for small screens
+  canvas.style.width = "100%";
+  canvas.style.height = "auto";
+});
 </script>
   
   
