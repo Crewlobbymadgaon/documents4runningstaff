@@ -268,6 +268,10 @@ function renderShedOrders(year) {
   });
 }
 
+function isMobileDevice() {
+  return /Mobi|Android|iPhone/i.test(navigator.userAgent);
+}
+
 function openModal(filePath) {
   const modal = document.getElementById("docModal");
   const container = document.getElementById("pdfViewer");
@@ -276,9 +280,10 @@ function openModal(filePath) {
   document.body.style.overflow = "hidden";
   history.pushState({ modalOpen: true }, "", "#doc");
 
-  const isMobile = window.innerWidth <= 640; // Tailwind's sm breakpoint
+  const isMobile = isMobileDevice();
 
   if (isMobile) {
+    // Show "Open" button
     const openBtn = document.createElement("button");
     openBtn.innerText = "📄 Open Document";
     openBtn.className = "mt-10 mx-auto block bg-blue-600 text-white text-lg font-semibold px-6 py-3 rounded shadow";
@@ -292,13 +297,15 @@ function openModal(filePath) {
     };
     container.appendChild(openBtn);
   } else {
+    // Directly show iframe
     const iframe = document.createElement("iframe");
     iframe.src = filePath;
-    iframe.className = "w-full h-full min-h-[80vh] border-0";
+    iframe.className = "w-full h-full min-h-[90vh] border-0";
     iframe.allow = "autoplay";
     container.appendChild(iframe);
   }
 }
+
 
 
 function closeModal() {
