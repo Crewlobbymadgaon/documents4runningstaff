@@ -126,20 +126,23 @@
 </section>
 
 <!-- Modal -->
-<div id="docModal" class="fixed inset-0 bg-black bg-opacity-70 z-50 hidden">
-  <div class="w-full h-full flex flex-col items-center justify-center">
-    <div class="bg-white w-[95vw] h-[90vh] max-h-[90vh] rounded-lg shadow-xl relative overflow-hidden flex flex-col">
-      <div class="flex justify-between items-center px-4 py-2 bg-blue-700 text-white text-lg font-semibold">
-        <span id="documentTitle">Document Viewer</span>
-        <div class="flex items-center space-x-2">
-          <button onclick="acknowledgeDocument()" class="bg-green-600 px-3 py-1 rounded text-sm hover:bg-green-700">Acknowledge</button>
-          <button onclick="closeModal()" class="text-white text-2xl font-bold">&times;</button>
-        </div>
-      </div>
-      <div id="pdfViewer" class="flex-grow w-full overflow-auto relative bg-white">
-        <!-- Iframe inserted here -->
-      </div>
+<div id="docModal" class="fixed inset-0 z-50 hidden bg-black bg-opacity-70 flex flex-col">
+  <!-- Header -->
+  <div class="bg-white p-4 flex justify-between items-center shadow-md">
+    <h2 class="text-lg font-bold text-gray-800">📄 Document Viewer</h2>
+    <div class="space-x-2">
+      <button onclick="acknowledgeDocument()" class="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700">
+        Acknowledge
+      </button>
+      <button onclick="closeModal()" class="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700">
+        Close
+      </button>
     </div>
+  </div>
+
+  <!-- PDF Viewer Area -->
+  <div id="pdfViewer" class="flex-1 overflow-auto bg-gray-100 text-center flex items-center justify-center">
+    <!-- iframe or Open button goes here -->
   </div>
 </div>
 
@@ -273,47 +276,28 @@ function openModal(filePath) {
   document.body.style.overflow = "hidden";
   history.pushState({ modalOpen: true }, "", "#doc");
 
-  const isMobile = window.innerWidth <= 768;
+  const isMobile = window.innerWidth <= 640; // Tailwind's sm breakpoint
 
   if (isMobile) {
-    const fallback = document.createElement("div");
-    fallback.className = `
-      w-full h-full flex flex-col justify-between items-center
-      text-center px-4 py-8 bg-gradient-to-b from-gray-100 to-white
-      animate-fade-in
-    `;
-
-    fallback.innerHTML = `
-      <div>
-        <h2 class="text-2xl font-bold mb-4 text-gray-800">📄 Document Viewer</h2>
-        <p class="text-base text-gray-600 mb-6">Tap below to view the document</p>
-        <a href="${filePath}" target="_blank"
-          class="inline-block bg-blue-600 text-white px-6 py-3 rounded-xl shadow-md hover:bg-blue-700 transition">
-          Open Document
-        </a>
-      </div>
-
-      <div class="mt-10 flex justify-center gap-4">
-        <button onclick="acknowledgeDocument()" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition">
-          Acknowledge
-        </button>
-        <button onclick="closeModal()" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition">
-          Close
-        </button>
-      </div>
-    `;
-
-    container.appendChild(fallback);
-    return;
+    const openBtn = document.createElement("button");
+    openBtn.innerText = "📄 Open Document";
+    openBtn.className = "mt-10 mx-auto block bg-blue-600 text-white text-lg font-semibold px-6 py-3 rounded shadow";
+    openBtn.onclick = () => {
+      container.innerHTML = '';
+      const iframe = document.createElement("iframe");
+      iframe.src = filePath;
+      iframe.className = "w-full h-full min-h-[80vh] border-0";
+      iframe.allow = "autoplay";
+      container.appendChild(iframe);
+    };
+    container.appendChild(openBtn);
+  } else {
+    const iframe = document.createElement("iframe");
+    iframe.src = filePath;
+    iframe.className = "w-full h-full min-h-[80vh] border-0";
+    iframe.allow = "autoplay";
+    container.appendChild(iframe);
   }
-
-  // For tablet/desktop
-  const iframe = document.createElement("iframe");
-  iframe.src = filePath;
-  iframe.className = "w-full h-full border-0";
-  iframe.allow = "autoplay";
-
-  container.appendChild(iframe);
 }
 
 
