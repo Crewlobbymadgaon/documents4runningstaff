@@ -356,6 +356,21 @@ window.addEventListener("DOMContentLoaded", () => {
     setTimeout(() => renderShedOrders("2025"), 500);
   }
 });
+
+  document.addEventListener("keydown", (e) => {
+  // Close dropdown if open
+  if (e.key === "Escape" && !dropdownMenu.classList.contains("hidden")) {
+    dropdownMenu.classList.add("hidden");
+    hamburgerBtn.setAttribute("aria-expanded", "false");
+  }
+
+  // Close document modal if open
+  const modal = document.getElementById("docModal");
+  if (e.key === "Escape" && !modal.classList.contains("hidden")) {
+    closeModal();
+  }
+});
+
 </script>
 
 
