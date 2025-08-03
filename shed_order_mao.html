@@ -151,6 +151,50 @@ document.addEventListener("click", (e) => {
     hamburgerBtn.setAttribute("aria-expanded", "false");
   }
 });
+  function loadShedOrders(year) {
+    const existingScript = document.getElementById("shed-script");
+    if (existingScript) existingScript.remove();
+
+    const script = document.createElement("script");
+    script.id = "shed-script";
+    script.src = `js/shed_order_mao_${year}.js`;
+
+    script.onload = () => {
+      if (
+        window.shedOrdersByYear &&
+        Array.isArray(window.shedOrdersByYear[year]) &&
+        window.shedOrdersByYear[year].length > 0
+      ) {
+        renderShedOrders(year);
+      } else {
+        showNoDataMessage();
+      }
+    };
+
+    script.onerror = showNoDataMessage;
+
+    document.body.appendChild(script);
+  }
+
+  function showNoDataMessage() {
+    const container = document.getElementById("shedOrderList");
+    container.innerHTML = `<div class="text-center text-red-600 font-semibold p-4">Data not available</div>`;
+  }
+
+  function highlightSelectedYear() {
+    const year = document.getElementById("yearSelect").value;
+    loadShedOrders(year);
+  }
+
+  window.addEventListener("DOMContentLoaded", () => {
+    const yearSelect = document.getElementById("yearSelect");
+    const currentYear = new Date().getFullYear();
+
+    const optionExists = [...yearSelect.options].some(opt => opt.value === String(currentYear));
+    yearSelect.value = optionExists ? currentYear : yearSelect.options[0].value;
+
+    highlightSelectedYear();
+  });
 
 function renderShedOrders(year) {
   const orders = window.shedOrdersByYear[year];
