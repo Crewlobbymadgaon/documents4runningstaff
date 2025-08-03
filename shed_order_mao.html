@@ -22,63 +22,7 @@
         font-family: 'Rajdhani', sans-serif;
       }
       
-#zoomWrapper {
-  overflow: auto;
-  touch-action: pan-y;
-  height: 100%;
-  width: 100%;
-  -webkit-overflow-scrolling: touch;
-  position: relative;
-}
-
-
-#pdfViewer {
-  transform-origin: center center;
-  transition: transform 0.1s ease;
-  will-change: transform;
-}
-
-
-html, body {
-  height: auto;
-  overflow-y: auto;
-  overscroll-behavior: contain;
-}
-
-#wrapper {
-  touch-action: pan-y pinch-zoom;
-  -ms-touch-action: manipulation;
-  height: auto;
-  overflow: visible;
-}
-      #docModal {
-  overflow: hidden;
-}
-
-#pdfViewer {
-  touch-action: none; /* critical for gestures to work */
-  transform-origin: center center;
-  will-change: transform;
-}
-
-
-
-      
-  .touch-zoom {
-    touch-action: none;
-    overflow: hidden;
-    position: relative;
-  }
-
-#pdfContainer canvas {
-  display: block;
-  margin: 0 auto 20px auto; /* centers and separates pages */
-}
-
-  .pinch-container {
-    transform-origin: 0 0;
-  }
-
+  
       
     </style>
   </head>
@@ -184,8 +128,8 @@ html, body {
     </div>
 
     <!-- Zoom Wrapper -->
-  <div id="zoomWrapper" class="w-full h-[90vh] overflow-auto touch-pan-y">
-  <div id="pdfViewer" class="w-full h-auto">
+    <div id="zoomWrapper" class="overflow-auto touch-pan-x touch-pan-y">
+  <div id="pdfViewer" class="w-full h-full transform transition-transform duration-100 ease-out origin-top-left flex flex-col items-center">
       
         <img id="documentImage" src="" alt="Document" class="w-full h-auto max-w-none" />
       </div>
@@ -443,104 +387,7 @@ document.addEventListener("keydown", (e) => {
 });
 
     
-let scale = 1;
-let startScale = 1;
-let initialDistance = 0;
-let translateX = 0;
-let translateY = 0;
-let initialX = 0;
-let initialY = 0;
-let isPanning = false;
-let lastTap = 0;
-
-const viewer = document.getElementById("pdfViewer");
-const wrapper = document.getElementById("zoomWrapper");
-
-function applyTransform() {
-  viewer.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
-  if (scale > 1) {
-    wrapper.style.touchAction = "none";
-  } else {
-    wrapper.style.touchAction = "pan-y";
-    translateX = 0;
-    translateY = 0;
-  }
-}
-
-function zoomIn() {
-  scale = Math.min(3, scale + 0.2);
-  applyTransform();
-}
-
-function zoomOut() {
-  scale = Math.max(1, scale - 0.2);
-  applyTransform();
-}
-
-function resetZoom() {
-  scale = 1;
-  translateX = 0;
-  translateY = 0;
-  applyTransform();
-}
-
-// -- Touch start --
-viewer.addEventListener("touchstart", function (e) {
-  if (e.touches.length === 2) {
-    e.preventDefault();
-    const [touch1, touch2] = e.touches;
-    initialDistance = Math.hypot(
-      touch2.clientX - touch1.clientX,
-      touch2.clientY - touch1.clientY
-    );
-    startScale = scale;
-    isPanning = false;
-  } else if (e.touches.length === 1 && scale > 1) {
-    isPanning = true;
-    initialX = e.touches[0].clientX - translateX;
-    initialY = e.touches[0].clientY - translateY;
-  }
-}, { passive: false });
-
-// -- Touch move --
-viewer.addEventListener("touchmove", function (e) {
-  if (e.touches.length === 2) {
-    e.preventDefault();
-    const [touch1, touch2] = e.touches;
-    const currentDistance = Math.hypot(
-      touch2.clientX - touch1.clientX,
-      touch2.clientY - touch1.clientY
-    );
-    scale = Math.max(1, Math.min(3, startScale * (currentDistance / initialDistance)));
-    applyTransform();
-  } else if (e.touches.length === 1 && isPanning && scale > 1) {
-    e.preventDefault();
-    translateX = e.touches[0].clientX - initialX;
-    translateY = e.touches[0].clientY - initialY;
-    applyTransform();
-  }
-}, { passive: false });
-
-// -- Touch end: double tap to zoom toggle --
-viewer.addEventListener("touchend", function (e) {
-  if (e.touches.length > 0) return;
-
-  const currentTime = new Date().getTime();
-  const tapLength = currentTime - lastTap;
-
-  if (tapLength < 300) {
-    if (scale === 1) {
-      scale = 2;
-    } else {
-      resetZoom();
-      return;
-    }
-    applyTransform();
-  }
-
-  lastTap = currentTime;
-});
-
+ 
 
 </script>
 
