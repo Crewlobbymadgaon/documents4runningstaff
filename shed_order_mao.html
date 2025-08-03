@@ -16,33 +16,17 @@
       .font-rajdhani {
         font-family: 'Rajdhani', sans-serif;
       }
- html, body, {
-    height: 100%;
-  }
-      #docModal {
-  height: 100vh;
-  width: 100vw;
-}
-
-#pdfViewer {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow-y: auto;
-  background-color: #f9fafb; /* Light background */
+      html,body {
+  height: 100%;
+  overscroll-behavior-y: none;
 }
 
 #pdfViewer iframe {
-  width: 95%;
-  height: 95vh;
-  max-width: 800px;
+  display: block;
+  width: 100%;
+  height: 100%;
   border: none;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
-  
-
-
 
 @media (max-width: 768px) {
   #docModal .bg-white {
@@ -141,28 +125,23 @@
   <div id="shedOrderList" class="grid gap-4 max-w-2xl mx-auto"></div>
 </section>
 
-
 <!-- Modal -->
-<div id="docModal" class="fixed inset-0 z-50 hidden bg-black bg-opacity-80 flex flex-col">
-  <!-- Header -->
-  <div class="bg-white p-4 flex justify-between items-center shadow-md">
-    <h2 class="text-lg font-bold text-gray-800">📄 Document Viewer</h2>
-    <div class="space-x-2">
-      <button onclick="acknowledgeDocument()" class="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700">
-        Acknowledge
-      </button>
-      <button onclick="closeModal()" class="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700">
-        Close
-      </button>
+<div id="docModal" class="fixed inset-0 bg-black bg-opacity-70 z-50 hidden">
+  <div class="w-full h-full flex flex-col items-center justify-center">
+    <div class="bg-white w-[95vw] h-[90vh] max-h-[90vh] rounded-lg shadow-xl relative overflow-hidden flex flex-col">
+      <div class="flex justify-between items-center px-4 py-2 bg-blue-700 text-white text-lg font-semibold">
+        <span id="documentTitle">Document Viewer</span>
+        <div class="flex items-center space-x-2">
+          <button onclick="acknowledgeDocument()" class="bg-green-600 px-3 py-1 rounded text-sm hover:bg-green-700">Acknowledge</button>
+          <button onclick="closeModal()" class="text-white text-2xl font-bold">&times;</button>
+        </div>
+      </div>
+      <div id="pdfViewer" class="flex-grow w-full overflow-auto relative bg-white">
+        <!-- Iframe inserted here -->
+      </div>
     </div>
   </div>
-
-  <!-- PDF Viewer Area -->
-  <div id="pdfViewer" class="flex-1 bg-white overflow-hidden">
-    <!-- iframe is injected here -->
-  </div>
 </div>
-
 
 
 <script>
@@ -289,24 +268,53 @@ function renderShedOrders(year) {
 function openModal(filePath) {
   const modal = document.getElementById("docModal");
   const container = document.getElementById("pdfViewer");
-
-  container.innerHTML = ''; // Clear previous
+  container.innerHTML = '';
   modal.classList.remove("hidden");
   document.body.style.overflow = "hidden";
   history.pushState({ modalOpen: true }, "", "#doc");
 
+  const isMobile = window.innerWidth <= 768;
+
+  if (isMobile) {
+    const fallback = document.createElement("div");
+    fallback.className = `
+      w-full h-full flex flex-col justify-between items-center
+      text-center px-4 py-8 bg-gradient-to-b from-gray-100 to-white
+      animate-fade-in
+    `;
+
+    fallback.innerHTML = `
+      <div>
+        <h2 class="text-2xl font-bold mb-4 text-gray-800">📄 Document Viewer</h2>
+        <p class="text-base text-gray-600 mb-6">Tap below to view the document</p>
+        <a href="${filePath}" target="_blank"
+          class="inline-block bg-blue-600 text-white px-6 py-3 rounded-xl shadow-md hover:bg-blue-700 transition">
+          Open Document
+        </a>
+      </div>
+
+      <div class="mt-10 flex justify-center gap-4">
+        <button onclick="acknowledgeDocument()" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition">
+          Acknowledge
+        </button>
+        <button onclick="closeModal()" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition">
+          Close
+        </button>
+      </div>
+    `;
+
+    container.appendChild(fallback);
+    return;
+  }
+
+  // For tablet/desktop
   const iframe = document.createElement("iframe");
   iframe.src = filePath;
-  iframe.style.width = "95%";
-  iframe.style.height = "95vh";
-  iframe.style.border = "0";
-  iframe.style.maxWidth = "800px";
-  iframe.style.boxShadow = "0 0 10px rgba(0,0,0,0.1)";
+  iframe.className = "w-full h-full border-0";
   iframe.allow = "autoplay";
 
   container.appendChild(iframe);
 }
-
 
 
 function closeModal() {
