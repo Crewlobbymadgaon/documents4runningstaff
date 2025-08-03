@@ -3,27 +3,19 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes">
-    
     <title>Shed Order</title>
     <link rel="manifest" href="/documents4runningstaff/manifest.json" />
     <link rel="icon" href="/documents4runningstaff/favicon.ico" />
     <link rel="apple-touch-icon" href="/documents4runningstaff/icon-192.png" />
-
-    
     <meta name="theme-color" content="#1f2937" />
-
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600&display=swap" rel="stylesheet" />
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
-      <script defer src="main.js"></script>
-
+    <script src="js/shed_order_mao_2025.js" defer></script>
+    <script defer src="main.js"></script>
     <style>
       .font-rajdhani {
         font-family: 'Rajdhani', sans-serif;
       }
-      
-  
-      
     </style>
   </head>
   <body class="bg-gray-50 text-gray-800">
@@ -103,22 +95,13 @@
 </div>
 </div> <!-- Ends the flex row: justify-between -->
 </header>
-
-
-
-
-
-  <section class="px-4 mt-8">
+<section class="px-4 mt-8">
   <div id="shedOrderList" class="grid gap-4 max-w-2xl mx-auto"></div>
-  </section>
-
-  <!-- Modal -->
+</section>
 
 <!-- Modal -->
 <div id="docModal" class="fixed inset-0 bg-black bg-opacity-70 z-50 flex items-center justify-center hidden">
   <div class="bg-white w-full max-w-4xl h-[90vh] flex flex-col rounded-lg shadow-lg relative overflow-hidden">
-
-    <!-- Header -->
     <div class="flex justify-between items-center px-4 py-2 bg-blue-700 text-white text-lg font-semibold">
       <span id="documentTitle">Document Viewer</span>
       <div class="flex items-center space-x-2">
@@ -126,214 +109,62 @@
         <button onclick="closeModal()" class="text-white text-2xl">&times;</button>
       </div>
     </div>
-
-    <!-- Zoom Wrapper -->
-    <div id="zoomWrapper" class="overflow-auto touch-pan-x touch-pan-y">
-  <div id="pdfViewer" class="w-full h-full transform transition-transform duration-100 ease-out origin-top-left flex flex-col items-center">
-      
-        <img id="documentImage" src="" alt="Document" class="w-full h-auto max-w-none" />
-      </div>
-    </div>
+    <div id="pdfViewer" class="w-full h-full overflow-auto"></div>
   </div>
 </div>
 
-    
+<script>
+function renderShedOrders(year) {
+  const orders = window.shedOrdersByYear[year];
+  const shedOrderList = document.getElementById("shedOrderList");
+  shedOrderList.innerHTML = "";
+  if (!orders || orders.length === 0) {
+    shedOrderList.innerHTML = "<p class='text-center text-gray-500'>No shed orders available.</p>";
+    return;
+  }
 
-  <!-- JavaScript -->
-  <script>
- 
- // Toggle Dropdown
-const hamburgerBtn = document.getElementById("hamburgerBtn");
-const dropdownMenu = document.getElementById("dropdownMenu");
-
-hamburgerBtn.addEventListener("click", (e) => {
-  e.stopPropagation(); // Prevent click from bubbling to document
-  dropdownMenu.classList.toggle("hidden");
-
-  const isHidden = dropdownMenu.classList.contains("hidden");
-  hamburgerBtn.setAttribute("aria-expanded", !isHidden);
-});
-
-// Close dropdown when a link inside it is clicked
-dropdownMenu.querySelectorAll("a").forEach(link => {
-  link.addEventListener("click", () => {
-    dropdownMenu.classList.add("hidden");
-    hamburgerBtn.setAttribute("aria-expanded", "false");
+  const reversedOrders = [...orders].reverse();
+  reversedOrders.forEach(order => {
+    const filePath = `https://raw.githubusercontent.com/documents4runningstaff/doc_shed_order_mao_2025/${order.file}`;
+    const card = document.createElement("div");
+    card.className = `bg-white relative rounded-xl p-4 border-2 border-blue-300 shadow-md transition duration-300 text-gray-800 text-base leading-relaxed break-words`;
+    card.innerHTML = `
+      <div class="font-bold text-lg text-blue-900 mb-2">${order.number}</div>
+      <div class="text-gray-700 mb-4">${order.topic}</div>
+      <div class="flex justify-between items-center px-4 sm:px-6 md:px-8 py-2 sm:py-3">
+        <button onclick="openModal('${filePath}')" title="View Document"
+          class="flex items-center gap-2 text-xs sm:text-sm font-bold text-white bg-gradient-to-b from-blue-900 via-blue-500 to-blue-900 hover:scale-105 transform transition duration-200 px-3 py-1.5 sm:px-4 sm:py-2 rounded-md border border-blue-950 shadow-lg focus:outline-none">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="white" viewBox="0 0 24 24" class="w-4 h-4 sm:w-5 sm:h-5">
+            <path d="M12 5c-7 0-9 7-9 7s2 7 9 7 9-7 9-7-2-7-9-7zm0 12a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"/>
+          </svg>
+          <span>View</span>
+        </button>
+        <a href="${filePath}" download title="Download Document"
+           class="flex items-center gap-2 text-xs sm:text-sm font-bold text-white bg-gradient-to-b from-blue-900 via-blue-500 to-blue-900 hover:scale-105 transform transition duration-200 px-3 py-1.5 sm:px-4 sm:py-2 rounded-md border border-blue-950 shadow-lg focus:outline-none">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="white" viewBox="0 0 24 24" class="w-4 h-4 sm:w-5 sm:h-5">
+            <path d="M12 16.5l4.5-4.5h-3V3h-3v9h-3l4.5 4.5zm-9 3h18v-2H3v2z"/>
+          </svg>
+          <span>Download</span>
+        </a>
+      </div>
+    `;
+    shedOrderList.appendChild(card);
   });
-});
+}
 
-// Close dropdown if clicking outside
-document.addEventListener("click", (e) => {
-  if (
-    !dropdownMenu.classList.contains("hidden") &&
-    !dropdownMenu.contains(e.target) &&
-    !hamburgerBtn.contains(e.target)
-  ) {
-    dropdownMenu.classList.add("hidden");
-    hamburgerBtn.setAttribute("aria-expanded", "false");
-  }
-});
-    document.addEventListener("keydown", (e) => {
-  if (e.key === "Escape" && !dropdownMenu.classList.contains("hidden")) {
-    dropdownMenu.classList.add("hidden");
-    hamburgerBtn.setAttribute("aria-expanded", "false");
-  }
-});
-
-
-  function renderShedOrders(year) {
-    const orders = window.shedOrdersByYear[year];
-    const shedOrderList = document.getElementById("shedOrderList");
-    shedOrderList.innerHTML = "";
-
-    if (!orders || orders.length === 0) {
-      shedOrderList.innerHTML = "<p class='text-center text-gray-500'>No shed orders available.</p>";
-      return;
-    }
-
-    const reversedOrders = [...orders].reverse();
-
-    reversedOrders.forEach(order => {
-      const filePath = `/documents4runningstaff/doc_shed_order_mao_${year}/${order.file}`;
-
-      const card = document.createElement("div");
-      
-card.className = `
-  bg-white relative rounded-xl p-4 
-  border-2 border-blue-300 shadow-md 
-  transition duration-300 
-  text-gray-800 text-base leading-relaxed break-words
-`;
-      card.innerHTML = `
-        <div class="font-bold text-lg text-blue-900 mb-2">${order.number}</div>
-        <div class="text-gray-700 mb-4">${order.topic}</div>
-
-        <div class="flex justify-between items-center px-4 sm:px-6 md:px-8 py-2 sm:py-3">
-  <!-- View Button -->
-<button onclick="openModal('${filePath}')" title="View Document"
-  class="flex items-center gap-2 
-         text-xs sm:text-sm font-bold text-white 
-         bg-gradient-to-b from-blue-900 via-blue-500 to-blue-900 
-         hover:scale-105 transform transition duration-200 
-         px-3 py-1.5 sm:px-4 sm:py-2 
-         rounded-md border border-blue-950 shadow-lg 
-         focus:outline-none">
-  <svg xmlns="http://www.w3.org/2000/svg" fill="white" viewBox="0 0 24 24" class="w-4 h-4 sm:w-5 sm:h-5">
-    <path d="M12 5c-7 0-9 7-9 7s2 7 9 7 9-7 9-7-2-7-9-7zm0 12a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"/>
-  </svg>
-  <span>View</span>
-</button>
-
-  <!-- Download Button -->
-  <a href="${filePath}" download title="Download Document"
-     class="flex items-center gap-2 
-            text-xs sm:text-sm font-bold text-white 
-            bg-gradient-to-b from-blue-900 via-blue-500 to-blue-900 
-            hover:scale-105 transform transition duration-200 
-            px-3 py-1.5 sm:px-4 sm:py-2 
-            rounded-md border border-blue-950 shadow-lg 
-            focus:outline-none">
-    <svg xmlns="http://www.w3.org/2000/svg" fill="white" viewBox="0 0 24 24" class="w-4 h-4 sm:w-5 sm:h-5">
-      <path d="M12 16.5l4.5-4.5h-3V3h-3v9h-3l4.5 4.5zm-9 3h18v-2H3v2z"/>
-    </svg>
-    <span>Download</span>
-  </a>
-</div>
-      `;
-
-      shedOrderList.appendChild(card);
-    });
-  }
-
-  function loadShedOrders(year) {
-    const existingScript = document.getElementById("shed-script");
-    if (existingScript) existingScript.remove();
-
-    const script = document.createElement("script");
-    script.id = "shed-script";
-    script.src = `js/shed_order_mao_${year}.js`;
-
-    script.onload = () => {
-      if (
-        window.shedOrdersByYear &&
-        Array.isArray(window.shedOrdersByYear[year]) &&
-        window.shedOrdersByYear[year].length > 0
-      ) {
-        renderShedOrders(year);
-      } else {
-        showNoDataMessage();
-      }
-    };
-
-    script.onerror = showNoDataMessage;
-
-    document.body.appendChild(script);
-  }
-
-  function showNoDataMessage() {
-    const container = document.getElementById("shedOrderList");
-    container.innerHTML = `<div class="text-center text-red-600 font-semibold p-4">Data not available</div>`;
-  }
-
-  function highlightSelectedYear() {
-    const year = document.getElementById("yearSelect").value;
-    loadShedOrders(year);
-  }
-
-  window.addEventListener("DOMContentLoaded", () => {
-    const yearSelect = document.getElementById("yearSelect");
-    const currentYear = new Date().getFullYear();
-
-    const optionExists = [...yearSelect.options].some(opt => opt.value === String(currentYear));
-    yearSelect.value = optionExists ? currentYear : yearSelect.options[0].value;
-
-    highlightSelectedYear();
-  });
-                         
-  
-  function cachePDF(url) {
-    if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
-      // Trigger fetch to store in cache
-      fetch(url, { mode: 'no-cors' }).catch(() => {});
-    }
-  }
-
-let currentDocId = null; // global tracker
-
-function openModal(filePath, docId) {
-  currentDocId = docId; // track for acknowledgment
+function openModal(filePath) {
   const modal = document.getElementById("docModal");
   const container = document.getElementById("pdfViewer");
   container.innerHTML = '';
   modal.classList.remove("hidden");
-  document.body.style.overflow = "hidden"; // Prevent scroll
+  document.body.style.overflow = "hidden";
   history.pushState({ modalOpen: true }, "", "#doc");
 
-  pdfjsLib.getDocument(filePath).promise.then(function (pdf) {
-    for (let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber++) {
-      pdf.getPage(pageNumber).then(function (page) {
-        const viewport = page.getViewport({ scale: 1.5 });
-        const canvas = document.createElement("canvas");
-        const context = canvas.getContext("2d");
-        canvas.width = viewport.width;
-        canvas.height = viewport.height;
-
-        page.render({ canvasContext: context, viewport: viewport }).promise.then(() => {
-          const wrapper = document.createElement("div");
-          wrapper.className = "w-full flex justify-center mb-4";
-
-          canvas.style.maxWidth = "100%";
-          canvas.className = "shadow border";
-
-          wrapper.appendChild(canvas);
-          container.appendChild(wrapper);
-        });
-      });
-    }
-  }).catch(err => {
-    alert("Failed to load PDF. Try again online.");
-    closeModal();
-  });
+  const iframe = document.createElement("iframe");
+  iframe.src = filePath;
+  iframe.className = "w-full h-full border-0";
+  iframe.allow = "autoplay";
+  container.appendChild(iframe);
 }
 
 function closeModal() {
@@ -342,58 +173,30 @@ function closeModal() {
   modal.classList.add("hidden");
   container.innerHTML = '';
   document.body.style.overflow = "";
-
   if (location.hash === "#doc") {
     history.back();
   }
 }
 
-function acknowledgeDocument() {
-  const empId = prompt("Enter your Employee ID:");
-  const password = prompt("Enter your Password:");
-
-  if (empId && password) {
-    // Fake authentication for now
-    alert("Acknowledged successfully.");
-    
-    // Save acknowledgment locally (temporary method)
-    localStorage.setItem(`ack_${currentDocId}_${empId}`, true);
-    
-    closeModal();
-
-    // Optional: visually update UI
-    // updateAcknowledgementStatus(currentDocId, empId);
-  } else {
-    alert("Acknowledgement failed. Please enter both Employee ID and Password.");
-  }
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/service-worker.js')
+      .then(reg => console.log("Service Worker registered:", reg))
+      .catch(err => console.log("Service Worker registration failed:", err));
+  });
 }
 
-// Handle back button
-window.addEventListener("popstate", () => {
-  const modal = document.getElementById("docModal");
-  if (!modal.classList.contains("hidden")) {
-    closeModal();
+// Load shed orders for 2025 after window.shedOrdersByYear is populated
+window.addEventListener("DOMContentLoaded", () => {
+  if (window.shedOrdersByYear?.["2025"]) {
+    renderShedOrders("2025");
+  } else {
+    // In case deferred script hasn't loaded yet
+    setTimeout(() => renderShedOrders("2025"), 500);
   }
 });
-
-// Escape key closes modal
-document.addEventListener("keydown", (e) => {
-  if (e.key === "Escape") {
-    const modal = document.getElementById("docModal");
-    if (!modal.classList.contains("hidden")) {
-      closeModal();
-    }
-  }
-});
-
-    
- 
-
 </script>
 
-  
- <div id="pdfLoading" class="fixed inset-0 z-40 bg-black bg-opacity-80 text-white flex items-center justify-center text-xl font-semibold hidden">
-  Loading document...
-    </div>
+
 </body>
-  </html
+</html>
