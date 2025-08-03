@@ -27,7 +27,7 @@ window.shedOrdersByYear["2025"] = [
   },
   {
     number: "06/2025",
-    topic: "Withdrawal of Operational Halt of Train No : 2011120112 w.e.f 10/02/2025 from VERNA Station",
+    topic: "Withdrawal of Operational Halt of Train No : 20111/20112 w.e.f 10/02/2025 from VERNA Station",
     file: "06_2025.pdf"
   },
   {
