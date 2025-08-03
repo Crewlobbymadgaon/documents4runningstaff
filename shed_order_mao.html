@@ -22,10 +22,13 @@
         font-family: 'Rajdhani', sans-serif;
       }
       
-  #zoomWrapper {
-    overflow: auto;
-    touch-action: none; /* Prevent default pinch gestures */
-  }
+ #zoomWrapper {
+  overflow-y: auto;
+  overflow-x: hidden; /* default: disable horizontal scroll */
+  touch-action: pan-y; /* only allow vertical gestures initially */
+  height: 100%;
+  width: 100%;
+}
 
   #pdfViewer canvas {
   display: block;
@@ -450,8 +453,23 @@ let lastTap = 0;
 const viewer = document.getElementById("pdfViewer");
 
 function applyTransform() {
-  viewer.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+  const wrapper = document.getElementById("zoomWrapper");
+
+  // Dynamically control side scroll based on zoom level
+  if (scale === 1) {
+    wrapper.style.overflowX = "hidden";
+    wrapper.style.touchAction = "pan-y"; // allow vertical scroll only
+  } else {
+    wrapper.style.overflowX = "auto";
+    wrapper.style.touchAction = "auto"; // allow full pan
+  }
+
+  // Apply zoom and pan
+  requestAnimationFrame(() => {
+    viewer.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+  });
 }
+
 
 // --- Optional Zoom Buttons ---
 function zoomIn() {
