@@ -174,8 +174,8 @@ html, body {
 
     <!-- Zoom Wrapper -->
     <div id="zoomWrapper" class="overflow-auto touch-pan-x touch-pan-y">
-  
-      <div id="pdfViewer" class="w-full h-full transform transition-transform duration-100 ease-out origin-center flex items-center justify-center">
+  <div id="pdfViewer" class="w-full h-full transform transition-transform duration-100 ease-out origin-top-left flex flex-col items-center">
+      
         <img id="documentImage" src="" alt="Document" class="w-full h-auto max-w-none" />
       </div>
     </div>
@@ -435,8 +435,15 @@ document.addEventListener("keydown", (e) => {
   
   let scale = 1;
 const viewer = document.getElementById("pdfViewer");
-const wrapper = document.getElementById("zoomWrapper");
+const wrapper = document.createElement("div");
+wrapper.className = "w-full flex justify-center mb-4";
 
+canvas.style.display = "block";
+canvas.style.maxWidth = "100%";
+canvas.className = "shadow border";
+
+wrapper.appendChild(canvas);
+pdfViewer.appendChild(wrapper);
 // Apply zoom with optional origin
 function applyZoom(x = null, y = null) {
   if (x !== null && y !== null) {
