@@ -128,12 +128,13 @@
     </div>
 
     <!-- Zoom Wrapper -->
-    <div id="zoomWrapper" class="overflow-auto touch-pan-x touch-pan-y">
-  <div id="pdfViewer" class="w-full h-full transform transition-transform duration-100 ease-out origin-top-left flex flex-col items-center">
-      
-        <img id="documentImage" src="" alt="Document" class="w-full h-auto max-w-none" />
-      </div>
-    </div>
+<div id="zoomWrapper"
+     class="flex-1 overflow-auto relative touch-none">
+  <div id="pdfViewer"
+       class="transform transition-transform duration-200 ease-in-out origin-top-left 
+              w-full h-full flex flex-col items-center will-change-transform">
+  </div>
+</div>
   </div>
 </div>
 
@@ -301,40 +302,59 @@ card.className = `
 let currentDocId = null; // global tracker
 
 function openModal(filePath, docId) {
-  currentDocId = docId; // track for acknowledgment
+  currentDocId = docId;
+  resetZoom();
+
   const modal = document.getElementById("docModal");
   const container = document.getElementById("pdfViewer");
+  const loading = document.getElementById("pdfLoading");
+  const zoomWrapper = document.getElementById("zoomWrapper");
+
   container.innerHTML = '';
+  loading.classList.remove("hidden");
+
   modal.classList.remove("hidden");
-  document.body.style.overflow = "hidden"; // Prevent scroll
+  document.body.style.overflow = "hidden";
   history.pushState({ modalOpen: true }, "", "#doc");
 
   pdfjsLib.getDocument(filePath).promise.then(function (pdf) {
+    let renderedPages = 0;
+
     for (let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber++) {
       pdf.getPage(pageNumber).then(function (page) {
-        const viewport = page.getViewport({ scale: 1.5 });
+        // Create canvas before measuring dimensions
         const canvas = document.createElement("canvas");
         const context = canvas.getContext("2d");
-        canvas.width = viewport.width;
-        canvas.height = viewport.height;
 
-        page.render({ canvasContext: context, viewport: viewport }).promise.then(() => {
+        const viewport = page.getViewport({ scale: 1 }); // Initial scale
+        const desiredWidth = zoomWrapper.clientWidth;
+        const scaleFactor = desiredWidth / viewport.width;
+        const scaledViewport = page.getViewport({ scale: scaleFactor });
+
+        canvas.width = scaledViewport.width;
+        canvas.height = scaledViewport.height;
+
+        page.render({ canvasContext: context, viewport: scaledViewport }).promise.then(() => {
           const wrapper = document.createElement("div");
           wrapper.className = "w-full flex justify-center mb-4";
-
-          canvas.style.maxWidth = "100%";
-          canvas.className = "shadow border";
-
+          canvas.className = "shadow border max-w-full";
           wrapper.appendChild(canvas);
           container.appendChild(wrapper);
+
+          renderedPages++;
+          if (renderedPages === pdf.numPages) {
+            loading.classList.add("hidden");
+          }
         });
       });
     }
   }).catch(err => {
-    alert("Failed to load PDF. Try again online.");
+    loading.classList.add("hidden");
+    alert("Failed to load PDF.");
     closeModal();
   });
 }
+
 
 function closeModal() {
   const modal = document.getElementById("docModal");
@@ -342,11 +362,13 @@ function closeModal() {
   modal.classList.add("hidden");
   container.innerHTML = '';
   document.body.style.overflow = "";
+  resetZoom();
 
   if (location.hash === "#doc") {
     history.back();
   }
 }
+
 
 function acknowledgeDocument() {
   const empId = prompt("Enter your Employee ID:");
@@ -386,7 +408,69 @@ document.addEventListener("keydown", (e) => {
   }
 });
 
-    
+    let scale = 1;
+let startDist = 0;
+let lastTouchEnd = 0;
+
+const wrapper = document.getElementById("zoomWrapper");
+const viewer = document.getElementById("pdfViewer");
+
+function resetZoom() {
+  scale = 1;
+  viewer.style.transform = `scale(${scale})`;
+  viewer.style.transformOrigin = "top left";
+  viewer.scrollTop = 0;
+  viewer.scrollLeft = 0;
+  wrapper.scrollTop = 0;
+  wrapper.scrollLeft = 0;
+}
+
+// Double tap zoom (mobile)
+wrapper.addEventListener("touchend", function (e) {
+  const now = new Date().getTime();
+  if (now - lastTouchEnd <= 300) {
+    // Double tap detected
+    scale = scale === 1 ? 2 : 1;
+    viewer.style.transform = `scale(${scale})`;
+    if (scale > 1) {
+  wrapper.style.overflowX = "auto";
+} else {
+  wrapper.style.overflowX = "hidden";
+}
+
+  }
+  lastTouchEnd = now;
+});
+
+// Pinch to zoom
+wrapper.addEventListener("touchstart", function (e) {
+  if (e.touches.length === 2) {
+    startDist = getDistance(e.touches[0], e.touches[1]);
+    if (scale > 1) {
+  wrapper.style.overflowX = "auto";
+} else {
+  wrapper.style.overflowX = "hidden";
+}
+
+  }
+}, { passive: true });
+
+wrapper.addEventListener("touchmove", function (e) {
+  if (e.touches.length === 2) {
+    const newDist = getDistance(e.touches[0], e.touches[1]);
+    const zoomFactor = newDist / startDist;
+    scale = Math.min(3, Math.max(1, scale * zoomFactor));
+    viewer.style.transform = `scale(${scale})`;
+    startDist = newDist;
+    e.preventDefault();
+  }
+}, { passive: false });
+
+function getDistance(touch1, touch2) {
+  const dx = touch2.clientX - touch1.clientX;
+  const dy = touch2.clientY - touch1.clientY;
+  return Math.sqrt(dx * dx + dy * dy);
+}
  
 
 </script>
