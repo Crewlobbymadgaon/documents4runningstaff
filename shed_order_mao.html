@@ -73,6 +73,16 @@ html, body {
   .pinch-container {
     transform-origin: 0 0;
   }
+#pdfViewerWrapper {
+  overflow: hidden;
+  touch-action: none;
+}
+
+#pdfTransformWrapper {
+  transform-origin: center center;
+  touch-action: none;
+  will-change: transform;
+}
 
       
     </style>
@@ -163,32 +173,20 @@ html, body {
   <div id="shedOrderList" class="grid gap-4 max-w-2xl mx-auto"></div>
   </section>
 
-  <!-- Modal -->
-
-<!-- Modal -->
-<div id="docModal" class="fixed inset-0 bg-black bg-opacity-70 z-50 flex items-center justify-center hidden">
-  <div class="bg-white w-full max-w-4xl h-[90vh] flex flex-col rounded-lg shadow-lg relative overflow-hidden">
-
-    <!-- Header -->
-    <div class="flex justify-between items-center px-4 py-2 bg-blue-700 text-white text-lg font-semibold">
-      <span id="documentTitle">Document Viewer</span>
-      <div class="flex items-center space-x-2">
-        <button onclick="acknowledgeDocument()" class="bg-green-600 px-3 py-1 rounded text-sm hover:bg-green-700">Acknowledge</button>
-        <button onclick="closeModal()" class="text-white text-2xl">&times;</button>
-      </div>
-    </div>
-
-    <!-- Zoom Wrapper -->
-    <div id="zoomWrapper" class="overflow-auto touch-pan-x touch-pan-y">
-  <div id="pdfViewer" class="w-full h-full transform transition-transform duration-100 ease-out origin-top-left flex flex-col items-center">
-      
-        <img id="documentImage" src="" alt="Document" class="w-full h-auto max-w-none" />
+ <div id="docModal" class="fixed inset-0 bg-black bg-opacity-80 z-50 flex flex-col">
+  <div class="flex justify-between items-center p-2 bg-gray-900 text-white">
+    <span id="modalTitle" class="font-bold text-lg">Document Title</span>
+    <button id="closeModal" class="text-white text-2xl">&times;</button>
+  </div>
+  <div class="flex-1 overflow-auto relative">
+    <div id="pdfViewerWrapper" class="w-full h-full touch-none">
+      <div id="pdfTransformWrapper" class="origin-center w-full h-full will-change-transform">
+        <!-- Canvases are appended here -->
       </div>
     </div>
   </div>
 </div>
 
-    
 
   <!-- JavaScript -->
   <script>
@@ -354,7 +352,9 @@ let currentDocId = null; // global tracker
 function openModal(filePath, docId) {
   currentDocId = docId; // track for acknowledgment
   const modal = document.getElementById("docModal");
-  const container = document.getElementById("pdfViewer");
+  const viewer = document.getElementById("pdfViewerWrapper");
+const transformWrapper = document.getElementById("pdfTransformWrapper");
+
   container.innerHTML = '';
   modal.classList.remove("hidden");
   document.body.style.overflow = "hidden"; // Prevent scroll
@@ -438,7 +438,7 @@ document.addEventListener("keydown", (e) => {
 });
 
     
-  let scale = 1;
+let scale = 1;
 let startScale = 1;
 let initialDistance = 0;
 let translateX = 0;
@@ -447,39 +447,15 @@ let initialX = 0;
 let initialY = 0;
 let lastTap = 0;
 
-const viewer = document.getElementById("pdfViewer");
-
 function applyTransform() {
-  viewer.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+  transformWrapper.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
 }
 
-// --- Optional Zoom Buttons ---
-function zoomIn() {
-  scale = Math.min(3, scale + 0.1);
-  applyTransform();
-}
-
-function zoomOut() {
-  scale = Math.max(1, scale - 0.1);
-  applyTransform();
-}
-
-function resetZoom() {
-  scale = 1;
-  translateX = 0;
-  translateY = 0;
-  applyTransform();
-}
-
-// --- Touch Gesture Handling ---
 viewer.addEventListener("touchstart", function (e) {
   if (e.touches.length === 2) {
     e.preventDefault();
-    const [touch1, touch2] = e.touches;
-    initialDistance = Math.hypot(
-      touch2.clientX - touch1.clientX,
-      touch2.clientY - touch1.clientY
-    );
+    const [t1, t2] = e.touches;
+    initialDistance = Math.hypot(t2.clientX - t1.clientX, t2.clientY - t1.clientY);
     startScale = scale;
   } else if (e.touches.length === 1) {
     initialX = e.touches[0].clientX - translateX;
@@ -490,11 +466,8 @@ viewer.addEventListener("touchstart", function (e) {
 viewer.addEventListener("touchmove", function (e) {
   if (e.touches.length === 2) {
     e.preventDefault();
-    const [touch1, touch2] = e.touches;
-    const currentDistance = Math.hypot(
-      touch2.clientX - touch1.clientX,
-      touch2.clientY - touch1.clientY
-    );
+    const [t1, t2] = e.touches;
+    const currentDistance = Math.hypot(t2.clientX - t1.clientX, t2.clientY - t1.clientY);
     scale = Math.min(Math.max(startScale * (currentDistance / initialDistance), 1), 3);
     applyTransform();
   } else if (e.touches.length === 1) {
@@ -506,20 +479,18 @@ viewer.addEventListener("touchmove", function (e) {
 }, { passive: false });
 
 viewer.addEventListener("touchend", function (e) {
-  // Double tap to toggle zoom
   const currentTime = new Date().getTime();
   const tapLength = currentTime - lastTap;
-
   if (tapLength < 300 && tapLength > 0 && e.touches.length === 0) {
     if (scale === 1) {
       scale = 2;
     } else {
-      resetZoom();
-      return;
+      scale = 1;
+      translateX = 0;
+      translateY = 0;
     }
     applyTransform();
   }
-
   lastTap = currentTime;
 });
 
