@@ -16,6 +16,25 @@
       .font-rajdhani {
         font-family: 'Rajdhani', sans-serif;
       }
+      html,body {
+  height: 100%;
+  overscroll-behavior-y: none;
+}
+
+#pdfViewer iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+@media (max-width: 768px) {
+  #docModal .bg-white {
+    border-radius: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+  }
+}
     </style>
   </head>
   <body class="bg-gray-50 text-gray-800">
@@ -100,18 +119,23 @@
 </section>
 
 <!-- Modal -->
-<div id="docModal" class="fixed inset-0 bg-black bg-opacity-70 z-50 flex items-center justify-center hidden">
-  <div class="bg-white w-full max-w-4xl h-[90vh] flex flex-col rounded-lg shadow-lg relative overflow-hidden">
-    <div class="flex justify-between items-center px-4 py-2 bg-blue-700 text-white text-lg font-semibold">
-      <span id="documentTitle">Document Viewer</span>
-      <div class="flex items-center space-x-2">
-        <button onclick="acknowledgeDocument()" class="bg-green-600 px-3 py-1 rounded text-sm hover:bg-green-700">Acknowledge</button>
-        <button onclick="closeModal()" class="text-white text-2xl">&times;</button>
+<div id="docModal" class="fixed inset-0 bg-black bg-opacity-70 z-50 hidden">
+  <div class="w-full h-full flex flex-col items-center justify-center">
+    <div class="bg-white w-[95vw] h-[90vh] max-h-[90vh] rounded-lg shadow-xl relative overflow-hidden flex flex-col">
+      <div class="flex justify-between items-center px-4 py-2 bg-blue-700 text-white text-lg font-semibold">
+        <span id="documentTitle">Document Viewer</span>
+        <div class="flex items-center space-x-2">
+          <button onclick="acknowledgeDocument()" class="bg-green-600 px-3 py-1 rounded text-sm hover:bg-green-700">Acknowledge</button>
+          <button onclick="closeModal()" class="text-white text-2xl font-bold">&times;</button>
+        </div>
+      </div>
+      <div id="pdfViewer" class="flex-grow w-full overflow-auto relative bg-white">
+        <!-- Iframe inserted here -->
       </div>
     </div>
-    <div id="pdfViewer" class="w-full h-full overflow-auto"></div>
   </div>
 </div>
+
 
 <script>
   // Toggle Dropdown
@@ -237,17 +261,27 @@ function renderShedOrders(year) {
 function openModal(filePath) {
   const modal = document.getElementById("docModal");
   const container = document.getElementById("pdfViewer");
-  container.innerHTML = '';
+
+  container.innerHTML = "";
+
   modal.classList.remove("hidden");
   document.body.style.overflow = "hidden";
   history.pushState({ modalOpen: true }, "", "#doc");
 
+  // Add loader (optional)
+  const loader = document.createElement("div");
+  loader.className = "absolute inset-0 flex items-center justify-center bg-white z-10";
+  loader.innerHTML = `<div class="animate-spin h-8 w-8 border-4 border-blue-600 border-t-transparent rounded-full"></div>`;
+  container.appendChild(loader);
+
+  // Add iframe
   const iframe = document.createElement("iframe");
   iframe.src = filePath;
-  iframe.className = "w-full h-full border-0";
-  iframe.allow = "autoplay";
+  iframe.className = "w-full h-full border-0 absolute top-0 left-0 z-0";
+  iframe.onload = () => loader.remove();
   container.appendChild(iframe);
 }
+
 
 function closeModal() {
   const modal = document.getElementById("docModal");
