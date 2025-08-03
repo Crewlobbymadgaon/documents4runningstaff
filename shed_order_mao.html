@@ -477,15 +477,20 @@ function resetZoom() {
 }
 
 // Ctrl + scroll zoom (desktop)
-wrapper.addEventListener("wheel", function (e) {
-  if (e.ctrlKey) {
-    e.preventDefault();
-    scale += e.deltaY < 0 ? 0.1 : -0.1;
-    scale = Math.min(3, Math.max(1, scale));
-    applyZoom(e.clientX, e.clientY);
+wrapper.addEventListener("touchstart", function (e) {
+  if (e.touches.length === 1) {
+    const currentTime = new Date().getTime();
+    const tapLength = currentTime - lastTap;
+    if (tapLength < 300 && tapLength > 0) {
+      // Double tap detected
+      e.preventDefault();
+      const touch = e.touches[0];
+      scale = scale < 2 ? 2 : 1;
+      applyZoom(touch.clientX, touch.clientY);
+    }
+    lastTap = currentTime;
   }
-}, { passive: false });
-
+});
 // Pinch zoom (mobile)
 let lastDist = null;
 wrapper.addEventListener("touchmove", function (e) {
