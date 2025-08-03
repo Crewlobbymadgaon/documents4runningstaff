@@ -16,9 +16,9 @@
       .font-rajdhani {
         font-family: 'Rajdhani', sans-serif;
       }
-      html,body {
+html, body {
   height: 100%;
-  overscroll-behavior-y: none;
+  overflow: auto;
 }
 
 #pdfViewer iframe {
@@ -125,26 +125,18 @@
   <div id="shedOrderList" class="grid gap-4 max-w-2xl mx-auto"></div>
 </section>
 
-<!-- Modal -->
-<div id="docModal" class="fixed inset-0 z-50 hidden bg-black bg-opacity-70 flex flex-col">
-  <!-- Header -->
-  <div class="bg-white p-4 flex justify-between items-center shadow-md">
-    <h2 class="text-lg font-bold text-gray-800">📄 Document Viewer</h2>
-    <div class="space-x-2">
-      <button onclick="acknowledgeDocument()" class="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700">
-        Acknowledge
-      </button>
-      <button onclick="closeModal()" class="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700">
-        Close
-      </button>
-    </div>
-  </div>
 
-  <!-- PDF Viewer Area -->
-  <div id="pdfViewer" class="flex-1 overflow-auto bg-gray-100 text-center flex items-center justify-center">
-    <!-- iframe or Open button goes here -->
+<!-- Modal -->
+<div id="docModal" class="fixed inset-0 z-50 bg-black bg-opacity-80 flex flex-col">
+  <div class="flex justify-between items-center px-4 py-3 bg-white shadow text-black">
+    <h2 class="text-xl font-bold">📄 Document Viewer</h2>
+    <button onclick="closeModal()" class="text-red-600 font-semibold px-3 py-1 rounded hover:bg-red-100">
+      ✖ Close
+    </button>
   </div>
+  <div id="pdfViewer" class="flex-1 bg-gray-100 overflow-auto"></div>
 </div>
+
 
 
 <script>
@@ -268,10 +260,6 @@ function renderShedOrders(year) {
   });
 }
 
-function isMobileDevice() {
-  return /Mobi|Android|iPhone/i.test(navigator.userAgent);
-}
-
 function openModal(filePath) {
   const modal = document.getElementById("docModal");
   const container = document.getElementById("pdfViewer");
@@ -280,32 +268,13 @@ function openModal(filePath) {
   document.body.style.overflow = "hidden";
   history.pushState({ modalOpen: true }, "", "#doc");
 
-  const isMobile = isMobileDevice();
-
-  if (isMobile) {
-    // Show "Open" button
-    const openBtn = document.createElement("button");
-    openBtn.innerText = "📄 Open Document";
-    openBtn.className = "mt-10 mx-auto block bg-blue-600 text-white text-lg font-semibold px-6 py-3 rounded shadow";
-    openBtn.onclick = () => {
-      container.innerHTML = '';
-      const iframe = document.createElement("iframe");
-      iframe.src = filePath;
-      iframe.className = "w-full h-full min-h-[80vh] border-0";
-      iframe.allow = "autoplay";
-      container.appendChild(iframe);
-    };
-    container.appendChild(openBtn);
-  } else {
-    // Directly show iframe
-    const iframe = document.createElement("iframe");
-    iframe.src = filePath;
-    iframe.className = "w-full h-full min-h-[90vh] border-0";
-    iframe.allow = "autoplay";
-    container.appendChild(iframe);
-  }
+  // Load the PDF directly in iframe for all screen sizes
+  const iframe = document.createElement("iframe");
+  iframe.src = filePath;
+  iframe.className = "w-full h-full min-h-[90vh] border-0";
+  iframe.allow = "autoplay";
+  container.appendChild(iframe);
 }
-
 
 
 function closeModal() {
