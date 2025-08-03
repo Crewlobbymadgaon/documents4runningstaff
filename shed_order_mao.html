@@ -23,12 +23,13 @@
       }
       
  #zoomWrapper {
-  overflow-y: auto;
-  overflow-x: hidden; /* default: disable horizontal scroll */
-  touch-action: pan-y; /* only allow vertical gestures initially */
+  overflow: hidden; /* Default: lock all scroll */
   height: 100%;
   width: 100%;
+  touch-action: pan-y; /* Allow only vertical scroll at rest */
+  position: relative;
 }
+
 
   #pdfViewer canvas {
   display: block;
@@ -455,19 +456,31 @@ const viewer = document.getElementById("pdfViewer");
 function applyTransform() {
   const wrapper = document.getElementById("zoomWrapper");
 
-  // Dynamically control side scroll based on zoom level
   if (scale === 1) {
-    wrapper.style.overflowX = "hidden";
-    wrapper.style.touchAction = "pan-y"; // allow vertical scroll only
+    translateX = 0;
+    translateY = 0;
+
+    wrapper.style.overflow = "hidden";        // No scrolling at 1x
+    wrapper.style.touchAction = "pan-y";      // Only vertical allowed
   } else {
-    wrapper.style.overflowX = "auto";
-    wrapper.style.touchAction = "auto"; // allow full pan
+    wrapper.style.overflow = "auto";          // Enable scrolling
+    wrapper.style.touchAction = "none";       // Full pan allowed
   }
 
-  // Apply zoom and pan
   requestAnimationFrame(() => {
     viewer.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
   });
+}
+function resetZoom() {
+  scale = 1;
+  translateX = 0;
+  translateY = 0;
+
+  const wrapper = document.getElementById("zoomWrapper");
+  wrapper.scrollLeft = 0;
+  wrapper.scrollTop = 0;
+
+  applyTransform();
 }
 
 
@@ -482,12 +495,7 @@ function zoomOut() {
   applyTransform();
 }
 
-function resetZoom() {
-  scale = 1;
-  translateX = 0;
-  translateY = 0;
-  applyTransform();
-}
+
 
 // --- Touch Gesture Handling ---
 viewer.addEventListener("touchstart", function (e) {
