@@ -125,7 +125,7 @@ function renderShedOrders(year) {
 
   const reversedOrders = [...orders].reverse();
   reversedOrders.forEach(order => {
-    const filePath = `https://raw.githubusercontent.com/documents4runningstaff/doc_shed_order_mao_2025/${order.file}`;
+   const filePath = `/documents4runningstaff/doc_shed_order_mao_${year}/${order.file}`;
     const card = document.createElement("div");
     card.className = `bg-white relative rounded-xl p-4 border-2 border-blue-300 shadow-md transition duration-300 text-gray-800 text-base leading-relaxed break-words`;
     card.innerHTML = `
