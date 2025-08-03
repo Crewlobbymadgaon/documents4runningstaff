@@ -126,17 +126,25 @@ html, body {
 </section>
 
 
-<!-- Modal -->
-<div id="docModal" class="fixed inset-0 z-50 bg-black bg-opacity-80 flex flex-col">
-  <div class="flex justify-between items-center px-4 py-3 bg-white shadow text-black">
-    <h2 class="text-xl font-bold">📄 Document Viewer</h2>
-    <button onclick="closeModal()" class="text-red-600 font-semibold px-3 py-1 rounded hover:bg-red-100">
-      ✖ Close
-    </button>
+<div id="docModal" class="fixed inset-0 z-50 hidden bg-black bg-opacity-70 flex flex-col">
+  <!-- Header -->
+  <div class="bg-white p-4 flex justify-between items-center shadow-md">
+    <h2 class="text-lg font-bold text-gray-800">📄 Document Viewer</h2>
+    <div class="space-x-2">
+      <button onclick="acknowledgeDocument()" class="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700">
+        Acknowledge
+      </button>
+      <button onclick="closeModal()" class="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700">
+        Close
+      </button>
+    </div>
   </div>
-  <div id="pdfViewer" class="flex-1 bg-gray-100 overflow-auto"></div>
-</div>
 
+  <!-- PDF Viewer Area -->
+  <div id="pdfViewer" class="flex-1 overflow-auto bg-gray-100 text-center flex items-center justify-center">
+    <!-- iframe or Open button goes here -->
+  </div>
+</div>
 
 
 <script>
