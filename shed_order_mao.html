@@ -114,6 +114,44 @@
 </div>
 
 <script>
+  // Toggle Dropdown
+const hamburgerBtn = document.getElementById("hamburgerBtn");
+const dropdownMenu = document.getElementById("dropdownMenu");
+
+hamburgerBtn.addEventListener("click", (e) => {
+  e.stopPropagation(); // Prevent click from bubbling to document
+  dropdownMenu.classList.toggle("hidden");
+
+  const isHidden = dropdownMenu.classList.contains("hidden");
+  hamburgerBtn.setAttribute("aria-expanded", !isHidden);
+});
+
+// Close dropdown when a link inside it is clicked
+dropdownMenu.querySelectorAll("a").forEach(link => {
+  link.addEventListener("click", () => {
+    dropdownMenu.classList.add("hidden");
+    hamburgerBtn.setAttribute("aria-expanded", "false");
+  });
+});
+
+// Close dropdown if clicking outside
+document.addEventListener("click", (e) => {
+  if (
+    !dropdownMenu.classList.contains("hidden") &&
+    !dropdownMenu.contains(e.target) &&
+    !hamburgerBtn.contains(e.target)
+  ) {
+    dropdownMenu.classList.add("hidden");
+    hamburgerBtn.setAttribute("aria-expanded", "false");
+  }
+});
+    document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && !dropdownMenu.classList.contains("hidden")) {
+    dropdownMenu.classList.add("hidden");
+    hamburgerBtn.setAttribute("aria-expanded", "false");
+  }
+});
+
 function renderShedOrders(year) {
   const orders = window.shedOrdersByYear[year];
   const shedOrderList = document.getElementById("shedOrderList");
