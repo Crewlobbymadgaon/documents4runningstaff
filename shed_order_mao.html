@@ -22,19 +22,20 @@
         font-family: 'Rajdhani', sans-serif;
       }
       
- #zoomWrapper {
-  overflow: hidden; /* Default: lock all scroll */
+#zoomWrapper {
+  overflow: auto;
+  touch-action: pan-y;
   height: 100%;
   width: 100%;
-  touch-action: pan-y; /* Allow only vertical scroll at rest */
+  -webkit-overflow-scrolling: touch;
   position: relative;
 }
 
 
-  #pdfViewer canvas {
-  display: block;
-  margin: 0 auto;
-  max-width: 100%;
+#pdfViewer {
+  transform-origin: center center;
+  transition: transform 0.1s ease;
+  will-change: transform;
 }
 
 
@@ -183,8 +184,8 @@ html, body {
     </div>
 
     <!-- Zoom Wrapper -->
-    <div id="zoomWrapper" class="overflow-auto touch-pan-x touch-pan-y">
-  <div id="pdfViewer" class="w-full h-full transform transition-transform duration-100 ease-out origin-top-left flex flex-col items-center">
+  <div id="zoomWrapper" class="w-full h-[90vh] overflow-auto touch-pan-y">
+  <div id="pdfViewer" class="w-full h-auto">
       
         <img id="documentImage" src="" alt="Document" class="w-full h-auto max-w-none" />
       </div>
@@ -442,62 +443,48 @@ document.addEventListener("keydown", (e) => {
 });
 
     
-  let scale = 1;
+let scale = 1;
 let startScale = 1;
 let initialDistance = 0;
 let translateX = 0;
 let translateY = 0;
 let initialX = 0;
 let initialY = 0;
+let isPanning = false;
 let lastTap = 0;
 
 const viewer = document.getElementById("pdfViewer");
+const wrapper = document.getElementById("zoomWrapper");
 
 function applyTransform() {
-  const wrapper = document.getElementById("zoomWrapper");
-
-  if (scale === 1) {
+  viewer.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+  if (scale > 1) {
+    wrapper.style.touchAction = "none";
+  } else {
+    wrapper.style.touchAction = "pan-y";
     translateX = 0;
     translateY = 0;
-
-    wrapper.style.overflow = "hidden";        // No scrolling at 1x
-    wrapper.style.touchAction = "pan-y";      // Only vertical allowed
-  } else {
-    wrapper.style.overflow = "auto";          // Enable scrolling
-    wrapper.style.touchAction = "none";       // Full pan allowed
   }
-
-  requestAnimationFrame(() => {
-    viewer.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
-  });
-}
-function resetZoom() {
-  scale = 1;
-  translateX = 0;
-  translateY = 0;
-
-  const wrapper = document.getElementById("zoomWrapper");
-  wrapper.scrollLeft = 0;
-  wrapper.scrollTop = 0;
-
-  applyTransform();
 }
 
-
-// --- Optional Zoom Buttons ---
 function zoomIn() {
-  scale = Math.min(3, scale + 0.1);
+  scale = Math.min(3, scale + 0.2);
   applyTransform();
 }
 
 function zoomOut() {
-  scale = Math.max(1, scale - 0.1);
+  scale = Math.max(1, scale - 0.2);
   applyTransform();
 }
 
+function resetZoom() {
+  scale = 1;
+  translateX = 0;
+  translateY = 0;
+  applyTransform();
+}
 
-
-// --- Touch Gesture Handling ---
+// -- Touch start --
 viewer.addEventListener("touchstart", function (e) {
   if (e.touches.length === 2) {
     e.preventDefault();
@@ -507,12 +494,15 @@ viewer.addEventListener("touchstart", function (e) {
       touch2.clientY - touch1.clientY
     );
     startScale = scale;
-  } else if (e.touches.length === 1) {
+    isPanning = false;
+  } else if (e.touches.length === 1 && scale > 1) {
+    isPanning = true;
     initialX = e.touches[0].clientX - translateX;
     initialY = e.touches[0].clientY - translateY;
   }
 }, { passive: false });
 
+// -- Touch move --
 viewer.addEventListener("touchmove", function (e) {
   if (e.touches.length === 2) {
     e.preventDefault();
@@ -521,9 +511,9 @@ viewer.addEventListener("touchmove", function (e) {
       touch2.clientX - touch1.clientX,
       touch2.clientY - touch1.clientY
     );
-    scale = Math.min(Math.max(startScale * (currentDistance / initialDistance), 1), 3);
+    scale = Math.max(1, Math.min(3, startScale * (currentDistance / initialDistance)));
     applyTransform();
-  } else if (e.touches.length === 1) {
+  } else if (e.touches.length === 1 && isPanning && scale > 1) {
     e.preventDefault();
     translateX = e.touches[0].clientX - initialX;
     translateY = e.touches[0].clientY - initialY;
@@ -531,12 +521,14 @@ viewer.addEventListener("touchmove", function (e) {
   }
 }, { passive: false });
 
+// -- Touch end: double tap to zoom toggle --
 viewer.addEventListener("touchend", function (e) {
-  // Double tap to toggle zoom
+  if (e.touches.length > 0) return;
+
   const currentTime = new Date().getTime();
   const tapLength = currentTime - lastTap;
 
-  if (tapLength < 300 && tapLength > 0 && e.touches.length === 0) {
+  if (tapLength < 300) {
     if (scale === 1) {
       scale = 2;
     } else {
@@ -548,6 +540,7 @@ viewer.addEventListener("touchend", function (e) {
 
   lastTap = currentTime;
 });
+
 
 </script>
 
