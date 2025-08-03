@@ -16,14 +16,31 @@
       .font-rajdhani {
         font-family: 'Rajdhani', sans-serif;
       }
- html, body, #docModal {
+ html, body, {
     height: 100%;
   }
-  #pdfViewer iframe {
-    width: 100%;
-    height: 100%;
-    display: block;
-  }
+      #docModal {
+  height: 100vh;
+  width: 100vw;
+}
+
+#pdfViewer {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow-y: auto;
+  background-color: #f9fafb; /* Light background */
+}
+
+#pdfViewer iframe {
+  width: 95%;
+  height: 95vh;
+  max-width: 800px;
+  border: none;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+  
 
 
 
@@ -273,27 +290,21 @@ function openModal(filePath) {
   const modal = document.getElementById("docModal");
   const container = document.getElementById("pdfViewer");
 
-  // Clear previous iframe
-  container.innerHTML = '';
-
-  // Show modal
+  container.innerHTML = ''; // Clear previous
   modal.classList.remove("hidden");
   document.body.style.overflow = "hidden";
-
-  // Update history
   history.pushState({ modalOpen: true }, "", "#doc");
 
-  // Create and insert iframe
   const iframe = document.createElement("iframe");
   iframe.src = filePath;
-  iframe.className = "w-full h-full";
-  iframe.style = "border: 0;";
+  iframe.style.width = "95%";
+  iframe.style.height = "95vh";
+  iframe.style.border = "0";
+  iframe.style.maxWidth = "800px";
+  iframe.style.boxShadow = "0 0 10px rgba(0,0,0,0.1)";
   iframe.allow = "autoplay";
 
-  // Workaround for iOS iframe load delay
-  setTimeout(() => {
-    container.appendChild(iframe);
-  }, 100);
+  container.appendChild(iframe);
 }
 
 
