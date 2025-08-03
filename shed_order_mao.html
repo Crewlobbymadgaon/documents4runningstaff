@@ -46,12 +46,18 @@ html, body {
   height: auto;
   overflow: visible;
 }
+      #docModal {
+  overflow: hidden;
+}
 
 #pdfViewer {
-  will-change: transform;
-  transition: transform 0.2s ease-out;
+  touch-action: none; /* critical for gestures to work */
   transform-origin: center center;
+  will-change: transform;
 }
+
+
+
       
   .touch-zoom {
     touch-action: none;
