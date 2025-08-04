@@ -234,14 +234,20 @@ document.addEventListener("click", (e) => {
   }
 
   window.addEventListener("DOMContentLoaded", () => {
-    const yearSelect = document.getElementById("yearSelect");
-    const currentYear = new Date().getFullYear();
+  const yearSelect = document.getElementById("yearSelect");
+  const currentYear = new Date().getFullYear();
+  const optionExists = [...yearSelect.options].some(opt => opt.value === String(currentYear));
+  yearSelect.value = optionExists ? currentYear : yearSelect.options[0].value;
+  highlightSelectedYear();
 
-    const optionExists = [...yearSelect.options].some(opt => opt.value === String(currentYear));
-    yearSelect.value = optionExists ? currentYear : yearSelect.options[0].value;
+  // Load 2025 orders only if not already handled
+  if (window.shedOrdersByYear?.["2025"]) {
+    renderShedOrders("2025");
+  } else {
+    setTimeout(() => renderShedOrders("2025"), 500);
+  }
+});
 
-    highlightSelectedYear();
-  });
 
 function renderShedOrders(year) {
   const orders = window.shedOrdersByYear[year];
@@ -363,15 +369,6 @@ if ('serviceWorker' in navigator) {
   });
 }
 
-// Load shed orders for 2025 after window.shedOrdersByYear is populated
-window.addEventListener("DOMContentLoaded", () => {
-  if (window.shedOrdersByYear?.["2025"]) {
-    renderShedOrders("2025");
-  } else {
-    // In case deferred script hasn't loaded yet
-    setTimeout(() => renderShedOrders("2025"), 500);
-  }
-});
 
   document.addEventListener("keydown", (e) => {
   // Close dropdown if open
