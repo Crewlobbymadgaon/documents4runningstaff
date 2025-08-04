@@ -229,19 +229,29 @@ document.addEventListener("click", (e) => {
   }
 
   function highlightSelectedYear() {
-    const year = document.getElementById("yearSelect").value;
-    loadShedOrders(year);
+    const yearSelect = document.getElementById("yearSelect");
+
+// Clear existing options
+yearSelect.innerHTML = "";
+
+if (window.shedOrdersByYear) {
+  const years = Object.keys(window.shedOrdersByYear).sort((a, b) => b - a); // Descending
+
+  years.forEach(y => {
+    const opt = document.createElement("option");
+    opt.value = y;
+    opt.textContent = `    ${y}    `;
+    opt.className = "bg-white text-blue-900 hover:bg-blue-100 transition duration-150 ease-in-out";
+    yearSelect.appendChild(opt);
+  });
+
+  // Set current year if present, else set the first available
+  const currentYear = String(new Date().getFullYear());
+  yearSelect.value = years.includes(currentYear) ? currentYear : years[0];
+}
   }
 
-  window.addEventListener("DOMContentLoaded", () => {
-    const yearSelect = document.getElementById("yearSelect");
-    const currentYear = new Date().getFullYear();
-
-    const optionExists = [...yearSelect.options].some(opt => opt.value === String(currentYear));
-    yearSelect.value = optionExists ? currentYear : yearSelect.options[0].value;
-
-    highlightSelectedYear();
-  });
+  
 
 function renderShedOrders(year) {
   const orders = window.shedOrdersByYear[year];
@@ -363,12 +373,17 @@ if ('serviceWorker' in navigator) {
   });
 }
 
-// Load shed orders for 2025 after window.shedOrdersByYear is populated
 window.addEventListener("DOMContentLoaded", () => {
+  const yearSelect = document.getElementById("yearSelect");
+  const currentYear = new Date().getFullYear();
+  const optionExists = [...yearSelect.options].some(opt => opt.value === String(currentYear));
+  yearSelect.value = optionExists ? currentYear : yearSelect.options[0].value;
+
+  highlightSelectedYear();
+
   if (window.shedOrdersByYear?.["2025"]) {
     renderShedOrders("2025");
   } else {
-    // In case deferred script hasn't loaded yet
     setTimeout(() => renderShedOrders("2025"), 500);
   }
 });
