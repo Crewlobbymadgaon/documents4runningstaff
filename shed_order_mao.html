@@ -248,26 +248,29 @@ document.addEventListener("click", (e) => {
   }
 });
 
-
 function renderShedOrders(year) {
   const orders = window.shedOrdersByYear[year];
   const shedOrderList = document.getElementById("shedOrderList");
   shedOrderList.innerHTML = "";
+
   if (!orders || orders.length === 0) {
     shedOrderList.innerHTML = "<p class='text-center text-gray-500'>No shed orders available.</p>";
     return;
   }
 
   const reversedOrders = [...orders].reverse();
+  const ackStatus = JSON.parse(localStorage.getItem("acknowledgedDocs") || "[]");
+
   reversedOrders.forEach(order => {
-   const filePath = `/documents4runningstaff/doc_shed_order_mao_${year}/${order.file}`;
+    const filePath = `/documents4runningstaff/doc_shed_order_mao_${year}/${order.file}`;
     const card = document.createElement("div");
     card.className = `bg-white relative rounded-xl p-4 border-2 border-blue-300 shadow-md transition duration-300 text-gray-800 text-base leading-relaxed break-words`;
+
     card.innerHTML = `
       <div class="font-bold text-lg text-blue-900 mb-2">${order.number}</div>
       <div class="text-gray-700 mb-4">${order.topic}</div>
       <div class="flex justify-between items-center px-4 sm:px-6 md:px-8 py-2 sm:py-3">
-      <button onclick="openModal('${filePath}', '${order.number}', '${order.topic.replace(/'/g, "\\'")}')" title="View Document"
+        <button onclick="openModal('${filePath}', '${order.number}', '${order.topic.replace(/'/g, "\\'")}')" title="View Document"
           class="flex items-center gap-2 text-xs sm:text-sm font-bold text-white bg-gradient-to-b from-blue-900 via-blue-500 to-blue-900 hover:scale-105 transform transition duration-200 px-3 py-1.5 sm:px-4 sm:py-2 rounded-md border border-blue-950 shadow-lg focus:outline-none">
           <svg xmlns="http://www.w3.org/2000/svg" fill="white" viewBox="0 0 24 24" class="w-4 h-4 sm:w-5 sm:h-5">
             <path d="M12 5c-7 0-9 7-9 7s2 7 9 7 9-7 9-7-2-7-9-7zm0 12a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"/>
@@ -282,17 +285,15 @@ function renderShedOrders(year) {
           <span>Download</span>
         </a>
       </div>
-      <div id="ack-${order.number}" class="text-green-600 text-sm font-semibold mt-2"></div>
+      <div id="ack-${order.number}" class="text-green-600 text-sm font-semibold mt-2">
+        ${ackStatus.includes(order.number) ? "✔️ Acknowledged" : ""}
+      </div>
     `;
-    shedOrderList.appendChild(card);
-    const ackStatus = JSON.parse(localStorage.getItem("acknowledgedDocs") || "[]");
-    if (ackStatus.includes(order.number)) {
-  const ackDiv = card.querySelector(`#ack-${order.number}`);
-  if (ackDiv) ackDiv.textContent = "✔️ Acknowledged";
-}
 
+    shedOrderList.appendChild(card);
   });
 }
+
 let currentDocId = ""; // Global variable at top of your script
 function openModal(filePath, orderTitle, orderTopic) {
   const modal = document.getElementById("docModal");
