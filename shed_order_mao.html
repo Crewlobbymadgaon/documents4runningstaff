@@ -151,6 +151,18 @@ select.custom-select-center {
     <button onclick="closeModal()" class="text-white text-2xl font-bold">&times;</button>
   </div>
 </div>
+      <!-- Acknowledge Form -->
+<div id="ackForm" class="hidden fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+  <div class="bg-white p-6 rounded-xl w-80 shadow-lg space-y-4">
+    <h2 class="text-xl font-bold text-center">Acknowledge Document</h2>
+    <input id="loginId" type="text" placeholder="Login ID" class="w-full px-3 py-2 border rounded" />
+    <input id="password" type="password" placeholder="Password" class="w-full px-3 py-2 border rounded" />
+    <textarea id="remarks" placeholder="Remarks (optional)" class="w-full px-3 py-2 border rounded"></textarea>
+    <button onclick="submitAcknowledgment()" class="bg-green-600 text-white w-full py-2 rounded">Submit</button>
+    <button onclick="closeAckForm()" class="text-sm text-center text-gray-500 w-full">Cancel</button>
+  </div>
+</div>
+
  
       <div id="pdfViewer" class="flex-grow w-full overflow-auto relative bg-white">
         <!-- Iframe inserted here -->
@@ -384,7 +396,61 @@ window.addEventListener("DOMContentLoaded", () => {
   }
 });
 
+ 
+let currentDocId = ""; // make sure this is set when opening modal
+let currentDocTitle = "";
+
+function acknowledgeDocument() {
+  if (!currentDocId) {
+    alert("Document ID missing");
+    return;
+  }
+  openAckForm(currentDocId);
+}
+
+function openAckForm(docId) {
+  currentDocId = docId;
+  document.getElementById("ackForm").classList.remove("hidden");
+}
+
+function closeAckForm() {
+  document.getElementById("ackForm").classList.add("hidden");
+  document.getElementById("loginId").value = "";
+  document.getElementById("password").value = "";
+  document.getElementById("remarks").value = "";
+}
+
+async function submitAcknowledgment() {
+  const loginId = document.getElementById("loginId").value.trim();
+  const password = document.getElementById("password").value.trim();
+  const remarks = document.getElementById("remarks").value.trim();
+
+  if (!loginId || !password) {
+    alert("Please enter both Login ID and Password.");
+    return;
+  }
+
+  try {
+    const response = await fetch("https://script.google.com/macros/s/AKfycbyEkNHxf84xZWoVmrMxmPwcfV-Tu2MqyAtWbJlYAjpk7afD_ovRFpEVNjX8w-ejfqhqVw/exec", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ loginId, password, docId: currentDocId, remarks })
+    });
+
+    const result = await response.json();
+    if (result.success) {
+      alert("Acknowledged successfully!");
+      closeAckForm();
+    } else {
+      alert("Login failed: " + result.message);
+    }
+  } catch (err) {
+    alert("Error: " + err.message);
+  }
+}
 </script>
+
+
 
 
 </body>
