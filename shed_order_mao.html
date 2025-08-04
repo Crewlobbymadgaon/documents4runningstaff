@@ -296,6 +296,7 @@ function renderShedOrders(year) {
 
 let currentDocId = ""; // Global variable at top of your script
 function openModal(filePath, orderTitle, orderTopic) {
+ currentDocId = orderTitle; // Make sure this is set!
   const modal = document.getElementById("docModal");
   const container = document.getElementById("pdfViewer");
   const titleElement = document.getElementById("documentTitle");
