@@ -282,11 +282,18 @@ function renderShedOrders(year) {
           <span>Download</span>
         </a>
       </div>
+      <div id="ack-${order.number}" class="text-green-600 text-sm font-semibold mt-2"></div>
     `;
     shedOrderList.appendChild(card);
-  });
+    const ackStatus = JSON.parse(localStorage.getItem("acknowledgedDocs") || "[]");
+    if (ackStatus.includes(order.number)) {
+  const ackDiv = card.querySelector(`#ack-${order.number}`);
+  if (ackDiv) ackDiv.textContent = "✔️ Acknowledged";
 }
 
+  });
+}
+let currentDocId = ""; // Global variable at top of your script
 function openModal(filePath, orderTitle, orderTopic) {
   const modal = document.getElementById("docModal");
   const container = document.getElementById("pdfViewer");
@@ -388,6 +395,26 @@ if ('serviceWorker' in navigator) {
     closeModal();
   }
 });
+function acknowledgeDocument() {
+  if (!currentDocId) return;
+
+  // Store acknowledgment in localStorage
+  const key = "acknowledgedDocs";
+  const acknowledged = JSON.parse(localStorage.getItem(key)) || [];
+  if (!acknowledged.includes(currentDocId)) {
+    acknowledged.push(currentDocId);
+    localStorage.setItem(key, JSON.stringify(acknowledged));
+  }
+
+  // Update acknowledgment status in card
+  const ackDiv = document.getElementById(`ack-${currentDocId}`);
+  if (ackDiv) {
+    ackDiv.textContent = "✔️ Acknowledged";
+  }
+
+  // Optional: disable the button or close modal
+  closeModal();
+}
 
 </script>
 
