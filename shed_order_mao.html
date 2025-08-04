@@ -198,30 +198,30 @@ document.addEventListener("click", (e) => {
     hamburgerBtn.setAttribute("aria-expanded", "false");
   }
 });
-  function loadShedOrders(year) {
-    const existingScript = document.getElementById("shed-script");
-    if (existingScript) existingScript.remove();
+ function loadShedOrders(year) {
+  const existingScript = document.getElementById("shed-script");
+  if (existingScript) existingScript.remove();
 
-    const script = document.createElement("script");
-    script.id = "shed-script";
-    script.src = js/shed_order_mao_${year}.js;
+  const script = document.createElement("script");
+  script.id = "shed-script";
+  script.src = `js/shed_order_mao_${year}.js`;  // ✅ FIX: Add backticks for template literal
 
-    script.onload = () => {
-      if (
-        window.shedOrdersByYear &&
-        Array.isArray(window.shedOrdersByYear[year]) &&
-        window.shedOrdersByYear[year].length > 0
-      ) {
-        renderShedOrders(year);
-      } else {
-        showNoDataMessage();
-      }
-    };
+  script.onload = () => {
+    if (
+      window.shedOrdersByYear &&
+      Array.isArray(window.shedOrdersByYear[year]) &&
+      window.shedOrdersByYear[year].length > 0
+    ) {
+      renderShedOrders(window.shedOrdersByYear[year]);  // ✅ Pass array, not year
+    } else {
+      showNoDataMessage();
+    }
+  };
 
-    script.onerror = showNoDataMessage;
+  script.onerror = showNoDataMessage;
 
-    document.body.appendChild(script);
-  }
+  document.body.appendChild(script);
+}
 
   function showNoDataMessage() {
     const container = document.getElementById("shedOrderList");
