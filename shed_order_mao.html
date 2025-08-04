@@ -198,34 +198,34 @@ document.addEventListener("click", (e) => {
     hamburgerBtn.setAttribute("aria-expanded", "false");
   }
 });
- function loadShedOrders(year) {
-  const existingScript = document.getElementById("shed-script");
-  if (existingScript) existingScript.remove();
+  function loadShedOrders(year) {
+    const existingScript = document.getElementById("shed-script");
+    if (existingScript) existingScript.remove();
 
-  const script = document.createElement("script");
-  script.id = "shed-script";
-  script.src = `js/shed_order_mao_${year}.js`;  // ✅ FIX: Add backticks for template literal
+    const script = document.createElement("script");
+    script.id = "shed-script";
+    script.src = `js/shed_order_mao_${year}.js`;
 
-  script.onload = () => {
-    if (
-      window.shedOrdersByYear &&
-      Array.isArray(window.shedOrdersByYear[year]) &&
-      window.shedOrdersByYear[year].length > 0
-    ) {
-      renderShedOrders(window.shedOrdersByYear[year]);  // ✅ Pass array, not year
-    } else {
-      showNoDataMessage();
-    }
-  };
+    script.onload = () => {
+      if (
+        window.shedOrdersByYear &&
+        Array.isArray(window.shedOrdersByYear[year]) &&
+        window.shedOrdersByYear[year].length > 0
+      ) {
+        renderShedOrders(year);
+      } else {
+        showNoDataMessage();
+      }
+    };
 
-  script.onerror = showNoDataMessage;
+    script.onerror = showNoDataMessage;
 
-  document.body.appendChild(script);
-}
+    document.body.appendChild(script);
+  }
 
   function showNoDataMessage() {
     const container = document.getElementById("shedOrderList");
-    container.innerHTML = <div class="text-center text-red-600 font-semibold p-4">Data not available</div>;
+    container.innerHTML = `<div class="text-center text-red-600 font-semibold p-4">Data not available</div>`;
   }
 
   function highlightSelectedYear() {
@@ -254,10 +254,10 @@ function renderShedOrders(year) {
 
   const reversedOrders = [...orders].reverse();
   reversedOrders.forEach(order => {
-   const filePath = /documents4runningstaff/doc_shed_order_mao_${year}/${order.file};
+   const filePath = `/documents4runningstaff/doc_shed_order_mao_${year}/${order.file}`;
     const card = document.createElement("div");
-    card.className = bg-white relative rounded-xl p-4 border-2 border-blue-300 shadow-md transition duration-300 text-gray-800 text-base leading-relaxed break-words;
-    card.innerHTML = 
+    card.className = `bg-white relative rounded-xl p-4 border-2 border-blue-300 shadow-md transition duration-300 text-gray-800 text-base leading-relaxed break-words`;
+    card.innerHTML = `
       <div class="font-bold text-lg text-blue-900 mb-2">${order.number}</div>
       <div class="text-gray-700 mb-4">${order.topic}</div>
       <div class="flex justify-between items-center px-4 sm:px-6 md:px-8 py-2 sm:py-3">
@@ -276,7 +276,7 @@ function renderShedOrders(year) {
           <span>Download</span>
         </a>
       </div>
-    ;
+    `;
     shedOrderList.appendChild(card);
   });
 }
@@ -298,13 +298,13 @@ function openModal(filePath, orderTitle, orderTopic) {
 
   if (isMobile) {
     const fallback = document.createElement("div");
-    fallback.className = 
+    fallback.className = `
       w-full h-full flex flex-col justify-between items-center
       text-center px-4 py-8 bg-gradient-to-b from-gray-100 to-white
       animate-fade-in
-    ;
+    `;
 
-    fallback.innerHTML = 
+    fallback.innerHTML = `
       <div class="text-center w-full animate-fade-in px-4 py-6">
         <div class="bg-gradient-to-br from-blue-50 via-white to-blue-100 rounded-2xl shadow-lg p-6 max-w-md mx-auto border border-blue-300">
           <div class="text-blue-800 text-3xl mb-2">📄</div>
@@ -329,7 +329,7 @@ function openModal(filePath, orderTitle, orderTopic) {
           </div>
         </div>
       </div>
-    ;
+    `;
 
     container.appendChild(fallback);
     return;
