@@ -356,10 +356,15 @@ function closeModal() {
   modal.classList.add("hidden");
   container.innerHTML = '';
   document.body.style.overflow = "";
+
+  // Reset zoom by removing any zoom-related transformations (if added)
+  document.body.style.transform = "none";
+
   if (location.hash === "#doc") {
     history.back();
   }
 }
+
 
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
