@@ -146,10 +146,16 @@ select.custom-select-center {
   <div class="hidden md:flex justify-between items-center px-4 py-2 bg-blue-700 text-white text-lg font-semibold">
   <span id="documentTitle">Document Viewer</span>
   <div class="flex items-center space-x-2">
-    <button onclick="acknowledgeDocument()" class="bg-green-600 px-3 py-1 rounded text-sm hover:bg-green-700">
+    <button
+      onclick="openLoginModal(currentDocId)"
+      class="bg-green-600 px-3 py-1 rounded text-sm hover:bg-green-700"
+    >
       Acknowledge
     </button>
-    <button onclick="closeModal()" class="text-white text-2xl font-bold">&times;</button>
+    <button
+      onclick="closeModal()"
+      class="text-white text-2xl font-bold"
+    >&times;</button>
   </div>
 </div>
  
@@ -430,67 +436,59 @@ function closeLoginModal() {
 }
 
 function submitLogin() {
-  const empNum = document.getElementById("empNumber").value.trim();
+  const empNo = document.getElementById("empNumber").value.trim();
   const password = document.getElementById("empPassword").value.trim();
 
-  if (!empNum || !password) {
+  if (!empNo || !password) {
     alert("Please enter both employee number and password.");
     return;
   }
 
-  // Optional: Password check (for now allow anything)
-  // You can integrate Firebase Auth here later
+  // Authenticate user
+  const matchedEmployee = employees.find(emp => emp.empNo === empNo && emp.password === password);
 
+  if (!matchedEmployee) {
+    alert("Invalid employee number or password.");
+    return;
+  }
+
+  // Save login session (optional)
+  localStorage.setItem("loggedInEmployee", JSON.stringify(matchedEmployee));
+
+  // Close login modal
+  closeLoginModal();
+
+  // Acknowledge document if pending
   if (pendingAcknowledge && currentDocId) {
-    const key = "acknowledgedDocs";
-    const acknowledged = JSON.parse(localStorage.getItem(key)) || [];
-    if (!acknowledged.includes(currentDocId)) {
-      acknowledged.push(currentDocId);
-      localStorage.setItem(key, JSON.stringify(acknowledged));
-    }
+    const now = new Date().toLocaleString();
 
+    // Save acknowledgment data
+    const ackRecord = {
+      docId: currentDocId,
+      empNo: matchedEmployee.empNo,
+      name: matchedEmployee.name,
+      designation: matchedEmployee.designation,
+      dateTime: now,
+      remarks: "" // Optional: ask for remarks later
+    };
+
+    const ackList = JSON.parse(localStorage.getItem("acknowledgements") || "[]");
+    ackList.push(ackRecord);
+    localStorage.setItem("acknowledgements", JSON.stringify(ackList));
+
+    // Update card view (only show "Acknowledged")
     const ackDiv = document.getElementById(`ack-${currentDocId}`);
     if (ackDiv) {
-      const now = new Date().toLocaleString();
-      ackDiv.textContent = `✔️ Acknowledged by ${empNum} on ${now}`;
+      ackDiv.textContent = "✔️ Acknowledged";
     }
 
-    closeModal(); // Close document
-    closeLoginModal(); // Close login
+    // Close document viewer
+    closeModal();
+
+    // Show welcome
+    alert(`Welcome ${matchedEmployee.name} (${matchedEmployee.designation})`);
   }
 }
-
-
-  function submitLogin() {
-    const empNo = document.getElementById("empNumber").value.trim();
-    const password = document.getElementById("empPassword").value;
-
-    const matchedEmployee = employees.find(emp => emp.empNo === empNo && emp.password === password);
-
-    if (matchedEmployee) {
-      alert(`Welcome ${matchedEmployee.name} (${matchedEmployee.designation})`);
-
-      // Save session (optional)
-      localStorage.setItem("loggedInEmployee", JSON.stringify(matchedEmployee));
-
-      // Close modal
-      closeLoginModal();
-
-      // You can proceed with acknowledgement logic here
-      showAcknowledgeForm(matchedEmployee);
-
-    } else {
-      alert("Invalid employee number or password.");
-    }
-  }
-
-  function closeLoginModal() {
-    document.getElementById("loginModal").classList.add("hidden");
-  }
-
-  function openLoginModal() {
-    document.getElementById("loginModal").classList.remove("hidden");
-  }
 
 
 </script>
