@@ -458,13 +458,13 @@ function submitLogin() {
   const matchedEmployee = employees.find(emp => emp.empNo === empNo && emp.password === password);
 
   if (matchedEmployee) {
-    alert(`Welcome ${matchedEmployee.name} (${matchedEmployee.designation})`);
+    // Removed: alert(`Welcome ${matchedEmployee.name} (${matchedEmployee.designation})`);
 
     localStorage.setItem("loggedInEmployee", JSON.stringify(matchedEmployee));
     closeLoginModal();
 
     if (pendingAcknowledge && currentDocId) {
-      pendingAcknowledge = false; // ✅ Set after showing modal
+      pendingAcknowledge = false;
       document.getElementById("ackDocTitle").textContent = currentDocId;
       document.getElementById("ackModal").classList.remove("hidden");
       document.body.style.overflow = "hidden";
@@ -473,7 +473,6 @@ function submitLogin() {
     alert("Invalid employee number or password.");
   }
 }
-
 
 function closeAckModal() {
   document.getElementById("ackModal").classList.add("hidden");
