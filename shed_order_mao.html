@@ -464,15 +464,16 @@ function submitLogin() {
     closeLoginModal();
 
     if (pendingAcknowledge && currentDocId) {
+      pendingAcknowledge = false; // ✅ Set after showing modal
       document.getElementById("ackDocTitle").textContent = currentDocId;
       document.getElementById("ackModal").classList.remove("hidden");
-
-      **document.body.style.overflow = "hidden";** // ✅ Important to keep modal in focus
+      document.body.style.overflow = "hidden";
     }
   } else {
     alert("Invalid employee number or password.");
   }
 }
+
 
 function closeAckModal() {
   document.getElementById("ackModal").classList.add("hidden");
