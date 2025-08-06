@@ -13,8 +13,6 @@
     <script src="js/shed_order_mao_2025.js" defer></script>
     <script defer src="main.js"></script>
     <script src="/documents4runningstaff/js/employee.js"></script>
-    
-    
     <style>
       .font-rajdhani {
         font-family: 'Rajdhani', sans-serif;
@@ -148,16 +146,10 @@ select.custom-select-center {
   <div class="hidden md:flex justify-between items-center px-4 py-2 bg-blue-700 text-white text-lg font-semibold">
   <span id="documentTitle">Document Viewer</span>
   <div class="flex items-center space-x-2">
-    <button
-      onclick="openLoginModal(currentDocId)"
-      class="bg-green-600 px-3 py-1 rounded text-sm hover:bg-green-700"
-    >
+    <button onclick="acknowledgeDocument()" class="bg-green-600 px-3 py-1 rounded text-sm hover:bg-green-700">
       Acknowledge
     </button>
-    <button
-      onclick="closeModal()"
-      class="text-white text-2xl font-bold"
-    >&times;</button>
+    <button onclick="closeModal()" class="text-white text-2xl font-bold">&times;</button>
   </div>
 </div>
  
@@ -169,7 +161,20 @@ select.custom-select-center {
 </div>
 
 
-   
+    <div id="loginModal" class="fixed inset-0 bg-black bg-opacity-70 z-50 hidden">
+  <div class="bg-white p-6 rounded-xl shadow max-w-sm w-full mx-auto mt-24 relative">
+    <h2 class="text-xl font-bold mb-4 text-center text-blue-800">Employee Login</h2>
+    <input type="text" id="empNumber" placeholder="Employee Number" class="w-full mb-3 px-3 py-2 border rounded" />
+    <input type="password" id="empPassword" placeholder="Password" class="w-full mb-4 px-3 py-2 border rounded" />
+    <div class="flex justify-between items-center">
+      <button onclick="submitLogin()" class="bg-blue-700 text-white px-4 py-2 rounded hover:bg-blue-800">
+        Login
+      </button>
+      <button onclick="closeLoginModal()" class="text-red-600 font-bold">Cancel</button>
+    </div>
+  </div>
+    </div>
+
 <script>
   // Toggle Dropdown
 const hamburgerBtn = document.getElementById("hamburgerBtn");
@@ -425,133 +430,70 @@ function closeLoginModal() {
 }
 
 function submitLogin() {
-  const empNo = document.getElementById("empNumber").value.trim();
-  const password = document.getElementById("empPassword").value;
+  const empNum = document.getElementById("empNumber").value.trim();
+  const password = document.getElementById("empPassword").value.trim();
 
-  const matchedEmployee = employees.find(emp => emp.empNo === empNo && emp.password === password);
-
-  if (matchedEmployee) {
-    alert(`Welcome ${matchedEmployee.name} (${matchedEmployee.designation})`);
-
-    localStorage.setItem("loggedInEmployee", JSON.stringify(matchedEmployee));
-
-    // Instead of acknowledging directly, show declaration + remarks form
-    closeLoginModal();
-    showAcknowledgeForm(matchedEmployee);
-  } else {
-    alert("Invalid employee number or password.");
+  if (!empNum || !password) {
+    alert("Please enter both employee number and password.");
+    return;
   }
-}
 
-  // Save login session (optional)
-  localStorage.setItem("loggedInEmployee", JSON.stringify(matchedEmployee));
+  // Optional: Password check (for now allow anything)
+  // You can integrate Firebase Auth here later
 
-  // Close login modal
-  closeLoginModal();
-
-  // Acknowledge document if pending
   if (pendingAcknowledge && currentDocId) {
-    const now = new Date().toLocaleString();
-
-    // Save acknowledgment data
-    const ackRecord = {
-      docId: currentDocId,
-      empNo: matchedEmployee.empNo,
-      name: matchedEmployee.name,
-      designation: matchedEmployee.designation,
-      dateTime: now,
-      remarks: "" // Optional: ask for remarks later
-    };
-
-    const ackList = JSON.parse(localStorage.getItem("acknowledgements") || "[]");
-    ackList.push(ackRecord);
-    localStorage.setItem("acknowledgements", JSON.stringify(ackList));
-
-    // Update card view (only show "Acknowledged")
-    const ackDiv = document.getElementById(`ack-${currentDocId}`);
-    if (ackDiv) {
-      ackDiv.textContent = "✔️ Acknowledged";
+    const key = "acknowledgedDocs";
+    const acknowledged = JSON.parse(localStorage.getItem(key)) || [];
+    if (!acknowledged.includes(currentDocId)) {
+      acknowledged.push(currentDocId);
+      localStorage.setItem(key, JSON.stringify(acknowledged));
     }
 
-    // Close document viewer
-    closeModal();
+    const ackDiv = document.getElementById(`ack-${currentDocId}`);
+    if (ackDiv) {
+      const now = new Date().toLocaleString();
+      ackDiv.textContent = `✔️ Acknowledged by ${empNum} on ${now}`;
+    }
 
-    // Show welcome
-    alert(`Welcome ${matchedEmployee.name} (${matchedEmployee.designation})`);
+    closeModal(); // Close document
+    closeLoginModal(); // Close login
   }
 }
 
-  function showAcknowledgeForm(employee) {
-  window.loggedInEmployee = employee; // Store globally for next use
-  document.getElementById("acknowledgeModal").classList.remove("hidden");
-}
 
-function closeAcknowledgeModal() {
-  document.getElementById("acknowledgeModal").classList.add("hidden");
-}
+  function submitLogin() {
+    const empNo = document.getElementById("empNumber").value.trim();
+    const password = document.getElementById("empPassword").value;
 
-  function submitAcknowledgement() {
-  const declaration = document.getElementById("declarationCheck").checked;
-  const remarks = document.getElementById("ackRemarks").value.trim();
+    const matchedEmployee = employees.find(emp => emp.empNo === empNo && emp.password === password);
 
-  if (!declaration) {
-    alert("You must agree to the declaration before submitting.");
-    return;
+    if (matchedEmployee) {
+      alert(`Welcome ${matchedEmployee.name} (${matchedEmployee.designation})`);
+
+      // Save session (optional)
+      localStorage.setItem("loggedInEmployee", JSON.stringify(matchedEmployee));
+
+      // Close modal
+      closeLoginModal();
+
+      // You can proceed with acknowledgement logic here
+      showAcknowledgeForm(matchedEmployee);
+
+    } else {
+      alert("Invalid employee number or password.");
+    }
   }
 
-  const docId = window.currentDocId;
-  const employee = window.loggedInEmployee;
-
-  if (!docId || !employee) {
-    alert("Missing document or employee info.");
-    return;
+  function closeLoginModal() {
+    document.getElementById("loginModal").classList.add("hidden");
   }
 
-  const now = new Date().toLocaleString();
-
-  // Update UI
-  const ackDiv = document.getElementById(`ack-${docId}`);
-  if (ackDiv) {
-    ackDiv.textContent = `✔️ Acknowledged by ${employee.name} (${employee.designation}) on ${now}`;
+  function openLoginModal() {
+    document.getElementById("loginModal").classList.remove("hidden");
   }
-
-  // Save to Firebase (assumes Firebase already initialized)
-  const data = {
-    empNo: employee.empNo,
-    name: employee.name,
-    designation: employee.designation,
-    docId: docId,
-    timestamp: now,
-    remarks: remarks
-  };
-
-  firebase.database().ref(`acknowledgements/${docId}/${employee.empNo}`).set(data)
-    .then(() => {
-      console.log("Acknowledgement saved to Firebase.");
-    })
-    .catch(error => {
-      console.error("Firebase save error:", error);
-    });
-
-  // Optional: Save locally
-  const key = "acknowledgedDocs";
-  const acknowledged = JSON.parse(localStorage.getItem(key)) || [];
-  if (!acknowledged.includes(docId)) {
-    acknowledged.push(docId);
-    localStorage.setItem(key, JSON.stringify(acknowledged));
-  }
-
-  // Close modals
-  closeAcknowledgeModal();
-  closeModal();
-  }
-
-  
-  
 
 
 </script>
-    
 
 
 
