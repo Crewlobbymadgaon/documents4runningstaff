@@ -441,18 +441,17 @@ function acknowledgeDocument() {
 }
   function openLoginModal() {
   document.getElementById("loginModal").classList.remove("hidden");
+  document.body.style.overflow = "hidden"; // Prevent background scroll
 }
 
 function closeLoginModal() {
   document.getElementById("loginModal").classList.add("hidden");
   document.getElementById("empNumber").value = "";
   document.getElementById("empPassword").value = "";
-  pendingAcknowledge = false;
+  
 }
 
-
-
-  function submitLogin() {
+function submitLogin() {
   const empNo = document.getElementById("empNumber").value.trim();
   const password = document.getElementById("empPassword").value;
 
@@ -465,16 +464,16 @@ function closeLoginModal() {
     closeLoginModal();
 
     if (pendingAcknowledge && currentDocId) {
-      // Set title for declaration modal
       document.getElementById("ackDocTitle").textContent = currentDocId;
-
-      // Open the declaration modal
       document.getElementById("ackModal").classList.remove("hidden");
+
+      **document.body.style.overflow = "hidden";** // ✅ Important to keep modal in focus
     }
   } else {
     alert("Invalid employee number or password.");
   }
 }
+
 function closeAckModal() {
   document.getElementById("ackModal").classList.add("hidden");
   document.getElementById("ackRemarks").value = "";
@@ -504,7 +503,9 @@ function submitAcknowledgment() {
 
   closeModal();
   closeAckModal();
+  pendingAcknowledge = false;
 }
+
 
 
 
