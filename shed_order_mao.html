@@ -13,6 +13,13 @@
     <script src="js/shed_order_mao_2025.js" defer></script>
     <script defer src="main.js"></script>
     <script src="/documents4runningstaff/js/employee.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
+    <!-- Firebase App (core) -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
+
+<!-- Firebase Firestore (for storing data) -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
     <style>
       .font-rajdhani {
         font-family: 'Rajdhani', sans-serif;
@@ -180,6 +187,26 @@ select.custom-select-center {
     </div>
   </div>
     </div>
+
+    <!-- Declaration Modal -->
+<div id="acknowledgeModal" class="fixed inset-0 bg-black bg-opacity-60 z-50 hidden">
+  <div class="bg-white p-4 rounded-md shadow-lg w-[90%] max-w-md mx-auto mt-40">
+    <h2 class="text-lg font-bold mb-2">Acknowledgement Declaration</h2>
+    <p class="mb-2">I have read and understood the contents of the document.</p>
+    
+    <label class="flex items-center space-x-2 mb-4">
+      <input type="checkbox" id="declarationCheck" class="accent-green-600">
+      <span>I agree</span>
+    </label>
+
+    <textarea id="ackRemarks" class="w-full border border-gray-300 p-2 mb-4" rows="3" placeholder="Remarks or doubts (optional)"></textarea>
+
+    <div class="flex justify-end space-x-2">
+      <button onclick="submitAcknowledgement()" class="bg-green-600 hover:bg-green-700 text-white px-4 py-1 rounded">Submit</button>
+      <button onclick="closeAcknowledgeModal()" class="bg-gray-400 hover:bg-gray-500 text-white px-4 py-1 rounded">Cancel</button>
+    </div>
+  </div>
+</div>
 
 <script>
   // Toggle Dropdown
@@ -437,20 +464,22 @@ function closeLoginModal() {
 
 function submitLogin() {
   const empNo = document.getElementById("empNumber").value.trim();
-  const password = document.getElementById("empPassword").value.trim();
+  const password = document.getElementById("empPassword").value;
 
-  if (!empNo || !password) {
-    alert("Please enter both employee number and password.");
-    return;
-  }
-
-  // Authenticate user
   const matchedEmployee = employees.find(emp => emp.empNo === empNo && emp.password === password);
 
-  if (!matchedEmployee) {
+  if (matchedEmployee) {
+    alert(`Welcome ${matchedEmployee.name} (${matchedEmployee.designation})`);
+
+    localStorage.setItem("loggedInEmployee", JSON.stringify(matchedEmployee));
+
+    // Instead of acknowledging directly, show declaration + remarks form
+    closeLoginModal();
+    showAcknowledgeForm(matchedEmployee);
+  } else {
     alert("Invalid employee number or password.");
-    return;
   }
+}
 
   // Save login session (optional)
   localStorage.setItem("loggedInEmployee", JSON.stringify(matchedEmployee));
@@ -490,9 +519,127 @@ function submitLogin() {
   }
 }
 
+  function showAcknowledgeForm(employee) {
+  window.loggedInEmployee = employee; // Store globally for next use
+  document.getElementById("acknowledgeModal").classList.remove("hidden");
+}
+
+function closeAcknowledgeModal() {
+  document.getElementById("acknowledgeModal").classList.add("hidden");
+}
+
+  function submitAcknowledgement() {
+  const declaration = document.getElementById("declarationCheck").checked;
+  const remarks = document.getElementById("ackRemarks").value.trim();
+
+  if (!declaration) {
+    alert("You must agree to the declaration before submitting.");
+    return;
+  }
+
+  const docId = window.currentDocId;
+  const employee = window.loggedInEmployee;
+
+  if (!docId || !employee) {
+    alert("Missing document or employee info.");
+    return;
+  }
+
+  const now = new Date().toLocaleString();
+
+  // Update UI
+  const ackDiv = document.getElementById(`ack-${docId}`);
+  if (ackDiv) {
+    ackDiv.textContent = `✔️ Acknowledged by ${employee.name} (${employee.designation}) on ${now}`;
+  }
+
+  // Save to Firebase (assumes Firebase already initialized)
+  const data = {
+    empNo: employee.empNo,
+    name: employee.name,
+    designation: employee.designation,
+    docId: docId,
+    timestamp: now,
+    remarks: remarks
+  };
+
+  firebase.database().ref(`acknowledgements/${docId}/${employee.empNo}`).set(data)
+    .then(() => {
+      console.log("Acknowledgement saved to Firebase.");
+    })
+    .catch(error => {
+      console.error("Firebase save error:", error);
+    });
+
+  // Optional: Save locally
+  const key = "acknowledgedDocs";
+  const acknowledged = JSON.parse(localStorage.getItem(key)) || [];
+  if (!acknowledged.includes(docId)) {
+    acknowledged.push(docId);
+    localStorage.setItem(key, JSON.stringify(acknowledged));
+  }
+
+  // Close modals
+  closeAcknowledgeModal();
+  closeModal();
+  }
+
+  
+  const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_PROJECT.firebaseapp.com",
+    databaseURL: "https://YOUR_PROJECT.firebaseio.com",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_PROJECT.appspot.com",
+    messagingSenderId: "SENDER_ID",
+    appId: "APP_ID"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+
+
 
 </script>
+    
+<script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
 
+  // Your web app's Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyBkv0A6LpL85hnwevwKOW5vRenuXRkdEsk",
+    authDomain: "circular-acknowledgement.firebaseapp.com",
+    projectId: "circular-acknowledgement",
+    storageBucket: "circular-acknowledgement.firebasestorage.app",
+    messagingSenderId: "432775784463",
+    appId: "1:432775784463:web:908776601b77ab8ffa1b7a"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+
+import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+const db = getFirestore(app);
+
+// Example: Save acknowledgement
+async function saveAcknowledgement(empNumber, designation, remark) {
+  try {
+    await addDoc(collection(db, "acknowledgements"), {
+      employeeNumber: empNumber,
+      designation: designation,
+      remark: remark,
+      timestamp: new Date()
+    });
+    alert("Acknowledged successfully!");
+  } catch (e) {
+    console.error("Error adding document: ", e);
+  }
+}
+
+</script>
 
 
 </body>
