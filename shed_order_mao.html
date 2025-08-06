@@ -174,6 +174,27 @@ select.custom-select-center {
     </div>
   </div>
     </div>
+   
+    <!-- Acknowledgment Declaration Modal -->
+<div id="ackModal" class="fixed inset-0 bg-black bg-opacity-70 z-50 hidden">
+  <div class="bg-white p-6 rounded-xl shadow max-w-md w-full mx-auto mt-24 relative">
+    <h2 class="text-xl font-bold mb-4 text-center text-blue-800">Acknowledge Document</h2>
+    <p class="mb-4 text-gray-700 text-sm">
+      I hereby declare that I have read and understood the contents of the document <span id="ackDocTitle" class="font-semibold text-blue-700"></span>.
+    </p>
+    <textarea id="ackRemarks" placeholder="Remarks (optional)" rows="3"
+      class="w-full px-3 py-2 border border-gray-300 rounded mb-4 resize-none"></textarea>
+    <div class="flex justify-between items-center">
+      <button onclick="submitAcknowledgment()"
+        class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+        Submit Acknowledgment
+      </button>
+      <button onclick="closeAckModal()"
+        class="text-red-600 font-bold">Cancel</button>
+    </div>
+  </div>
+</div>
+
 
 <script>
   // Toggle Dropdown
@@ -432,35 +453,59 @@ function closeLoginModal() {
 
 
   function submitLogin() {
-    const empNo = document.getElementById("empNumber").value.trim();
-    const password = document.getElementById("empPassword").value;
+  const empNo = document.getElementById("empNumber").value.trim();
+  const password = document.getElementById("empPassword").value;
 
-    const matchedEmployee = employees.find(emp => emp.empNo === empNo && emp.password === password);
+  const matchedEmployee = employees.find(emp => emp.empNo === empNo && emp.password === password);
 
-    if (matchedEmployee) {
-      alert(`Welcome ${matchedEmployee.name} (${matchedEmployee.designation})`);
+  if (matchedEmployee) {
+    alert(`Welcome ${matchedEmployee.name} (${matchedEmployee.designation})`);
 
-      // Save session (optional)
-      localStorage.setItem("loggedInEmployee", JSON.stringify(matchedEmployee));
+    localStorage.setItem("loggedInEmployee", JSON.stringify(matchedEmployee));
+    closeLoginModal();
 
-      // Close modal
-      closeLoginModal();
+    if (pendingAcknowledge && currentDocId) {
+      // Set title for declaration modal
+      document.getElementById("ackDocTitle").textContent = currentDocId;
 
-      // You can proceed with acknowledgement logic here
-      showAcknowledgeForm(matchedEmployee);
-
-    } else {
-      alert("Invalid employee number or password.");
+      // Open the declaration modal
+      document.getElementById("ackModal").classList.remove("hidden");
     }
+  } else {
+    alert("Invalid employee number or password.");
+  }
+}
+function closeAckModal() {
+  document.getElementById("ackModal").classList.add("hidden");
+  document.getElementById("ackRemarks").value = "";
+  pendingAcknowledge = false;
+}
+
+function submitAcknowledgment() {
+  const remarks = document.getElementById("ackRemarks").value.trim();
+  const employee = JSON.parse(localStorage.getItem("loggedInEmployee"));
+
+  if (!employee || !currentDocId) return;
+
+  const key = "acknowledgedDocs";
+  const acknowledged = JSON.parse(localStorage.getItem(key)) || [];
+
+  if (!acknowledged.includes(currentDocId)) {
+    acknowledged.push(currentDocId);
+    localStorage.setItem(key, JSON.stringify(acknowledged));
   }
 
-  function closeLoginModal() {
-    document.getElementById("loginModal").classList.add("hidden");
+  // Show acknowledgment text under card
+  const ackDiv = document.getElementById(`ack-${currentDocId}`);
+  if (ackDiv) {
+    const now = new Date().toLocaleString();
+    ackDiv.textContent = `✔️ Acknowledged by ${employee.name} on ${now}${remarks ? ` – "${remarks}"` : ""}`;
   }
 
-  function openLoginModal() {
-    document.getElementById("loginModal").classList.remove("hidden");
-  }
+  closeModal();
+  closeAckModal();
+}
+
 
 
 </script>
