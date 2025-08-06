@@ -429,36 +429,6 @@ function closeLoginModal() {
   pendingAcknowledge = false;
 }
 
-function submitLogin() {
-  const empNum = document.getElementById("empNumber").value.trim();
-  const password = document.getElementById("empPassword").value.trim();
-
-  if (!empNum || !password) {
-    alert("Please enter both employee number and password.");
-    return;
-  }
-
-  // Optional: Password check (for now allow anything)
-  // You can integrate Firebase Auth here later
-
-  if (pendingAcknowledge && currentDocId) {
-    const key = "acknowledgedDocs";
-    const acknowledged = JSON.parse(localStorage.getItem(key)) || [];
-    if (!acknowledged.includes(currentDocId)) {
-      acknowledged.push(currentDocId);
-      localStorage.setItem(key, JSON.stringify(acknowledged));
-    }
-
-    const ackDiv = document.getElementById(`ack-${currentDocId}`);
-    if (ackDiv) {
-      const now = new Date().toLocaleString();
-      ackDiv.textContent = `✔️ Acknowledged by ${empNum} on ${now}`;
-    }
-
-    closeModal(); // Close document
-    closeLoginModal(); // Close login
-  }
-}
 
 
   function submitLogin() {
