@@ -601,44 +601,103 @@ function closeAcknowledgeModal() {
 
 </script>
     
+<!-- FIREBASE SETUP -->
 <script type="module">
-  // Import the functions you need from the SDKs you need
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
+  import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
-  // Your web app's Firebase configuration
   const firebaseConfig = {
     apiKey: "AIzaSyBkv0A6LpL85hnwevwKOW5vRenuXRkdEsk",
     authDomain: "circular-acknowledgement.firebaseapp.com",
     projectId: "circular-acknowledgement",
-    storageBucket: "circular-acknowledgement.firebasestorage.app",
+    storageBucket: "circular-acknowledgement.appspot.com",
     messagingSenderId: "432775784463",
     appId: "1:432775784463:web:908776601b77ab8ffa1b7a"
   };
 
-  // Initialize Firebase
   const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
 
-import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+  // MOCK EMPLOYEE DATA (Replace with real list or Firebase Auth later)
+  const employees = [
+    { empNo: "12345", password: "pass123", name: "John D", designation: "LP" },
+    { empNo: "54321", password: "railway", name: "Amit R", designation: "ALP" },
+    { empNo: "11111", password: "engine", name: "Suresh N", designation: "LP" },
+  ];
 
-const db = getFirestore(app);
+  let currentDocId = null;
+  let loggedInEmployee = null;
 
-// Example: Save acknowledgement
-async function saveAcknowledgement(empNumber, designation, remark) {
-  try {
-    await addDoc(collection(db, "acknowledgements"), {
-      employeeNumber: empNumber,
-      designation: designation,
-      remark: remark,
-      timestamp: new Date()
-    });
-    alert("Acknowledged successfully!");
-  } catch (e) {
-    console.error("Error adding document: ", e);
-  }
-}
+  // === ACKNOWLEDGE FLOW ===
+  window.acknowledgeDocument = function (docId) {
+    currentDocId = docId;
+    document.getElementById("loginModal").classList.remove("hidden");
+  };
 
+  window.submitLogin = function () {
+    const empNo = document.getElementById("empNumber").value.trim();
+    const password = document.getElementById("empPassword").value.trim();
+
+    const matched = employees.find(emp => emp.empNo === empNo && emp.password === password);
+    if (matched) {
+      loggedInEmployee = matched;
+      document.getElementById("loginModal").classList.add("hidden");
+      document.getElementById("empNumber").value = "";
+      document.getElementById("empPassword").value = "";
+
+      document.getElementById("acknowledgeModal").classList.remove("hidden");
+    } else {
+      alert("Invalid credentials.");
+    }
+  };
+
+  window.submitAcknowledgement = async function () {
+    const checked = document.getElementById("declarationCheck").checked;
+    const remarks = document.getElementById("ackRemarks").value.trim();
+
+    if (!checked) {
+      alert("You must confirm you've read the document.");
+      return;
+    }
+
+    if (!loggedInEmployee || !currentDocId) {
+      alert("Missing document or employee info.");
+      return;
+    }
+
+    const now = new Date().toLocaleString();
+
+    // Save to Firestore
+    try {
+      await addDoc(collection(db, "acknowledgements"), {
+        docId: currentDocId,
+        empNo: loggedInEmployee.empNo,
+        name: loggedInEmployee.name,
+        designation: loggedInEmployee.designation,
+        remarks: remarks,
+        timestamp: now
+      });
+
+      const ackDiv = document.getElementById(`ack-${currentDocId}`);
+      if (ackDiv) {
+        ackDiv.textContent = `✔️ Acknowledged by ${loggedInEmployee.name} on ${now}`;
+      }
+
+      document.getElementById("acknowledgeModal").classList.add("hidden");
+      alert("Acknowledged successfully!");
+    } catch (error) {
+      console.error("Error saving acknowledgement:", error);
+      alert("Failed to save acknowledgement. Try again.");
+    }
+  };
+
+  window.closeLoginModal = function () {
+    document.getElementById("loginModal").classList.add("hidden");
+  };
+
+  window.closeAcknowledgeModal = function () {
+    document.getElementById("acknowledgeModal").classList.add("hidden");
+  };
 </script>
 
 
