@@ -480,7 +480,7 @@ function closeAckModal() {
   pendingAcknowledge = false;
 }
 
-function submitAcknowledgment() {
+async function submitAcknowledgment() {
   const remarks = document.getElementById("ackRemarks").value.trim();
   const employee = JSON.parse(localStorage.getItem("loggedInEmployee"));
 
@@ -492,21 +492,41 @@ function submitAcknowledgment() {
   if (!acknowledged.includes(currentDocId)) {
     acknowledged.push(currentDocId);
     localStorage.setItem(key, JSON.stringify(acknowledged));
+
+    // ✅ Save to Firebase
+    const now = new Date();
+    const timestamp = now.toISOString();
+
+    const data = {
+      empNo: employee.empNo,
+      name: employee.name,
+      designation: employee.designation,
+      remarks: remarks || "",
+      timestamp,
+      docId: currentDocId,
+    };
+
+    try {
+      await firebase.firestore().collection("acknowledgements").add(data);
+    } catch (error) {
+      console.error("Firebase save failed:", error);
+      alert("Error saving acknowledgment to server.");
+    }
   }
 
-  // Show acknowledgment text under card
-  const ackDiv = document.getElementById(`ack-${currentDocId}`);
-  if (ackDiv) {
-    const now = new Date().toLocaleString();
-    ackDiv.textContent = `✔️ Acknowledged by ${employee.name} on ${now}${remarks ? ` – "${remarks}"` : ""}`;
+  // ✅ Replace card content with only "✔️ Acknowledged"
+  const card = document.querySelector(`[data-doc-id="${currentDocId}"]`);
+  if (card) {
+    card.innerHTML = `
+      <div class="text-green-600 font-semibold text-center py-4">✔️ Acknowledged</div>
+    `;
   }
 
+  // ✅ Clean up
   closeModal();
   closeAckModal();
   pendingAcknowledge = false;
 }
-
-
 
 
 </script>
