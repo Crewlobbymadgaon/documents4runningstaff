@@ -461,7 +461,7 @@ function acknowledgeDocument(docId, docTitle) {
     remark
   };
 
-  // Save to local storage
+  // Save locally
   const localKey = `acknowledged_${docId}_${empNumber}`;
   localStorage.setItem(localKey, JSON.stringify(ackData));
 
@@ -470,20 +470,19 @@ function acknowledgeDocument(docId, docTitle) {
     .then(() => {
       console.log("Acknowledgement saved to Firebase.");
 
-      // ✅ Immediately update the card on UI
-      const card = document.getElementById(`card-${docId}`);
-      const ackDiv = card.querySelector(".acknowledgement-status");
-      ackDiv.innerHTML = `<span class="text-green-600 font-semibold">Acknowledged</span>`;
+      // ✅ Update the UI instantly
 
-      // Disable the Acknowledge button
-      const ackBtn = card.querySelector(".acknowledge-btn");
-      if (ackBtn) {
-        ackBtn.disabled = true;
-        ackBtn.classList.add("opacity-50", "cursor-not-allowed");
+      const card = document.getElementById(`card-${docId}`);
+      if (card) {
+        card.innerHTML = `
+          <div class="text-green-600 text-lg font-semibold text-center py-6">
+            ✅ Acknowledged
+          </div>
+        `;
       }
 
-      // Close modal
-      closeModal();
+      // ✅ Close modals
+      closeModal(); // your modal closing function
     })
     .catch((error) => {
       console.error("Error saving to Firebase:", error);
@@ -579,7 +578,22 @@ async function submitAcknowledgment() {
   pendingAcknowledge = false;
 }
 
+window.addEventListener("DOMContentLoaded", () => {
+  const emp = JSON.parse(localStorage.getItem("loggedInEmployee"));
+  if (!emp) return;
 
+  document.querySelectorAll("[id^='card-']").forEach(card => {
+    const docId = card.id.replace("card-", "");
+    const localKey = `acknowledged_${docId}_${emp.empNumber}`;
+    if (localStorage.getItem(localKey)) {
+      card.innerHTML = `
+        <div class="text-green-600 text-lg font-semibold text-center py-6">
+          ✅ Acknowledged
+        </div>
+      `;
+    }
+  });
+});
 </script>
 
 
