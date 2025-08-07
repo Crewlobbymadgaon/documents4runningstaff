@@ -434,10 +434,61 @@ if ('serviceWorker' in navigator) {
     closeModal();
   }
 });
-function acknowledgeDocument() {
-  // Trigger login first
-  pendingAcknowledge = true;
-  openLoginModal();
+function acknowledgeDocument(docId, docTitle) {
+  const empNumber = document.getElementById("empNumber").value.trim();
+  const password = document.getElementById("password").value.trim();
+  const remark = document.getElementById("remark").value.trim();
+
+  if (!empNumber || !password) {
+    alert("Please enter Employee Number and Password.");
+    return;
+  }
+
+  const employee = employees.find(emp => emp.empNumber === empNumber && emp.password === password);
+  if (!employee) {
+    alert("Invalid Employee Number or Password.");
+    return;
+  }
+
+  const timestamp = new Date().toLocaleString();
+  const ackData = {
+    docId,
+    docTitle,
+    empNumber,
+    name: employee.name,
+    designation: employee.designation,
+    timestamp,
+    remark
+  };
+
+  // Save to local storage
+  const localKey = `acknowledged_${docId}_${empNumber}`;
+  localStorage.setItem(localKey, JSON.stringify(ackData));
+
+  // Save to Firebase
+  firebase.database().ref(`acknowledgements/${docId}/${empNumber}`).set(ackData)
+    .then(() => {
+      console.log("Acknowledgement saved to Firebase.");
+
+      // ✅ Immediately update the card on UI
+      const card = document.getElementById(`card-${docId}`);
+      const ackDiv = card.querySelector(".acknowledgement-status");
+      ackDiv.innerHTML = `<span class="text-green-600 font-semibold">Acknowledged</span>`;
+
+      // Disable the Acknowledge button
+      const ackBtn = card.querySelector(".acknowledge-btn");
+      if (ackBtn) {
+        ackBtn.disabled = true;
+        ackBtn.classList.add("opacity-50", "cursor-not-allowed");
+      }
+
+      // Close modal
+      closeModal();
+    })
+    .catch((error) => {
+      console.error("Error saving to Firebase:", error);
+      alert("Failed to save acknowledgment. Please try again.");
+    });
 }
   function openLoginModal() {
   document.getElementById("loginModal").classList.remove("hidden");
