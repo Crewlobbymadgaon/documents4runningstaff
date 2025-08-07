@@ -578,22 +578,7 @@ async function submitAcknowledgment() {
   pendingAcknowledge = false;
 }
 
-window.addEventListener("DOMContentLoaded", () => {
-  const emp = JSON.parse(localStorage.getItem("loggedInEmployee"));
-  if (!emp) return;
 
-  document.querySelectorAll("[id^='card-']").forEach(card => {
-    const docId = card.id.replace("card-", "");
-    const localKey = `acknowledged_${docId}_${emp.empNumber}`;
-    if (localStorage.getItem(localKey)) {
-      card.innerHTML = `
-        <div class="text-green-600 text-lg font-semibold text-center py-6">
-          ✅ Acknowledged
-        </div>
-      `;
-    }
-  });
-});
 </script>
 
 
