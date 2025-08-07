@@ -13,6 +13,32 @@
     <script src="js/shed_order_mao_2025.js" defer></script>
     <script defer src="main.js"></script>
     <script src="/documents4runningstaff/js/employee.js"></script>
+    <!-- Firebase App (Core SDK) -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+
+<!-- Firebase Firestore SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+  import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyD4BfU5OKhKFynJMVC2k4qFEgmeDhLlSIM",
+    authDomain: "acksystem-circulars.firebaseapp.com",
+    projectId: "acksystem-circulars",
+    storageBucket: "acksystem-circulars.firebasestorage.app",
+    messagingSenderId: "105632229279",
+    appId: "1:105632229279:web:3f43d026e78e4fc9817faa"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  // Optional: Attach db to window so your main code can access it
+  window.db = db;
+  window.addDoc = addDoc;
+  window.collection = collection;
+</script>
     <style>
       .font-rajdhani {
         font-family: 'Rajdhani', sans-serif;
@@ -487,62 +513,47 @@ async function submitAcknowledgment() {
   const remarks = document.getElementById("ackRemarks").value.trim();
   const employee = JSON.parse(localStorage.getItem("loggedInEmployee"));
 
-  if (!employee || !currentDocId) {
-    alert("Something went wrong. Please try again.");
-    return;
-  }
+  if (!employee || !currentDocId) return;
 
-  const ackKey = `acknowledgedDocs_${employee.empNo}`;
-  const acknowledged = JSON.parse(localStorage.getItem(ackKey)) || [];
+  const key = "acknowledgedDocs";
+  const acknowledged = JSON.parse(localStorage.getItem(key)) || [];
 
   if (!acknowledged.includes(currentDocId)) {
     acknowledged.push(currentDocId);
-    localStorage.setItem(ackKey, JSON.stringify(acknowledged));
+    localStorage.setItem(key, JSON.stringify(acknowledged));
 
-    const now = new Date().toISOString();
+    const now = new Date();
+    const timestamp = now.toISOString();
 
     const data = {
       empNo: employee.empNo,
       name: employee.name,
       designation: employee.designation,
       remarks: remarks || "",
-      timestamp: now,
+      timestamp,
       docId: currentDocId,
     };
 
     try {
-      await firebase.firestore().collection("acknowledgements").add(data);
+      await window.addDoc(window.collection(window.db, "acknowledgements"), data);
     } catch (error) {
       console.error("Firebase save failed:", error);
       alert("Error saving acknowledgment to server.");
     }
   }
 
-  // ✅ Update the acknowledgment line in the existing card
-  const ackStatusEl = document.querySelector(`#ack-${currentDocId}`);
-  if (ackStatusEl) {
-    ackStatusEl.textContent = "✔️ Acknowledged";
-    ackStatusEl.classList.add("text-green-600", "font-semibold");
-  } else {
-    // If targeted element not found, try fallback update
-    const card = document.querySelector(`[data-doc-id="${currentDocId}"]`);
-    if (card) {
-      const fallbackAck = document.createElement("div");
-      fallbackAck.className = "text-green-600 font-semibold text-sm mt-2";
-      fallbackAck.textContent = "✔️ Acknowledged";
-      card.appendChild(fallbackAck);
-    }
+  const card = document.querySelector(`[data-doc-id="${currentDocId}"]`);
+  if (card) {
+    card.innerHTML = `<div class="text-green-600 font-semibold text-center py-4">✔️ Acknowledged</div>`;
   }
 
-  // ✅ Clean up
   closeModal();
   closeAckModal();
   pendingAcknowledge = false;
 }
 
-
-
 </script>
+
 
 
 
