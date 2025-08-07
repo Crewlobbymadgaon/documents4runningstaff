@@ -434,71 +434,10 @@ if ('serviceWorker' in navigator) {
     closeModal();
   }
 });
-function acknowledgeDocument(docId, docTitle) {
-  const empNumber = document.getElementById("empNumber").value.trim();
-  const password = document.getElementById("password").value.trim();
-  const remark = document.getElementById("remark").value.trim();
-
-  if (!empNumber || !password) {
-    alert("Please enter Employee Number and Password.");
-    return;
-  }
-
-  const employee = employees.find(emp => emp.empNumber === empNumber && emp.password === password);
-  if (!employee) {
-    alert("Invalid Employee Number or Password.");
-    return;
-  }
-
-  const timestamp = new Date().toLocaleString();
-  const ackData = {
-    docId,
-    docTitle,
-    empNumber,
-    name: employee.name,
-    designation: employee.designation,
-    timestamp,
-    remark
-  };
-
-  // Prevent duplicates
-  const localKey = `acknowledged_${docId}_${empNumber}`;
-  if (localStorage.getItem(localKey)) {
-    alert("You have already acknowledged this document.");
-    return;
-  }
-
-  // Save locally
-  localStorage.setItem(localKey, JSON.stringify(ackData));
-
-  // Save to Firebase
-  firebase.database().ref(`acknowledgements/${docId}`).update({
-    [empNumber]: ackData
-  })
-    .then(() => {
-      console.log("Acknowledgement saved to Firebase.");
-
-      // ✅ Update card UI
-      const card = document.getElementById(`card-${docId}`);
-      if (card) {
-        const statusDiv = card.querySelector(".acknowledgement-status");
-        if (statusDiv) {
-          statusDiv.innerHTML = `<span class="text-green-600 font-semibold">✅ Acknowledged</span>`;
-        }
-
-        const ackBtn = card.querySelector(".acknowledge-btn");
-        if (ackBtn) {
-          ackBtn.disabled = true;
-          ackBtn.classList.add("opacity-50", "cursor-not-allowed");
-        }
-      }
-
-      closeModal();
-    })
-    .catch((error) => {
-      console.error("Error saving to Firebase:", error);
-      alert("Failed to save acknowledgment. Please try again.");
-    });
+function acknowledgeDocument() {
+  // Trigger login first
+  pendingAcknowledge = true;
+  openLoginModal();
 }
   function openLoginModal() {
   document.getElementById("loginModal").classList.remove("hidden");
@@ -519,13 +458,14 @@ function submitLogin() {
   const matchedEmployee = employees.find(emp => emp.empNo === empNo && emp.password === password);
 
   if (matchedEmployee) {
+    // Removed: alert(`Welcome ${matchedEmployee.name} (${matchedEmployee.designation})`);
+
     localStorage.setItem("loggedInEmployee", JSON.stringify(matchedEmployee));
     closeLoginModal();
 
-    if (pendingAcknowledge && currentDocId && currentDocTitle) {
+    if (pendingAcknowledge && currentDocId) {
       pendingAcknowledge = false;
-      document.getElementById("ackDocTitle").textContent = currentDocTitle;
-      document.getElementById("ackRemarks").value = "";
+      document.getElementById("ackDocTitle").textContent = currentDocId;
       document.getElementById("ackModal").classList.remove("hidden");
       document.body.style.overflow = "hidden";
     }
