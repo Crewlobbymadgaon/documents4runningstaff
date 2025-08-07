@@ -295,7 +295,10 @@ function renderShedOrders(year) {
   }
 
   const reversedOrders = [...orders].reverse();
-  const ackStatus = JSON.parse(localStorage.getItem("acknowledgedDocs") || "[]");
+  const loggedIn = JSON.parse(localStorage.getItem("loggedInEmployee"));
+const ackStatus = loggedIn 
+  ? JSON.parse(localStorage.getItem(`acknowledgedDocs_${loggedIn.empNo}`) || "[]")
+  : [];
 
   reversedOrders.forEach(order => {
     const filePath = `/documents4runningstaff/doc_shed_order_mao_${year}/${order.file}`;
@@ -484,25 +487,26 @@ async function submitAcknowledgment() {
   const remarks = document.getElementById("ackRemarks").value.trim();
   const employee = JSON.parse(localStorage.getItem("loggedInEmployee"));
 
-  if (!employee || !currentDocId) return;
+  if (!employee || !currentDocId) {
+    alert("Something went wrong. Please try again.");
+    return;
+  }
 
-  const key = "acknowledgedDocs";
-  const acknowledged = JSON.parse(localStorage.getItem(key)) || [];
+  const ackKey = `acknowledgedDocs_${employee.empNo}`;
+  const acknowledged = JSON.parse(localStorage.getItem(ackKey)) || [];
 
   if (!acknowledged.includes(currentDocId)) {
     acknowledged.push(currentDocId);
-    localStorage.setItem(key, JSON.stringify(acknowledged));
+    localStorage.setItem(ackKey, JSON.stringify(acknowledged));
 
-    // ✅ Save to Firebase
-    const now = new Date();
-    const timestamp = now.toISOString();
+    const now = new Date().toISOString();
 
     const data = {
       empNo: employee.empNo,
       name: employee.name,
       designation: employee.designation,
       remarks: remarks || "",
-      timestamp,
+      timestamp: now,
       docId: currentDocId,
     };
 
@@ -514,12 +518,20 @@ async function submitAcknowledgment() {
     }
   }
 
-  // ✅ Replace card content with only "✔️ Acknowledged"
-  const card = document.querySelector(`[data-doc-id="${currentDocId}"]`);
-  if (card) {
-    card.innerHTML = `
-      <div class="text-green-600 font-semibold text-center py-4">✔️ Acknowledged</div>
-    `;
+  // ✅ Update the acknowledgment line in the existing card
+  const ackStatusEl = document.querySelector(`#ack-${currentDocId}`);
+  if (ackStatusEl) {
+    ackStatusEl.textContent = "✔️ Acknowledged";
+    ackStatusEl.classList.add("text-green-600", "font-semibold");
+  } else {
+    // If targeted element not found, try fallback update
+    const card = document.querySelector(`[data-doc-id="${currentDocId}"]`);
+    if (card) {
+      const fallbackAck = document.createElement("div");
+      fallbackAck.className = "text-green-600 font-semibold text-sm mt-2";
+      fallbackAck.textContent = "✔️ Acknowledged";
+      card.appendChild(fallbackAck);
+    }
   }
 
   // ✅ Clean up
@@ -527,6 +539,7 @@ async function submitAcknowledgment() {
   closeAckModal();
   pendingAcknowledge = false;
 }
+
 
 
 </script>
