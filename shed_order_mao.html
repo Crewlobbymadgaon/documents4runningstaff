@@ -551,6 +551,26 @@ function closeAckModal() {
   }
   }
 
+  async function markAcknowledgedCards() {
+  const employee = JSON.parse(localStorage.getItem("loggedInEmployee"));
+  if (!employee) return;
+
+  const colRef = window.collection(window.db, "acknowledgements");
+  const snapshot = await window.getDocs(colRef);
+
+  snapshot.forEach((doc) => {
+    const data = doc.data();
+    if (data.empNo === employee.empNo) {
+      const ackDiv = document.getElementById(`ack-${data.docId}`);
+      if (ackDiv) {
+        ackDiv.textContent = "✔️ Acknowledged";
+      }
+    }
+  });
+}
+  await renderShedOrders(year);
+await markAcknowledgedCards();
+
 </script>
 
 
