@@ -553,10 +553,12 @@ function closeAckModal() {
 
   
   async function markAcknowledgedCards() {
-    const employee = JSON.parse(localStorage.getItem("loggedInEmployee"));
-    if (!employee) return;
+  const employee = JSON.parse(localStorage.getItem("loggedInEmployee"));
+  if (!employee) return;
 
-    const colRef = window.collection(window.db, "acknowledgements");
+  const colRef = window.collection(window.db, "acknowledgements");
+
+  try {
     const snapshot = await window.getDocs(colRef);
 
     snapshot.forEach((doc) => {
@@ -565,15 +567,22 @@ function closeAckModal() {
         const ackDiv = document.getElementById(`ack-${data.docId}`);
         if (ackDiv) {
           ackDiv.textContent = "✔️ Acknowledged";
+          ackDiv.classList.add("text-green-600", "font-semibold"); // optional: styling
         }
       }
     });
+  } catch (error) {
+    console.error("Error fetching acknowledgements from Firebase:", error);
   }
+}
 
-  async function initPage() {
-    await renderShedOrders(year); // must be defined
-    await markAcknowledgedCards();
-  }
+async function initPage() {
+  await renderShedOrders(year); // Make sure this renders all documents/cards with correct IDs
+  await markAcknowledgedCards();
+}
+
+// Call initPage when the page loads
+window.addEventListener("DOMContentLoaded", initPage);
 </script>
 
 
