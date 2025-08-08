@@ -550,39 +550,34 @@ function closeAckModal() {
     alert("Failed to submit acknowledgment. Please try again.");
   }
   }
-
-  
-  async function markAcknowledgedCards() {
+async function markAcknowledgedCards() {
   const employee = JSON.parse(localStorage.getItem("loggedInEmployee"));
   if (!employee) return;
 
   const colRef = window.collection(window.db, "acknowledgements");
+  const snapshot = await window.getDocs(colRef);
 
-  try {
-    const snapshot = await window.getDocs(colRef);
+  const ackDocs = [];
 
-    snapshot.forEach((doc) => {
-      const data = doc.data();
-      if (data.empNo === employee.empNo) {
-        const ackDiv = document.getElementById(`ack-${data.docId}`);
-        if (ackDiv) {
-          ackDiv.textContent = "✔️ Acknowledged";
-          ackDiv.classList.add("text-green-600", "font-semibold"); // optional: styling
-        }
+  snapshot.forEach((doc) => {
+    const data = doc.data();
+    if (data.empNo === employee.empNo) {
+      ackDocs.push(data.docId);
+      const ackDiv = document.getElementById(`ack-${data.docId}`);
+      if (ackDiv) {
+        ackDiv.textContent = "✔️ Acknowledged";
       }
-    });
-  } catch (error) {
-    console.error("Error fetching acknowledgements from Firebase:", error);
-  }
+    }
+  });
+
+  // Save acknowledged doc IDs locally
+  localStorage.setItem(`acknowledgedDocs_${employee.empNo}`, JSON.stringify(ackDocs));
 }
 
 async function initPage() {
-  await renderShedOrders(year); // Make sure this renders all documents/cards with correct IDs
+  await renderShedOrders(year); // Make sure 'year' is defined globally
   await markAcknowledgedCards();
 }
-
-// Call initPage when the page loads
-window.addEventListener("DOMContentLoaded", initPage);
 </script>
 
 
