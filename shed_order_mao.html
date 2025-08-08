@@ -509,48 +509,47 @@ function closeAckModal() {
   pendingAcknowledge = false;
 }
 
-async function submitAcknowledgment() {
+
+  async function submitAcknowledgment() {
   const remarks = document.getElementById("ackRemarks").value.trim();
-  const employee = JSON.parse(localStorage.getItem("loggedInEmployee"));
+  const emp = JSON.parse(localStorage.getItem("loggedInEmployee"));
+  if (!emp || !currentDocId || !window.db) {
+    alert("Something went wrong. Please log in again.");
+    return;
+  }
 
-  if (!employee || !currentDocId) return;
-
-  const key = "acknowledgedDocs";
-  const acknowledged = JSON.parse(localStorage.getItem(key)) || [];
-
-  if (!acknowledged.includes(currentDocId)) {
-    acknowledged.push(currentDocId);
-    localStorage.setItem(key, JSON.stringify(acknowledged));
-
-    const now = new Date();
-    const timestamp = now.toISOString();
-
-    const data = {
-      empNo: employee.empNo,
-      name: employee.name,
-      designation: employee.designation,
-      remarks: remarks || "",
-      timestamp,
+  try {
+    await window.addDoc(window.collection(window.db, "acknowledgements"), {
+      empNo: emp.empNo,
+      name: emp.name,
+      designation: emp.designation,
       docId: currentDocId,
-    };
+      remarks: remarks,
+      timestamp: new Date().toISOString()
+    });
 
-    try {
-      await window.addDoc(window.collection(window.db, "acknowledgements"), data);
-    } catch (error) {
-      console.error("Firebase save failed:", error);
-      alert("Error saving acknowledgment to server.");
+    // Save locally to prevent re-acknowledging
+    const ackKey = `acknowledgedDocs_${emp.empNo}`;
+    const ackDocs = JSON.parse(localStorage.getItem(ackKey) || "[]");
+    if (!ackDocs.includes(currentDocId)) {
+      ackDocs.push(currentDocId);
+      localStorage.setItem(ackKey, JSON.stringify(ackDocs));
     }
-  }
 
-  const card = document.querySelector(`[data-doc-id="${currentDocId}"]`);
-  if (card) {
-    card.innerHTML = `<div class="text-green-600 font-semibold text-center py-4">✔️ Acknowledged</div>`;
-  }
+    // Update UI
+    const ackElement = document.getElementById(`ack-${currentDocId}`);
+    if (ackElement) {
+      ackElement.textContent = "✔️ Acknowledged";
+    }
 
-  closeModal();
-  closeAckModal();
-  pendingAcknowledge = false;
-}
+    closeAckModal();
+    closeModal();
+    alert("Acknowledgment submitted successfully.");
+  } catch (error) {
+    console.error("Error submitting acknowledgment:", error);
+    alert("Failed to submit acknowledgment. Please try again.");
+  }
+  }
 
 </script>
 
