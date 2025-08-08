@@ -556,7 +556,6 @@ async function markAcknowledgedCards() {
 
   const colRef = window.collection(window.db, "acknowledgements");
   const snapshot = await window.getDocs(colRef);
-
   const ackDocs = [];
 
   snapshot.forEach((doc) => {
@@ -570,13 +569,7 @@ async function markAcknowledgedCards() {
     }
   });
 
-  // Save acknowledged doc IDs locally
   localStorage.setItem(`acknowledgedDocs_${employee.empNo}`, JSON.stringify(ackDocs));
-}
-
-async function initPage() {
-  await renderShedOrders(year); // Make sure 'year' is defined globally
-  await markAcknowledgedCards();
 }
 </script>
 
