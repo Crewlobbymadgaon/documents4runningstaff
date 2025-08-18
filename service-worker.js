@@ -1,46 +1,49 @@
 /* /documents4runningstaff/sw.js
-   App-shell + dynamic PDF caching + navigation fallback
+   Robust app-shell + dynamic PDF caching + update notification
 */
 
-const CACHE_NAME = 'library-cache-v3';
-const RUNTIME = 'library-runtime-v3';
+const CACHE_NAME = 'library-cache-v4';
+const RUNTIME    = 'library-runtime-v4';
+const BASE       = '/documents4runningstaff';
 
-// List every file required to start the UI (precache these)
+// Precaching: list every local file needed to boot the UI.
+// ⚠️ Make sure each path below exists in your repo exactly as written.
 const PRECACHE_URLS = [
-  '/documents4runningstaff/',                 // important for GH Pages index
-  '/documents4runningstaff/index.html',
-  '/documents4runningstaff/offline.html',
-  '/documents4runningstaff/manifest.json',
-  '/documents4runningstaff/favicon.ico',
-  '/documents4runningstaff/icon-192.png',
-  '/documents4runningstaff/icon-512.png',
-  '/documents4runningstaff/styles.css',
-  '/documents4runningstaff/script.js', 
-  '/documents4runningstaff/js/employee.js',
-  '/documents4runningstaff/js/shed_order_mao_2025.js'
-  // adjust name if different
-  // add any other local JS/CSS/data files here:
-  // '/documents4runningstaff/js/shed_order_mao_2025.js',
-  // '/documents4runningstaff/pdfs/2025-safety.pdf',
+  `${BASE}/`,
+  `${BASE}/index.html`,
+  `${BASE}/offline.html`,
+  `${BASE}/manifest.json`,
+  `${BASE}/favicon.ico`,
+  `${BASE}/icon-192.png`,
+  `${BASE}/icon-512.png`,
+  `${BASE}/styles.css`,
+  `${BASE}/script.js`,                  // verify this name (was main.js earlier)
+  `${BASE}/js/employee.js`,
+  `${BASE}/js/shed_order_mao_2025.js`
+  // add other local assets, fonts, pdfs, etc.
 ];
 
-/* ---------- install: precache ---------- */
+/* ---------- install: precache with fault tolerance ---------- */
 self.addEventListener('install', event => {
-  event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => cache.addAll(PRECACHE_URLS))
-      .then(() => self.skipWaiting())
-  );
+  event.waitUntil((async () => {
+    const cache = await caches.open(CACHE_NAME);
+    // addAll will fail if any resource 404s; use Promise.allSettled for robustness
+    const results = await Promise.allSettled(PRECACHE_URLS.map(url => cache.add(url)));
+    const failed = results.filter(r => r.status === 'rejected');
+    if (failed.length) {
+      // still activate, but log failures to help debugging
+      console.warn('Some precache resources failed to cache:', failed.map(f => f.reason));
+    }
+    // activate new SW immediately
+    await self.skipWaiting();
+  })());
 });
 
 /* ---------- activate: cleanup old caches ---------- */
 self.addEventListener('activate', event => {
   event.waitUntil((async () => {
     const keys = await caches.keys();
-    await Promise.all(keys.map(key => {
-      if (key !== CACHE_NAME && key !== RUNTIME) return caches.delete(key);
-      return Promise.resolve();
-    }));
+    await Promise.all(keys.map(key => (key !== CACHE_NAME && key !== RUNTIME) ? caches.delete(key) : Promise.resolve()));
     await self.clients.claim();
   })());
 });
@@ -51,93 +54,84 @@ function isNavigationRequest(request) {
          (request.method === 'GET' && request.headers.get('accept')?.includes('text/html'));
 }
 
-/* ---------- fetch handler: strategies ---------- */
+/* ---------- message handler (optional update flow) ---------- */
+self.addEventListener('message', event => {
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
+});
+
+/* ---------- fetch handler: routing strategies ---------- */
 self.addEventListener('fetch', event => {
   const req = event.request;
   const url = new URL(req.url);
 
-  // Only handle GET requests
   if (req.method !== 'GET') return;
 
-  // 1) HTML navigations (app-shell model) — network-first, fallback to cached shell or offline page
-  if (isNavigationRequest(req) && url.origin === location.origin && url.pathname.startsWith('/documents4runningstaff')) {
+  // 1) Navigation requests (app-shell model): network-first, fallback to shell/offline
+  if (isNavigationRequest(req) && url.origin === location.origin && url.pathname.startsWith(BASE)) {
     event.respondWith((async () => {
       try {
         const networkResponse = await fetch(req);
-        // Optionally cache navigation responses in RUNTIME for "freshness"
-        const runtimeCache = await caches.open(RUNTIME);
-        runtimeCache.put(req, networkResponse.clone());
+        // cache a copy to runtime for later
+        const rc = await caches.open(RUNTIME);
+        rc.put(req, networkResponse.clone());
         return networkResponse;
       } catch (err) {
-        const cache = await caches.open(CACHE_NAME);
-        // prefer index.html (app shell), else offline page
-        return await cache.match('/documents4runningstaff/index.html') ||
-               await cache.match('/documents4runningstaff/offline.html');
+        const precache = await caches.open(CACHE_NAME);
+        return await precache.match(`${BASE}/index.html`) ||
+               await precache.match(`${BASE}/offline.html`);
       }
     })());
     return;
   }
 
-  // 2) Static assets (js/css/images/fonts/icons) — cache-first
-  if (url.origin === location.origin &&
-      (/\.(?:js|css|png|jpg|jpeg|webp|svg|ico|woff2?)$/i).test(url.pathname)) {
+  // 2) Static assets (cache-first)
+  if (url.origin === location.origin && /\.(?:js|css|png|jpg|jpeg|webp|svg|ico|woff2?)$/i.test(url.pathname)) {
     event.respondWith((async () => {
       const cached = await caches.match(req);
       if (cached) return cached;
       try {
-        const response = await fetch(req);
-        const runtimeCache = await caches.open(RUNTIME);
-        runtimeCache.put(req, response.clone());
-        return response;
+        const res = await fetch(req);
+        const rc = await caches.open(RUNTIME);
+        rc.put(req, res.clone());
+        return res;
       } catch (err) {
-        // If it's an icon/font/image and not cached, fallback to offline.html for navigations only
-        if (isNavigationRequest(req)) {
-          return caches.match('/documents4runningstaff/offline.html');
-        }
-        // otherwise return error response
+        // fallback to offline page for navigations only
+        if (isNavigationRequest(req)) return caches.match(`${BASE}/offline.html`);
         return new Response('', { status: 504, statusText: 'Offline' });
       }
     })());
     return;
   }
 
-  // 3) PDFs and other documents — try network, cache dynamically for offline later, fallback to cache
-  if (url.origin === location.origin && (/\.(?:pdf|html)$/i).test(url.pathname)) {
+  // 3) PDFs and repo HTML docs — network-first, cache dynamically, fallback to cached copy or offline
+  if (url.origin === location.origin && /\.(?:pdf|html)$/i.test(url.pathname)) {
     event.respondWith((async () => {
       const cache = await caches.open(RUNTIME);
       try {
-        const response = await fetch(req);
-        // only cache successful responses
-        if (response && response.ok) {
-          cache.put(req, response.clone());
-        }
-        return response;
+        const res = await fetch(req);
+        if (res && res.ok) cache.put(req, res.clone());
+        return res;
       } catch (err) {
         const cached = await cache.match(req);
         if (cached) return cached;
-        // as last resort show offline page
-        return caches.match('/documents4runningstaff/offline.html');
+        return caches.match(`${BASE}/offline.html`);
       }
     })());
     return;
   }
 
-  // 4) Cross-origin resources (CDNs) - best-effort: return cache if present else network
+  // 4) Cross-origin resources (CDNs) — best-effort: try cache -> network, attempt caching runtime
   if (url.origin !== location.origin) {
     event.respondWith((async () => {
       const cached = await caches.match(req);
       if (cached) return cached;
       try {
-        // try network (some responses may be opaque and not cacheable)
-        const response = await fetch(req);
-        // attempt to cache opaque responses but be cautious
-        try {
-          const runtimeCache = await caches.open(RUNTIME);
-          runtimeCache.put(req, response.clone());
-        } catch (e) {
-          // ignore caching failures for cross-origin
-        }
-        return response;
+        const res = await fetch(req);
+        // attempt to cache but ignore failures (opaque responses might throw)
+        try { const rc = await caches.open(RUNTIME); rc.put(req, res.clone()); } catch (e) {}
+        return res;
       } catch (err) {
         return new Response('', { status: 504, statusText: 'Offline' });
       }
