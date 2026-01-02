@@ -27,10 +27,11 @@
     transition: opacity 0.3s ease;
   }
 
-  .hidden {
-    opacity: 0;
-    pointer-events: none;
-  }
+  .fade-hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
 </style>
     
   </head>
@@ -362,8 +363,11 @@
   menuBtn.addEventListener("click", () => {
     menuBtn.classList.add("hidden");
     homeBtn.classList.remove("hidden");
-    menuItems.classList.remove("hidden");
-    mainContent.classList.add("hidden");
+    menuItems.classList.remove("fade-hidden");
+menuItems.classList.remove("hidden");
+
+mainContent.classList.add("fade-hidden");
+
   });
 
   homeBtn.addEventListener("click", () => {
