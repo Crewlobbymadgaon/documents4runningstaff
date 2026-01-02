@@ -301,69 +301,10 @@
 </div>
   </div>
 
-  <!-- 🔳 Modal -->
-<div id="modal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex justify-center items-center z-50">
-  <div class="bg-white p-5 rounded-lg shadow-lg w-[95%] sm:w-[520px]">
-    <h2 class="text-xl font-bold mb-3" id="modalTitle"></h2>
 
-    <iframe
-      id="docFrame"
-      class="w-full h-[420px] border rounded mb-4"
-      loading="lazy">
-    </iframe>
-
-    <div class="flex gap-3 justify-end">
-      <a id="downloadBtn"
-         class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded text-sm"
-         download>
-        Download
-      </a>
-
-      <button onclick="closeModal()"
-        class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded text-sm">
-        Close
-      </button>
-    </div>
-  </div>
-</div>
-
-
-  
 
 <script>
-  function openModal(title) {
-  const modal = document.getElementById("modal");
-  const frame = document.getElementById("docFrame");
-  const downloadBtn = document.getElementById("downloadBtn");
-
-  const fileMap = {
-    "Shed Order": "/documents4runningstaff/doc_shed_order_mao_2025/01-2025.pdf",
-    "Safety Circular": "/documents4runningstaff/safety-circular.pdf",
-    "Counselling Subject": "/documents4runningstaff/counselling.pdf",
-    "G&SR Correction Slip": "/documents4runningstaff/gsr-correction.pdf",
-    "WTT Correction Slip": "/documents4runningstaff/wtt-correction.pdf",
-    "Accident Manual Correction": "/documents4runningstaff/accident-manual.pdf"
-  };
-
-  const file = fileMap[title];
-
-  document.getElementById("modalTitle").textContent = title;
-  frame.src = file;
-  downloadBtn.href = file;
-
-  modal.classList.remove("hidden");
-  document.body.style.overflow = "hidden";
-}
-
-
-  function closeModal() {
-    const modal = document.getElementById("modal");
-    modal.classList.add("hidden");
-    modal.classList.remove("flex");
-    document.body.style.overflow = ""; // restore scroll
-  }
-
- 
+  
   const menuBtn = document.getElementById("menu-button");
   const homeBtn = document.getElementById("home-button");
   const menuItems = document.getElementById("menu-items");
