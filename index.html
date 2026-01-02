@@ -12,9 +12,7 @@
     
     <meta name="theme-color" content="#1f2937" />
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/idb@7/build/iife/index-min.js"></script>
-    <!-- Add Alpine.js -->
-    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    
 
     <style>
       .font-rajdhani {
@@ -300,52 +298,59 @@
   </div>
 
   <!-- 🔳 Modal -->
-  <div id="modal" class="fixed inset-0 bg-black bg-opacity-50 hidden justify-center items-center z-50">
-    <div class="bg-white p-6 rounded-lg shadow-lg w-[95%] sm:w-[500px] relative">
-      <h2 class="text-xl font-bold mb-2" id="modalTitle">Document Title</h2>
-      <div id="modalContent" class="mb-4"></div>
-      
-      <!-- Action Buttons -->
-     <div class="flex flex-col gap-3">
-  <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-1.5 rounded text-sm">
-    Mark as Offline
-  </button>
-  <button onclick="closeModal()" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-1.5 rounded text-sm">
-    Close
-  </button>
-</div>
+<div id="modal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex justify-center items-center z-50">
+  <div class="bg-white p-5 rounded-lg shadow-lg w-[95%] sm:w-[520px]">
+    <h2 class="text-xl font-bold mb-3" id="modalTitle"></h2>
 
+    <iframe
+      id="docFrame"
+      class="w-full h-[420px] border rounded mb-4"
+      loading="lazy">
+    </iframe>
+
+    <div class="flex gap-3 justify-end">
+      <a id="downloadBtn"
+         class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded text-sm"
+         download>
+        Download
+      </a>
+
+      <button onclick="closeModal()"
+        class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded text-sm">
+        Close
+      </button>
     </div>
   </div>
+</div>
+
 
   
 
 <script>
-  // 📄 Open Modal
   function openModal(title) {
-    const modal = document.getElementById("modal");
-    const modalTitle = document.getElementById("modalTitle");
-    const modalContent = document.getElementById("modalContent");
+  const modal = document.getElementById("modal");
+  const frame = document.getElementById("docFrame");
+  const downloadBtn = document.getElementById("downloadBtn");
 
-    // Map title to file path
-    const fileMap = {
-      "Shed Order": "/documents4runningstaff/doc_shed_order_mao_2025/01-2025.pdf",
-      "Safety Circular": "/documents4runningstaff/safety-circular.pdf",
-      "Counselling Subject": "/documents4runningstaff/counselling.pdf",
-      "G&SR Correction Slip": "/documents4runningstaff/gsr-correction.pdf",
-      "WTT Correction Slip": "/documents4runningstaff/wtt-correction.pdf",
-      "Accident Manual Correction": "/documents4runningstaff/accident-manual.pdf",
-    };
+  const fileMap = {
+    "Shed Order": "/documents4runningstaff/doc_shed_order_mao_2025/01-2025.pdf",
+    "Safety Circular": "/documents4runningstaff/safety-circular.pdf",
+    "Counselling Subject": "/documents4runningstaff/counselling.pdf",
+    "G&SR Correction Slip": "/documents4runningstaff/gsr-correction.pdf",
+    "WTT Correction Slip": "/documents4runningstaff/wtt-correction.pdf",
+    "Accident Manual Correction": "/documents4runningstaff/accident-manual.pdf"
+  };
 
-    modalTitle.textContent = title;
-    modalContent.innerHTML = `
-      <iframe src="${fileMap[title]}" class="w-full h-[400px]" frameborder="0"></iframe>
-    `;
+  const file = fileMap[title];
 
-    modal.classList.remove("hidden");
-    modal.classList.add("flex");
-    document.body.style.overflow = "hidden"; // prevent background scroll
-  }
+  document.getElementById("modalTitle").textContent = title;
+  frame.src = file;
+  downloadBtn.href = file;
+
+  modal.classList.remove("hidden");
+  document.body.style.overflow = "hidden";
+}
+
 
   function closeModal() {
     const modal = document.getElementById("modal");
