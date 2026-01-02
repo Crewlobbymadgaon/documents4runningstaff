@@ -335,13 +335,17 @@ const ackStatus = loggedIn
       <div class="font-bold text-lg text-blue-900 mb-2">${order.number}</div>
       <div class="text-gray-700 mb-4">${order.topic}</div>
       <div class="flex justify-between items-center px-4 sm:px-6 md:px-8 py-2 sm:py-3">
-        <button onclick="openModal('${filePath}', '${order.number}', '${order.topic.replace(/'/g, "\\'")}')" title="View Document"
-          class="flex items-center gap-2 text-xs sm:text-sm font-bold text-white bg-gradient-to-b from-blue-900 via-blue-500 to-blue-900 hover:scale-105 transform transition duration-200 px-3 py-1.5 sm:px-4 sm:py-2 rounded-md border border-blue-950 shadow-lg focus:outline-none">
+        <a href="${filePath}" target="_blank" title="View Document"
+  class="flex items-center gap-2 text-xs sm:text-sm font-bold text-white 
+         bg-gradient-to-b from-blue-900 via-blue-500 to-blue-900 
+         hover:scale-105 transform transition duration-200 
+         px-3 py-1.5 sm:px-4 sm:py-2 
+         rounded-md border border-blue-950 shadow-lg focus:outline-none">
           <svg xmlns="http://www.w3.org/2000/svg" fill="white" viewBox="0 0 24 24" class="w-4 h-4 sm:w-5 sm:h-5">
             <path d="M12 5c-7 0-9 7-9 7s2 7 9 7 9-7 9-7-2-7-9-7zm0 12a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"/>
           </svg>
           <span>View</span>
-        </button>
+        </a>
         <a href="${filePath}" download title="Download Document"
            class="flex items-center gap-2 text-xs sm:text-sm font-bold text-white bg-gradient-to-b from-blue-900 via-blue-500 to-blue-900 hover:scale-105 transform transition duration-200 px-3 py-1.5 sm:px-4 sm:py-2 rounded-md border border-blue-950 shadow-lg focus:outline-none">
           <svg xmlns="http://www.w3.org/2000/svg" fill="white" viewBox="0 0 24 24" class="w-4 h-4 sm:w-5 sm:h-5">
