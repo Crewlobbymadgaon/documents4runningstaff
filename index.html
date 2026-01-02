@@ -305,29 +305,19 @@
       <div id="modalContent" class="mb-4"></div>
       
       <!-- Action Buttons -->
-      <div class="flex flex-col gap-3">
-        <button onclick="openAcknowledgeBox()" class="bg-green-600 hover:bg-green-700 text-white px-4 py-1.5 rounded text-sm">Acknowledge</button>
-        <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-1.5 rounded text-sm">Mark as Offline</button>
-        <button onclick="closeModal()" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-1.5 rounded text-sm">Close</button>
-      </div>
+     <div class="flex flex-col gap-3">
+  <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-1.5 rounded text-sm">
+    Mark as Offline
+  </button>
+  <button onclick="closeModal()" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-1.5 rounded text-sm">
+    Close
+  </button>
+</div>
+
     </div>
   </div>
 
-  <!-- 🔘 Acknowledge Dialog -->
-  <div id="ackBox" class="fixed inset-0 bg-black bg-opacity-50 hidden justify-center items-center z-50">
-    <div class="bg-white p-6 rounded-lg shadow-lg w-[95%] sm:w-[500px]">
-      <h3 class="text-lg font-bold mb-3">Acknowledge Document</h3>
-      <label class="flex items-start space-x-2 mb-3">
-        <input type="checkbox" id="readConfirm" class="mt-1">
-        <span>I have read the document and understood its content.</span>
-      </label>
-      <textarea id="doubtText" rows="3" class="w-full border border-gray-300 rounded p-2 mb-4" placeholder="If you have any doubts, mention here..."></textarea>
-      <div class="flex gap-3">
-        <button onclick="submitAcknowledgement()" class="bg-green-600 hover:bg-green-700 text-white px-4 py-1.5 rounded text-sm">Submit</button>
-        <button onclick="closeAcknowledgeBox()" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-1.5 rounded text-sm">Cancel</button>
-      </div>
-    </div>
-  </div>
+  
 
 <script>
   // 📄 Open Modal
@@ -363,34 +353,7 @@
     document.body.style.overflow = ""; // restore scroll
   }
 
-  // ✅ Open Acknowledge Box
-  function openAcknowledgeBox() {
-    document.getElementById('ackBox').classList.remove('hidden');
-    document.getElementById('ackBox').classList.add('flex');
-  }
-
-  function closeAcknowledgeBox() {
-    document.getElementById('ackBox').classList.add('hidden');
-    document.getElementById('ackBox').classList.remove('flex');
-  }
-
-  // ✅ Acknowledge Submit
-  function submitAcknowledgement() {
-    const confirmed = document.getElementById('readConfirm').checked;
-    const doubt = document.getElementById('doubtText').value.trim();
-
-    if (!confirmed) {
-      alert("Please confirm you have read and understood the document.");
-      return;
-    }
-
-    alert("Acknowledged successfully!" + (doubt ? "\nDoubt: " + doubt : ""));
-    closeAcknowledgeBox();
-    closeModal();
-  }
-
-  
-  
+ 
   const menuBtn = document.getElementById("menu-button");
   const homeBtn = document.getElementById("home-button");
   const menuItems = document.getElementById("menu-items");
