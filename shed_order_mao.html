@@ -300,19 +300,31 @@ window.addEventListener("DOMContentLoaded", () => {
   const yearSelect = document.getElementById("yearSelect");
   const currentYear = new Date().getFullYear();
 
-  // Check if current year option exists
-  let option = [...yearSelect.options].find(o => o.value === String(currentYear));
+  // 1️⃣ Collect existing years from dropdown
+  const years = new Set(
+    [...yearSelect.options].map(opt => Number(opt.value))
+  );
 
-  // If not, add it dynamically at top
-  if (!option) {
-    option = document.createElement("option");
-    option.value = currentYear;
-    option.textContent = `    ${currentYear}    `;
-    option.className = "bg-white text-blue-900";
-    yearSelect.insertBefore(option, yearSelect.firstChild);
-  }
+  // 2️⃣ Ensure current year is included
+  years.add(currentYear);
 
+  // 3️⃣ Sort years DESCENDING (latest first)
+  const sortedYears = [...years].sort((a, b) => b - a);
+
+  // 4️⃣ Rebuild dropdown cleanly
+  yearSelect.innerHTML = "";
+  sortedYears.forEach(year => {
+    const opt = document.createElement("option");
+    opt.value = year;
+    opt.textContent = `    ${year}    `;
+    opt.className = "bg-white text-blue-900";
+    yearSelect.appendChild(opt);
+  });
+
+  // 5️⃣ Select current year by default
   yearSelect.value = String(currentYear);
+
+  // 6️⃣ Load current year shed orders
   loadShedOrders(currentYear);
 });
 
