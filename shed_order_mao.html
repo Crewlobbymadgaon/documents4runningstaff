@@ -295,20 +295,27 @@ document.addEventListener("click", (e) => {
     loadShedOrders(year);
   }
 
-  window.addEventListener("DOMContentLoaded", () => {
+
+window.addEventListener("DOMContentLoaded", () => {
   const yearSelect = document.getElementById("yearSelect");
   const currentYear = new Date().getFullYear();
-  const optionExists = [...yearSelect.options].some(opt => opt.value === String(currentYear));
-  yearSelect.value = optionExists ? currentYear : yearSelect.options[0].value;
-  highlightSelectedYear();
 
-  // Load 2025 orders only if not already handled
-  if (window.shedOrdersByYear?.["2025"]) {
-    renderShedOrders("2025");
-  } else {
-    setTimeout(() => renderShedOrders("2025"), 500);
+  // Check if current year option exists
+  let option = [...yearSelect.options].find(o => o.value === String(currentYear));
+
+  // If not, add it dynamically at top
+  if (!option) {
+    option = document.createElement("option");
+    option.value = currentYear;
+    option.textContent = `    ${currentYear}    `;
+    option.className = "bg-white text-blue-900";
+    yearSelect.insertBefore(option, yearSelect.firstChild);
   }
+
+  yearSelect.value = String(currentYear);
+  loadShedOrders(currentYear);
 });
+
 
 function renderShedOrders(year) {
   const orders = window.shedOrdersByYear[year];
