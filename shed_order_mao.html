@@ -10,7 +10,7 @@
     <meta name="theme-color" content="#1f2937" />
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600&display=swap" rel="stylesheet" />
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="js/shed_order_mao_2025.js" defer></script>
+    
     <script defer src="main.js"></script>
     <script src="/documents4runningstaff/js/employee.js"></script>
     <!-- Firebase App (Core SDK) -->
@@ -164,62 +164,26 @@ select.custom-select-center {
   <div id="shedOrderList" class="grid gap-4 max-w-2xl mx-auto"></div>
 </section>
 
-<!-- Modal -->
+<!-- Document Modal -->
 <div id="docModal" class="fixed inset-0 bg-black bg-opacity-70 z-50 hidden">
-  <div class="w-full h-full flex flex-col items-center justify-center">
-    <div class="bg-white w-[95vw] h-[90vh] max-h-[90vh] rounded-lg shadow-xl relative overflow-hidden flex flex-col">
-     <!-- Only show on medium screens and above -->
-  <div class="hidden md:flex justify-between items-center px-4 py-2 bg-blue-700 text-white text-lg font-semibold">
-  <span id="documentTitle">Document Viewer</span>
-  <div class="flex items-center space-x-2">
-    <button onclick="acknowledgeDocument()" class="bg-green-600 px-3 py-1 rounded text-sm hover:bg-green-700">
-      Acknowledge
-    </button>
-    <button onclick="closeModal()" class="text-white text-2xl font-bold">&times;</button>
-  </div>
-</div>
- 
-      <div id="pdfViewer" class="flex-grow w-full overflow-auto relative bg-white">
-        <!-- Iframe inserted here -->
+  <div class="w-full h-full flex items-center justify-center">
+    <div class="bg-white w-[95vw] h-[90vh] rounded-lg shadow-xl flex flex-col">
+
+      <!-- Header (desktop only) -->
+      <div class="hidden md:flex justify-between items-center px-4 py-2 bg-blue-700 text-white text-lg font-semibold">
+        <span id="documentTitle">Document Viewer</span>
+        <button onclick="closeModal()" class="text-white text-2xl font-bold">&times;</button>
       </div>
+
+      <!-- PDF Viewer -->
+      <div id="pdfViewer" class="flex-grow w-full overflow-auto bg-white">
+        <!-- iframe injected here -->
+      </div>
+
     </div>
   </div>
 </div>
 
-
-    <div id="loginModal" class="fixed inset-0 bg-black bg-opacity-70 z-50 hidden">
-  <div class="bg-white p-6 rounded-xl shadow max-w-sm w-full mx-auto mt-24 relative">
-    <h2 class="text-xl font-bold mb-4 text-center text-blue-800">Employee Login</h2>
-    <input type="text" id="empNumber" placeholder="Employee Number" class="w-full mb-3 px-3 py-2 border rounded" />
-    <input type="password" id="empPassword" placeholder="Password" class="w-full mb-4 px-3 py-2 border rounded" />
-    <div class="flex justify-between items-center">
-      <button onclick="submitLogin()" class="bg-blue-700 text-white px-4 py-2 rounded hover:bg-blue-800">
-        Login
-      </button>
-      <button onclick="closeLoginModal()" class="text-red-600 font-bold">Cancel</button>
-    </div>
-  </div>
-    </div>
-   
-    <!-- Acknowledgment Declaration Modal -->
-<div id="ackModal" class="fixed inset-0 bg-black bg-opacity-70 z-50 hidden">
-  <div class="bg-white p-6 rounded-xl shadow max-w-md w-full mx-auto mt-24 relative">
-    <h2 class="text-xl font-bold mb-4 text-center text-blue-800">Acknowledge Document</h2>
-    <p class="mb-4 text-gray-700 text-sm">
-      I hereby declare that I have read and understood the contents of the document <span id="ackDocTitle" class="font-semibold text-blue-700"></span>.
-    </p>
-    <textarea id="ackRemarks" placeholder="Remarks (optional)" rows="3"
-      class="w-full px-3 py-2 border border-gray-300 rounded mb-4 resize-none"></textarea>
-    <div class="flex justify-between items-center">
-      <button onclick="submitAcknowledgment()"
-        class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
-        Submit Acknowledgment
-      </button>
-      <button onclick="closeAckModal()"
-        class="text-red-600 font-bold">Cancel</button>
-    </div>
-  </div>
-</div>
 
 
 <script>
@@ -260,30 +224,56 @@ document.addEventListener("click", (e) => {
     hamburgerBtn.setAttribute("aria-expanded", "false");
   }
 });
-  function loadShedOrders(year) {
-    const existingScript = document.getElementById("shed-script");
-    if (existingScript) existingScript.remove();
+  async function loadShedOrders(year) {
+  const list = document.getElementById("shedOrderList");
+  list.innerHTML = "<p class='text-center'>Loading...</p>";
 
-    const script = document.createElement("script");
-    script.id = "shed-script";
-    script.src = `js/shed_order_mao_${year}.js`;
+  const q = query(
+    collection(window.db, "documents"),
+    where("category", "==", "shed_order"),
+    where("lobby", "==", "mao"),
+    where("year", "==", Number(year)),
+    orderBy("createdAt", "desc")
+  );
 
-    script.onload = () => {
-      if (
-        window.shedOrdersByYear &&
-        Array.isArray(window.shedOrdersByYear[year]) &&
-        window.shedOrdersByYear[year].length > 0
-      ) {
-        renderShedOrders(year);
-      } else {
-        showNoDataMessage();
-      }
-    };
+  const snapshot = await getDocs(q);
+  list.innerHTML = "";
 
-    script.onerror = showNoDataMessage;
-
-    document.body.appendChild(script);
+  if (snapshot.empty) {
+    list.innerHTML = "<p class='text-center text-red-600'>No data available</p>";
+    return;
   }
+
+  snapshot.forEach(async (doc) => {
+    const data = doc.data();
+
+    const fileRef = ref(storage, data.filePath);
+    const fileURL = await getDownloadURL(fileRef);
+
+    const card = document.createElement("div");
+    card.className =
+      "bg-white rounded-xl p-4 border-2 border-blue-300 shadow-md";
+
+    card.innerHTML = `
+      <div class="font-bold text-lg text-blue-900 mb-2">${data.title}</div>
+      <div class="text-gray-700 mb-4">${data.description || ""}</div>
+
+      <div class="flex gap-3">
+        <a href="${fileURL}" target="_blank"
+           class="bg-blue-600 text-white px-4 py-2 rounded text-sm">
+           View
+        </a>
+        <a href="${fileURL}" download
+           class="bg-blue-800 text-white px-4 py-2 rounded text-sm">
+           Download
+        </a>
+      </div>
+    `;
+
+    list.appendChild(card);
+  });
+}
+
 
   function showNoDataMessage() {
     const container = document.getElementById("shedOrderList");
@@ -328,110 +318,46 @@ window.addEventListener("DOMContentLoaded", () => {
   loadShedOrders(currentYear);
 });
 
-
-function renderShedOrders(year) {
-  const orders = window.shedOrdersByYear[year];
-  const shedOrderList = document.getElementById("shedOrderList");
-  shedOrderList.innerHTML = "";
-
-  if (!orders || orders.length === 0) {
-    shedOrderList.innerHTML = "<p class='text-center text-gray-500'>No shed orders available.</p>";
-    return;
-  }
-
-  const reversedOrders = [...orders].reverse();
-  const loggedIn = JSON.parse(localStorage.getItem("loggedInEmployee"));
-const ackStatus = loggedIn 
-  ? JSON.parse(localStorage.getItem(`acknowledgedDocs_${loggedIn.empNo}`) || "[]")
-  : [];
-
-  reversedOrders.forEach(order => {
-    const filePath = `/documents4runningstaff/doc_shed_order_mao_${year}/${order.file}`;
-    const card = document.createElement("div");
-    card.className = `bg-white relative rounded-xl p-4 border-2 border-blue-300 shadow-md transition duration-300 text-gray-800 text-base leading-relaxed break-words`;
-
-    card.innerHTML = `
-      <div class="font-bold text-lg text-blue-900 mb-2">${order.number}</div>
-      <div class="text-gray-700 mb-4">${order.topic}</div>
-      <div class="flex justify-between items-center px-4 sm:px-6 md:px-8 py-2 sm:py-3">
-        <a href="${filePath}" target="_blank" title="View Document"
-  class="flex items-center gap-2 text-xs sm:text-sm font-bold text-white 
-         bg-gradient-to-b from-blue-900 via-blue-500 to-blue-900 
-         hover:scale-105 transform transition duration-200 
-         px-3 py-1.5 sm:px-4 sm:py-2 
-         rounded-md border border-blue-950 shadow-lg focus:outline-none">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="white" viewBox="0 0 24 24" class="w-4 h-4 sm:w-5 sm:h-5">
-            <path d="M12 5c-7 0-9 7-9 7s2 7 9 7 9-7 9-7-2-7-9-7zm0 12a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"/>
-          </svg>
-          <span>View</span>
-        </a>
-        <a href="${filePath}" download title="Download Document"
-           class="flex items-center gap-2 text-xs sm:text-sm font-bold text-white bg-gradient-to-b from-blue-900 via-blue-500 to-blue-900 hover:scale-105 transform transition duration-200 px-3 py-1.5 sm:px-4 sm:py-2 rounded-md border border-blue-950 shadow-lg focus:outline-none">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="white" viewBox="0 0 24 24" class="w-4 h-4 sm:w-5 sm:h-5">
-            <path d="M12 16.5l4.5-4.5h-3V3h-3v9h-3l4.5 4.5zm-9 3h18v-2H3v2z"/>
-          </svg>
-          <span>Download</span>
-        </a>
-      </div>
-      <div id="ack-${order.number}" class="text-green-600 text-sm font-semibold mt-2">
-        ${ackStatus.includes(order.number) ? "✔️ Acknowledged" : ""}
-      </div>
-    `;
-
-    shedOrderList.appendChild(card);
-  });
-}
-
-let currentDocId = ""; // Global variable at top of your script
-let pendingAcknowledge = false;
-  function openModal(filePath, orderTitle, orderTopic) {
- currentDocId = orderTitle; // Make sure this is set!
+function openModal(filePath, title = "Document Viewer", description = "") {
   const modal = document.getElementById("docModal");
   const container = document.getElementById("pdfViewer");
   const titleElement = document.getElementById("documentTitle");
-  container.innerHTML = '';
+
+  container.innerHTML = "";
   modal.classList.remove("hidden");
   document.body.style.overflow = "hidden";
   history.pushState({ modalOpen: true }, "", "#doc");
 
   if (titleElement) {
-    titleElement.textContent = orderTitle || "Document Viewer";
+    titleElement.textContent = title;
   }
 
   const isMobile = window.innerWidth <= 768;
 
+  // 📱 Mobile-friendly fallback
   if (isMobile) {
     const fallback = document.createElement("div");
-    fallback.className = `
-      w-full h-full flex flex-col justify-between items-center
-      text-center px-4 py-8 bg-gradient-to-b from-gray-100 to-white
-      animate-fade-in
-    `;
+    fallback.className =
+      "w-full h-full flex items-center justify-center px-4 animate-fade-in";
 
     fallback.innerHTML = `
-      <div class="text-center w-full animate-fade-in px-4 py-6">
-        <div class="bg-gradient-to-br from-blue-50 via-white to-blue-100 rounded-2xl shadow-lg p-6 max-w-md mx-auto border border-blue-300">
-          <div class="text-blue-800 text-3xl mb-2">📄</div>
-          <h2 class="text-xl font-bold text-gray-800 mb-2">${orderTitle}</h2>
-          <p class="text-base sm:text-lg text-gray-700 mb-6">${orderTopic}</p>
+      <div class="bg-gradient-to-br from-blue-50 via-white to-blue-100
+                  rounded-2xl shadow-lg p-6 max-w-md w-full border border-blue-300 text-center">
+        <div class="text-blue-800 text-4xl mb-3">📄</div>
+        <h2 class="text-xl font-bold text-gray-800 mb-2">${title}</h2>
+        ${description ? `<p class="text-gray-700 mb-4">${description}</p>` : ""}
 
+        <a href="${filePath}" target="_blank"
+           class="block w-full bg-blue-600 text-white text-lg font-semibold py-3
+                  rounded-lg shadow hover:bg-blue-700 transition mb-4">
+          Open Document
+        </a>
 
-          <a href="${filePath}" target="_blank"
-            class="inline-block w-full bg-blue-600 text-white text-lg font-semibold py-3 rounded-lg shadow hover:bg-blue-700 transition">
-            🚀 Open Document
-          </a>
-
-          <div class="mt-6 flex justify-between gap-4">
-            <button onclick="acknowledgeDocument()"
-              class="flex-1 bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition text-sm font-medium">
-              ✅ Acknowledge
-            </button>
-            <button onclick="closeModal()"
-              class="flex-1 bg-red-600 text-white py-2 rounded-lg hover:bg-red-700 transition text-sm font-medium">
-              ❌ Close
-            </button>
-          </div>
-        </div>
+        <button onclick="closeModal()"
+          class="w-full bg-red-600 text-white py-2 rounded-lg
+                 hover:bg-red-700 transition text-sm font-medium">
+          Close
+        </button>
       </div>
     `;
 
@@ -439,13 +365,15 @@ let pendingAcknowledge = false;
     return;
   }
 
-  // Desktop iframe view
+  // 🖥 Desktop iframe viewer
   const iframe = document.createElement("iframe");
   iframe.src = filePath;
   iframe.className = "w-full h-full border-0";
   iframe.allow = "autoplay";
+
   container.appendChild(iframe);
 }
+
 
 
 function closeModal() {
@@ -486,114 +414,7 @@ if ('serviceWorker' in navigator) {
     closeModal();
   }
 });
-function acknowledgeDocument() {
-  // Trigger login first
-  pendingAcknowledge = true;
-  openLoginModal();
-}
-  function openLoginModal() {
-  document.getElementById("loginModal").classList.remove("hidden");
-  document.body.style.overflow = "hidden"; // Prevent background scroll
-}
 
-function closeLoginModal() {
-  document.getElementById("loginModal").classList.add("hidden");
-  document.getElementById("empNumber").value = "";
-  document.getElementById("empPassword").value = "";
-  
-}
-
-function submitLogin() {
-  const empNo = document.getElementById("empNumber").value.trim();
-  const password = document.getElementById("empPassword").value;
-
-  const matchedEmployee = employees.find(emp => emp.empNo === empNo && emp.password === password);
-
-  if (matchedEmployee) {
-    // Removed: alert(`Welcome ${matchedEmployee.name} (${matchedEmployee.designation})`);
-
-    localStorage.setItem("loggedInEmployee", JSON.stringify(matchedEmployee));
-    closeLoginModal();
-
-    if (pendingAcknowledge && currentDocId) {
-      pendingAcknowledge = false;
-      document.getElementById("ackDocTitle").textContent = currentDocId;
-      document.getElementById("ackModal").classList.remove("hidden");
-      document.body.style.overflow = "hidden";
-    }
-  } else {
-    alert("Invalid employee number or password.");
-  }
-}
-
-function closeAckModal() {
-  document.getElementById("ackModal").classList.add("hidden");
-  document.getElementById("ackRemarks").value = "";
-  pendingAcknowledge = false;
-}
-
-
-  async function submitAcknowledgment() {
-  const remarks = document.getElementById("ackRemarks").value.trim();
-  const emp = JSON.parse(localStorage.getItem("loggedInEmployee"));
-  if (!emp || !currentDocId || !window.db) {
-    alert("Something went wrong. Please log in again.");
-    return;
-  }
-
-  try {
-    await window.addDoc(window.collection(window.db, "acknowledgements"), {
-      empNo: emp.empNo,
-      name: emp.name,
-      designation: emp.designation,
-      docId: currentDocId,
-      remarks: remarks,
-      timestamp: new Date().toISOString()
-    });
-
-    // Save locally to prevent re-acknowledging
-    const ackKey = `acknowledgedDocs_${emp.empNo}`;
-    const ackDocs = JSON.parse(localStorage.getItem(ackKey) || "[]");
-    if (!ackDocs.includes(currentDocId)) {
-      ackDocs.push(currentDocId);
-      localStorage.setItem(ackKey, JSON.stringify(ackDocs));
-    }
-
-    // Update UI
-    const ackElement = document.getElementById(`ack-${currentDocId}`);
-    if (ackElement) {
-      ackElement.textContent = "✔️ Acknowledged";
-    }
-
-    closeAckModal();
-    closeModal();
-    alert("Acknowledgment submitted successfully.");
-  } catch (error) {
-    console.error("Error submitting acknowledgment:", error);
-    alert("Failed to submit acknowledgment. Please try again.");
-  }
-  }
-async function markAcknowledgedCards() {
-  const employee = JSON.parse(localStorage.getItem("loggedInEmployee"));
-  if (!employee) return;
-
-  const colRef = window.collection(window.db, "acknowledgements");
-  const snapshot = await window.getDocs(colRef);
-  const ackDocs = [];
-
-  snapshot.forEach((doc) => {
-    const data = doc.data();
-    if (data.empNo === employee.empNo) {
-      ackDocs.push(data.docId);
-      const ackDiv = document.getElementById(`ack-${data.docId}`);
-      if (ackDiv) {
-        ackDiv.textContent = "✔️ Acknowledged";
-      }
-    }
-  });
-
-  localStorage.setItem(`acknowledgedDocs_${employee.empNo}`, JSON.stringify(ackDocs));
-}
 </script>
 
 
