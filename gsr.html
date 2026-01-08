@@ -8,9 +8,12 @@
   <link rel="icon" href="/documents4runningstaff/favicon.ico" />
   <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600&display=swap" rel="stylesheet" />
   <script src="https://cdn.tailwindcss.com"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+
+  <!-- ✅ Firebase COMPAT SDKs ONLY -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+
   <style>
     body { font-family: 'Rajdhani', sans-serif; }
   </style>
@@ -18,7 +21,6 @@
 
 <body class="bg-gray-50 text-gray-800">
 
-<!-- HEADER -->
 <header class="bg-gradient-to-r from-purple-900 via-purple-700 to-purple-900 text-white py-4 shadow">
   <h1 class="text-center text-3xl font-extrabold">G&SR</h1>
   <p class="text-center text-sm text-purple-200 mt-1">
@@ -26,26 +28,12 @@
   </p>
 </header>
 
-<!-- LIST -->
 <section class="p-4">
   <div id="gsrList" class="grid gap-4 max-w-3xl mx-auto"></div>
 </section>
 
-<!-- FIREBASE -->
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
-  import {
-    getFirestore,
-    collection,
-    getDocs
-  } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
-  import {
-    getStorage,
-    ref,
-    getDownloadURL
-  } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-storage.js";
-
-  // ✅ CORRECT Firebase config (DO NOT CHANGE)
+<script>
+  // 🔐 Firebase config
   const firebaseConfig = {
     apiKey: "AIzaSyD4BfU5OKhKFynJMVC2k4qFEgmeDhLlSIM",
     authDomain: "doc4runningstaff-d000b.firebaseapp.com",
@@ -55,19 +43,55 @@
     appId: "1:34983733068:web:bbe8a3d902eecaab8bd1e9"
   };
 
-  // Initialize
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
-  const storage = getStorage(app);
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+
+  const db = firebase.firestore();
+  const storage = firebase.storage();
 
   console.log("Firebase initialized");
 
-  // 🔍 PROOF TEST
-  const snapshot = await getDocs(collection(db, "documents"));
-  console.log("Docs found:", snapshot.size);
+  async function loadGSR() {
+    const list = document.getElementById("gsrList");
+    list.innerHTML = "<p class='text-center'>Loading G&SR…</p>";
+
+    const snapshot = await db.collection("documents").get();
+    console.log("Docs found:", snapshot.size);
+
+    list.innerHTML = "";
+
+    if (snapshot.empty) {
+      list.innerHTML = "<p class='text-center text-red-600'>No documents found</p>";
+      return;
+    }
+
+    snapshot.forEach(async (doc) => {
+      const data = doc.data();
+
+      if (data.category !== "gsr") return;
+
+      const fileURL = await storage.ref(data.filePath).getDownloadURL();
+
+      const card = document.createElement("div");
+      card.className = "bg-white p-4 rounded-xl border shadow";
+
+      card.innerHTML = `
+        <div class="text-lg font-bold text-purple-900">${data.title}</div>
+        <div class="text-gray-600 mb-3">${data.description || ""}</div>
+        <div class="flex gap-3">
+          <a href="${fileURL}" target="_blank"
+             class="bg-purple-600 text-white px-4 py-2 rounded text-sm">View</a>
+          <a href="${fileURL}" download
+             class="bg-purple-800 text-white px-4 py-2 rounded text-sm">Download</a>
+        </div>
+      `;
+
+      list.appendChild(card);
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", loadGSR);
 </script>
-
-
 
 </body>
 </html>
