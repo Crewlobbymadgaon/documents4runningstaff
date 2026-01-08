@@ -9,8 +9,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600&display=swap" rel="stylesheet" />
   <script src="https://cdn.tailwindcss.com"></script>
 
- 
-
   <style>
     body { font-family: 'Rajdhani', sans-serif; }
   </style>
@@ -18,20 +16,57 @@
 
 <body class="bg-gray-50 text-gray-800">
 
+<!-- HEADER -->
 <header class="bg-gradient-to-r from-purple-900 via-purple-700 to-purple-900 text-white py-4 shadow">
-  <h1 class="text-center text-3xl font-extrabold">G&SR</h1>
-  <p class="text-center text-sm text-purple-200 mt-1">
-    General & Subsidiary Rules
-  </p>
+  <div class="flex items-center justify-between px-4">
+    <button onclick="goHome()"
+      class="bg-white/20 px-3 py-1 rounded text-sm font-bold hover:bg-white/30">
+      ⬅ Home
+    </button>
+
+    <div class="text-center flex-1">
+      <h1 class="text-3xl font-extrabold">G&SR</h1>
+      <p class="text-sm text-purple-200">
+        General & Subsidiary Rules
+      </p>
+    </div>
+
+    <div class="w-16"></div>
+  </div>
 </header>
 
-<section class="p-4">
-  <div id="gsrList" class="grid gap-4 max-w-3xl mx-auto"></div>
+<!-- OPTIONS -->
+<section class="p-4 max-w-3xl mx-auto grid gap-4">
+
+  <button onclick="openGSR('english')"
+    class="bg-white border-l-4 border-purple-600 p-4 rounded shadow text-left hover:bg-purple-50">
+    <h3 class="text-lg font-bold text-purple-900">📘 G&SR – English</h3>
+    <p class="text-sm text-gray-600">Open English version</p>
+  </button>
+
+  <button onclick="openGSR('hindi')"
+    class="bg-white border-l-4 border-purple-600 p-4 rounded shadow text-left hover:bg-purple-50">
+    <h3 class="text-lg font-bold text-purple-900">📕 G&SR – Hindi</h3>
+    <p class="text-sm text-gray-600">Open Hindi version</p>
+  </button>
+
+  <button onclick="loadCorrections()"
+    class="bg-white border-l-4 border-red-600 p-4 rounded shadow text-left hover:bg-red-50">
+    <h3 class="text-lg font-bold text-red-700">📝 G&SR Correction Slips</h3>
+    <p class="text-sm text-gray-600">View all correction slips</p>
+  </button>
+
 </section>
 
+<!-- CORRECTIONS LIST -->
+<section class="p-4">
+  <div id="correctionList" class="grid gap-4 max-w-3xl mx-auto"></div>
+</section>
+
+<!-- FIREBASE -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
-  import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+  import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
   import { getStorage, ref, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-storage.js";
 
   const firebaseConfig = {
@@ -47,37 +82,68 @@
   const db = getFirestore(app);
   const storage = getStorage(app);
 
-  console.log("Firebase initialized");
+  // 🔹 Open main G&SR (English / Hindi)
+  async function openGSR(language) {
+    const q = query(
+      collection(db, "documents"),
+      where("category", "==", "gsr"),
+      where("type", "==", "main"),
+      where("language", "==", language)
+    );
 
-  async function loadGSR() {
-    const list = document.getElementById("gsrList");
-    list.innerHTML = "Loading...";
+    const snap = await getDocs(q);
+    if (snap.empty) {
+      alert("Document not available");
+      return;
+    }
 
-    const snapshot = await getDocs(collection(db, "documents"));
-    console.log("Docs found:", snapshot.size);
-
-    list.innerHTML = "";
-
-    snapshot.forEach(async (doc) => {
-      const data = doc.data();
-      const url = await getDownloadURL(ref(storage, data.filePath));
-
-      const div = document.createElement("div");
-      div.className = "bg-white p-4 rounded shadow";
-
-      div.innerHTML = `
-        <h3 class="font-bold">${data.title}</h3>
-        <p>${data.description}</p>
-        <a href="${url}" target="_blank" class="text-purple-700 underline">Open PDF</a>
-      `;
-
-      list.appendChild(div);
-    });
+    const data = snap.docs[0].data();
+    const url = await getDownloadURL(ref(storage, data.filePath));
+    window.open(url, "_blank");
   }
 
-  window.addEventListener("DOMContentLoaded", loadGSR);
-</script>
+  // 🔹 Load correction slips
+  async function loadCorrections() {
+    const list = document.getElementById("correctionList");
+    list.innerHTML = "Loading corrections...";
 
+    const q = query(
+      collection(db, "documents"),
+      where("category", "==", "gsr"),
+      where("type", "==", "correction")
+    );
+
+    const snap = await getDocs(q);
+    list.innerHTML = "";
+
+    if (snap.empty) {
+      list.innerHTML = "<p class='text-center text-gray-500'>No correction slips available</p>";
+      return;
+    }
+
+    for (const d of snap.docs) {
+      const data = d.data();
+      const url = await getDownloadURL(ref(storage, data.filePath));
+
+      const card = document.createElement("a");
+      card.href = url;
+      card.target = "_blank";
+      card.className =
+        "block bg-white p-4 rounded shadow border-l-4 border-red-500 hover:bg-red-50";
+
+      card.innerHTML = `
+        <div class="font-bold text-red-700">${data.title}</div>
+        <div class="text-sm text-gray-600">${data.description || ""}</div>
+      `;
+
+      list.appendChild(card);
+    }
+  }
+
+  function goHome() {
+    window.location.href = "index.html";
+  }
+</script>
 
 </body>
 </html>
