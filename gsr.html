@@ -8,7 +8,9 @@
   <link rel="icon" href="/documents4runningstaff/favicon.ico" />
   <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600&display=swap" rel="stylesheet" />
   <script src="https://cdn.tailwindcss.com"></script>
-
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
   <style>
     body { font-family: 'Rajdhani', sans-serif; }
   </style>
@@ -30,53 +32,60 @@
 </section>
 
 <!-- FIREBASE -->
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
-import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
-import { getStorage, ref, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-storage.js";
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyD4BfU5OKhKFynJMVC2k4qFEgmeDhLlSIM",
+    authDomain: "doc4runningstaff-d000b.firebaseapp.com",
+    projectId: "doc4runningstaff-d000b",
+    storageBucket: "doc4runningstaff-d000b.firebasestorage.app",
+    messagingSenderId: "34983733068",
+    appId: "1:34983733068:web:bbe8a3d902eecaab8bd1e9"
+  };
 
-const firebaseConfig = {
-  apiKey: "AIzaSyD4BfU5OKhKFynJMVC2k4qFEgmeDhLlSIM",
-  authDomain: "doc4runningstaff-d000b.firebaseapp.com",
-  projectId: "doc4runningstaff-d000b",
-  storageBucket: "doc4runningstaff-d000b.firebasestorage.app",
-  messagingSenderId: "34983733068",
-  appId: "1:34983733068:web:bbe8a3d902eecaab8bd1e9"
-};
+  firebase.initializeApp(firebaseConfig);
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-const storage = getStorage(app);
+  const db = firebase.firestore();
+  const storage = firebase.storage();
 
-async function loadGSR() {
-  const list = document.getElementById("gsrList");
-  list.innerHTML = "<p>Loading…</p>";
+  async function loadGSR() {
+    const list = document.getElementById("gsrList");
+    list.innerHTML = "<p style='text-align:center'>Loading G&SR…</p>";
 
-  const snapshot = await getDocs(collection(db, "documents"));
+    const snapshot = await db.collection("documents").get();
 
-  list.innerHTML = "";
+    list.innerHTML = "";
 
-  if (snapshot.empty) {
-    list.innerHTML = "<p style='color:red;text-align:center'>NO DOCUMENTS FOUND</p>";
-    return;
+    if (snapshot.empty) {
+      list.innerHTML = "<p style='color:red;text-align:center'>NO DOCUMENTS FOUND</p>";
+      return;
+    }
+
+    snapshot.forEach(doc => {
+      const d = doc.data();
+
+      const card = document.createElement("div");
+      card.className = "bg-white p-4 rounded-xl border shadow";
+
+      const fileRef = storage.ref(d.filePath);
+      fileRef.getDownloadURL().then(url => {
+        card.innerHTML = `
+          <div class="text-lg font-bold text-purple-900">${d.title}</div>
+          <div class="text-gray-600 mb-3">${d.description || ""}</div>
+          <div class="flex gap-3">
+            <a href="${url}" target="_blank"
+               class="bg-purple-600 text-white px-4 py-2 rounded text-sm">View</a>
+            <a href="${url}" download
+               class="bg-purple-800 text-white px-4 py-2 rounded text-sm">Download</a>
+          </div>
+        `;
+      });
+
+      list.appendChild(card);
+    });
   }
 
-  snapshot.forEach(docSnap => {
-    const d = docSnap.data();
-
-    const card = document.createElement("div");
-    card.className = "bg-white p-4 rounded border";
-
-    card.innerHTML = `
-      <div><b>ID:</b> ${docSnap.id}</div>
-      <div><b>Title:</b> ${d.title || "❌ missing"}</div>
-      <div><b>Category:</b> ${d.category || "❌ missing"}</div>
-      <div><b>FilePath:</b> ${d.filePath || "❌ missing"}</div>
-    `;
-
-    list.appendChild(card);
-  });
-}</script>
+  window.addEventListener("DOMContentLoaded", loadGSR);
+</script>
 
 </body>
 </html>
