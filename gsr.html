@@ -58,9 +58,7 @@
     list.innerHTML = "<p class='text-center'>Loading G&SR…</p>";
 
     const q = query(
-      collection(db, "documents"),
-      where("category", "==", "gsr"),
-      orderBy("createdAt", "desc")
+      collection(db, "documents")
     );
 
     const snapshot = await getDocs(q);
