@@ -41,13 +41,13 @@
 
   // 🔐 Your Firebase config
   const firebaseConfig = {
-    apiKey: "AIzaSyD4BfU5OKhKFynJMVC2k4qFEgmeDhLlSIM",
-    authDomain: "acksystem-circulars.firebaseapp.com",
-    projectId: "acksystem-circulars",
-    storageBucket: "doc4runningstaff-d000b.firebasestorage.app",
-    messagingSenderId: "105632229279",
-    appId: "1:105632229279:web:3f43d026e78e4fc9817faa"
-  };
+  apiKey: "AIzaSyD4BfU5OKhKFynJMVC2k4qFEgmeDhLlSIM",
+  authDomain: "acksystem-circulars.firebaseapp.com",
+  projectId: "acksystem-circulars",
+  storageBucket: "acksystem-circulars.appspot.com", // ✅ FIXED
+  messagingSenderId: "105632229279",
+  appId: "1:105632229279:web:3f43d026e78e4fc9817faa"
+};
 
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
