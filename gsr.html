@@ -31,16 +31,11 @@
 
 <!-- FIREBASE -->
 <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
-  import {
-    getFirestore, collection, query, where, orderBy, getDocs
-  } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
-  import {
-    getStorage, ref, getDownloadURL
-  } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-storage.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+import { getStorage, ref, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-storage.js";
 
-  // 🔐 Your Firebase config
-  const firebaseConfig = {
+const firebaseConfig = {
   apiKey: "AIzaSyD4BfU5OKhKFynJMVC2k4qFEgmeDhLlSIM",
   authDomain: "doc4runningstaff-d000b.firebaseapp.com",
   projectId: "doc4runningstaff-d000b",
@@ -49,50 +44,71 @@
   appId: "1:34983733068:web:bbe8a3d902eecaab8bd1e9"
 };
 
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
-  const storage = getStorage(app);
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const storage = getStorage(app);
 
-  async function loadGSR() {
-    const list = document.getElementById("gsrList");
-    list.innerHTML = "<p class='text-center'>Loading G&SR…</p>";
+async function loadGSR() {
+  const list = document.getElementById("gsrList");
+  list.innerHTML = "<p class='text-center'>Loading G&SR…</p>";
 
-    const q = query(
-      collection(db, "documents")
-    );
+  try {
+    const snapshot = await getDocs(collection(db, "documents"));
+    console.log("Documents found:", snapshot.size);
 
-    const snapshot = await getDocs(q);
     list.innerHTML = "";
 
     if (snapshot.empty) {
-      list.innerHTML = "<p class='text-center text-red-600'>No G&SR documents found</p>";
+      list.innerHTML = "<p class='text-center text-red-600'>No documents found</p>";
       return;
     }
 
     for (const docSnap of snapshot.docs) {
       const data = docSnap.data();
-      const fileURL = await getDownloadURL(ref(storage, data.filePath));
+      console.log("Doc data:", data);
+
+      // ✅ SAFETY CHECK
+      if (!data.filePath) {
+        console.warn("Skipped document (no filePath):", docSnap.id);
+        continue;
+      }
+
+      let fileURL;
+      try {
+        fileURL = await getDownloadURL(ref(storage, data.filePath));
+      } catch (err) {
+        console.error("Storage error:", data.filePath, err);
+        continue;
+      }
 
       const card = document.createElement("div");
       card.className = "bg-white p-4 rounded-xl border shadow";
 
       card.innerHTML = `
-        <div class="text-lg font-bold text-purple-900">${data.title}</div>
+        <div class="text-lg font-bold text-purple-900">${data.title || "Untitled"}</div>
         <div class="text-gray-600 mb-3">${data.description || ""}</div>
 
         <div class="flex gap-3">
           <a href="${fileURL}" target="_blank"
-             class="bg-purple-600 text-white px-4 py-2 rounded text-sm">View</a>
+             class="bg-purple-600 text-white px-4 py-2 rounded text-sm">
+             View
+          </a>
           <a href="${fileURL}" download
-             class="bg-purple-800 text-white px-4 py-2 rounded text-sm">Download</a>
+             class="bg-purple-800 text-white px-4 py-2 rounded text-sm">
+             Download
+          </a>
         </div>
       `;
 
       list.appendChild(card);
     }
+  } catch (error) {
+    console.error("Firestore error:", error);
+    list.innerHTML = "<p class='text-center text-red-600'>Error loading documents</p>";
   }
+}
 
-  window.addEventListener("DOMContentLoaded", loadGSR);
+window.addEventListener("DOMContentLoaded", loadGSR);
 </script>
 
 </body>
