@@ -211,8 +211,8 @@ async function loadShedOrders(year) {
   collection(window.db, "documents"),
   where("category", "==", "shed_order"),
   where("lobby", "==", "mao"),
-  where("year", "==", Number(year))
-
+  where("year", "==", Number(year)),
+  orderBy("createdAt", "desc")
 );
 
 
