@@ -212,7 +212,7 @@ async function loadShedOrders(year) {
   where("category", "==", "shed_order"),
   where("lobby", "==", "mao"),
   where("year", "==", Number(year)),
-  orderBy("createdAt", "desc")
+  orderBy("orderIndex", "desc") // 🔥 LATEST FIRST (CORRECT)
 );
 
 
