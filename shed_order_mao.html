@@ -208,12 +208,12 @@ async function loadShedOrders(year) {
   list.innerHTML = "<p class='text-center'>Loading...</p>";
 
   const q = query(
-    collection(window.db, "documents"),
-    where("category", "==", "shed_order"),
-    where("lobby", "==", "mao"),
-    where("year", "==", Number(year)),
-    orderBy("createdAt", "desc")
-  );
+  collection(window.db, "documents"),
+  where("category", "==", "shed_order"),
+  where("lobby", "==", "mao"),
+  where("year", "==", Number(year))
+);
+
 
   const snapshot = await getDocs(q);
   list.innerHTML = "";
