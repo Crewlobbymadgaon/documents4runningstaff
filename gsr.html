@@ -1,148 +1,192 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="h-full">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>G&SR – Digital Library</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>G&SR – Digital Library</title>
 
-  <link rel="icon" href="/documents4runningstaff/favicon.ico" />
-  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600&display=swap" rel="stylesheet" />
-  <script src="https://cdn.tailwindcss.com"></script>
+<link rel="icon" href="/documents4runningstaff/favicon.ico" />
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600&display=swap" rel="stylesheet" />
+<script src="https://cdn.tailwindcss.com"></script>
 
-  <style>
-    body { font-family: 'Rajdhani', sans-serif; }
-  </style>
+<style>
+body { font-family: 'Rajdhani', sans-serif; }
+</style>
 </head>
 
-<body class="bg-gray-50 text-gray-800">
+<body class="bg-gray-50 text-gray-800 h-full">
 
 <!-- HEADER -->
-<header class="bg-gradient-to-r from-purple-900 via-purple-700 to-purple-900 text-white py-4 shadow">
-  <div class="flex items-center justify-between px-4">
-    <button onclick="goHome()"
-      class="bg-white/20 px-3 py-1 rounded text-sm font-bold hover:bg-white/30">
-      ⬅ Home
-    </button>
+ <header class="bg-gradient-to-r from-blue-900 via-blue-700 to-blue-900 text-white py-3 shadow-md">
+ <div class="text-center px-4">
+ <h1 class="font-rajdhani text-xl sm:text-3xl md:text-4xl leading-tight font-extrabold">
+      Digital Library
+      <span class="text-yellow-300">for</span>
+      Running Staff
+</h1>
+  <div class="text-center">
+    <h2 class="font-rajdhani text-4xl sm:text-5xl md:text-6xl font-extrabold mt-2">
+    G&SR
+  </h2>
+    <p class="text-sm ">General & Subsidiary Rules of the Konkan Railway</p>
+  </div>
 
-    <div class="text-center flex-1">
-      <h1 class="text-3xl font-extrabold">G&SR</h1>
-      <p class="text-sm text-purple-200">
-        General & Subsidiary Rules
-      </p>
+  
+<div class="flex items-center justify-between mt-6">
+  
+  <!-- Invisible spacer to balance hamburger button -->
+  <div class="w-12"></div>
+<div class="px-4 sm:px-6 md:px-8">
+
+  <div class="max-w-7xl mx-auto text-center">
+    <div class="flex justify-center gap-3 py-2 sm:py-3">
+
+      <!-- Home Button -->
+      <button onclick="window.location.href='/documents4runningstaff/index.html'"
+              title="Go to Home"
+              class="flex items-center gap-2 
+                     text-xs sm:text-sm font-bold text-white 
+                     bg-gradient-to-b from-blue-900 via-blue-500 to-blue-900 
+                     hover:scale-105 transform transition duration-200 
+                     px-3 py-1.5 sm:px-4 sm:py-2 
+                     rounded-md border border-blue-950 shadow-lg 
+                     focus:outline-none">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="white" viewBox="0 0 24 24"
+             class="w-4 h-4 sm:w-5 sm:h-5">
+          <path d="M3 9.75L12 3l9 6.75v9.75A1.5 1.5 0 0 1 19.5 21h-3.75V13.5h-7.5V21H4.5A1.5 1.5 0 0 1 3 19.5V9.75Z" />
+        </svg>
+        <span>Home</span>
+      </button>
+
     </div>
+  </div>
+</div>
 
-    <div class="w-16"></div>
+
+    <!-- Hamburger -->
+    <!-- Hamburger + Dropdown: wrapped in a relative container -->
+<div class="relative">
+  <!-- Hamburger Button (right) -->
+  <button id="hamburgerBtn"
+    class="bg-gradient-to-b from-blue-900 via-blue-500 to-blue-900 
+           hover:from-blue-800 hover:to-blue-950 
+           text-white p-2 rounded-md 
+           border border-blue-950 
+           shadow-lg 
+           focus:outline-none focus:ring-2 focus:ring-blue-900 
+           transition duration-150 ease-in-out"
+    aria-label="Toggle Menu" aria-expanded="false">
+    <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"
+      viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path stroke-linecap="round" stroke-linejoin="round"
+        d="M4 6h16M4 12h16M4 18h16"></path>
+    </svg>
+  </button>
+
   </div>
 </header>
 
-<!-- OPTIONS -->
-<section class="p-4 max-w-3xl mx-auto grid gap-4">
+<!-- DROPDOWN MENU -->
+<div id="dropdownMenu"
+  class="hidden absolute right-4 mt-2 
+         bg-white border border-blue-900 
+         shadow-lg z-50 rounded-md w-56">
+
+
+  <a href="index.html"
+   class="block px-4 py-2 text-blue-900 hover:bg-blue-100 font-semibold">
+   Home
+</a>
+
+  <a href="so_lobby_selector.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100 font-semibold">Shed Order</a>
+  <a href="safetycircular.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100 font-semibold">Safety Circular</a>
+  <a href="counselling.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100 font-semibold">Counselling Topics</a>
+  <a href="othercirculars.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100 font-semibold">Other Circulars</a>
+  <a href="gsr.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100 font-semibold">G&SR</a>
+  <a href="accidentmanual.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100 font-semibold">Accident Manual</a>
+  <a href="wtt.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100 font-semibold">WTT</a>
+</div>
+
+<!-- CONTENT -->
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-xl mx-auto mt-12 px-4">
 
   <button onclick="openGSR('english')"
-    class="bg-white border-l-4 border-purple-600 p-4 rounded shadow text-left hover:bg-purple-50">
-    <h3 class="text-lg font-bold text-purple-900">📘 G&SR – English</h3>
-    <p class="text-sm text-gray-600">Open English version</p>
-  </button>
+  class="bg-gradient-to-b from-blue-900 via-blue-700 to-blue-900
+         hover:from-blue-800 hover:to-blue-950
+         text-white py-6 rounded-xl text-xl font-bold 
+         border border-blue-950 shadow-lg
+         transition duration-200 ease-in-out">
+  📘 G&SR – English
+</button>
+
 
   <button onclick="openGSR('hindi')"
-    class="bg-white border-l-4 border-purple-600 p-4 rounded shadow text-left hover:bg-purple-50">
-    <h3 class="text-lg font-bold text-purple-900">📕 G&SR – Hindi</h3>
-    <p class="text-sm text-gray-600">Open Hindi version</p>
-  </button>
+  class="bg-gradient-to-b from-blue-900 via-blue-700 to-blue-900
+         hover:from-blue-800 hover:to-blue-950
+         text-white py-6 rounded-xl text-xl font-bold 
+         border border-blue-950 shadow-lg
+         transition duration-200 ease-in-out">
+  📕 G&SR – Hindi
+</button>
 
-  <button onclick="loadCorrections()"
-    class="bg-white border-l-4 border-red-600 p-4 rounded shadow text-left hover:bg-red-50">
-    <h3 class="text-lg font-bold text-red-700">📝 G&SR Correction Slips</h3>
-    <p class="text-sm text-gray-600">View all correction slips</p>
-  </button>
 
-</section>
-
-<!-- CORRECTIONS LIST -->
-<section class="p-4">
-  <div id="correctionList" class="grid gap-4 max-w-3xl mx-auto"></div>
-</section>
+</div>
 
 <!-- FIREBASE -->
 <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
-  import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
-  import { getStorage, ref, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-storage.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
+import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+import { getStorage, ref, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-storage.js";
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyD4BfU5OKhKFynJMVC2k4qFEgmeDhLlSIM",
-    authDomain: "doc4runningstaff-d000b.firebaseapp.com",
-    projectId: "doc4runningstaff-d000b",
-    storageBucket: "doc4runningstaff-d000b.firebasestorage.app",
-    messagingSenderId: "34983733068",
-    appId: "1:34983733068:web:bbe8a3d902eecaab8bd1e9"
-  };
+const firebaseConfig = {
+  apiKey: "AIzaSyD4BfU5OKhKFynJMVC2k4qFEgmeDhLlSIM",
+  authDomain: "doc4runningstaff-d000b.firebaseapp.com",
+  projectId: "doc4runningstaff-d000b",
+  storageBucket: "doc4runningstaff-d000b.firebasestorage.app",
+  messagingSenderId: "34983733068",
+  appId: "1:34983733068:web:bbe8a3d902eecaab8bd1e9"
+};
 
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
-  const storage = getStorage(app);
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const storage = getStorage(app);
 
-  // 🔹 Open main G&SR (English / Hindi)
-  async function openGSR(language) {
-    const q = query(
-      collection(db, "documents"),
-      where("category", "==", "gsr"),
-      where("type", "==", "main"),
-      where("language", "==", language)
-    );
+/* Open G&SR directly */
+window.openGSR = async (language) => {
+  const q = query(
+    collection(db, "documents"),
+    where("category", "==", "gsr"),
+    where("type", "==", "main"),
+    where("language", "==", language)
+  );
 
-    const snap = await getDocs(q);
-    if (snap.empty) {
-      alert("Document not available");
-      return;
-    }
+  const snap = await getDocs(q);
 
-    const data = snap.docs[0].data();
-    const url = await getDownloadURL(ref(storage, data.filePath));
-    window.open(url, "_blank");
+  if (snap.empty) {
+    alert("Document not found");
+    return;
   }
 
-  // 🔹 Load correction slips
-  async function loadCorrections() {
-    const list = document.getElementById("correctionList");
-    list.innerHTML = "Loading corrections...";
+  const data = snap.docs[0].data();
+  const url = await getDownloadURL(ref(storage, data.filePath));
+  window.open(url, "_blank");
+};
+</script>
 
-    const q = query(
-      collection(db, "documents"),
-      where("category", "==", "gsr"),
-      where("type", "==", "correction")
-    );
+<!-- MENU SCRIPT -->
+<script>
+const hamburgerBtn = document.getElementById("hamburgerBtn");
+const dropdownMenu = document.getElementById("dropdownMenu");
 
-    const snap = await getDocs(q);
-    list.innerHTML = "";
+hamburgerBtn.onclick = () => {
+  dropdownMenu.classList.toggle("hidden");
+};
 
-    if (snap.empty) {
-      list.innerHTML = "<p class='text-center text-gray-500'>No correction slips available</p>";
-      return;
-    }
-
-    for (const d of snap.docs) {
-      const data = d.data();
-      const url = await getDownloadURL(ref(storage, data.filePath));
-
-      const card = document.createElement("a");
-      card.href = url;
-      card.target = "_blank";
-      card.className =
-        "block bg-white p-4 rounded shadow border-l-4 border-red-500 hover:bg-red-50";
-
-      card.innerHTML = `
-        <div class="font-bold text-red-700">${data.title}</div>
-        <div class="text-sm text-gray-600">${data.description || ""}</div>
-      `;
-
-      list.appendChild(card);
-    }
+document.addEventListener("click", (e) => {
+  if (!hamburgerBtn.contains(e.target) && !dropdownMenu.contains(e.target)) {
+    dropdownMenu.classList.add("hidden");
   }
-
-  function goHome() {
-    window.location.href = "index.html";
-  }
+});
 </script>
 
 </body>
