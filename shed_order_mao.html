@@ -205,72 +205,24 @@ document.addEventListener("click", (e) => {
  
 async function loadShedOrders(year) {
   const list = document.getElementById("shedOrderList");
-  list.innerHTML = "<p class='text-center'>Loading...</p>";
+  list.innerHTML = "Loading...";
 
-  const q = query(
-    collection(db, "documents"),
-    where("category", "==", "shed_order"),
-    where("lobby", "==", "mao"),
-    where("year", "==", Number(year))
-  );
+  const snapshot = await getDocs(collection(db, "documents"));
 
-  const snapshot = await getDocs(q);
-
-  // Convert + normalize data
-  const docs = snapshot.docs.map(d => {
-    const data = d.data();
-    return {
-      ...data,
-      orderIndex: Number(data.orderIndex) || 0   // 🔒 SAFETY
-    };
-  });
-
-  // Sort latest first
-  docs.sort((a, b) => b.orderIndex - a.orderIndex);
+  console.log("TOTAL DOCS:", snapshot.size);
 
   list.innerHTML = "";
 
-  // ✅ Correct empty check
-  if (docs.length === 0) {
-    list.innerHTML =
-      "<p class='text-center text-red-600 font-semibold'>No Shed Orders available</p>";
-    return;
-  }
+  snapshot.forEach(doc => {
+    const d = doc.data();
+    console.log(d);
 
-  // Render cards
-  for (const data of docs) {
-    const orderNo =
-      data.orderNo ||
-      (data.title?.match(/\d{2}\/\d{4}/)?.[0]) ||
-      "";
-
-    const fileURL = await getDownloadURL(
-      ref(window.storage, data.filePath)
-    );
-
-    const card = document.createElement("div");
-    card.className =
-      "bg-white rounded-xl p-4 border-2 border-blue-300 shadow-md";
-
-    card.innerHTML = `
-      <div class="text-lg font-extrabold text-blue-900 mb-1">
-        Shed Order ${orderNo}
-      </div>
-
-      <div class="text-gray-700 mb-4 leading-relaxed">
-        ${data.description || ""}
-      </div>
-
-      <button
-        onclick="window.open('${fileURL}', '_blank')"
-        class="bg-blue-700 hover:bg-blue-800 text-white px-6 py-2 rounded-md text-sm font-bold">
-        View
-      </button>
-    `;
-
-    list.appendChild(card);
-  }
+    const div = document.createElement("div");
+    div.textContent = JSON.stringify(d);
+    list.appendChild(div);
+  });
 }
+
 
   function highlightSelectedYear() {
     const year = document.getElementById("yearSelect").value;
