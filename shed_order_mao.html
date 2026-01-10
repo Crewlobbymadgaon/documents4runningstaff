@@ -210,8 +210,6 @@ async function loadShedOrders(year) {
   const q = query(
   collection(db, "documents"),
   where("category", "==", "shed_order"),
-  where("lobby", "==", "mao"),
-  where("year", "==", Number(year)),
   orderBy("orderIndex", "desc")
 );
 
