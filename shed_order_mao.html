@@ -229,41 +229,61 @@ async function loadShedOrders(year) {
       .map(doc => doc.data())
       .sort((a, b) => (b.orderIndex || 0) - (a.orderIndex || 0));
 
-    list.innerHTML = "";
+ list.innerHTML = "";
 
-    // 🔹 Render cards
-    for (const data of docs) {
-      const orderNo =
-        data.orderNo ||
-        (data.title?.match(/\d{2}\/\d{4}/)?.[0]) ||
-        "";
+for (const data of docs) {
+  try {
+    const orderNo =
+      data.orderNo ||
+      (data.title?.match(/\d{2}\/\d{4}/)?.[0]) ||
+      "";
 
-      const fileURL = await getDownloadURL(
-        ref(storage, data.filePath)
-      );
+    const fileURL = await getDownloadURL(
+      ref(storage, data.filePath)
+    );
 
-      const card = document.createElement("div");
-      card.className =
-        "bg-white rounded-xl p-4 border-2 border-blue-300 shadow-md";
+    const card = document.createElement("div");
+    card.className =
+      "bg-white rounded-xl p-4 border-2 border-blue-300 shadow-md";
 
-      card.innerHTML = `
-        <div class="text-lg font-extrabold text-blue-900 mb-1">
-          Shed Order ${orderNo}
-        </div>
+    card.innerHTML = `
+      <div class="text-lg font-extrabold text-blue-900 mb-1">
+        Shed Order ${orderNo}
+      </div>
 
-        <div class="text-gray-700 mb-4 leading-relaxed">
-          ${data.description || ""}
-        </div>
+      <div class="text-gray-700 mb-4 leading-relaxed">
+        ${data.description || ""}
+      </div>
 
-        <button
-          onclick="window.open('${fileURL}', '_blank')"
-          class="bg-blue-700 hover:bg-blue-800 text-white px-6 py-2 rounded-md text-sm font-bold">
-          View
-        </button>
-      `;
+      <button
+        onclick="window.open('${fileURL}', '_blank')"
+        class="bg-blue-700 hover:bg-blue-800 text-white px-6 py-2 rounded-md text-sm font-bold">
+        View
+      </button>
+    `;
 
-      list.appendChild(card);
-    }
+    list.appendChild(card);
+
+  } catch (err) {
+    console.error("PDF load failed:", data.filePath, err);
+
+    // Optional: show broken entry instead of hiding
+    const errorCard = document.createElement("div");
+    errorCard.className =
+      "bg-red-50 rounded-xl p-4 border-2 border-red-300";
+
+    errorCard.innerHTML = `
+      <div class="font-bold text-red-700">
+        Shed Order ${data.orderNo || ""}
+      </div>
+      <div class="text-red-600 text-sm">
+        PDF not available / path error
+      </div>
+    `;
+
+    list.appendChild(errorCard);
+  }
+}
   } catch (err) {
     console.error("Error loading shed orders:", err);
     list.innerHTML =
