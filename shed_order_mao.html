@@ -241,9 +241,7 @@ for (const data of docs) {
       (data.title?.match(/\d{2}\/\d{4}/)?.[0]) ||
       "";
 
-    const fileURL = await getDownloadURL(
-      ref(storage, data.filePath)
-    );
+    
 
     const card = document.createElement("div");
     card.className =
@@ -259,10 +257,10 @@ for (const data of docs) {
       </div>
 
       <button
-        onclick="window.open('${fileURL}', '_blank')"
-        class="bg-blue-700 hover:bg-blue-800 text-white px-6 py-2 rounded-md text-sm font-bold">
-        View
-      </button>
+  onclick="openShedOrder('${data.filePath}')"
+  class="bg-blue-700 hover:bg-blue-800 text-white px-6 py-2 rounded-md text-sm font-bold">
+  View
+</button>
     `;
 
     list.appendChild(card);
@@ -293,7 +291,15 @@ for (const data of docs) {
       "<p class='text-center text-red-600 font-semibold'>Error loading data</p>";
   }
 }
-
+async function openShedOrder(filePath) {
+  try {
+    const url = await getDownloadURL(ref(window.storage, filePath));
+    window.open(url, "_blank");
+  } catch (err) {
+    alert("Unable to open document");
+    console.error(err);
+  }
+}
 // 🔹 Year selector handler
 function highlightSelectedYear() {
   const year = document.getElementById("yearSelect").value;
