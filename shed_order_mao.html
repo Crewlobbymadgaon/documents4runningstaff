@@ -209,12 +209,18 @@ async function loadShedOrders(year) {
 
   const q = query(
   collection(db, "documents"),
-  where("category", "==", "shed_order")
-  
+  where("category", "==", "shed_order"),
+  where("lobby", "==", "mao"),
+  where("year", "==", Number(year))
 );
+const snapshot = await getDocs(q);
+
+const docs = snapshot.docs
+  .map(d => d.data())
+  .sort((a, b) => (b.orderIndex || 0) - (a.orderIndex || 0));
 
 
-  const snapshot = await getDocs(q);
+
   list.innerHTML = "";
 
   if (snapshot.empty) {
@@ -223,41 +229,40 @@ async function loadShedOrders(year) {
     return;
   }
 
-  snapshot.forEach(async (doc) => {
-    const data = doc.data();
+  for (const data of docs) {
 
-    // Prefer explicit orderNo, fallback to title parsing
-    const orderNo =
-      data.orderNo ||
-      (data.title?.match(/\d{2}\/\d{4}/)?.[0]) ||
-      "";
+  const orderNo =
+    data.orderNo ||
+    (data.title?.match(/\d{2}\/\d{4}/)?.[0]) ||
+    "";
 
-    const fileURL = await getDownloadURL(
-      ref(window.storage, data.filePath)
-    );
+  const fileURL = await getDownloadURL(
+    ref(window.storage, data.filePath)
+  );
 
-    const card = document.createElement("div");
-    card.className =
-      "bg-white rounded-xl p-4 border-2 border-blue-300 shadow-md";
+  const card = document.createElement("div");
+  card.className =
+    "bg-white rounded-xl p-4 border-2 border-blue-300 shadow-md";
 
-    card.innerHTML = `
-      <div class="text-lg font-extrabold text-blue-900 mb-1">
-        Shed Order ${orderNo}
-      </div>
+  card.innerHTML = `
+    <div class="text-lg font-extrabold text-blue-900 mb-1">
+      Shed Order ${orderNo}
+    </div>
 
-      <div class="text-gray-700 mb-4 leading-relaxed">
-        ${data.description || ""}
-      </div>
+    <div class="text-gray-700 mb-4 leading-relaxed">
+      ${data.description || ""}
+    </div>
 
-      <button
-        onclick="window.open('${fileURL}', '_blank')"
-        class="bg-blue-700 hover:bg-blue-800 text-white px-6 py-2 rounded-md text-sm font-bold">
-        View
-      </button>
-    `;
+    <button
+      onclick="window.open('${fileURL}', '_blank')"
+      class="bg-blue-700 hover:bg-blue-800 text-white px-6 py-2 rounded-md text-sm font-bold">
+      View
+    </button>
+  `;
 
-    list.appendChild(card);
-  });
+  list.appendChild(card);
+}
+
 }
 
 
