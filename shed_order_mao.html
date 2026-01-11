@@ -244,34 +244,34 @@ for (const data of docs) {
     
 
     const card = document.createElement("div");
-    card.className =
-      "bg-white rounded-xl p-4 border-2 border-blue-300 shadow-md";
+  
+      card.className =
+  "bg-white rounded-xl p-4 border-2 border-blue-300 shadow-md relative";
+
 
     card.innerHTML = `
-      <div class="flex items-start gap-3">
-
-  <!-- Left content -->
-  <div class="flex-1">
-    <div class="text-lg font-extrabold text-blue-900 mb-1">
-      Shed Order ${orderNo}
-    </div>
-
-    <div class="text-gray-700 leading-relaxed text-sm sm:text-base">
-      ${data.description || ""}
-    </div>
+      <div class="pb-14">
+  <div class="text-lg font-extrabold text-blue-900 mb-1">
+    Shed Order ${orderNo}
   </div>
 
-  <!-- Right-side View button (mobile friendly) -->
-  <button
-    onclick="openShedOrder('${data.filePath}')"
-    class="bg-blue-700 hover:bg-blue-800 text-white
-           px-5 py-2.5 sm:py-2
-           rounded-lg sm:rounded-md
-           text-sm font-bold
-           whitespace-nowrap
-           ml-auto">
-    View
-  </button>
+  <div class="text-gray-700 leading-relaxed text-sm sm:text-base">
+    ${data.description || ""}
+  </div>
+</div>
+
+<button
+  onclick="openShedOrder('${data.filePath}')"
+  class="absolute bottom-3 right-3
+         bg-blue-700 hover:bg-blue-800 text-white
+         px-5 py-2
+         rounded-lg
+         text-sm font-bold
+         shadow-md
+         active:scale-95 transition">
+  View
+</button>
+
 
 </div>
 
