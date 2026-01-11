@@ -240,22 +240,35 @@ async function loadSafetyCirculars(year) {
   "bg-white rounded-xl p-4 border-2 border-blue-300 shadow-md";
 
 card.innerHTML = `
-  <div class="text-lg font-extrabold text-blue-900 mb-1">
-    Safety Circular ${circularNo}
+<div class="flex items-start justify-between gap-3">
+
+  <!-- LEFT CONTENT -->
+  <div class="flex-1 min-w-0">
+    <div class="text-[15px] font-extrabold text-blue-900 leading-tight">
+      Shed Order ${orderNo}
+    </div>
+
+    <div class="text-[14px] text-gray-700 mt-1 leading-snug line-clamp-2">
+      ${data.description || ""}
+    </div>
   </div>
 
-  <div class="text-gray-700 mb-4 text-sm leading-relaxed">
-    ${data.title || data.description || ""}
-  </div>
+  <!-- RIGHT BUTTON -->
+  <button
+    onclick="openShedOrder('${data.filePath}')"
+    class="shrink-0
+           bg-blue-700 hover:bg-blue-800 text-white
+           px-4 py-2
+           rounded-md
+           text-[13px] font-bold
+           shadow
+           active:scale-95 transition">
+    View
+  </button>
 
-  <div class="flex justify-end">
-    <button
-      onclick="openSafetyCircular('${data.filePath}')"
-      class="bg-blue-700 hover:bg-blue-800 text-white px-6 py-2 rounded-md text-sm font-bold">
-      View
-    </button>
-  </div>
+</div>
 `;
+
 
 
       list.appendChild(card);
