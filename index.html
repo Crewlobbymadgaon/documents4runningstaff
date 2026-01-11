@@ -329,38 +329,46 @@
 <script>
   
   const menuBtn = document.getElementById("menu-button");
-  const homeBtn = document.getElementById("home-button");
-  const menuItems = document.getElementById("menu-items");
-  const mainContent = document.getElementById("main-content");
+const homeBtn = document.getElementById("home-button");
+const menuItems = document.getElementById("menu-items");
+const mainContent = document.getElementById("main-content");
 
-  menuBtn.addEventListener("click", () => {
-    menuBtn.classList.add("hidden");
-    homeBtn.classList.remove("hidden");
-    menuItems.classList.remove("fade-hidden");
-menuItems.classList.remove("hidden");
+/* MENU OPEN */
+menuBtn.addEventListener("click", () => {
+  menuBtn.classList.add("hidden");
+  homeBtn.classList.remove("hidden");
 
-mainContent.classList.add("fade-hidden");
+  // Show menu
+  menuItems.classList.remove("hidden");
+  menuItems.classList.remove("fade-hidden");
 
-  });
+  // Hide main content
+  mainContent.classList.add("fade-hidden");
+});
 
-  homeBtn.addEventListener("click", () => {
+/* HOME (BACK) */
+homeBtn.addEventListener("click", () => {
+  homeBtn.classList.add("hidden");
+  menuBtn.classList.remove("hidden");
+
+  // Hide menu
+  menuItems.classList.add("fade-hidden");
+  menuItems.classList.add("hidden");
+
+  // Show main content
+  mainContent.classList.remove("fade-hidden");
+});
+
+/* Auto-close menu on navigation */
+document.querySelectorAll('#menu-items a').forEach(link => {
+  link.addEventListener('click', () => {
     homeBtn.classList.add("hidden");
     menuBtn.classList.remove("hidden");
-    menuItems.classList.add("hidden");
-    mainContent.classList.remove("hidden");
-  });
 
-document.querySelectorAll('#menu-items a').forEach(link => {
-  link.addEventListener('click', (e) => {
-    const href = link.getAttribute('href');
-    if (href.startsWith("#")) {
-      // Only toggle views for internal section links
-      homeBtn.classList.add("hidden");
-      menuBtn.classList.remove("hidden");
-      menuItems.classList.add("hidden");
-      mainContent.classList.remove("hidden");
-    }
-    // For actual navigation (like shed order), do nothing — browser handles it
+    menuItems.classList.add("fade-hidden");
+    menuItems.classList.add("hidden");
+
+    mainContent.classList.remove("fade-hidden");
   });
 });
 
