@@ -91,24 +91,17 @@
   </div>
 </div>
 
-      <div class="bg-white text-center py-2 border-b border-gray-300">
-    <span class="font-bold text-red-700 text-base sm:text-xl animate-pulse">
-      🚨 Latest Circulars for Running Staff
-    </span>
-  </div>
-    </div>
+      
+    
     <!-- Main Content Wrapper -->
 <div id="main-content">
+<div id="latest-banner" class="bg-white text-center py-2 border-b border-gray-300">
+  <span class="font-bold text-red-700 text-base sm:text-xl animate-pulse">
+    🚨 Latest Circulars for Running Staff
+  </span>
+</div>
 
-<!-- Main Content -->
-<div class="p-4 space-y-6 max-w-3xl mx-auto">
-
- 
-
-
-  
-
-  <!-- 🔻 Document Sections -->
+   <!-- 🔻 Document Sections -->
   <div class="p-4 space-y-6 max-w-3xl mx-auto mt-4">
 
     <!-- 1. Shed Order -->
@@ -171,7 +164,11 @@
     </div>
 </div>
   </div>
+    </div>
 
+    
+    <!-- Main Content -->
+<div class="p-4 space-y-6 max-w-3xl mx-auto">
 
 <div id="menu-items"
      class="mt-4 pb-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-y-3 gap-x-4 px-4"
@@ -329,21 +326,26 @@ const menuBtn = document.getElementById("menu-button");
 const homeBtn = document.getElementById("home-button");
 const menuItems = document.getElementById("menu-items");
 const mainContent = document.getElementById("main-content");
+const banner = document.getElementById("latest-banner");
 
 menuBtn.addEventListener("click", () => {
   menuBtn.classList.add("hidden");
   homeBtn.classList.remove("hidden");
 
-  menuItems.style.display = "grid";   // 🔥 FORCE SHOW
-  mainContent.style.display = "none";
+  mainContent.classList.add("hidden");
+  banner.classList.add("hidden");
+
+  menuItems.classList.remove("hidden");
 });
 
 homeBtn.addEventListener("click", () => {
   homeBtn.classList.add("hidden");
   menuBtn.classList.remove("hidden");
 
-  menuItems.style.display = "none";
-  mainContent.style.display = "block";
+  menuItems.classList.add("hidden");
+
+  mainContent.classList.remove("hidden");
+  banner.classList.remove("hidden");
 });
 
 
