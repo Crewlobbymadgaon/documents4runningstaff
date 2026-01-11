@@ -174,11 +174,8 @@
 
 
 <div id="menu-items"
-     class="hidden mt-4 md:mt-5 pb-4 
-            grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 
-            gap-y-3 gap-x-2 sm:gap-x-4 
-            px-2 sm:px-4 
-            text-base font-bold max-w-screen-xl mx-auto font-[Rajdhani]">
+     class="mt-4 pb-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-y-3 gap-x-4 px-4"
+     style="display:none;">
 
 
 <!-- Shed Order -->
@@ -328,48 +325,25 @@
 
 <script>
   
-  const menuBtn = document.getElementById("menu-button");
+const menuBtn = document.getElementById("menu-button");
 const homeBtn = document.getElementById("home-button");
 const menuItems = document.getElementById("menu-items");
 const mainContent = document.getElementById("main-content");
 
-/* MENU OPEN */
 menuBtn.addEventListener("click", () => {
   menuBtn.classList.add("hidden");
   homeBtn.classList.remove("hidden");
 
-  // Show menu
-  menuItems.classList.remove("hidden");
-  menuItems.classList.remove("fade-hidden");
-
-  // Hide main content
-  mainContent.classList.add("fade-hidden");
+  menuItems.style.display = "grid";   // 🔥 FORCE SHOW
+  mainContent.style.display = "none";
 });
 
-/* HOME (BACK) */
 homeBtn.addEventListener("click", () => {
   homeBtn.classList.add("hidden");
   menuBtn.classList.remove("hidden");
 
-  // Hide menu
-  menuItems.classList.add("fade-hidden");
-  menuItems.classList.add("hidden");
-
-  // Show main content
-  mainContent.classList.remove("fade-hidden");
-});
-
-/* Auto-close menu on navigation */
-document.querySelectorAll('#menu-items a').forEach(link => {
-  link.addEventListener('click', () => {
-    homeBtn.classList.add("hidden");
-    menuBtn.classList.remove("hidden");
-
-    menuItems.classList.add("fade-hidden");
-    menuItems.classList.add("hidden");
-
-    mainContent.classList.remove("fade-hidden");
-  });
+  menuItems.style.display = "none";
+  mainContent.style.display = "block";
 });
 
 
