@@ -248,19 +248,33 @@ for (const data of docs) {
       "bg-white rounded-xl p-4 border-2 border-blue-300 shadow-md";
 
     card.innerHTML = `
-      <div class="text-lg font-extrabold text-blue-900 mb-1">
-        Shed Order ${orderNo}
-      </div>
+      <div class="flex items-start gap-3">
 
-      <div class="text-gray-700 mb-4 leading-relaxed">
-        ${data.description || ""}
-      </div>
+  <!-- Left content -->
+  <div class="flex-1">
+    <div class="text-lg font-extrabold text-blue-900 mb-1">
+      Shed Order ${orderNo}
+    </div>
 
-      <button
-  onclick="openShedOrder('${data.filePath}')"
-  class="bg-blue-700 hover:bg-blue-800 text-white px-6 py-2 rounded-md text-sm font-bold">
-  View
-</button>
+    <div class="text-gray-700 leading-relaxed text-sm sm:text-base">
+      ${data.description || ""}
+    </div>
+  </div>
+
+  <!-- Right-side View button (mobile friendly) -->
+  <button
+    onclick="openShedOrder('${data.filePath}')"
+    class="bg-blue-700 hover:bg-blue-800 text-white
+           px-5 py-2.5 sm:py-2
+           rounded-lg sm:rounded-md
+           text-sm font-bold
+           whitespace-nowrap
+           ml-auto">
+    View
+  </button>
+
+</div>
+
     `;
 
     list.appendChild(card);
