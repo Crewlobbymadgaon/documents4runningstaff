@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes">
+    <title>Safety Circularr</title>
+    <link rel="manifest" href="/documents4runningstaff/manifest.json" />
+    <link rel="icon" href="/documents4runningstaff/favicon.ico" />
+    <link rel="apple-touch-icon" href="/documents4runningstaff/icon-192.png" />
+    <meta name="theme-color" content="#1f2937" />
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600&display=swap" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script defer src="main.js"></script>
+   
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
+import {
+  getFirestore,
+  collection,
+  query,
+  where,
+  getDocs,
+  orderBy
+} from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+
+import { getStorage, ref, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-storage.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyD4BfU5OKhKFynJMVC2k4qFEgmeDhLlSIM",
+  authDomain: "doc4runningstaff-d000b.firebaseapp.com",
+  projectId: "doc4runningstaff-d000b",
+  storageBucket: "doc4runningstaff-d000b.firebasestorage.app",
+  messagingSenderId: "34983733068",
+  appId: "1:34983733068:web:bbe8a3d902eecaab8bd1e9"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const storage = getStorage(app);
+
+  // expose globally
+  window.db = db;
+  window.storage = storage;
+  window.query = query;
+  window.where = where;
+  window.orderBy = orderBy;
+  window.getDocs = getDocs;
+  window.collection = collection;
+  window.ref = ref;
+  window.getDownloadURL = getDownloadURL;
+</script>
+
+    <style>
+      .font-rajdhani {
+        font-family: 'Rajdhani', sans-serif;
+      }
+      html,body {
+  height: 100%;
+  overscroll-behavior-y: none;
+}
+
+      @keyframes fade-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+      /* Force selected text inside <select> to center in all browsers */
+.custom-select-center {
+  text-align: center;         /* Applies in Chrome */
+  text-align-last: center;    /* Applies in Firefox/Edge/Safari */
+}
+
+/* On iOS and some Android tablets, remove native appearance completely */
+select.custom-select-center {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+    </style>
+  </head>
+  <body class="bg-gray-50 text-gray-800">
+<header class="sticky top-0 z-50
+  bg-gradient-to-r from-blue-900 via-blue-700 to-blue-900
+  text-white py-3 shadow-md">
+
+
+  <div class="text-center px-4">
+  
+<h1 class="font-rajdhani text-xl sm:text-3xl md:text-4xl leading-tight font-extrabold">
+      Digital Library
+      <span class="text-yellow-300">for</span>
+      Running Staff
+</h1>
+  <!-- Subheading -->
+  <h2 class="font-rajdhani text-4xl sm:text-4xl md:text-5xl font-extrabold mt-2">
+    Safety Circular
+  </h2>
+      
+    </div>
+
+<!-- Year Selector (center) and Hamburger (right) on same line -->
+<div class="flex items-center justify-between mt-6">
+  
+  <!-- Invisible spacer to balance hamburger button -->
+  <div class="w-12"></div>
+
+<!-- Centered Year Selector with padding compensation -->
+<div class="relative inline-block w-40">
+ <select id="yearSelect" onchange="highlightSelectedYear()"
+    class="appearance-none w-full bg-gradient-to-b from-blue-900 via-blue-500 to-blue-900
+           text-white text-xl font-bold 
+           px-0 py-2 rounded-md border border-blue-950 
+           focus:bg-blue-950 focus:outline-none focus:ring-1 focus:ring-blue-950 shadow 
+           text-center custom-select-center">
+    <option class="bg-white text-blue-900 hover:bg-blue-100 transition duration-150 ease-in-out" value="2022">&nbsp;&nbsp;&nbsp;&nbsp;2022&nbsp;&nbsp;&nbsp;&nbsp;</option>
+    <option class="bg-white text-blue-900 hover:bg-blue-100 transition duration-150 ease-in-out" value="2023">&nbsp;&nbsp;&nbsp;&nbsp;2023&nbsp;&nbsp;&nbsp;&nbsp;</option>
+  </select>
+ 
+<!-- Dropdown arrow -->
+<div class="pointer-events-none absolute inset-y-0 right-3 flex items-center text-white text-sm">
+  ▼
+</div>
+</div>
+  <!-- Hamburger + Dropdown: wrapped in a relative container -->
+<div class="relative">
+  <!-- Hamburger Button (right) -->
+  <button id="hamburgerBtn"
+    class="bg-gradient-to-b from-blue-900 via-blue-500 to-blue-900 
+           hover:from-blue-800 hover:to-blue-950 
+           text-white p-2 rounded-md 
+           border border-blue-950 
+           shadow-lg 
+           focus:outline-none focus:ring-2 focus:ring-blue-900 
+           transition duration-150 ease-in-out"
+    aria-label="Toggle Menu" aria-expanded="false">
+    <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"
+      viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path stroke-linecap="round" stroke-linejoin="round"
+        d="M4 6h16M4 12h16M4 18h16"></path>
+    </svg>
+  </button>
+
+  <!-- Dropdown menu (now correctly aligned below hamburger) -->
+  <div id="dropdownMenu"
+    class="hidden absolute right-0 mt-2 bg-white border border-blue-800 shadow-lg z-50 rounded-md w-52">
+    <a href="index.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Home</a>
+    <a href="so_lobby_selector.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Shed Order</a>
+    <a href="safetycircular.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Safety Circular</a>
+    <a href="counselling.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Counselling Topics</a>
+    <a href="othercirculars.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Other Circulars</a>
+    <a href="gsr.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">G&SR</a>
+    <a href="accidentmanual.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Accident Manual</a>
+    <a href="wtt.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">WTT</a>
+    <a href="readingmaterials.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Reading Materials</a>
+    <a href="tsd.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">TSD</a>
+  </div>
+</div>
+</div> <!-- Ends the flex row: justify-between -->
+</header>
+<section class="px-4 mt-8">
+  <div id="documentList" class="grid gap-4 max-w-2xl mx-auto"></div>
+</section>
+
+<script>
+  // Toggle Dropdown
+const hamburgerBtn = document.getElementById("hamburgerBtn");
+const dropdownMenu = document.getElementById("dropdownMenu");
+
+hamburgerBtn.addEventListener("click", (e) => {
+  e.stopPropagation(); // Prevent click from bubbling to document
+  dropdownMenu.classList.toggle("hidden");
+
+  const isHidden = dropdownMenu.classList.contains("hidden");
+  hamburgerBtn.setAttribute("aria-expanded", !isHidden);
+});
+
+// Close dropdown when a link inside it is clicked
+dropdownMenu.querySelectorAll("a").forEach(link => {
+  link.addEventListener("click", () => {
+    dropdownMenu.classList.add("hidden");
+    hamburgerBtn.setAttribute("aria-expanded", "false");
+  });
+});
+
+// Close dropdown if clicking outside
+document.addEventListener("click", (e) => {
+  if (
+    !dropdownMenu.classList.contains("hidden") &&
+    !dropdownMenu.contains(e.target) &&
+    !hamburgerBtn.contains(e.target)
+  ) {
+    dropdownMenu.classList.add("hidden");
+    hamburgerBtn.setAttribute("aria-expanded", "false");
+  }
+});
+    document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && !dropdownMenu.classList.contains("hidden")) {
+    dropdownMenu.classList.add("hidden");
+    hamburgerBtn.setAttribute("aria-expanded", "false");
+  }
+});
+ 
+async function loadSafetyCirculars(year) {
+  const list = document.getElementById("documentList");
+  list.innerHTML = "<p class='text-center'>Loading...</p>";
+
+  try {
+    const q = query(
+      collection(db, "documents"),
+      where("category", "==", "safety_circular"),
+      where("year", "==", Number(year))
+    );
+
+    const snapshot = await getDocs(q);
+
+    if (snapshot.empty) {
+      list.innerHTML =
+        "<p class='text-center text-red-600 font-semibold'>No Safety Circulars available</p>";
+      return;
+    }
+
+    const docs = snapshot.docs
+      .map(d => d.data())
+      .sort((a, b) => (b.orderIndex || 0) - (a.orderIndex || 0));
+
+    list.innerHTML = "";
+
+    for (const data of docs) {
+      const card = document.createElement("div");
+      card.className =
+        "bg-white rounded-xl p-4 border-2 border-blue-300 shadow-md";
+
+      card.innerHTML = `
+        <div class="flex items-start justify-between gap-3">
+          <div class="flex-1">
+            <div class="text-[15px] font-extrabold text-blue-900">
+              ${data.title}
+            </div>
+            <div class="text-[14px] text-gray-700 mt-1 line-clamp-3">
+              ${data.description || ""}
+            </div>
+          </div>
+
+          <button
+            onclick="openDocument('${data.filePath}')"
+            class="shrink-0 bg-blue-700 hover:bg-blue-800
+                   text-white px-4 py-2 rounded-md
+                   text-[13px] font-bold shadow">
+            View
+          </button>
+        </div>
+      `;
+
+      list.appendChild(card);
+    }
+  } catch (err) {
+    console.error(err);
+    list.innerHTML =
+      "<p class='text-center text-red-600 font-semibold'>Error loading data</p>";
+  }
+}
+
+async function openDocument(filePath) {
+  try {
+    const url = await getDownloadURL(
+      ref(window.storage, filePath)
+    );
+
+    // Open in new tab (supports search, zoom, download)
+    window.open(url, "_blank");
+
+  } catch (err) {
+    alert("Unable to open document");
+    console.error("Open document failed:", filePath, err);
+  }
+}
+
+// 🔹 Year selector handler
+function highlightSelectedYear() {
+  const year = document.getElementById("yearSelect").value;
+  loadSafetyCirculars(year);
+}
+
+
+// 🔹 Initial load
+window.addEventListener("DOMContentLoaded", () => {
+  const yearSelect = document.getElementById("yearSelect");
+  const currentYear = new Date().getFullYear();
+
+  yearSelect.innerHTML = "";
+
+  for (let y = currentYear; y >= 2022; y--) {
+    const opt = document.createElement("option");
+    opt.value = y;
+    opt.textContent = ` ${y} `;
+    opt.className = "bg-white text-blue-900";
+    yearSelect.appendChild(opt);
+  }
+
+  yearSelect.value = currentYear;
+  loadSafetyCirculars(currentYear);
+});
+
+
+
+
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/service-worker.js')
+      .then(reg => console.log("Service Worker registered:", reg))
+      .catch(err => console.log("Service Worker registration failed:", err));
+  });
+}
+
+
+  document.addEventListener("keydown", (e) => {
+  // Close dropdown if open
+  if (e.key === "Escape" && !dropdownMenu.classList.contains("hidden")) {
+    dropdownMenu.classList.add("hidden");
+    hamburgerBtn.setAttribute("aria-expanded", "false");
+  }
+
+ 
+});
+
+</script>
+
+
+</body>
+</html>
