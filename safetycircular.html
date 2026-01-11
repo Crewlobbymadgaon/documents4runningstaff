@@ -220,56 +220,59 @@ async function loadSafetyCirculars(year) {
       return;
     }
 
+    // 🔹 Sort latest first
     const docs = snapshot.docs
       .map(d => d.data())
-      .sort((a, b) => (b.orderIndex || 0) - (a.orderIndex || 0));
+      .sort((a, b) => (b.circularIndex || 0) - (a.circularIndex || 0));
 
     list.innerHTML = "";
 
-   const circularNo =
-  data.circularNo ||
-  (data.title?.match(/\d{2}\/\d{4}/)?.[0]) ||
-  "";
+    // ✅ LOOP PROPERLY
+    for (const data of docs) {
 
-const card = document.createElement("div");
-card.className =
-  "bg-white rounded-xl p-4 border-2 border-blue-300 shadow-md flex flex-col";
-
-card.innerHTML = `
-  <div class="text-base font-extrabold text-blue-900">
-    Safety Circular ${circularNo}
-  </div>
-
-  <div class="text-sm font-semibold text-gray-900 mt-1">
-    ${data.title || ""}
-  </div>
-
-  ${data.description ? `
-    <div class="text-gray-700 mt-2 text-sm leading-relaxed">
-      ${data.description}
-    </div>
-  ` : ""}
-
-  <!-- Button row -->
-  <div class="mt-3 flex justify-end">
-    <button
-      onclick="openSafetyCircular('${data.filePath}')"
-      class="bg-blue-700 hover:bg-blue-800 text-white px-5 py-2 rounded-md text-sm font-bold">
-      View
-    </button>
-  </div>
-`;
+      const circularNo =
+  data.circularNo || "";
 
 
+      const card = document.createElement("div");
+      card.className =
+        "bg-white rounded-xl p-4 border-2 border-blue-300 shadow-md flex flex-col";
+
+      card.innerHTML = `
+        <div class="text-base font-extrabold text-blue-900">
+          Safety Circular ${circularNo}
+        </div>
+
+        <div class="text-sm font-semibold text-gray-900 mt-1">
+          ${data.title || ""}
+        </div>
+
+        ${data.description ? `
+          <div class="text-gray-700 mt-2 text-sm leading-relaxed">
+            ${data.description}
+          </div>
+        ` : ""}
+
+        <!-- Button bottom-right -->
+        <div class="mt-3 flex justify-end">
+          <button
+            onclick="openSafetyCircular('${data.filePath}')"
+            class="bg-blue-700 hover:bg-blue-800 text-white px-5 py-2 rounded-md text-sm font-bold">
+            View
+          </button>
+        </div>
+      `;
 
       list.appendChild(card);
     }
+
   } catch (err) {
-    console.error(err);
+    console.error("Safety Circular load error:", err);
     list.innerHTML =
       "<p class='text-center text-red-600 font-semibold'>Error loading data</p>";
   }
 }
+
 
 async function openSafetyCircular(filePath) {
   try {
