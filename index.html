@@ -317,27 +317,35 @@ const colorMap = {
   indigo:{ bg: "bg-indigo-100",border: "border-indigo-600",text: "text-indigo-800",btn: "bg-indigo-600 hover:bg-indigo-700" },
   gray:  { bg: "bg-gray-200",  border: "border-gray-500",  text: "text-gray-800",  btn: "bg-gray-600 hover:bg-gray-700" }
 };
-
-/* 🔹 Latest loader */
 async function loadLatest({ category, containerId, title, color, icon }) {
   const box = document.getElementById(containerId);
   box.innerHTML = "<p class='text-sm'>Loading…</p>";
 
   try {
     const q = query(
-  collection(db, "documents"),
-  where("category", "==", category),
-  orderBy("latestRank", "desc"),
-  limit(1)
-);
+      collection(db, "documents"),
+      where("category", "==", category)
+    );
 
     const snap = await getDocs(q);
+
     if (snap.empty) {
       box.innerHTML = "";
       return;
     }
 
-    const data = snap.docs[0].data();
+    // 🔥 CLIENT-SIDE SORT (SAFE)
+    const docs = snap.docs
+      .map(d => d.data())
+      .filter(d => typeof d.latestRank === "number")
+      .sort((a, b) => b.latestRank - a.latestRank);
+
+    if (!docs.length) {
+      box.innerHTML = "";
+      return;
+    }
+
+    const data = docs[0];
     const c = colorMap[color];
 
     box.innerHTML = `
