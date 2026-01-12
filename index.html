@@ -359,29 +359,40 @@ async function loadLatest({ category, containerId, title, color, icon }) {
 
     // 🔹 FINAL CARD
     box.innerHTML = `
-      <div class="${c.bg} border-l-4 ${c.border} p-5 rounded-xl shadow-md
-                  hover:shadow-lg transition">
+  <div class="${c.bg} border-l-4 ${c.border} p-5 rounded-xl shadow-md 
+              hover:shadow-lg transition
+              flex flex-col min-h-[160px]">
 
-        <h2 class="text-lg font-extrabold ${c.text} mb-2">
-          ${icon} ${title}
-        </h2>
+    <!-- TITLE -->
+    <h2 class="text-[18px] font-bold ${c.text} mb-2">
+      ${icon} ${title}
+    </h2>
 
-        <p class="text-[15px] mb-4 leading-snug">
-          ${data.title || data.description || ""}
-        </p>
+    <!-- DESCRIPTION -->
+    <p class="text-[15px] text-gray-800 leading-snug">
+      ${data.title || data.description || ""}
+    </p>
 
-        <div class="flex justify-end">
-          <button
-            onclick="openLatest('${data.filePath}')"
-            class="${c.btn} text-white px-5 py-2 rounded-md
-                   text-base font-semibold shadow
-                   hover:scale-105 active:scale-95 transition">
-            View
-          </button>
-        </div>
+    <!-- BUTTON ROW (FORCED BOTTOM RIGHT) -->
+    <div class="mt-auto flex justify-end pt-4">
+      <button
+        onclick="openLatest('${data.filePath}')"
+        class="${c.btn}
+               text-white
+               px-5 py-2
+               rounded-md
+               text-[14px] font-semibold
+               shadow
+               hover:scale-105
+               active:scale-95
+               transition">
+        View
+      </button>
+    </div>
+  </div>
+`;
 
-      </div>
-    `;
+      
   } catch (err) {
     console.error("Latest load error:", category, err);
     box.innerHTML = "";
