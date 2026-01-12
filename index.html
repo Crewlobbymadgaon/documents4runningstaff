@@ -275,34 +275,137 @@
  
 
 
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
+import {
+  getFirestore,
+  collection,
+  query,
+  where,
+  orderBy,
+  limit,
+  getDocs
+} from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+import {
+  getStorage,
+  ref,
+  getDownloadURL
+} from "https://www.gstatic.com/firebasejs/12.7.0/firebase-storage.js";
 
+/* 🔹 Firebase init */
+const firebaseConfig = {
+  apiKey: "AIzaSyD4BfU5OKhKFynJMVC2k4qFEgmeDhLlSIM",
+  authDomain: "doc4runningstaff-d000b.firebaseapp.com",
+  projectId: "doc4runningstaff-d000b",
+  storageBucket: "doc4runningstaff-d000b.firebasestorage.app",
+  messagingSenderId: "34983733068",
+  appId: "1:34983733068:web:bbe8a3d902eecaab8bd1e9"
+};
 
-<script>
-  
-const menuBtn = document.getElementById("menu-button");
-const homeBtn = document.getElementById("home-button");
-const menuItems = document.getElementById("menu-items");
-const mainContent = document.getElementById("main-content");
-const banner = document.getElementById("latest-banner");
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const storage = getStorage(app);
 
-menuBtn.addEventListener("click", () => {
-  menuBtn.classList.add("hidden");
-  homeBtn.classList.remove("hidden");
+/* 🔹 COLOR MAP (Tailwind-safe) */
+const colorMap = {
+  red:   { bg: "bg-red-100",   border: "border-red-600",   text: "text-red-800",   btn: "bg-red-600 hover:bg-red-700" },
+  yellow:{ bg: "bg-yellow-100",border: "border-yellow-600",text: "text-yellow-800",btn: "bg-yellow-600 hover:bg-yellow-700" },
+  blue:  { bg: "bg-blue-100",  border: "border-blue-600",  text: "text-blue-800",  btn: "bg-blue-600 hover:bg-blue-700" },
+  green: { bg: "bg-green-100", border: "border-green-600", text: "text-green-800", btn: "bg-green-600 hover:bg-green-700" },
+  indigo:{ bg: "bg-indigo-100",border: "border-indigo-600",text: "text-indigo-800",btn: "bg-indigo-600 hover:bg-indigo-700" },
+  gray:  { bg: "bg-gray-200",  border: "border-gray-500",  text: "text-gray-800",  btn: "bg-gray-600 hover:bg-gray-700" }
+};
 
-  mainContent.classList.add("hidden");
-  banner.classList.add("hidden");
+/* 🔹 Latest loader */
+async function loadLatest({ category, containerId, title, color, icon }) {
+  const box = document.getElementById(containerId);
+  box.innerHTML = "<p class='text-sm'>Loading…</p>";
 
-  menuItems.classList.remove("hidden");
+  try {
+    const q = query(
+      collection(db, "documents"),
+      where("category", "==", category),
+      orderBy("createdAt", "desc"),
+      limit(1)
+    );
+
+    const snap = await getDocs(q);
+    if (snap.empty) {
+      box.innerHTML = "";
+      return;
+    }
+
+    const data = snap.docs[0].data();
+    const c = colorMap[color];
+
+    box.innerHTML = `
+      <div class="${c.bg} border-l-4 ${c.border} p-4 rounded shadow">
+        <h2 class="text-lg font-bold ${c.text} mb-2">
+          ${icon} ${title}
+        </h2>
+
+        <p class="text-sm mb-3">
+          ${data.title || data.description || ""}
+        </p>
+
+        <button
+          onclick="openLatest('${data.filePath}')"
+          class="${c.btn} text-white px-4 py-1.5 rounded text-sm">
+          View
+        </button>
+      </div>
+    `;
+  } catch (err) {
+    console.error("Latest load error:", category, err);
+    box.innerHTML = "";
+  }
+}
+
+/* 🔹 Open PDF */
+window.openLatest = async function (filePath) {
+  const url = await getDownloadURL(ref(storage, filePath));
+  window.open(url, "_blank");
+};
+
+/* 🔹 Load all latest cards */
+window.addEventListener("DOMContentLoaded", () => {
+  loadLatest({ category:"shed_order", containerId:"latest-shed", title:"Shed Order", color:"red", icon:"📄" });
+  loadLatest({ category:"safety_circular", containerId:"latest-safety", title:"Safety Circular", color:"yellow", icon:"⚠️" });
+  loadLatest({ category:"counselling", containerId:"latest-counselling", title:"Counselling Topic", color:"blue", icon:"🧠" });
+  loadLatest({ category:"gsr", containerId:"latest-gsr", title:"G&SR Correction Slip", color:"green", icon:"📘" });
+  loadLatest({ category:"wtt", containerId:"latest-wtt", title:"WTT Correction Slip", color:"indigo", icon:"🕓" });
+  loadLatest({ category:"accident_manual", containerId:"latest-accident", title:"Accident Manual", color:"gray", icon:"🚨" });
 });
 
-homeBtn.addEventListener("click", () => {
-  homeBtn.classList.add("hidden");
-  menuBtn.classList.remove("hidden");
 
-  menuItems.classList.add("hidden");
+window.addEventListener("DOMContentLoaded", () => {
 
-  mainContent.classList.remove("hidden");
-  banner.classList.remove("hidden");
+  const menuBtn = document.getElementById("menu-button");
+  const homeBtn = document.getElementById("home-button");
+  const menuItems = document.getElementById("menu-items");
+  const mainContent = document.getElementById("main-content");
+  const banner = document.getElementById("latest-banner");
+
+  menuBtn.addEventListener("click", () => {
+    menuBtn.classList.add("hidden");
+    homeBtn.classList.remove("hidden");
+
+    mainContent.classList.add("hidden");
+    banner.classList.add("hidden");
+
+    menuItems.classList.remove("hidden");
+  });
+
+  homeBtn.addEventListener("click", () => {
+    homeBtn.classList.add("hidden");
+    menuBtn.classList.remove("hidden");
+
+    menuItems.classList.add("hidden");
+
+    mainContent.classList.remove("hidden");
+    banner.classList.remove("hidden");
+  });
+
 });
 
 
@@ -349,123 +452,6 @@ homeBtn.addEventListener("click", () => {
   });
 
 
-  import {
-  collection,
-  query,
-  where,
-  orderBy,
-  limit,
-  getDocs
-} from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
-
-async function loadLatest({
-  category,
-  containerId,
-  title,
-  color,
-  icon
-}) {
-  const box = document.getElementById(containerId);
-  box.innerHTML = "<p class='text-sm'>Loading…</p>";
-
-  try {
-    const q = query(
-      collection(db, "documents"),
-      where("category", "==", category),
-      orderBy("createdAt", "desc"),
-      limit(1)
-    );
-
-    const snap = await getDocs(q);
-
-    if (snap.empty) {
-      box.innerHTML = "";
-      return;
-    }
-
-    const data = snap.docs[0].data();
-
-    box.innerHTML = `
-      <div class="bg-${color}-100 border-l-4 border-${color}-600 p-4 rounded shadow">
-        <h2 class="text-lg font-bold text-${color}-800 mb-2">
-          ${icon} ${title}
-        </h2>
-
-        <p class="text-sm mb-3">
-          ${data.title || data.description || ""}
-        </p>
-
-        <button
-          onclick="openLatest('${data.filePath}')"
-          class="bg-${color}-600 hover:bg-${color}-700
-                 text-white px-4 py-1.5 rounded text-sm">
-          View
-        </button>
-      </div>
-    `;
-  } catch (e) {
-    console.error("Latest load error:", category, e);
-    box.innerHTML = "";
-  }
-}
-
-  async function openLatest(filePath) {
-  const url = await getDownloadURL(ref(storage, filePath));
-  window.open(url, "_blank");
-                 }
-
-
-  window.addEventListener("DOMContentLoaded", () => {
-
-  loadLatest({
-    category: "shed_order",
-    containerId: "latest-shed",
-    title: "Shed Order",
-    color: "red",
-    icon: "📄"
-  });
-
-  loadLatest({
-    category: "safety_circular",
-    containerId: "latest-safety",
-    title: "Safety Circular",
-    color: "yellow",
-    icon: "⚠️"
-  });
-
-  loadLatest({
-    category: "counselling",
-    containerId: "latest-counselling",
-    title: "Counselling Topic",
-    color: "blue",
-    icon: "🧠"
-  });
-
-  loadLatest({
-    category: "gsr",
-    containerId: "latest-gsr",
-    title: "G&SR Correction Slip",
-    color: "green",
-    icon: "📘"
-  });
-
-  loadLatest({
-    category: "wtt",
-    containerId: "latest-wtt",
-    title: "WTT Correction Slip",
-    color: "indigo",
-    icon: "🕓"
-  });
-
-  loadLatest({
-    category: "accident_manual",
-    containerId: "latest-accident",
-    title: "Accident Manual",
-    color: "gray",
-    icon: "🚨"
-  });
-
-});
 </script>
 
 
