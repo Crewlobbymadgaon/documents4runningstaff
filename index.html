@@ -319,9 +319,18 @@ const colorMap = {
 };
 async function loadLatest({ category, containerId, title, color, icon }) {
   const box = document.getElementById(containerId);
-  box.innerHTML = "<p class='text-sm'>Loading…</p>";
+
+  // 🔹 Skeleton loader (fast visual feedback)
+  box.innerHTML = `
+    <div class="animate-pulse bg-gray-100 border-l-4 border-gray-300 p-5 rounded-xl shadow">
+      <div class="h-5 bg-gray-300 rounded w-2/3 mb-3"></div>
+      <div class="h-4 bg-gray-300 rounded w-full mb-2"></div>
+      <div class="h-4 bg-gray-300 rounded w-5/6"></div>
+    </div>
+  `;
 
   try {
+    // 🔹 Simple query (FAST – no index needed)
     const q = query(
       collection(db, "documents"),
       where("category", "==", category)
@@ -334,7 +343,7 @@ async function loadLatest({ category, containerId, title, color, icon }) {
       return;
     }
 
-    // 🔥 CLIENT-SIDE SORT (SAFE)
+    // 🔥 SAFE CLIENT-SIDE SORT using latestRank
     const docs = snap.docs
       .map(d => d.data())
       .filter(d => typeof d.latestRank === "number")
@@ -348,21 +357,29 @@ async function loadLatest({ category, containerId, title, color, icon }) {
     const data = docs[0];
     const c = colorMap[color];
 
+    // 🔹 FINAL CARD
     box.innerHTML = `
-      <div class="${c.bg} border-l-4 ${c.border} p-4 rounded shadow">
-        <h2 class="text-lg font-bold ${c.text} mb-2">
+      <div class="${c.bg} border-l-4 ${c.border} p-5 rounded-xl shadow-md
+                  hover:shadow-lg transition">
+
+        <h2 class="text-lg font-extrabold ${c.text} mb-2">
           ${icon} ${title}
         </h2>
 
-        <p class="text-sm mb-3">
+        <p class="text-[15px] mb-4 leading-snug">
           ${data.title || data.description || ""}
         </p>
 
-        <button
-          onclick="openLatest('${data.filePath}')"
-          class="${c.btn} text-white px-4 py-1.5 rounded text-sm">
-          View
-        </button>
+        <div class="flex justify-end">
+          <button
+            onclick="openLatest('${data.filePath}')"
+            class="${c.btn} text-white px-5 py-2 rounded-md
+                   text-base font-semibold shadow
+                   hover:scale-105 active:scale-95 transition">
+            View
+          </button>
+        </div>
+
       </div>
     `;
   } catch (err) {
