@@ -1,4 +1,4 @@
-a<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en" class="h-full">
   <head>
     <meta charset="UTF-8" />
@@ -325,11 +325,11 @@ async function loadLatest({ category, containerId, title, color, icon }) {
 
   try {
     const q = query(
-      collection(db, "documents"),
-      where("category", "==", category),
-    
-      limit(1)
-    );
+  collection(db, "documents"),
+  where("category", "==", category),
+  orderBy("latestRank", "desc"),
+  limit(1)
+);
 
     const snap = await getDocs(q);
     if (snap.empty) {
