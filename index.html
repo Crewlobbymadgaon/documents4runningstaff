@@ -107,71 +107,18 @@
 <div class="p-4 space-y-6 max-w-3xl mx-auto">    
     
 
+<!-- LATEST DOCUMENTS -->
+<div class="p-4 space-y-6 max-w-3xl mx-auto mt-4">
 
-   <!-- 🔻 Document Sections -->
-  <div class="p-4 space-y-6 max-w-3xl mx-auto mt-4">
+  <div id="latest-shed"></div>
+  <div id="latest-safety"></div>
+  <div id="latest-counselling"></div>
+  <div id="latest-gsr"></div>
+  <div id="latest-wtt"></div>
+  <div id="latest-accident"></div>
 
-    <!-- 1. Shed Order -->
-    <div class="bg-red-100 border-l-4 border-red-600 p-4 rounded shadow">
-      <h2 class="text-lg font-bold text-red-800 mb-2">📄 Shed Order</h2>
-      <p class="text-base mb-3">Provision of Additional Stoppages for trains 10105/10106, 10107/10108 on Konkan Railway
-</p>
-      <div class="flex gap-3">
-        <a href="/documents4runningstaff/doc_shed_order_mao_2025/01-2025.pdf"
-   target="_blank"
-   class="inline-block bg-red-600 hover:bg-red-700 text-white px-4 py-1.5 rounded text-sm">
-  View
-        </a>
-      </div>
-    </div>
-
-    <!-- 2. Safety Circular -->
-    <div class="bg-yellow-100 border-l-4 border-yellow-600 p-4 rounded shadow">
-      <h2 class="text-lg font-bold text-yellow-800 mb-2">⚠️ Safety Circular</h2>
-      <p class="text-sm mb-3">Monsoon safety precautions – July 2025.</p>
-      <div class="flex gap-3">
-        <button onclick="openModal('Safety Circular')" class="bg-yellow-600 hover:bg-yellow-700 text-white px-4 py-1.5 rounded text-sm">View</button>
-      </div>
-    </div>
-
-    <!-- 3. Counselling Subject -->
-    <div class="bg-blue-100 border-l-4 border-blue-600 p-4 rounded shadow">
-      <h2 class="text-lg font-bold text-blue-800 mb-2">🧠 Counselling Subject</h2>
-      <p class="text-sm mb-3">Alertness and rest management instructions.</p>
-      <div class="flex gap-3">
-        <button onclick="openModal('Counselling Subject')" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-1.5 rounded text-sm">View</button>
-      </div>
-    </div>
-
-    <!-- 4. G&SR Correction Slip -->
-    <div class="bg-green-100 border-l-4 border-green-600 p-4 rounded shadow">
-      <h2 class="text-lg font-bold text-green-800 mb-2">📘 G&SR Correction Slip</h2>
-      <p class="text-sm mb-3">Latest updates in G&SR effective July 2025.</p>
-      <div class="flex gap-3">
-        <button onclick="openModal('G&SR Correction Slip')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-1.5 rounded text-sm">View</button>
-      </div>
-    </div>
-
-    <!-- 5. WTT Correction Slip -->
-    <div class="bg-indigo-100 border-l-4 border-indigo-600 p-4 rounded shadow">
-      <h2 class="text-lg font-bold text-indigo-800 mb-2">🕓 WTT Correction Slip</h2>
-      <p class="text-sm mb-3">Time table changes for monsoon 2025.</p>
-      <div class="flex gap-3">
-        <button onclick="openModal('WTT Correction Slip')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-1.5 rounded text-sm">View</button>
-      </div>
-    </div>
-
-    <!-- 6. Accident Manual Correction -->
-    <div class="bg-gray-200 border-l-4 border-gray-500 p-4 rounded shadow">
-      <h2 class="text-lg font-bold text-gray-800 mb-2">🚨 Accident Manual Correction</h2>
-      <p class="text-sm mb-3">Revised procedures for accident reporting.</p>
-      <div class="flex gap-3">
-        <button onclick="openModal('Accident Manual Correction')" class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-1.5 rounded text-sm">View</button>
-      </div>
-    </div>
 </div>
-  </div>
-</div>
+    
     
 
     
@@ -400,6 +347,125 @@ homeBtn.addEventListener("click", () => {
       span.classList.remove("scale-110");
     });
   });
+
+
+  import {
+  collection,
+  query,
+  where,
+  orderBy,
+  limit,
+  getDocs
+} from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+
+async function loadLatest({
+  category,
+  containerId,
+  title,
+  color,
+  icon
+}) {
+  const box = document.getElementById(containerId);
+  box.innerHTML = "<p class='text-sm'>Loading…</p>";
+
+  try {
+    const q = query(
+      collection(db, "documents"),
+      where("category", "==", category),
+      orderBy("createdAt", "desc"),
+      limit(1)
+    );
+
+    const snap = await getDocs(q);
+
+    if (snap.empty) {
+      box.innerHTML = "";
+      return;
+    }
+
+    const data = snap.docs[0].data();
+
+    box.innerHTML = `
+      <div class="bg-${color}-100 border-l-4 border-${color}-600 p-4 rounded shadow">
+        <h2 class="text-lg font-bold text-${color}-800 mb-2">
+          ${icon} ${title}
+        </h2>
+
+        <p class="text-sm mb-3">
+          ${data.title || data.description || ""}
+        </p>
+
+        <button
+          onclick="openLatest('${data.filePath}')"
+          class="bg-${color}-600 hover:bg-${color}-700
+                 text-white px-4 py-1.5 rounded text-sm">
+          View
+        </button>
+      </div>
+    `;
+  } catch (e) {
+    console.error("Latest load error:", category, e);
+    box.innerHTML = "";
+  }
+}
+
+  async function openLatest(filePath) {
+  const url = await getDownloadURL(ref(storage, filePath));
+  window.open(url, "_blank");
+                 }
+
+
+  window.addEventListener("DOMContentLoaded", () => {
+
+  loadLatest({
+    category: "shed_order",
+    containerId: "latest-shed",
+    title: "Shed Order",
+    color: "red",
+    icon: "📄"
+  });
+
+  loadLatest({
+    category: "safety_circular",
+    containerId: "latest-safety",
+    title: "Safety Circular",
+    color: "yellow",
+    icon: "⚠️"
+  });
+
+  loadLatest({
+    category: "counselling",
+    containerId: "latest-counselling",
+    title: "Counselling Topic",
+    color: "blue",
+    icon: "🧠"
+  });
+
+  loadLatest({
+    category: "gsr",
+    containerId: "latest-gsr",
+    title: "G&SR Correction Slip",
+    color: "green",
+    icon: "📘"
+  });
+
+  loadLatest({
+    category: "wtt",
+    containerId: "latest-wtt",
+    title: "WTT Correction Slip",
+    color: "indigo",
+    icon: "🕓"
+  });
+
+  loadLatest({
+    category: "accident_manual",
+    containerId: "latest-accident",
+    title: "Accident Manual",
+    color: "gray",
+    icon: "🚨"
+  });
+
+});
 </script>
 
 
