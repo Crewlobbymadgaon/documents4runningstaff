@@ -492,23 +492,19 @@ window.addEventListener("DOMContentLoaded", () => {
 
 </script>
 
-<footer class="bg-gradient-to-r from-blue-900 via-blue-700 to-blue-900 text-white mt-10">
-  <div class="max-w-7xl mx-auto px-4 py-4 text-center">
+<footer id="app-footer"
+  class="fixed sm:static bottom-0 left-0 w-full
+         text-center text-xs sm:text-sm
+         text-gray-300
+         pointer-events-none">
 
-    <p class="text-sm sm:text-base font-semibold">
-      Digital Library for Running Staff
-    </p>
-
-    <p class="text-xs sm:text-sm text-yellow-200 mt-1">
-      Combined Crew Lobby · Madgaon
-    </p>
-
-    <p class="text-[11px] sm:text-xs text-gray-300 mt-2">
-      © <span id="year"></span> All Rights Reserved
-    </p>
-
+  <div class="py-2">
+    Combined Crew Lobby · Madgaon
+    © <span id="year"></span> All Rights Reserved
   </div>
+
 </footer>
+
 <script>
   document.getElementById("year").textContent = new Date().getFullYear();
 </script>
