@@ -17,6 +17,14 @@
     .font-rajdhani {
       font-family: 'Rajdhani', sans-serif;
     }
+     :root {
+    --footer-height: 48px;
+  }
+
+  body {
+    padding-bottom: var(--footer-height);
+    overflow-x: hidden;
+  }
   </style>
 </head>
 
@@ -141,6 +149,22 @@
     });
   });
 </script>
+<footer
+  class="fixed bottom-0 left-0 w-full z-40
+         flex items-center justify-center
+         text-xs sm:text-sm
+         text-gray-700
+         bg-white
+         shadow-[0_-2px_8px_rgba(0,0,0,0.08)]
+         h-[var(--footer-height)]">
+© <span class="footer-year ml-1"></span>&nbsp;Combined Crew Lobby · Madgaon. All Rights Reserved
 
+</footer>
+
+<script>
+  document.querySelectorAll(".footer-year").forEach(el => {
+    el.textContent = new Date().getFullYear();
+  });
+</script>
 </body>
 </html>
