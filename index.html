@@ -472,13 +472,47 @@ window.openLatest = async function (filePath) {
 
 /* 🔹 Load all latest cards */
 window.addEventListener("DOMContentLoaded", () => {
-  loadLatestShedOrders();
+  loadLatestShedOrder();
 
-  loadLatest({ category:"safety_circular", containerId:"latest-safety", title:"Safety Circular", color:"yellow", icon:"⚠️" });
-  loadLatest({ category:"counselling", containerId:"latest-counselling", title:"Counselling Topic", color:"blue", icon:"🧠" });
-  loadLatest({ category:"gsr", containerId:"latest-gsr", title:"G&SR Correction Slip", color:"green", icon:"📘" });
-  loadLatest({ category:"wtt", containerId:"latest-wtt", title:"WTT Correction Slip", color:"indigo", icon:"🕓" });
-  loadLatest({ category:"accident_manual", containerId:"latest-accident", title:"Accident Manual", color:"gray", icon:"🚨" });
+  loadLatest({
+    category: "safety_circular",
+    containerId: "latest-safety",
+    title: "Safety Circular",
+    color: "yellow",
+    icon: "⚠️"
+  });
+
+  loadLatest({
+    category: "counselling",
+    containerId: "latest-counselling",
+    title: "Counselling Topic",
+    color: "blue",
+    icon: "🧠"
+  });
+
+  loadLatest({
+    category: "gsr",
+    containerId: "latest-gsr",
+    title: "G&SR Correction Slip",
+    color: "green",
+    icon: "📘"
+  });
+
+  loadLatest({
+    category: "wtt",
+    containerId: "latest-wtt",
+    title: "WTT Correction Slip",
+    color: "indigo",
+    icon: "🕓"
+  });
+
+  loadLatest({
+    category: "accident_manual",
+    containerId: "latest-accident",
+    title: "Accident Manual",
+    color: "gray",
+    icon: "🚨"
+  });
 
   rotateSlogan();
 });
