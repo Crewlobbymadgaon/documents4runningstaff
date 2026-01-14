@@ -322,63 +322,87 @@ const colorMap = {
   gray:  { bg: "bg-gray-200",  border: "border-gray-500",  text: "text-gray-800",  btn: "bg-gray-600 hover:bg-gray-700" }
 };
 
+  const shedLobbies = [
+  { code: "mao", name: "Madgaon" },
+  { code: "rn",  name: "Ratnagiri" },
+  { code: "ven", name: "Verna" },
+  { code: "sl",  name: "Surathkal" }
+];
+
 async function loadLatestShedOrder() {
   const box = document.getElementById("latest-shed");
 
+  // Skeleton
   box.innerHTML = `
     <div class="animate-pulse bg-gray-100 border-l-4 border-gray-300 p-5 rounded-xl shadow"></div>
   `;
 
   try {
-    const q = query(
-      collection(db, "documents"),
-      where("category", "==", "shed_order")
-    );
+    const lobbyResults = [];
 
-    const snap = await getDocs(q);
-    if (snap.empty) {
+    for (const lobby of shedLobbies) {
+      const q = query(
+        collection(db, "documents"),
+        where("category", "==", "shed_order"),
+        where("lobby", "==", lobby.code)
+      );
+
+      const snap = await getDocs(q);
+
+      const latest = snap.docs
+        .map(d => d.data())
+        .find(d => d.latestRank === 1);
+
+      if (latest) {
+        lobbyResults.push({
+          lobby: lobby.name,
+          description: latest.description || latest.title || "",
+          filePath: latest.filePath
+        });
+      }
+    }
+
+    if (!lobbyResults.length) {
       box.innerHTML = "";
       return;
     }
 
-    const docs = snap.docs
-      .map(d => d.data())
-      .filter(d => typeof d.latestRank === "number")
-      .sort((a, b) => b.latestRank - a.latestRank);
+    // Build rows
+    const rows = lobbyResults.map(item => `
+      <div class="flex items-start justify-between gap-3 border-b last:border-b-0 pb-3 last:pb-0">
+        <div class="flex-1">
+          <div class="font-semibold text-red-800 text-[15px]">
+            ${item.lobby}
+          </div>
+          <div class="text-[14px] text-gray-700 leading-snug">
+            ${item.description}
+          </div>
+        </div>
 
-    if (!docs.length) {
-      box.innerHTML = "";
-      return;
-    }
+        <button
+          onclick="openLatest('${item.filePath}')"
+          class="shrink-0 bg-red-600 hover:bg-red-700
+                 text-white px-4 py-2 rounded-md
+                 text-[13px] font-semibold shadow
+                 active:scale-95 transition">
+          View
+        </button>
+      </div>
+    `).join("");
 
-    const data = docs[0];
-
+    // Final single card
     box.innerHTML = `
-      <div class="bg-red-100 border-l-4 border-red-600 p-5 rounded-xl shadow-md
-                  flex flex-col min-h-[160px]">
-
-        <h2 class="text-[18px] font-bold text-red-800 mb-2">
-          📄 Latest Shed Order (All Lobbies)
+      <div class="bg-red-100 border-l-4 border-red-600 p-5 rounded-xl shadow-md">
+        <h2 class="text-[18px] font-bold text-red-800 mb-4">
+          📄 Latest Shed Orders (All Lobbies)
         </h2>
-
-        <p class="text-[15px] text-gray-800 leading-snug">
-          ${data.title || data.description || ""}
-        </p>
-
-        <div class="mt-auto flex justify-end pt-4">
-          <button
-            onclick="openLatest('${data.filePath}')"
-            class="bg-red-600 hover:bg-red-700
-                   text-white px-5 py-2 rounded-md
-                   text-[14px] font-semibold shadow
-                   hover:scale-105 transition">
-            View
-          </button>
+        <div class="space-y-3">
+          ${rows}
         </div>
       </div>
     `;
   } catch (err) {
-    console.error("Latest shed order error:", err);
+    console.error("Latest shed order load error:", err);
     box.innerHTML = "";
   }
 }
