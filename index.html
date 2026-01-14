@@ -113,7 +113,7 @@
 <!-- LATEST DOCUMENTS -->
 <div class="p-4 space-y-6 max-w-3xl mx-auto mt-4">
 
-  <div id="latest-shed-orders" class="space-y-4"></div>
+  <div id="latest-shed"></div>
 
   <div id="latest-safety"></div>
   <div id="latest-counselling"></div>
@@ -322,73 +322,64 @@ const colorMap = {
   gray:  { bg: "bg-gray-200",  border: "border-gray-500",  text: "text-gray-800",  btn: "bg-gray-600 hover:bg-gray-700" }
 };
 
-  const shedLobbies = [
-  { code: "mao", name: "Madgaon", color: "red", icon: "📄" },
-  { code: "rn",  name: "Ratnagiri", color: "blue", icon: "📄" },
-  { code: "ven", name: "Verna", color: "green", icon: "📄" },
-  { code: "sl",  name: "Surathkal", color: "indigo", icon: "📄" }
-];
-  async function loadLatestShedOrders() {
-  const container = document.getElementById("latest-shed-orders");
-  container.innerHTML = "";
+async function loadLatestShedOrder() {
+  const box = document.getElementById("latest-shed");
 
-  for (const lobby of shedLobbies) {
-    const card = document.createElement("div");
-    card.innerHTML = `
-      <div class="animate-pulse bg-gray-100 border-l-4 border-gray-300 p-5 rounded-xl shadow"></div>
-    `;
-    container.appendChild(card);
+  box.innerHTML = `
+    <div class="animate-pulse bg-gray-100 border-l-4 border-gray-300 p-5 rounded-xl shadow"></div>
+  `;
 
-    try {
-      const q = query(
-        collection(db, "documents"),
-        where("category", "==", "shed_order"),
-        where("lobby", "==", lobby.code)
-      );
+  try {
+    const q = query(
+      collection(db, "documents"),
+      where("category", "==", "shed_order")
+    );
 
-      const snap = await getDocs(q);
-
-      const docs = snap.docs
-        .map(d => d.data())
-        .filter(d => typeof d.latestRank === "number")
-        .sort((a, b) => b.latestRank - a.latestRank);
-
-      if (!docs.length) {
-        card.innerHTML = "";
-        continue;
-      }
-
-      const data = docs[0];
-      const c = colorMap[lobby.color];
-
-      card.innerHTML = `
-        <div class="${c.bg} border-l-4 ${c.border} p-5 rounded-xl shadow-md
-                    flex flex-col min-h-[160px]">
-
-          <h2 class="text-[18px] font-bold ${c.text}">
-            ${lobby.icon} Shed Order – ${lobby.name}
-          </h2>
-
-          <p class="text-[15px] text-gray-800 mt-2 leading-snug">
-            ${data.description || ""}
-          </p>
-
-          <div class="mt-auto flex justify-end pt-4">
-            <button
-              onclick="openLatest('${data.filePath}')"
-              class="${c.btn}
-                     text-white px-5 py-2 rounded-md
-                     text-[14px] font-semibold shadow
-                     hover:scale-105 transition">
-              View
-            </button>
-          </div>
-        </div>
-      `;
-    } catch (err) {
-      console.error("Latest shed load error:", lobby.code, err);
-      card.innerHTML = "";
+    const snap = await getDocs(q);
+    if (snap.empty) {
+      box.innerHTML = "";
+      return;
     }
+
+    const docs = snap.docs
+      .map(d => d.data())
+      .filter(d => typeof d.latestRank === "number")
+      .sort((a, b) => b.latestRank - a.latestRank);
+
+    if (!docs.length) {
+      box.innerHTML = "";
+      return;
+    }
+
+    const data = docs[0];
+
+    box.innerHTML = `
+      <div class="bg-red-100 border-l-4 border-red-600 p-5 rounded-xl shadow-md
+                  flex flex-col min-h-[160px]">
+
+        <h2 class="text-[18px] font-bold text-red-800 mb-2">
+          📄 Latest Shed Order (All Lobbies)
+        </h2>
+
+        <p class="text-[15px] text-gray-800 leading-snug">
+          ${data.title || data.description || ""}
+        </p>
+
+        <div class="mt-auto flex justify-end pt-4">
+          <button
+            onclick="openLatest('${data.filePath}')"
+            class="bg-red-600 hover:bg-red-700
+                   text-white px-5 py-2 rounded-md
+                   text-[14px] font-semibold shadow
+                   hover:scale-105 transition">
+            View
+          </button>
+        </div>
+      </div>
+    `;
+  } catch (err) {
+    console.error("Latest shed order error:", err);
+    box.innerHTML = "";
   }
 }
 async function loadLatest({ category, containerId, title, color, icon }) {
