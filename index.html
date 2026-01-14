@@ -19,7 +19,9 @@
         font-family: 'Rajdhani', sans-serif;
       }
       
-      
+      :root {
+  --footer-height: 44px; /* safe touch height for mobile */
+      }
       
   #menu-items, #main-content {
     transition: opacity 0.3s ease;
@@ -102,8 +104,8 @@
     </div>
 
       <!-- Main Content Wrapper -->
-    <div id="main-content" class="pb-10 sm:pb-0">
-
+<div id="main-content"
+     class="pb-[var(--footer-height)] sm:pb-0">
  <!-- Main Content -->
 <div class="p-4 space-y-6 max-w-3xl mx-auto">    
     
@@ -494,16 +496,17 @@ window.addEventListener("DOMContentLoaded", () => {
 </script>
 
 <footer id="app-footer"
-  class="fixed sm:static bottom-0 left-0 w-full
-         text-center text-xs sm:text-sm
+  class="fixed sm:static
+         bottom-0 left-0 w-full
+         h-[var(--footer-height)]
+         flex items-center justify-center
+         text-[11px] sm:text-sm
          text-gray-400
-         pointer-events-none">
+         bg-transparent
+         z-40">
 
-  <div class="py-2">
-    Combined Crew Lobby · Madgaon
-    © <span id="year"></span> All Rights Reserved
-  </div>
-
+  Combined Crew Lobby · Madgaon
+  © <span id="year"></span> All Rights Reserved
 </footer>
 
 <script>
