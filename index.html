@@ -126,7 +126,7 @@
 </div>
     
     
-
+  </main>
     
     
 <div id="menu-items"
@@ -279,7 +279,7 @@
 </a>
   </div>
  
-  </main>
+ 
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
@@ -481,13 +481,17 @@ window.openLatest = async function (filePath) {
 
 /* 🔹 Load all latest cards */
 window.addEventListener("DOMContentLoaded", () => {
- 
+  loadLatestShedOrders();
+
   loadLatest({ category:"safety_circular", containerId:"latest-safety", title:"Safety Circular", color:"yellow", icon:"⚠️" });
   loadLatest({ category:"counselling", containerId:"latest-counselling", title:"Counselling Topic", color:"blue", icon:"🧠" });
   loadLatest({ category:"gsr", containerId:"latest-gsr", title:"G&SR Correction Slip", color:"green", icon:"📘" });
   loadLatest({ category:"wtt", containerId:"latest-wtt", title:"WTT Correction Slip", color:"indigo", icon:"🕓" });
   loadLatest({ category:"accident_manual", containerId:"latest-accident", title:"Accident Manual", color:"gray", icon:"🚨" });
+
+  rotateSlogan();
 });
+
 
 
 window.addEventListener("DOMContentLoaded", () => {
@@ -562,9 +566,7 @@ window.addEventListener("DOMContentLoaded", () => {
       span.classList.remove("scale-110");
     });
   });
-window.addEventListener("DOMContentLoaded", () => {
-  loadLatestShedOrders();
-});
+
 
 
 </script>
