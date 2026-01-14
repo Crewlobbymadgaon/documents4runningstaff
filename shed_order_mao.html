@@ -52,9 +52,14 @@ const storage = getStorage(app);
 </script>
 
     <style>
-      :root {
-  --footer-height: 48px;
-      }
+     :root {
+    --footer-height: 48px;
+  }
+
+  body {
+    padding-bottom: var(--footer-height);
+    overflow-x: hidden;
+  }
       
       .font-rajdhani {
         font-family: 'Rajdhani', sans-serif;
@@ -163,6 +168,7 @@ select.custom-select-center {
 </div>
 </div> <!-- Ends the flex row: justify-between -->
 </header>
+  
 <section class="px-4 mt-8">
   <div id="shedOrderList" class="grid gap-4 max-w-2xl mx-auto"></div>
 </section>
@@ -385,13 +391,18 @@ if ('serviceWorker' in navigator) {
          bg-white
          shadow-[0_-2px_8px_rgba(0,0,0,0.08)]
          h-[var(--footer-height)]">
-  Combined Crew Lobby · Madgaon © <span id="year"></span> All Rights Reserved
+
+  Combined Crew Lobby · Madgaon ©
+  <span class="footer-year ml-1"></span>
+  All Rights Reserved
+
 </footer>
 
 <script>
-  document.getElementById("year").textContent = new Date().getFullYear();
+  document.querySelectorAll(".footer-year").forEach(el => {
+    el.textContent = new Date().getFullYear();
+  });
 </script>
-    
 
 </body>
 </html>
