@@ -88,7 +88,7 @@ select.custom-select-center {
 }
     </style>
   </head>
-  <body class="bg-gray-50 text-gray-800 pb-[var(--footer-height)]">
+  <body class="bg-gray-50 text-gray-800 min-h-screen flex flex-col">
 
 <header class="sticky top-0 z-50
   bg-gradient-to-r from-blue-900 via-blue-700 to-blue-900
@@ -169,7 +169,9 @@ select.custom-select-center {
 </div>
 </div> <!-- Ends the flex row: justify-between -->
 </header>
-  
+
+    <main class="flex-1 pb-[var(--footer-height)]">
+
 <section class="px-4 mt-8">
   <div id="shedOrderList" class="grid gap-4 max-w-2xl mx-auto"></div>
 </section>
@@ -384,6 +386,7 @@ if ('serviceWorker' in navigator) {
 });
 
 </script>
+    </main>
 <footer
   class="fixed bottom-0 left-0 w-full z-40
          flex items-center justify-center
