@@ -20,8 +20,8 @@
       }
       
       :root {
-  --footer-height: 44px; /* safe touch height for mobile */
-      }
+  --footer-height: 48px;
+}
       
   #menu-items, #main-content {
     transition: opacity 0.3s ease;
@@ -37,6 +37,7 @@
   </head>
 
   <body class="bg-gray-50 text-gray-800">
+    <div class="pb-[var(--footer-height)]">
     <div class="sticky top-0 z-50">
 
     <!-- Header -->
@@ -105,7 +106,6 @@
 
       <!-- Main Content Wrapper -->
 <div id="main-content"
-     class="pb-[var(--footer-height)] sm:pb-0">
  <!-- Main Content -->
 <div class="p-4 space-y-6 max-w-3xl mx-auto">    
     
@@ -130,7 +130,7 @@
     
 <div id="menu-items"
      class="hidden mt-4
-            pb-[var(--footer-height)] sm:pb-6
+        
             grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3
             gap-y-3 gap-x-4 px-4
             max-w-screen-xl mx-auto">
@@ -495,23 +495,20 @@ window.addEventListener("DOMContentLoaded", () => {
 
 </script>
 
-<footer id="app-footer"
-  class="fixed sm:static
-         bottom-0 left-0 w-full
-         h-[var(--footer-height)]
+<footer
+  class="fixed bottom-0 left-0 w-full z-40
          flex items-center justify-center
-         text-[11px] sm:text-sm
-         text-gray-400
-         bg-transparent
-         z-40">
-
-  Combined Crew Lobby · Madgaon
-  © <span id="year"></span> All Rights Reserved
+         text-xs sm:text-sm
+         text-white/90
+         backdrop-blur-md
+         bg-black/30
+         h-[var(--footer-height)]">
+  Combined Crew Lobby · Madgaon © <span id="year"></span> All Rights Reserved
 </footer>
 
 <script>
   document.getElementById("year").textContent = new Date().getFullYear();
 </script>
-
+    </div>
   </body>
     </html>
