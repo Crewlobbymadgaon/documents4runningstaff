@@ -436,9 +436,9 @@ async function loadLatestShedOrder() {
 async function loadLatest({ category, containerId, title, color, icon }) {
   const box = document.getElementById(containerId);
 
-  // Skeleton loader
+  // Skeleton
   box.innerHTML = `
-    <div class="animate-pulse bg-gray-100 border border-gray-300 p-5 rounded-xl shadow"></div>
+    <div class="animate-pulse bg-gray-100 border border-gray-300 p-4 rounded-xl shadow"></div>
   `;
 
   try {
@@ -467,40 +467,38 @@ async function loadLatest({ category, containerId, title, color, icon }) {
     const c = colorMap[color];
 
     box.innerHTML = `
-      <!-- OUTER BOX (same as Shed Order) -->
+      <!-- OUTER BOX -->
       <div class="bg-white border border-blue-300
-                  rounded-xl shadow-md p-5">
+                  rounded-xl shadow-md p-4">
 
         <!-- HEADING -->
-        <h2 class="text-[18px] font-bold text-blue-900 mb-4
+        <h2 class="text-[17px] font-bold text-blue-900 mb-3
                    flex items-center gap-2">
           ${icon} ${title}
         </h2>
 
-        <!-- INNER COLORED CARD -->
+        <!-- INNER COLORED ROW -->
         <div class="${c.bg} border-l-4 ${c.border}
-                    rounded-lg p-4
-                    flex flex-col min-h-[150px]">
+                    rounded-lg p-3
+                    flex flex-col">
 
-          <!-- TOP CONTENT -->
+          <!-- CONTENT -->
           <div>
-            <!-- NUMBER / MONTH-YEAR -->
             <div class="text-[15px] font-bold text-gray-900 tracking-wide">
               ${data.circularNo || data.orderNo || data.monthYear || ""}
             </div>
 
-            <!-- DESCRIPTION -->
-            <div class="text-[14px] text-gray-700 mt-1 leading-snug line-clamp-2">
+            <div class="text-[14px] text-gray-700 mt-0.5 leading-snug line-clamp-2">
               ${data.title || data.description || ""}
             </div>
           </div>
 
-          <!-- BUTTON (FORCED BOTTOM-RIGHT) -->
-          <div class="mt-auto flex justify-end pt-4">
+          <!-- BUTTON (BOTTOM RIGHT, COMPACT) -->
+          <div class="mt-auto flex justify-end pt-2">
             <button
               onclick="openLatest('${data.filePath}')"
               class="${c.btn}
-                     text-white px-4 py-2
+                     text-white px-4 py-1.5
                      rounded-md text-[13px] font-semibold
                      shadow active:scale-95 transition">
               View
