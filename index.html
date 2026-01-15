@@ -539,8 +539,9 @@ async function loadLatestCorrectionSlips() {
       const snap = await getDocs(q);
 
       const latest = snap.docs
-        .map(d => d.data())
-        .find(d => d.latestRank === 1);
+  .map(d => d.data())
+  .filter(d => typeof d.latestRank === "number")
+  .sort((a, b) => a.latestRank - b.latestRank)[0];
 
       if (!latest) continue;
 
