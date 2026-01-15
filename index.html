@@ -114,12 +114,9 @@
 <div class="p-4 space-y-6 max-w-3xl mx-auto mt-4">
 
   <div id="latest-shed"></div>
-
+  <div id="latest-correction"></div>
   <div id="latest-safety"></div>
   <div id="latest-counselling"></div>
-  <div id="latest-gsr"></div>
-  <div id="latest-wtt"></div>
-  <div id="latest-accident"></div>
 
 </div>
 </div>
@@ -513,6 +510,96 @@ async function loadLatest({ category, containerId, title, color, icon }) {
     box.innerHTML = "";
   }
 }
+
+async function loadLatestCorrectionSlips() {
+  const box = document.getElementById("latest-correction");
+
+  // Skeleton
+  box.innerHTML = `
+    <div class="animate-pulse bg-gray-100 border border-gray-300 p-5 rounded-xl shadow"></div>
+  `;
+
+  try {
+    const sections = [
+      { key: "gsr",      name: "G&SR",            bg: "bg-blue-50",   border: "border-blue-500" },
+      { key: "accident", name: "Accident Manual", bg: "bg-red-50",    border: "border-red-500" },
+      { key: "wtt_a",    name: "WTT – Part A",    bg: "bg-green-50",  border: "border-green-500" },
+      { key: "wtt_b",    name: "WTT – Part B",    bg: "bg-amber-50",  border: "border-amber-500" }
+    ];
+
+    const rows = [];
+
+    for (const sec of sections) {
+      const q = query(
+        collection(db, "documents"),
+        where("category", "==", "correction_slip"),
+        where("section", "==", sec.key)
+      );
+
+      const snap = await getDocs(q);
+
+      const latest = snap.docs
+        .map(d => d.data())
+        .find(d => d.latestRank === 1);
+
+      if (!latest) continue;
+
+      rows.push(`
+        <div class="${sec.bg} border-l-4 ${sec.border}
+                    rounded-lg p-4
+                    flex justify-between gap-4">
+
+          <!-- LEFT -->
+          <div class="flex-1 min-w-0">
+            <div class="text-[15px] font-bold text-gray-900 tracking-wide">
+              Correction Slip No ${latest.slipNo}
+            </div>
+
+            <div class="text-[13px] text-gray-700 mt-1 line-clamp-2">
+              ${latest.description || ""}
+            </div>
+          </div>
+
+          <!-- RIGHT -->
+          <button
+            onclick="openLatest('${latest.filePath}')"
+            class="shrink-0 self-end
+                   bg-blue-700 hover:bg-blue-800
+                   text-white px-4 py-2
+                   rounded-md text-[13px] font-semibold
+                   shadow active:scale-95 transition">
+            View
+          </button>
+        </div>
+      `);
+    }
+
+    if (!rows.length) {
+      box.innerHTML = "";
+      return;
+    }
+
+    box.innerHTML = `
+      <div class="bg-white border border-blue-300
+                  rounded-xl shadow-md p-5">
+
+        <h2 class="text-[18px] font-bold text-blue-900 mb-4
+                   flex items-center gap-2">
+          📘 Correction Slip
+        </h2>
+
+        <div class="space-y-3">
+          ${rows.join("")}
+        </div>
+      </div>
+    `;
+
+  } catch (err) {
+    console.error("Correction Slip load error:", err);
+    box.innerHTML = "";
+  }
+}
+  
 /* 🔹 Open PDF */
 window.openLatest = async function (filePath) {
   const url = await getDownloadURL(ref(storage, filePath));
@@ -522,7 +609,7 @@ window.openLatest = async function (filePath) {
 /* 🔹 Load all latest cards */
 window.addEventListener("DOMContentLoaded", () => {
   loadLatestShedOrder();
-
+  loadLatestCorrectionSlips();
   loadLatest({
     category: "safety_circular",
     containerId: "latest-safety",
