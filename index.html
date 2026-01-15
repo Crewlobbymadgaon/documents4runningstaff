@@ -429,10 +429,10 @@ async function loadLatest({ category, containerId, title, color, icon }) {
 
   // Skeleton
   box.innerHTML = `
-    <div class="animate-pulse bg-gray-100 p-5 rounded-xl shadow">
-      <div class="h-5 bg-gray-300 w-1/2 mb-3 rounded"></div>
-      <div class="h-4 bg-gray-300 w-3/4 mb-2 rounded"></div>
-      <div class="h-4 bg-gray-300 w-2/3 rounded"></div>
+    <div class="animate-pulse bg-white p-5 rounded-xl shadow">
+      <div class="h-5 bg-gray-200 w-1/2 mb-3 rounded"></div>
+      <div class="h-4 bg-gray-200 w-3/4 mb-2 rounded"></div>
+      <div class="h-4 bg-gray-200 w-2/3 rounded"></div>
     </div>
   `;
 
@@ -462,26 +462,24 @@ async function loadLatest({ category, containerId, title, color, icon }) {
     const c = colorMap[color];
 
     box.innerHTML = `
-      <!-- OUTER CARD -->
-      <div class="${c.bg} border-l-4 ${c.border}
-                  p-5 rounded-xl shadow-md
-                  flex flex-col gap-4">
+      <!-- OUTER CARD (SAME AS SHED ORDER) -->
+      <div class="bg-white rounded-xl shadow-md p-5 space-y-4">
 
-        <!-- CATEGORY TITLE -->
-        <h2 class="text-[19px] font-extrabold ${c.text}">
+        <!-- HEADING -->
+        <h2 class="text-[19px] font-extrabold text-gray-800">
           ${icon} ${title}
         </h2>
 
-        <!-- INNER BOX (SAME AS SHED LOBBY STYLE) -->
-        <div class="bg-white rounded-lg border border-gray-200
-                    px-4 py-3 shadow-sm
+        <!-- INNER COLOURED CARD -->
+        <div class="${c.bg} border-l-4 ${c.border}
+                    rounded-lg px-4 py-3
                     flex flex-col min-h-[120px]">
 
           <div class="text-[15px] font-bold ${c.text}">
             ${data.circularNo || data.orderNo || "Latest Circular"}
           </div>
 
-          <div class="text-[14px] text-gray-700 mt-1 leading-snug line-clamp-3">
+          <div class="text-[14px] text-gray-800 mt-1 leading-snug line-clamp-3">
             ${data.title || data.description || ""}
           </div>
 
