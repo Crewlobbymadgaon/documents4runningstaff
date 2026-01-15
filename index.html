@@ -432,6 +432,7 @@ async function loadLatestShedOrder() {
   }
 }
 async function loadLatest({ category, containerId, title, color, icon }) {
+async function loadLatest({ category, containerId, title, color, icon }) {
   const box = document.getElementById(containerId);
 
   // Skeleton loader
@@ -478,28 +479,23 @@ async function loadLatest({ category, containerId, title, color, icon }) {
         <!-- INNER COLORED CARD -->
         <div class="${c.bg} border-l-4 ${c.border}
                     rounded-lg p-4
-                    flex justify-between gap-4">
+                    flex flex-col min-h-[150px]">
 
-          <!-- LEFT CONTENT -->
-          <div class="flex-1 min-w-0">
+          <!-- TOP CONTENT -->
+          <div>
+            <!-- NUMBER / MONTH-YEAR -->
             <div class="text-[15px] font-bold text-gray-900 tracking-wide">
-              ${data.circularNo || data.orderNo || ""}
+              ${data.circularNo || data.orderNo || data.monthYear || ""}
             </div>
 
-            <!-- MONTH-YEAR (same style as number) -->
-<div class="text-[15px] font-bold text-gray-900 tracking-wide">
-  ${data.monthYear || ""}
-</div>
-
-<!-- TITLE / DESCRIPTION -->
-<div class="text-[14px] text-gray-700 mt-1 leading-snug line-clamp-2">
-  ${data.title || data.description || ""}
-</div>
+            <!-- DESCRIPTION -->
+            <div class="text-[14px] text-gray-700 mt-1 leading-snug line-clamp-2">
+              ${data.title || data.description || ""}
+            </div>
           </div>
 
-          <!-- RIGHT COLUMN -->
-          <div class="flex flex-col items-end justify-between shrink-0">
-
+          <!-- BUTTON (FORCED BOTTOM-RIGHT) -->
+          <div class="mt-auto flex justify-end pt-4">
             <button
               onclick="openLatest('${data.filePath}')"
               class="${c.btn}
@@ -508,8 +504,8 @@ async function loadLatest({ category, containerId, title, color, icon }) {
                      shadow active:scale-95 transition">
               View
             </button>
-
           </div>
+
         </div>
       </div>
     `;
