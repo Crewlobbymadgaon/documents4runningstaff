@@ -368,49 +368,48 @@ async function loadLatestShedOrder() {
         "";
 
       rows.push(`
-        <div class="${lobby.bg} border-l-4 ${lobby.border}
-                    rounded-lg p-4
-                    flex justify-between gap-4">
+  <div class="${lobby.bg} border-l-4 ${lobby.border}
+              rounded-lg p-4
+              flex justify-between gap-4">
 
-          <!-- LEFT CONTENT -->
-          <div class="flex-1 min-w-0">
-            <div class="text-[14px] font-bold text-gray-800">
-              Shed Order ${orderNo}
-            </div>
+    <!-- LEFT CONTENT -->
+    <div class="flex-1 min-w-0">
+      <div class="text-[15px] font-bold text-gray-900 tracking-wide">
+        ${orderNo}
+      </div>
 
-            <div class="text-[14px] text-gray-700 mt-1 leading-snug line-clamp-2">
-              ${latest.description || ""}
-            </div>
-          </div>
+      <div class="text-[14px] text-gray-700 mt-1 leading-snug line-clamp-2">
+        ${latest.description || ""}
+      </div>
+    </div>
 
-          <!-- RIGHT COLUMN -->
-          <div class="flex flex-col items-end justify-between shrink-0">
+    <!-- RIGHT COLUMN -->
+    <div class="flex flex-col items-end justify-between shrink-0">
 
-            <!-- LOBBY BADGE -->
-            <div class="text-[12px] font-semibold
-                        px-3 py-1
-                        rounded-full
-                        bg-white/80
-                        text-gray-900
-                        border ${lobby.border}">
-              ${lobby.name}
-            </div>
+      <!-- LOBBY BADGE -->
+      <div class="text-[12px] font-semibold
+                  px-3 py-1
+                  rounded-full
+                  bg-white/80
+                  text-gray-900
+                  border ${lobby.border}">
+        ${lobby.name}
+      </div>
 
-            <!-- VIEW BUTTON -->
-            <button
-              onclick="openLatest('${latest.filePath}')"
-              class="mt-3
-                     bg-blue-700 hover:bg-blue-800
-                     text-white px-4 py-2
-                     rounded-md text-[13px] font-semibold
-                     shadow active:scale-95 transition">
-              View
-            </button>
+      <!-- VIEW BUTTON -->
+      <button
+        onclick="openLatest('${latest.filePath}')"
+        class="mt-3
+               bg-blue-700 hover:bg-blue-800
+               text-white px-4 py-2
+               rounded-md text-[13px] font-semibold
+               shadow active:scale-95 transition">
+        View
+      </button>
 
-          </div>
-        </div>
-      `);
-    }
+    </div>
+  </div>
+`);
 
     if (!rows.length) {
       box.innerHTML = "";
