@@ -462,8 +462,9 @@ async function loadLatest({ category, containerId, title, color, icon }) {
     const c = colorMap[color];
 
     box.innerHTML = `
-      <div class="bg-white rounded-xl shadow-md p-5 space-y-4
-            hover:shadow-lg transition">
+      <div class="bg-white border border-blue-300
+            rounded-xl shadow-md p-5
+            transition hover:shadow-lg">
 
   <h2 class="text-[19px] font-extrabold text-gray-800">
     ${icon} ${title}
