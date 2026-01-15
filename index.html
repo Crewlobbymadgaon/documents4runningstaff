@@ -434,13 +434,9 @@ async function loadLatestShedOrder() {
 async function loadLatest({ category, containerId, title, color, icon }) {
   const box = document.getElementById(containerId);
 
-  // Skeleton
+  // Skeleton loader
   box.innerHTML = `
-    <div class="animate-pulse bg-white p-5 rounded-xl shadow">
-      <div class="h-5 bg-gray-200 w-1/2 mb-3 rounded"></div>
-      <div class="h-4 bg-gray-200 w-3/4 mb-2 rounded"></div>
-      <div class="h-4 bg-gray-200 w-2/3 rounded"></div>
-    </div>
+    <div class="animate-pulse bg-gray-100 border border-gray-300 p-5 rounded-xl shadow"></div>
   `;
 
   try {
@@ -469,39 +465,47 @@ async function loadLatest({ category, containerId, title, color, icon }) {
     const c = colorMap[color];
 
     box.innerHTML = `
+      <!-- OUTER BOX (same as Shed Order) -->
       <div class="bg-white border border-blue-300
-            rounded-xl shadow-md p-5
-            transition hover:shadow-lg">
+                  rounded-xl shadow-md p-5">
 
-  <h2 class="text-[19px] font-extrabold text-gray-800">
-    ${icon} ${title}
-  </h2>
+        <!-- HEADING -->
+        <h2 class="text-[18px] font-bold text-blue-900 mb-4
+                   flex items-center gap-2">
+          ${icon} ${title}
+        </h2>
 
-  <div class="${c.bg} border-l-4 ${c.border}
-              rounded-lg px-4 py-3
-              flex flex-col min-h-[120px]">
+        <!-- INNER COLORED CARD -->
+        <div class="${c.bg} border-l-4 ${c.border}
+                    rounded-lg p-4
+                    flex justify-between gap-4">
 
-    <div class="text-[15px] font-bold ${c.text}">
-      ${data.circularNo || data.orderNo || "Latest Circular"}
-    </div>
+          <!-- LEFT CONTENT -->
+          <div class="flex-1 min-w-0">
+            <div class="text-[15px] font-bold text-gray-900 tracking-wide">
+              ${data.circularNo || data.orderNo || ""}
+            </div>
 
-    <div class="text-[14px] text-gray-800 mt-1 leading-snug line-clamp-3">
-      ${data.title || data.description || ""}
-    </div>
+            <div class="text-[14px] text-gray-700 mt-1 leading-snug line-clamp-2">
+              ${data.title || data.description || ""}
+            </div>
+          </div>
 
-    <div class="mt-auto flex justify-end pt-3">
-      <button
-        onclick="openLatest('${data.filePath}')"
-        class="${c.btn}
-               text-white px-4 py-1.5
-               rounded-md text-[13px] font-semibold
-               shadow hover:scale-105 transition">
-        View
-      </button>
-    </div>
+          <!-- RIGHT COLUMN -->
+          <div class="flex flex-col items-end justify-between shrink-0">
 
-  </div>
-</div>
+            <button
+              onclick="openLatest('${data.filePath}')"
+              class="${c.btn}
+                     text-white px-4 py-2
+                     rounded-md text-[13px] font-semibold
+                     shadow active:scale-95 transition">
+              View
+            </button>
+
+          </div>
+        </div>
+      </div>
     `;
   } catch (err) {
     console.error("Latest load error:", category, err);
