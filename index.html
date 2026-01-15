@@ -410,7 +410,7 @@ async function loadLatestShedOrder() {
     }
 
     box.innerHTML = `
-      <div class="bg-white border border-blue-300
+      <div class="bg-white border border-blue-500
                   rounded-xl shadow-md p-5
                   transition hover:shadow-lg">
 
@@ -465,7 +465,7 @@ async function loadLatest({ category, containerId, title, color, icon }) {
 
     box.innerHTML = `
       <!-- OUTER BOX -->
-      <div class="bg-white border border-blue-400
+      <div class="bg-white border border-blue-500
                   rounded-xl shadow-md p-4">
 
         <!-- HEADING -->
@@ -552,7 +552,7 @@ async function loadLatestCorrectionSlips() {
           <!-- LEFT CONTENT -->
           <div class="flex-1 min-w-0">
             <div class="text-[15px] font-bold text-gray-900 tracking-wide">
-              Correction Slip No ${latest.slipNo}
+              No ${latest.slipNo}
             </div>
 
             <div class="text-[13px] text-gray-700 mt-1 leading-snug line-clamp-2">
@@ -594,7 +594,7 @@ async function loadLatestCorrectionSlips() {
     }
 
     box.innerHTML = `
-      <div class="bg-white border border-blue-300
+      <div class="bg-white border border-blue-500
                   rounded-xl shadow-md p-5">
 
         <h2 class="text-[18px] font-bold text-blue-900 mb-4
