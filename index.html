@@ -550,10 +550,9 @@ async function loadLatestCorrectionSlips() {
                     flex justify-between gap-4">
 
           <!-- LEFT CONTENT -->
-          <div class="flex-1 min-w-0">
-            <div class="text-[15px] font-bold text-gray-900 tracking-wide">
-              No ${latest.slipNo}
-            </div>
+          <div class="text-[15px] font-bold text-gray-900 tracking-wide">
+  No ${String(latest.slipNo).padStart(2, "0")}
+</div>
 
             <div class="text-[13px] text-gray-700 mt-1 leading-snug line-clamp-2">
               ${latest.description || ""}
