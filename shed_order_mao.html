@@ -86,6 +86,61 @@ select.custom-select-center {
   -moz-appearance: none;
   appearance: none;
 }
+
+.shed-card {
+  background: linear-gradient(135deg, #ffffff, #f8fafc);
+  border-radius: 16px;
+  border-left: 6px solid #1d4ed8;
+  padding: 14px 16px;
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.8),
+    0 10px 22px rgba(0,0,0,.12);
+
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.shed-card:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.8),
+    0 18px 36px rgba(0,0,0,.18);
+}
+
+.shed-title {
+  font-size: 15px;
+  font-weight: 800;
+  color: #1e3a8a;
+  letter-spacing: .3px;
+}
+
+.shed-desc {
+  font-size: 14px;
+  color: #374151;
+  margin-top: 4px;
+  line-height: 1.35;
+}
+
+.shed-btn {
+  background: linear-gradient(to bottom, #1d4ed8, #1e40af);
+  color: white;
+  padding: 6px 14px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  box-shadow: 0 6px 14px rgba(29,78,216,.35);
+}
+
+.shed-btn:active {
+  transform: scale(.96);
+}
+
+/* Mobile tuning */
+@media (max-width: 640px) {
+  .shed-card {
+    padding: 12px 14px;
+  }
+}
     </style>
   </head>
   <body class="bg-gray-50 text-gray-800 min-h-screen flex flex-col">
@@ -258,42 +313,35 @@ for (const data of docs) {
 
     const card = document.createElement("div");
   
-  card.className =
-  "bg-white rounded-lg px-4 py-3 border border-blue-300 shadow-sm";
+  card.className = "shed-card";
+
 
 
 
     card.innerHTML = `
 <div class="flex items-start justify-between gap-3">
-  <!-- LEFT CONTENT -->
-  <div class="flex-1">
-    <div class="text-[15px] font-extrabold text-blue-900 leading-tight">
-      Shed Order ${orderNo}
-    </div>
 
-    <div class="text-[14px] text-gray-700 mt-1 leading-snug line-clamp-3">
+  <!-- LEFT -->
+  <div class="flex-1 min-w-0">
+   <div class="shed-title">
+  📋 Shed Order ${orderNo}
+</div>
+
+
+    <div class="shed-desc line-clamp-3">
       ${data.description || ""}
     </div>
   </div>
 
-  <!-- RIGHT BUTTON -->
+  <!-- RIGHT -->
   <button
     onclick="openShedOrder('${data.filePath}')"
-    class="shrink-0 self-end
-           bg-blue-700 hover:bg-blue-800 text-white
-           px-4 py-2
-           rounded-md
-           text-[13px] font-bold
-           shadow
-           active:scale-95 transition">
+    class="shed-btn shrink-0 self-end">
     View
   </button>
-</div>
-
 
 </div>
-
-    `;
+`;
 
     list.appendChild(card);
 
