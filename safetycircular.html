@@ -85,7 +85,6 @@ select.custom-select-center {
   appearance: none;
 }
       /* Safety Circular Card – 3D & clickable */
-/* Shared Document Card – Shed Order & Safety Circular */
 .shed-card {
   background: linear-gradient(135deg, #ffffff, #f8fafc);
   border-radius: 16px;
@@ -120,10 +119,12 @@ select.custom-select-center {
   line-height: 1.35;
 }
 
+/* VIEW text – visual only */
 .shed-btn {
   font-size: 13px;
   font-weight: 700;
   color: #1d4ed8;
+  pointer-events: none;   /* 🔑 IMPORTANT */
 }
     </style>
   </head>
@@ -285,7 +286,7 @@ async function loadSafetyCirculars(year) {
 
 
       const card = document.createElement("div");
-card.className = "shed-card cursor-pointer";
+card.className = "shed-card";
 
 // ✅ ENTIRE CARD CLICKABLE
 card.onclick = () => openSafetyCircular(data.filePath);
@@ -304,8 +305,8 @@ card.innerHTML = `
       </div>
     </div>
 
-    <!-- RIGHT (VISUAL ONLY, NO CLICK) -->
-    <div class="shed-btn shrink-0 self-end pointer-events-none">
+    <!-- RIGHT (VISUAL ONLY) -->
+    <div class="shed-btn shrink-0 self-end">
       View →
     </div>
 
