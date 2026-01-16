@@ -25,6 +25,57 @@
     padding-bottom: var(--footer-height);
     overflow-x: hidden;
   }
+  
+  .lobby-card {
+    position: relative;
+    height: 96px;
+    background: linear-gradient(135deg, #ffffff, #f8fafc);
+    border-radius: 18px;
+    box-shadow: 0 12px 28px rgba(0,0,0,0.10);
+    text-decoration: none;
+    color: #0f172a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all .25s ease;
+    overflow: hidden;
+  }
+
+  /* Accent strip */
+  .lobby-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 5px;
+    width: 100%;
+    background: var(--accent);
+  }
+
+  .lobby-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 22px 50px rgba(0,0,0,0.18);
+  }
+
+  .lobby-card:active {
+    transform: scale(0.96);
+  }
+
+  .lobby-title {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: .5px;
+  }
+
+  @media (max-width: 640px) {
+    .lobby-card {
+      height: 84px;
+    }
+    .lobby-title {
+      font-size: 18px;
+    }
+  }
   </style>
 </head>
 
@@ -80,52 +131,33 @@
 
 
   <!-- Centered Grid Container -->
-<div class="flex justify-center mt-4">
-  <!-- Lobby Buttons Grid -->
-  <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 w-full max-w-4xl px-2 sm:px-4">
+<!-- Modern Lobby Cards -->
+<div class="flex justify-center mt-6">
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 w-full max-w-5xl px-4">
 
-      <a href="shed_order_mao.html"
-   class="relative bg-gradient-to-b from-blue-900 via-blue-500 to-blue-900 w-full px-6 py-4 
-          rounded-xl text-lg font-bold text-white border border-blue-950 shadow-lg 
-          transition duration-200 ease-in-out flex items-center justify-center">
-  <span class="menu-text text-lg sm:text-xl font-bold tracking-wide text-center" 
-        style="text-shadow: 1px 1px 2px black;">
-    Madgaon
-  </span>
-</a>
-    
-    
-   <a href="shed_order_rn.html"
-   class="relative bg-gradient-to-b from-blue-900 via-blue-500 to-blue-900 w-full px-6 py-4 
-          rounded-xl text-lg font-bold text-white border border-blue-950 shadow-lg 
-          transition duration-200 ease-in-out flex items-center justify-center">
-  <span class="menu-text text-lg sm:text-xl font-bold tracking-wide text-center" 
-        style="text-shadow: 1px 1px 2px black;">
-    Ratnagiri
-  </span>
-</a>
-    
-    <a href="shed_order_ven.html"
-   class="relative bg-gradient-to-b from-blue-900 via-blue-500 to-blue-900 w-full px-6 py-4 
-          rounded-xl text-lg font-bold text-white border border-blue-950 shadow-lg 
-          transition duration-200 ease-in-out flex items-center justify-center">
-  <span class="menu-text text-lg sm:text-xl font-bold tracking-wide text-center" 
-        style="text-shadow: 1px 1px 2px black;">
-    Verna
-  </span>
-</a>
-    
-    <a href="shed_order_sl.html"
-   class="relative bg-gradient-to-b from-blue-900 via-blue-500 to-blue-900 w-full px-6 py-4 
-          rounded-xl text-lg font-bold text-white border border-blue-950 shadow-lg 
-          transition duration-200 ease-in-out flex items-center justify-center">
-  <span class="menu-text text-lg sm:text-xl font-bold tracking-wide text-center" 
-        style="text-shadow: 1px 1px 2px black;">
-    Suratkal
-  </span>
-</a>
+    <!-- Madgaon -->
+    <a href="shed_order_mao.html" class="lobby-card" style="--accent:#2563eb;">
+      <div class="lobby-title">MADGAON</div>
+    </a>
+
+    <!-- Ratnagiri -->
+    <a href="shed_order_rn.html" class="lobby-card" style="--accent:#16a34a;">
+      <div class="lobby-title">RATNAGIRI</div>
+    </a>
+
+    <!-- Verna -->
+    <a href="shed_order_ven.html" class="lobby-card" style="--accent:#d97706;">
+      <div class="lobby-title">VERNA</div>
+    </a>
+
+    <!-- Surathkal -->
+    <a href="shed_order_sl.html" class="lobby-card" style="--accent:#4f46e5;">
+      <div class="lobby-title">SURATKAL</div>
+    </a>
+
   </div>
 </div>
+
 
   <!-- Redirect Logic -->
   <script>
