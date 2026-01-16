@@ -32,6 +32,67 @@
   pointer-events: none;
 }
 
+
+.menu-card {
+    position: relative;
+    padding: 24px 18px;
+    border-radius: 18px;
+    background: linear-gradient(135deg, #ffffff, #f1f5f9);
+    box-shadow:
+      0 14px 32px rgba(0,0,0,0.12),
+      inset 0 0 0 1px rgba(255,255,255,0.8);
+    text-decoration: none;
+    color: #0f172a;
+    transition: all .25s ease;
+    overflow: hidden;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .menu-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 4px;
+    width: 100%;
+    background: var(--accent);
+  }
+
+  .menu-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 26px 60px rgba(0,0,0,0.22);
+  }
+
+  .menu-card:active {
+    transform: scale(0.95);
+  }
+
+  /* ICON */
+  .menu-icon {
+    font-size: 34px;
+    line-height: 1;
+  }
+
+  .menu-title {
+    font-size: 14px;      /* Mobile size */
+    font-weight: 700;    /* BOLD on mobile */
+    text-align: center;
+    letter-spacing: .4px;
+    line-height: 1.25;
+  }
+
+  @media (min-width: 640px) {
+    .menu-title {
+      font-size: 18px;   /* Desktop size */
+      font-weight: 600; /* Normal professional weight */
+    }
+  }
+  
 </style>
     
   </head>
@@ -122,154 +183,64 @@
     
     
 <div id="menu-items"
-     class="hidden mt-4
-        
-            grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3
-            gap-y-3 gap-x-4 px-4
-            max-w-screen-xl mx-auto">
+     class="hidden mt-6
+            grid grid-cols-1
+            sm:grid-cols-2
+            lg:grid-cols-3
+            xl:grid-cols-3
+            gap-5 px-4 sm:px-6
+            max-w-screen-2xl mx-auto">
 
+  <a href="so_lobby_selector.html" class="menu-card" style="--accent:#dc2626;">
+    <span class="menu-icon">📋</span>
+    <span class="menu-title">SHED ORDER</span>
+  </a>
 
+  <a href="safetycircular.html" class="menu-card" style="--accent:#ea580c;">
+    <span class="menu-icon">⚠️</span>
+    <span class="menu-title">SAFETY CIRCULAR</span>
+  </a>
 
-<!-- Shed Order -->
-<a href="so_lobby_selector.html"
-   class="relative w-full aspect-[6/1.2] sm:aspect-[6/1.8] 
-          flex items-center bg-gradient-to-b from-red-900 via-red-500 to-red-900 
-          px-6 py-4 rounded-xl text-lg font-bold text-white border border-black shadow-lg 
-          transition duration-200 ease-in-out">
-  <div class="w-9 h-12 sm:w-16 sm:h-20 bg-white rounded shadow-inner flex items-center justify-center overflow-hidden z-10">
-    <img src="https://example.com/icon2.png" alt="Safety Icon" class="w-full h-full object-contain" />
-  </div>
-  <div class="absolute inset-0 flex items-center justify-center">
-    <span class="menu-text text-2xl sm:text-3xl font-bold tracking-wide text-center"
-          style="text-shadow: 1px 1px 2px black;">
-      Shed Order
-    </span>
-  </div>
+  <a href="counselling.html" class="menu-card" style="--accent:#ca8a04;">
+    <span class="menu-icon">🧠</span>
+    <span class="menu-title">COUNSELLING TOPIC</span>
+  </a>
+
+  <a href="other_circulars.html" class="menu-card" style="--accent:#16a34a;">
+    <span class="menu-icon">📢</span>
+    <span class="menu-title">OTHER CIRCULARS</span>
+  </a>
+
+  <a href="gsr.html" class="menu-card" style="--accent:#7c3aed;">
+    <span class="menu-icon">📘</span>
+    <span class="menu-title">G &amp; SR</span>
+  </a>
+
+  <a href="accident_manual.html" class="menu-card" style="--accent:#2563eb;">
+    <span class="menu-icon">🚨</span>
+    <span class="menu-title">ACCIDENT MANUAL</span>
+  </a>
+
+  <a href="wtt.html" class="menu-card" style="--accent:#db2777;">
+  <span class="menu-icon">⏱️</span>
+  <span class="menu-title">WTT</span>
 </a>
 
-  <!-- Safety Circular -->
-  <a href="safetycircular.html"
-     class="relative w-full aspect-[6/1.2] sm:aspect-[6/1.8] 
-          flex items-center bg-gradient-to-b from-orange-900 via-orange-500 to-orange-900 
-          px-6 py-4 rounded-xl text-lg font-bold text-white border border-black shadow-lg 
-          transition duration-200 ease-in-out">
-  <div class="w-9 h-12 sm:w-16 sm:h-20 bg-white rounded shadow-inner flex items-center justify-center overflow-hidden z-10">
-    <img src="https://example.com/icon2.png" alt="Safety Icon" class="w-full h-full object-contain" />
-  </div>
-  <div class="absolute inset-0 flex items-center justify-center">
-    <span class="menu-text text-2xl sm:text-3xl font-bold tracking-wide text-center" style="text-shadow: 1px 1px 2px black;">Safety Circular</span>
+
+  <a href="reading_materials.html" class="menu-card" style="--accent:#0d9488;">
+    <span class="menu-icon">📚</span>
+    <span class="menu-title">READING MATERIALS</span>
+  </a>
+
+  <a href="tsd.html" class="menu-card" style="--accent:#0891b2;">
+  <span class="menu-icon">🛠️</span>
+  <span class="menu-title">TSD</span>
+</a>
+
+
 </div>
-</a>
-
-  <!-- Counselling Subjects -->
-  <!-- Counselling Subjects -->
-<a href="counselling.html"
-   class="relative w-full aspect-[6/1.2] sm:aspect-[6/1.8]
-          flex items-center bg-gradient-to-b from-yellow-900 via-yellow-500 to-yellow-900
-          px-6 py-4 rounded-xl text-lg font-bold text-white border border-black shadow-lg
-          transition duration-200 ease-in-out">
-  
-  <div class="w-9 h-12 sm:w-16 sm:h-20 bg-white rounded shadow-inner
-              flex items-center justify-center overflow-hidden z-10">
-    <img src="https://example.com/icon2.png"
-         alt="Counselling Icon"
-         class="w-full h-full object-contain" />
-  </div>
-
-  <div class="absolute inset-0 flex items-center justify-center">
-    <span class="menu-text text-2xl sm:text-3xl font-bold tracking-wide text-center"
-          style="text-shadow: 1px 1px 2px black;">
-      Counselling Topic
-    </span>
-  </div>
-</a>
 
 
-
-  <!-- Other Circulars -->
-  <a href="other_circulars.html"
-     class="relative w-full aspect-[6/1.2] sm:aspect-[6/1.8] 
-          flex items-center bg-gradient-to-b from-green-900 via-green-500 to-green-900 
-          px-6 py-4 rounded-xl text-lg font-bold text-white border border-black shadow-lg 
-          transition duration-200 ease-in-out">
-  <div class="w-9 h-12 sm:w-16 sm:h-20 bg-white rounded shadow-inner flex items-center justify-center overflow-hidden z-10">
-    <img src="https://example.com/icon2.png" alt="Safety Icon" class="w-full h-full object-contain" />
-  </div>
-  <div class="absolute inset-0 flex items-center justify-center">
-    <span class="menu-text text-2xl sm:text-3xl font-bold tracking-wide text-center" style="text-shadow: 1px 1px 2px black;">Other Circulars</span>
-</div>
-</a>
-
-  <!-- G&SR -->
-  <a href="gsr.html"
-     class="relative w-full aspect-[6/1.2] sm:aspect-[6/1.8] 
-          flex items-center bg-gradient-to-b from-purple-900 via-purple-500 to-purple-900 
-          px-6 py-4 rounded-xl text-lg font-bold text-white border border-black shadow-lg 
-          transition duration-200 ease-in-out">
-  <div class="w-9 h-12 sm:w-16 sm:h-20 bg-white rounded shadow-inner flex items-center justify-center overflow-hidden z-10">
-    <img src="https://example.com/icon2.png" alt="Safety Icon" class="w-full h-full object-contain" />
-  </div>
-  <div class="absolute inset-0 flex items-center justify-center">
-    <span class="menu-text text-2xl sm:text-3xl font-bold tracking-wide text-center" style="text-shadow: 1px 1px 2px black;">G&amp;SR</span>
-</div>
-</a>
-
-  <!-- Accident Manual -->
-  <a href="accident_manual.html"
-     class="relative w-full aspect-[6/1.2] sm:aspect-[6/1.8] 
-          flex items-center bg-gradient-to-b from-blue-900 via-blue-500 to-blue-900 
-          px-6 py-4 rounded-xl text-lg font-bold text-white border border-black shadow-lg 
-          transition duration-200 ease-in-out">
-  <div class="w-9 h-12 sm:w-16 sm:h-20 bg-white rounded shadow-inner flex items-center justify-center overflow-hidden z-10">
-    <img src="https://example.com/icon2.png" alt="Safety Icon" class="w-full h-full object-contain" />
-  </div>
-  <div class="absolute inset-0 flex items-center justify-center">
-    <span class="menu-text text-2xl sm:text-3xl font-bold tracking-wide text-center" style="text-shadow: 1px 1px 2px black;">Accident Manual</span>
-</div>
-</a>
-
-  <!-- WTT -->
-  <a href="wtt.html"
-     class="relative w-full aspect-[6/1.2] sm:aspect-[6/1.8] 
-          flex items-center bg-gradient-to-b from-pink-900 via-pink-500 to-pink-900 
-          px-6 py-4 rounded-xl text-lg font-bold text-white border border-black shadow-lg 
-          transition duration-200 ease-in-out">
-  <div class="w-9 h-12 sm:w-16 sm:h-20 bg-white rounded shadow-inner flex items-center justify-center overflow-hidden z-10">
-    <img src="https://example.com/icon2.png" alt="Safety Icon" class="w-full h-full object-contain" />
-  </div>
-  <div class="absolute inset-0 flex items-center justify-center">
-    <span class="menu-text text-2xl sm:text-3xl font-bold tracking-wide text-center" style="text-shadow: 1px 1px 2px black;">WTT</span>
-</div>
-</a>
-
-  <!-- Reading Materials -->
-  <a href="reading_materials.html"
-     class="relative w-full aspect-[6/1.2] sm:aspect-[6/1.8] 
-          flex items-center bg-gradient-to-b from-teal-900 via-teal-500 to-teal-900 
-          px-6 py-4 rounded-xl text-lg font-bold text-white border border-black shadow-lg 
-          transition duration-200 ease-in-out">
-  <div class="w-9 h-12 sm:w-16 sm:h-20 bg-white rounded shadow-inner flex items-center justify-center overflow-hidden z-10">
-    <img src="https://example.com/icon2.png" alt="Safety Icon" class="w-full h-full object-contain" />
-  </div>
-  <div class="absolute inset-0 flex items-center justify-center">
-    <span class="menu-text text-2xl sm:text-3xl font-bold tracking-wide text-center" style="text-shadow: 1px 1px 2px black;">Reading Materials</span>
-</div>
-</a>
-
-  <!-- TSD -->
-  <a href="tsd.html"
-     class="relative w-full aspect-[6/1.2] sm:aspect-[6/1.8] 
-          flex items-center bg-gradient-to-b from-cyan-900 via-cyan-500 to-cyan-900 
-          px-6 py-4 rounded-xl text-lg font-bold text-white border border-black shadow-lg 
-          transition duration-200 ease-in-out">
-  <div class="w-9 h-12 sm:w-16 sm:h-20 bg-white rounded shadow-inner flex items-center justify-center overflow-hidden z-10">
-    <img src="https://example.com/icon2.png" alt="Safety Icon" class="w-full h-full object-contain" />
-  </div>
-  <div class="absolute inset-0 flex items-center justify-center">
-    <span class="menu-text text-2xl sm:text-3xl font-bold tracking-wide text-center" style="text-shadow: 1px 1px 2px black;">TSD</span>
-</div>
-</a>
-  </div>
  
   </main>
 
@@ -725,6 +696,6 @@ window.addEventListener("DOMContentLoaded", () => {
     el.textContent = new Date().getFullYear();
   });
 </script>
-  
+
   </body>
     </html>
