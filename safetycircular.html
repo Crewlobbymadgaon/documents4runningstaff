@@ -84,8 +84,7 @@ select.custom-select-center {
   -moz-appearance: none;
   appearance: none;
 }
-      /* Safety Circular Card – 3D & clickable */
-.shed-card {
+      .shed-card {
   background: linear-gradient(135deg, #ffffff, #f8fafc);
   border-radius: 16px;
   border-left: 6px solid #1d4ed8;
@@ -96,7 +95,6 @@ select.custom-select-center {
     0 10px 22px rgba(0,0,0,.12);
 
   transition: transform .2s ease, box-shadow .2s ease;
-  cursor: pointer;
 }
 
 .shed-card:hover {
@@ -110,6 +108,7 @@ select.custom-select-center {
   font-size: 15px;
   font-weight: 800;
   color: #1e3a8a;
+  letter-spacing: .3px;
 }
 
 .shed-desc {
@@ -119,12 +118,18 @@ select.custom-select-center {
   line-height: 1.35;
 }
 
-/* VIEW text – visual only */
 .shed-btn {
+  background: linear-gradient(to bottom, #1d4ed8, #1e40af);
+  color: white;
+  padding: 6px 14px;
+  border-radius: 10px;
   font-size: 13px;
   font-weight: 700;
-  color: #1d4ed8;
-  pointer-events: none;   /* 🔑 IMPORTANT */
+  box-shadow: 0 6px 14px rgba(29,78,216,.35);
+}
+
+.shed-btn:active {
+  transform: scale(.96);
 }
     </style>
   </head>
