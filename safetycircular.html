@@ -84,6 +84,47 @@ select.custom-select-center {
   -moz-appearance: none;
   appearance: none;
 }
+      /* Safety Circular Card – 3D & clickable */
+.safety-card {
+  background: linear-gradient(135deg, #ffffff, #f8fafc);
+  border-radius: 16px;
+  border-left: 6px solid #2563eb;
+  padding: 14px 16px;
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.8),
+    0 10px 22px rgba(0,0,0,.12);
+
+  transition: transform .2s ease, box-shadow .2s ease;
+  cursor: pointer;
+}
+
+.safety-card:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.8),
+    0 18px 36px rgba(0,0,0,.18);
+}
+
+.safety-title {
+  font-size: 15px;
+  font-weight: 800;
+  color: #1e3a8a;
+}
+
+.safety-desc {
+  font-size: 14px;
+  color: #374151;
+  margin-top: 4px;
+  line-height: 1.35;
+}
+
+.safety-view {
+  font-size: 13px;
+  font-weight: 700;
+  color: #1d4ed8;
+  pointer-events: none; /* important */
+}
     </style>
   </head>
 <body class="bg-gray-50 text-gray-800 min-h-screen flex flex-col">
@@ -244,41 +285,35 @@ async function loadSafetyCirculars(year) {
 
 
       const card = document.createElement("div");
-     
- card.className =
-  "bg-white rounded-xl p-4 border-2 border-blue-300 shadow-md";
+card.className = "shed-card cursor-pointer";
+
+// ✅ ENTIRE CARD CLICKABLE
+card.onclick = () => openSafetyCircular(data.filePath);
 
 card.innerHTML = `
-<div class="flex items-start justify-between gap-3">
+  <div class="flex items-start justify-between gap-3">
 
-  <!-- LEFT CONTENT -->
-  <div class="flex-1 min-w-0">
-    <div class="text-[15px] font-extrabold text-blue-900 leading-tight">
-      Safety Circular ${circularNo}
+    <!-- LEFT -->
+    <div class="flex-1 min-w-0">
+      <div class="shed-title">
+        📄 Safety Circular ${circularNo}
+      </div>
+
+      <div class="shed-desc line-clamp-2">
+        ${data.title || data.description || ""}
+      </div>
     </div>
 
-    <div class="text-[14px] text-gray-700 mt-1 leading-snug line-clamp-2">
-      ${data.title || data.description || ""}
+    <!-- RIGHT (VISUAL ONLY, NO CLICK) -->
+    <div class="shed-btn shrink-0 self-end pointer-events-none">
+      View →
     </div>
+
   </div>
-
-  <!-- RIGHT BUTTON -->
-  <button
-    onclick="openSafetyCircular('${data.filePath}')"
-    class="shrink-0 self-end
-           bg-blue-700 hover:bg-blue-800 text-white
-           px-4 py-2
-           rounded-md
-           text-[13px] font-bold
-           shadow
-           active:scale-95 transition">
-    View
-  </button>
-
-</div>
 `;
 
-      list.appendChild(card);
+list.appendChild(card);
+
     }
 
   } catch (err) {
