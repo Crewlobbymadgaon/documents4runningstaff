@@ -516,34 +516,36 @@ async function loadLatestCorrectionSlips() {
       if (!latest) continue;
 
       rows.push(`
-        <div class="latest-card-item ${sec.bg} border-l-4 ${sec.border}"
-     onclick="openLatest('${latest.filePath}')">
+      rows.push(`
+  <div class="latest-card-item ${sec.bg} border-l-4 ${sec.border}"
+       onclick="openLatest('${latest.filePath}')">
 
-  <div class="flex justify-between gap-4">
+    <div class="flex justify-between gap-4">
 
-    <div class="flex-1 min-w-0">
-      <div class="text-[15px] font-bold text-gray-900">
-        No ${String(latest.slipNo).padStart(2, "0")}
+      <div class="flex-1 min-w-0">
+        <div class="text-[15px] font-bold text-gray-900">
+          No ${String(latest.slipNo).padStart(2, "0")}
+        </div>
+
+        <div class="text-[14px] text-gray-700 line-clamp-2">
+          ${latest.description || ""}
+        </div>
       </div>
 
-      <div class="text-[14px] text-gray-700 line-clamp-2">
-        ${latest.description || ""}
+      <div class="flex flex-col items-end justify-between shrink-0">
+        <div class="text-[12px] font-semibold px-3 py-1 rounded-full
+                    bg-white/80 border ${sec.border}">
+          ${sec.name}
+        </div>
+
+        <div class="latest-view mt-3">
+          View →
+        </div>
       </div>
+
     </div>
-
-    <div class="flex flex-col items-end justify-between shrink-0">
-      <div class="text-[12px] font-semibold px-3 py-1 rounded-full
-                  bg-white/80 border ${sec.border}">
-        ${sec.name}
-      </div>
-
-      <div class="latest-view mt-3">
-        View →
-      </div>
-    </div>
-
   </div>
-</div>
+`);
     }
 
     if (!rows.length) {
