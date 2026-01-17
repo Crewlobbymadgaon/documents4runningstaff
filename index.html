@@ -111,13 +111,16 @@
     inset 0 1px 0 rgba(255,255,255,.8),
     0 16px 32px rgba(0,0,0,.18);
 }
-
-/* Visual-only view label */
+/* Visual-only outlined View button */
 .latest-view {
   font-size: 13px;
   font-weight: 700;
-  color: #1d4ed8;
-  pointer-events: none;
+  color: #1d4ed8;               /* blue text */
+  border: 2px solid #1d4ed8;    /* blue outline */
+  padding: 4px 12px;
+  border-radius: 9999px;       /* pill shape */
+  background: transparent;     /* NO fill */
+  pointer-events: none;        /* important: card handles click */
 }
 </style>
     
