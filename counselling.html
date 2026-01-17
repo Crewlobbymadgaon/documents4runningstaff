@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes">
+    <title>counselling Topic</title>
+    <link rel="manifest" href="/documents4runningstaff/manifest.json" />
+    <link rel="icon" href="/documents4runningstaff/favicon.ico" />
+    <link rel="apple-touch-icon" href="/documents4runningstaff/icon-192.png" />
+    <meta name="theme-color" content="#1f2937" />
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600&display=swap" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script defer src="main.js"></script>
+   
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
+import {
+  getFirestore,
+  collection,
+  query,
+  where,
+  getDocs,
+  orderBy
+} from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+
+import { getStorage, ref, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-storage.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyD4BfU5OKhKFynJMVC2k4qFEgmeDhLlSIM",
+  authDomain: "doc4runningstaff-d000b.firebaseapp.com",
+  projectId: "doc4runningstaff-d000b",
+  storageBucket: "doc4runningstaff-d000b.firebasestorage.app",
+  messagingSenderId: "34983733068",
+  appId: "1:34983733068:web:bbe8a3d902eecaab8bd1e9"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const storage = getStorage(app);
+
+  // expose globally
+  window.db = db;
+  window.storage = storage;
+  window.query = query;
+  window.where = where;
+  window.orderBy = orderBy;
+  window.getDocs = getDocs;
+  window.collection = collection;
+  window.ref = ref;
+  window.getDownloadURL = getDownloadURL;
+</script>
+
+    <style>
+     :root {
+    --footer-height: 48px;
+  }
+
+  body {
+    padding-bottom: var(--footer-height);
+    overflow-x: hidden;
+  }
+      
+      .font-rajdhani {
+        font-family: 'Rajdhani', sans-serif;
+      }
+      html,body {
+  height: 100%;
+  overscroll-behavior-y: none;
+}
+
+      @keyframes fade-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+      /* Force selected text inside <select> to center in all browsers */
+.custom-select-center {
+  text-align: center;         /* Applies in Chrome */
+  text-align-last: center;    /* Applies in Firefox/Edge/Safari */
+}
+
+/* On iOS and some Android tablets, remove native appearance completely */
+select.custom-select-center {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+.shed-card {
+  background: linear-gradient(135deg, #ffffff, #f8fafc);
+  border-radius: 16px;
+  border-left: 6px solid #1d4ed8;
+  padding: 14px 16px;
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.8),
+    0 10px 22px rgba(0,0,0,.12);
+
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.shed-card:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.8),
+    0 18px 36px rgba(0,0,0,.18);
+}
+
+.shed-title {
+  font-size: 15px;
+  font-weight: 800;
+  color: #1e3a8a;
+  letter-spacing: .3px;
+}
+
+.shed-desc {
+  font-size: 14px;
+  color: #374151;
+  margin-top: 4px;
+  line-height: 1.35;
+}
+
+.shed-btn {
+  color: #1d4ed8;
+  font-size: 12px;
+  font-weight: 700;
+
+  border: 1.5px solid #1d4ed8; /* tight outline */
+  padding: 2px 8px;           /* compact */
+  border-radius: 6px;         /* not pill */
+
+  line-height: 1.2;
+  background: transparent;
+
+  pointer-events: none;       /* card handles click */
+}
+
+.shed-btn:active {
+  transform: scale(.96);
+}
+
+/* Mobile tuning */
+@media (max-width: 640px) {
+  .shed-card {
+    padding: 12px 14px;
+  }
+}
+
+      .shed-card {
+  cursor: pointer;
+}
+
+.shed-card:hover {
+  border-left-color: #1e40af;
+}
+    </style>
+  </head>
+  <body class="bg-gray-50 text-gray-800 min-h-screen flex flex-col">
+
+<header class="sticky top-0 z-50
+  bg-gradient-to-r from-blue-900 via-blue-700 to-blue-900
+  text-white py-3 shadow-md">
+
+
+  <div class="text-center px-4">
+  
+<h1 class="font-rajdhani text-xl sm:text-3xl md:text-4xl leading-tight font-extrabold">
+      Digital Library
+      <span class="text-yellow-300">for</span>
+      Running Staff
+</h1>
+  <!-- Subheading -->
+  <h2 class="font-rajdhani text-4xl sm:text-4xl md:text-5xl font-extrabold mt-2">
+    Counselling Topic
+  </h2>
+      
+    </div>
+
+<!-- Year Selector (center) and Hamburger (right) on same line -->
+<div class="flex items-center justify-between mt-6">
+  
+  <!-- Invisible spacer to balance hamburger button -->
+  <div class="w-12"></div>
+
+<!-- Centered Year Selector with padding compensation -->
+<div class="relative inline-block w-40">
+ <select id="yearSelect" onchange="highlightSelectedYear()"
+    class="appearance-none w-full bg-gradient-to-b from-blue-900 via-blue-500 to-blue-900
+           text-white text-xl font-bold 
+           px-0 py-2 rounded-md border border-blue-950 
+           focus:bg-blue-950 focus:outline-none focus:ring-1 focus:ring-blue-950 shadow 
+           text-center custom-select-center">
+    <option class="bg-white text-blue-900 hover:bg-blue-100 transition duration-150 ease-in-out" value="2024">&nbsp;&nbsp;&nbsp;&nbsp;2024&nbsp;&nbsp;&nbsp;&nbsp;</option>
+    <option class="bg-white text-blue-900 hover:bg-blue-100 transition duration-150 ease-in-out" value="2025">&nbsp;&nbsp;&nbsp;&nbsp;2025&nbsp;&nbsp;&nbsp;&nbsp;</option>
+  </select>
+ 
+<!-- Dropdown arrow -->
+<div class="pointer-events-none absolute inset-y-0 right-3 flex items-center text-white text-sm">
+  ▼
+</div>
+</div>
+  <!-- Hamburger + Dropdown: wrapped in a relative container -->
+<div class="relative">
+  <!-- Hamburger Button (right) -->
+  <button id="hamburgerBtn"
+    class="bg-gradient-to-b from-blue-900 via-blue-500 to-blue-900 
+           hover:from-blue-800 hover:to-blue-950 
+           text-white p-2 rounded-md 
+           border border-blue-950 
+           shadow-lg 
+           focus:outline-none focus:ring-2 focus:ring-blue-900 
+           transition duration-150 ease-in-out"
+    aria-label="Toggle Menu" aria-expanded="false">
+    <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"
+      viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path stroke-linecap="round" stroke-linejoin="round"
+        d="M4 6h16M4 12h16M4 18h16"></path>
+    </svg>
+  </button>
+
+  <!-- Dropdown menu (now correctly aligned below hamburger) -->
+  <div id="dropdownMenu"
+    class="hidden absolute right-0 mt-2 bg-white border border-blue-800 shadow-lg z-50 rounded-md w-52">
+    <a href="index.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Home</a>
+    <a href="so_lobby_selector.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Shed Order</a>
+    <a href="safetycircular.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Safety Circular</a>
+   
+    <a href="othercirculars.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Other Circulars</a>
+    <a href="gsr.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">G&SR</a>
+    <a href="accidentmanual.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Accident Manual</a>
+    <a href="wtt.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">WTT</a>
+    <a href="readingmaterials.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Reading Materials</a>
+    <a href="tsd.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">TSD</a>
+  </div>
+</div>
+</div> <!-- Ends the flex row: justify-between -->
+</header>
+
+    <main class="flex-1 pb-[var(--footer-height)]">
+
+<section class="px-4 mt-8">
+  <div id="shedOrderList" class="grid gap-4 max-w-2xl mx-auto"></div>
+</section>
+
+
+
+
+
+<script>
+  // Toggle Dropdown
+const hamburgerBtn = document.getElementById("hamburgerBtn");
+const dropdownMenu = document.getElementById("dropdownMenu");
+
+hamburgerBtn.addEventListener("click", (e) => {
+  e.stopPropagation(); // Prevent click from bubbling to document
+  dropdownMenu.classList.toggle("hidden");
+
+  const isHidden = dropdownMenu.classList.contains("hidden");
+  hamburgerBtn.setAttribute("aria-expanded", !isHidden);
+});
+
+// Close dropdown when a link inside it is clicked
+dropdownMenu.querySelectorAll("a").forEach(link => {
+  link.addEventListener("click", () => {
+    dropdownMenu.classList.add("hidden");
+    hamburgerBtn.setAttribute("aria-expanded", "false");
+  });
+});
+
+// Close dropdown if clicking outside
+document.addEventListener("click", (e) => {
+  if (
+    !dropdownMenu.classList.contains("hidden") &&
+    !dropdownMenu.contains(e.target) &&
+    !hamburgerBtn.contains(e.target)
+  ) {
+    dropdownMenu.classList.add("hidden");
+    hamburgerBtn.setAttribute("aria-expanded", "false");
+  }
+});
+    document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && !dropdownMenu.classList.contains("hidden")) {
+    dropdownMenu.classList.add("hidden");
+    hamburgerBtn.setAttribute("aria-expanded", "false");
+  }
+});
+ 
+async function loadCounselling(year) {
+  const list = document.getElementById("shedOrderList");
+  list.innerHTML = "<p class='text-center'>Loading...</p>";
+
+  try {
+    // 🔹 Firestore query (NO orderBy here)
+    const q = query(
+      collection(db, "documents"),
+      where("category", "==", "counselling"),
+      
+      where("year", "==", Number(year))
+    );
+
+    const snapshot = await getDocs(q);
+
+    if (snapshot.empty) {
+      list.innerHTML =
+        "<p class='text-center text-red-600 font-semibold'>No Counselling Topic available</p>";
+      return;
+    }
+
+    // 🔹 Client-side sorting (LATEST FIRST)
+    const docs = snapshot.docs
+      .map(doc => doc.data())
+      .sort((a, b) => (b.orderIndex || 0) - (a.orderIndex || 0));
+
+ list.innerHTML = "";
+
+for (const data of docs) {
+  try {
+    const orderNo =
+      data.orderNo ||
+      (data.title?.match(/\d{2}\/\d{4}/)?.[0]) ||
+      "";
+
+    
+
+    const card = document.createElement("div");
+card.className = "shed-card cursor-pointer";
+
+// ✅ ENTIRE CARD CLICKABLE
+card.onclick = () => openCounselling(data.filePath);
+
+card.innerHTML = `
+  <div class="flex items-start justify-between gap-3">
+
+    <!-- LEFT -->
+    <div class="flex-1 min-w-0">
+      <div class="shed-title">
+        📋 Counselling Topic ${orderNo}
+      </div>
+
+      <div class="shed-desc line-clamp-3">
+        ${data.description || ""}
+      </div>
+    </div>
+
+    <!-- RIGHT (VISUAL ONLY) -->
+    <div class="shed-btn shrink-0 self-end pointer-events-none">
+      View
+    </div>
+
+  </div>
+`;
+
+list.appendChild(card);
+
+  } catch (err) {
+    console.error("PDF load failed:", data.filePath, err);
+
+    // Optional: show broken entry instead of hiding
+    const errorCard = document.createElement("div");
+    errorCard.className =
+      "bg-red-50 rounded-xl p-4 border-2 border-red-300";
+
+    errorCard.innerHTML = `
+      <div class="font-bold text-red-700">
+        Shed Order ${data.orderNo || ""}
+      </div>
+      <div class="text-red-600 text-sm">
+        PDF not available / path error
+      </div>
+    `;
+
+    list.appendChild(errorCard);
+  }
+}
+  } catch (err) {
+    console.error("Error loading shed orders:", err);
+    list.innerHTML =
+      "<p class='text-center text-red-600 font-semibold'>Error loading data</p>";
+  }
+}
+async function openCounselling(filePath) {
+  try {
+    const url = await getDownloadURL(ref(window.storage, filePath));
+    window.open(url, "_blank");
+  } catch (err) {
+    alert("Unable to open document");
+    console.error(err);
+  }
+}
+// 🔹 Year selector handler
+function highlightSelectedYear() {
+  const year = document.getElementById("yearSelect").value;
+  loadCounselling(year); // ✅ CORRECT
+}
+
+// 🔹 Initial load
+window.addEventListener("DOMContentLoaded", () => {
+  const yearSelect = document.getElementById("yearSelect");
+  const currentYear = new Date().getFullYear();
+
+  const years = new Set(
+    [...yearSelect.options].map(opt => Number(opt.value))
+  );
+  years.add(currentYear);
+
+  const sortedYears = [...years].sort((a, b) => b - a);
+
+  yearSelect.innerHTML = "";
+  sortedYears.forEach(year => {
+    const opt = document.createElement("option");
+    opt.value = year;
+    opt.textContent = ` ${year} `;
+    opt.className = "bg-white text-blue-900";
+    yearSelect.appendChild(opt);
+  });
+
+  yearSelect.value = String(currentYear);
+  loadCounselling(currentYear);
+});
+
+
+
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/service-worker.js')
+      .then(reg => console.log("Service Worker registered:", reg))
+      .catch(err => console.log("Service Worker registration failed:", err));
+  });
+}
+
+
+  document.addEventListener("keydown", (e) => {
+  // Close dropdown if open
+  if (e.key === "Escape" && !dropdownMenu.classList.contains("hidden")) {
+    dropdownMenu.classList.add("hidden");
+    hamburgerBtn.setAttribute("aria-expanded", "false");
+  }
+
+ 
+});
+
+</script>
+    </main>
+<footer
+  class="fixed bottom-0 left-0 w-full z-40
+         flex items-center justify-center
+         text-xs sm:text-sm
+         text-gray-700
+         bg-white
+         shadow-[0_-2px_8px_rgba(0,0,0,0.08)]
+         h-[var(--footer-height)]">
+© <span class="footer-year ml-1"></span>&nbsp;Combined Crew Lobby · Madgaon. All Rights Reserved
+
+</footer>
+
+<script>
+  document.querySelectorAll(".footer-year").forEach(el => {
+    el.textContent = new Date().getFullYear();
+  });
+</script>
+
+</body>
+</html>
