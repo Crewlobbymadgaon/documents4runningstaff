@@ -287,86 +287,69 @@ document.addEventListener("click", (e) => {
 });
  
 async function loadCounselling(year) {
-const list = document.getElementById("shedOrderList");
-list.innerHTML = "<p class='text-center'>Loading...</p>";
+  const list = document.getElementById("shedOrderList");
+  list.innerHTML = "<p class='text-center'>Loading...</p>";
 
-try {
-// 🔹 Firestore query (NO orderBy here)
-const q = query(
-collection(db, "documents"),
-where("category", "==", "counselling"),
+  try {
+    const q = query(
+      collection(db, "documents"),
+      where("category", "==", "counselling"),
+      where("year", "==", Number(year))
+    );
 
-where("year", "==", Number(year))  
-);  
+    const snapshot = await getDocs(q);
 
-const snapshot = await getDocs(q);  
+    if (snapshot.empty) {
+      list.innerHTML =
+        "<p class='text-center text-red-600 font-semibold'>No Counselling Topic available</p>";
+      return;
+    }
 
-if (snapshot.empty) {  
-  list.innerHTML =  
-    "<p class='text-center text-red-600 font-semibold'>No Counselling Topic available</p>";  
-  return;  
-}  
+    // ✅ latestRank: 1 = latest
+    const docs = snapshot.docs
+      .map(doc => doc.data())
+      .sort((a, b) => (a.latestRank || 999) - (b.latestRank || 999));
 
-// 🔹 Client-side sorting (LATEST FIRST)  
-const docs = snapshot.docs  
-  .map(doc => doc.data())  
-  .sort((a, b) => (b.orderIndex || 0) - (a.orderIndex || 0));
+    list.innerHTML = "";
 
-list.innerHTML = "";
+    for (const data of docs) {
+      const card = document.createElement("div");
+      card.className = "shed-card cursor-pointer";
 
-for (const data of docs) {
-try {
-const orderNo =
-data.orderNo ||
-(data.title?.match(/\d{2}/\d{4}/)?.[0]) ||
-"";
+      // Entire card clickable
+      card.onclick = () => openCounselling(data.filePath);
 
-const card = document.createElement("div");
+      card.innerHTML = `
+        <div class="flex items-start justify-between gap-3">
 
-card.className = "shed-card cursor-pointer";
+          <!-- LEFT -->
+          <div class="flex-1 min-w-0">
+            <div class="shed-title">
+              🧠 ${data.title || "Counselling Topic"}
+            </div>
 
-// ✅ ENTIRE CARD CLICKABLE
-card.onclick = () => openCounselling(data.filePath);
+            <div class="text-[13px] font-semibold text-blue-700 mt-0.5">
+              ${data.monthYear || ""}
+            </div>
 
-card.innerHTML = `
+            <div class="shed-desc line-clamp-3">
+              ${data.description || ""}
+            </div>
+          </div>
 
-  <div class="flex items-start justify-between gap-3">  <!-- LEFT -->  
-<div class="flex-1 min-w-0">  
-  <div class="shed-title">  
-    📋 Counselling Topic ${orderNo}  
-  </div>  
+          <!-- RIGHT -->
+          <div class="shed-btn shrink-0 self-end pointer-events-none">
+            View
+          </div>
 
-  <div class="shed-desc line-clamp-3">  
-    ${data.description || ""}  
-  </div>  
-</div>  
+        </div>
+      `;
 
-<!-- RIGHT (VISUAL ONLY) -->  
-<div class="shed-btn shrink-0 self-end pointer-events-none">  
-  View  
-</div>
+      list.appendChild(card);
+    }
 
-  </div>  
-`;  list.appendChild(card);
-    // Optional: show broken entry instead of hiding
-    const errorCard = document.createElement("div");
-    errorCard.className =
-      "bg-red-50 rounded-xl p-4 border-2 border-red-300";
-
-    errorCard.innerHTML = `
-      <div class="font-bold text-red-700">
-        Shed Order ${data.orderNo || ""}
-      </div>
-      <div class="text-red-600 text-sm">
-        PDF not available / path error
-      </div>
-    `;
-
-    list.appendChild(errorCard);
-  }
-}
   } catch (err) {
-    console.error("Error loading shed orders:", err);
+    console.error("Error loading counselling topics:", err);
     list.innerHTML =
       "<p class='text-center text-red-600 font-semibold'>Error loading data</p>";
   }
