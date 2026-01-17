@@ -515,7 +515,7 @@ async function loadLatestCorrectionSlips() {
   .sort((a, b) => a.latestRank - b.latestRank)[0];
       if (!latest) continue;
 
-      rows.push(`
+      
       rows.push(`
   <div class="latest-card-item ${sec.bg} border-l-4 ${sec.border}"
        onclick="openLatest('${latest.filePath}')">
@@ -539,7 +539,7 @@ async function loadLatestCorrectionSlips() {
         </div>
 
         <div class="latest-view mt-3">
-          View →
+          View
         </div>
       </div>
 
