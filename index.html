@@ -92,7 +92,33 @@
       font-weight: 600; /* Normal professional weight */
     }
   }
-  
+  .latest-card-item {
+  background: linear-gradient(135deg, #ffffff, #f8fafc);
+  border-radius: 14px;
+  padding: 14px 16px;
+  cursor: pointer;
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.8),
+    0 10px 22px rgba(0,0,0,.12);
+
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.latest-card-item:hover {
+  transform: translateY(-3px);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.8),
+    0 16px 32px rgba(0,0,0,.18);
+}
+
+/* Visual-only view label */
+.latest-view {
+  font-size: 13px;
+  font-weight: 700;
+  color: #1d4ed8;
+  pointer-events: none;
+}
 </style>
     
   </head>
@@ -331,43 +357,35 @@ async function loadLatestShedOrder() {
         "";
 
       rows.push(`
-        <div class="${lobby.bg} border-l-4 ${lobby.border}
-                    rounded-lg p-4
-                    flex justify-between gap-4">
+  <div class="latest-card-item ${lobby.bg} border-l-4 ${lobby.border}"
+       onclick="openLatest('${latest.filePath}')">
 
-          <!-- LEFT -->
-          <div class="flex-1 min-w-0">
-            <div class="text-[15px] font-bold text-gray-900 tracking-wide">
-              ${orderNo}
-            </div>
+    <div class="flex justify-between gap-4">
 
-            <div class="text-[14px] text-gray-700 mt-1 leading-snug line-clamp-2">
-              ${latest.description || ""}
-            </div>
-          </div>
-
-          <!-- RIGHT -->
-          <div class="flex flex-col items-end justify-between shrink-0">
-
-            <div class="text-[12px] font-semibold
-                        px-3 py-1 rounded-full
-                        bg-white/80 text-gray-900
-                        border ${lobby.border}">
-              ${lobby.name}
-            </div>
-
-            <button
-              onclick="openLatest('${latest.filePath}')"
-              class="mt-3 bg-blue-700 hover:bg-blue-800
-                     text-white px-4 py-2
-                     rounded-md text-[13px] font-semibold
-                     shadow active:scale-95 transition">
-              View
-            </button>
-
-          </div>
+      <div class="flex-1 min-w-0">
+        <div class="text-[15px] font-bold text-gray-900">
+          ${orderNo}
         </div>
-      `);
+
+        <div class="text-[14px] text-gray-700 line-clamp-2">
+          ${latest.description || ""}
+        </div>
+      </div>
+
+      <div class="flex flex-col items-end justify-between shrink-0">
+        <div class="text-[12px] font-semibold px-3 py-1 rounded-full
+                    bg-white/80 border ${lobby.border}">
+          ${lobby.name}
+        </div>
+
+        <div class="latest-view mt-3">
+          View
+        </div>
+      </div>
+
+    </div>
+  </div>
+`);
     } // ✅ FOR LOOP CLOSED HERE
 
     if (!rows.length) {
@@ -430,47 +448,35 @@ async function loadLatest({ category, containerId, title, color, icon }) {
     const c = colorMap[color];
 
     box.innerHTML = `
-      <!-- OUTER BOX -->
-      <div class="bg-white border border-blue-500
-                  rounded-xl shadow-md p-4">
+  <div class="bg-white border border-blue-500 rounded-xl shadow-md p-4">
 
-        <!-- HEADING -->
-        <h2 class="text-[17px] font-bold text-blue-900 mb-3
-                   flex items-center gap-2">
-          ${icon} ${title}
-        </h2>
+    <h2 class="text-[17px] font-bold text-blue-900 mb-3 flex items-center gap-2">
+      ${icon} ${title}
+    </h2>
 
-        <!-- INNER COLORED ROW -->
-        <div class="${c.bg} border-l-4 ${c.border}
-                    rounded-lg p-3
-                    flex flex-col">
+    <div class="latest-card-item ${c.bg} border-l-4 ${c.border}"
+         onclick="openLatest('${data.filePath}')">
 
-          <!-- CONTENT -->
-          <div>
-            <div class="text-[15px] font-bold text-gray-900 tracking-wide">
-              ${data.circularNo || data.orderNo || data.monthYear || ""}
-            </div>
+      <div class="flex justify-between gap-3">
 
-            <div class="text-[14px] text-gray-700 mt-0.5 leading-snug line-clamp-2">
-              ${data.title || data.description || ""}
-            </div>
+        <div class="flex-1 min-w-0">
+          <div class="text-[15px] font-bold text-gray-900">
+            ${data.circularNo || data.orderNo || ""}
           </div>
 
-          <!-- BUTTON (BOTTOM RIGHT, COMPACT) -->
-          <div class="mt-auto flex justify-end pt-2">
-            <button
-              onclick="openLatest('${data.filePath}')"
-              class="${c.btn}
-                     text-white px-4 py-1.5
-                     rounded-md text-[13px] font-semibold
-                     shadow active:scale-95 transition">
-              View
-            </button>
+          <div class="text-[14px] text-gray-700 line-clamp-2">
+            ${data.title || data.description || ""}
           </div>
-
         </div>
+
+        <div class="latest-view self-end">
+          View
+        </div>
+
       </div>
-    `;
+    </div>
+  </div>
+`;
   } catch (err) {
     console.error("Latest load error:", category, err);
     box.innerHTML = "";
@@ -510,40 +516,34 @@ async function loadLatestCorrectionSlips() {
       if (!latest) continue;
 
       rows.push(`
-        <div class="${sec.bg} border-l-4 ${sec.border}
-                    rounded-lg p-4
-                    flex justify-between gap-4">
+        <div class="latest-card-item ${sec.bg} border-l-4 ${sec.border}"
+     onclick="openLatest('${latest.filePath}')">
 
-          <!-- LEFT CONTENT -->
-          <div class="flex-1 min-w-0">
-            <div class="text-[15px] font-bold text-gray-900 leading-tight">
-              No ${String(latest.slipNo).padStart(2, "0")}
-            </div>
+  <div class="flex justify-between gap-4">
 
-            <div class="text-[14px] text-gray-700 leading-snug line-clamp-2">
-              ${latest.description || latest.title || ""}
-            </div>
-          </div>
+    <div class="flex-1 min-w-0">
+      <div class="text-[15px] font-bold text-gray-900">
+        No ${String(latest.slipNo).padStart(2, "0")}
+      </div>
 
-          <!-- RIGHT COLUMN -->
-          <div class="flex flex-col items-end justify-between shrink-0">
+      <div class="text-[14px] text-gray-700 line-clamp-2">
+        ${latest.description || ""}
+      </div>
+    </div>
 
-            <div class="text-[12px] font-semibold
-                        px-3 py-1 rounded-full
-                        bg-white/80 border ${sec.border}">
-              ${sec.name}
-            </div>
+    <div class="flex flex-col items-end justify-between shrink-0">
+      <div class="text-[12px] font-semibold px-3 py-1 rounded-full
+                  bg-white/80 border ${sec.border}">
+        ${sec.name}
+      </div>
 
-            <button
-              onclick="openLatest('${latest.filePath}')"
-              class="mt-3 bg-blue-700 hover:bg-blue-800
-                     text-white px-4 py-2 rounded-md
-                     text-[13px] font-semibold shadow">
-              View
-            </button>
-          </div>
-        </div>
-      `);
+      <div class="latest-view mt-3">
+        View →
+      </div>
+    </div>
+
+  </div>
+</div>
     }
 
     if (!rows.length) {
