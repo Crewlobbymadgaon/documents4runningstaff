@@ -1,141 +1,18 @@
 <!DOCTYPE html>
 <html lang="en" class="h-full">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>G&SR – Digital Library</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WTT</title>
 
-<link rel="icon" href="/documents4runningstaff/favicon.ico" />
-<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600&display=swap" rel="stylesheet" />
-<script src="https://cdn.tailwindcss.com"></script>
+  <link rel="manifest" href="/documents4runningstaff/manifest.json" />
+  <link rel="icon" href="/documents4runningstaff/favicon.ico" />
+  <meta name="theme-color" content="#1f2937" />
 
-<style>
-body { font-family: 'Rajdhani', sans-serif; }
-</style>
-</head>
-
-<body class="bg-gray-50 text-gray-800 h-full">
-
-<!-- HEADER -->
- <header class="bg-gradient-to-r from-blue-900 via-blue-700 to-blue-900 text-white py-3 shadow-md">
- <div class="text-center px-4">
- <h1 class="font-rajdhani text-xl sm:text-3xl md:text-4xl leading-tight font-extrabold">
-      Digital Library
-      <span class="text-yellow-300">for</span>
-      Running Staff
-</h1>
-  <div class="text-center">
-    <h2 class="font-rajdhani text-4xl sm:text-5xl md:text-6xl font-extrabold mt-2">
-    G&SR
-  </h2>
-    <p class="text-sm ">General & Subsidiary Rules of the Konkan Railway</p>
-  </div>
-
-  
-<div class="flex items-center justify-between mt-6">
-  
-  <!-- Invisible spacer to balance hamburger button -->
-  <div class="w-12"></div>
-<div class="px-4 sm:px-6 md:px-8">
-
-  <div class="max-w-7xl mx-auto text-center">
-    <div class="flex justify-center gap-3 py-2 sm:py-3">
-
-      <!-- Home Button -->
-      <button onclick="window.location.href='/documents4runningstaff/index.html'"
-              title="Go to Home"
-              class="flex items-center gap-2 
-                     text-xs sm:text-sm font-bold text-white 
-                     bg-gradient-to-b from-blue-900 via-blue-500 to-blue-900 
-                     hover:scale-105 transform transition duration-200 
-                     px-3 py-1.5 sm:px-4 sm:py-2 
-                     rounded-md border border-blue-950 shadow-lg 
-                     focus:outline-none">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="white" viewBox="0 0 24 24"
-             class="w-4 h-4 sm:w-5 sm:h-5">
-          <path d="M3 9.75L12 3l9 6.75v9.75A1.5 1.5 0 0 1 19.5 21h-3.75V13.5h-7.5V21H4.5A1.5 1.5 0 0 1 3 19.5V9.75Z" />
-        </svg>
-        <span>Home</span>
-      </button>
-
-    </div>
-  </div>
-</div>
-
-
-    <!-- Hamburger -->
-    <!-- Hamburger + Dropdown: wrapped in a relative container -->
-<div class="relative">
-  <!-- Hamburger Button (right) -->
-  <button id="hamburgerBtn"
-    class="bg-gradient-to-b from-blue-900 via-blue-500 to-blue-900 
-           hover:from-blue-800 hover:to-blue-950 
-           text-white p-2 rounded-md 
-           border border-blue-950 
-           shadow-lg 
-           focus:outline-none focus:ring-2 focus:ring-blue-900 
-           transition duration-150 ease-in-out"
-    aria-label="Toggle Menu" aria-expanded="false">
-    <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"
-      viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-      <path stroke-linecap="round" stroke-linejoin="round"
-        d="M4 6h16M4 12h16M4 18h16"></path>
-    </svg>
-  </button>
-
-  </div>
-</header>
-
-<!-- DROPDOWN MENU -->
-<div id="dropdownMenu"
-  class="hidden absolute right-4 mt-2 
-         bg-white border border-blue-900 
-         shadow-lg z-50 rounded-md w-56">
-
-
-  <a href="index.html"
-   class="block px-4 py-2 text-blue-900 hover:bg-blue-100 font-semibold">
-   Home
-</a>
-
-  <a href="so_lobby_selector.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100 font-semibold">Shed Order</a>
-  <a href="safetycircular.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100 font-semibold">Safety Circular</a>
-  <a href="counselling.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100 font-semibold">Counselling Topics</a>
-  <a href="othercirculars.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100 font-semibold">Other Circulars</a>
-  <a href="gsr.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100 font-semibold">G&SR</a>
-  <a href="accidentmanual.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100 font-semibold">Accident Manual</a>
-  <a href="wtt.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100 font-semibold">WTT</a>
-</div>
-
-<!-- CONTENT -->
-<div class="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-xl mx-auto mt-12 px-4">
-
-  <button onclick="openGSR('english')"
-  class="bg-gradient-to-b from-blue-900 via-blue-700 to-blue-900
-         hover:from-blue-800 hover:to-blue-950
-         text-white py-6 rounded-xl text-xl font-bold 
-         border border-blue-950 shadow-lg
-         transition duration-200 ease-in-out">
-  📘 G&SR – English
-</button>
-
-
-  <button onclick="openGSR('hindi')"
-  class="bg-gradient-to-b from-blue-900 via-blue-700 to-blue-900
-         hover:from-blue-800 hover:to-blue-950
-         text-white py-6 rounded-xl text-xl font-bold 
-         border border-blue-950 shadow-lg
-         transition duration-200 ease-in-out">
-  📕 G&SR – Hindi
-</button>
-
-
-</div>
-
-<!-- FIREBASE -->
-<script type="module">
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
-import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
 import { getStorage, ref, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-storage.js";
 
 const firebaseConfig = {
@@ -148,42 +25,198 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
 const storage = getStorage(app);
 
-/* Open G&SR directly */
-window.openGSR = async (language) => {
-  const q = query(
-    collection(db, "documents"),
-    where("category", "==", "gsr"),
-    where("type", "==", "main"),
-    where("language", "==", language)
-  );
-
-  const snap = await getDocs(q);
-
-  if (snap.empty) {
-    alert("Document not found");
-    return;
-  }
-
-  const data = snap.docs[0].data();
-  const url = await getDownloadURL(ref(storage, data.filePath));
-  window.open(url, "_blank");
-};
+// expose globally
+window.storage = storage;
+window.ref = ref;
+window.getDownloadURL = getDownloadURL;
 </script>
 
-<!-- MENU SCRIPT -->
+
+  <style>
+    .font-rajdhani { font-family: 'Rajdhani', sans-serif; }
+
+    :root { --footer-height: 48px; }
+    body { padding-bottom: var(--footer-height); }
+
+    .lobby-card {
+      position: relative;
+      height: 96px;
+      background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%);
+      border-radius: 18px;
+      box-shadow:
+        0 2px 0 rgba(255,255,255,0.9) inset,
+        0 12px 20px rgba(0,0,0,0.12),
+        0 24px 48px rgba(0,0,0,0.18);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform .25s ease, box-shadow .25s ease;
+      cursor: pointer;
+      overflow: hidden;
+    }
+
+    .lobby-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 5px;
+      width: 100%;
+      background: var(--accent);
+    }
+
+    .lobby-card:hover {
+      transform: translateY(-8px);
+      box-shadow:
+        0 2px 0 rgba(255,255,255,0.9) inset,
+        0 20px 36px rgba(0,0,0,0.18),
+        0 40px 70px rgba(0,0,0,0.28);
+    }
+
+    .lobby-title {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: .5px;
+      color: #0f172a;
+    }
+  </style>
+</head>
+
+<body class="bg-gray-50 text-gray-800">
+
+<!-- HEADER -->
+<header class="sticky top-0 z-50 relative
+  bg-gradient-to-r from-blue-900 via-blue-700 to-blue-900
+  text-white py-3 shadow-md">
+
+
+
+  <div class="flex items-center justify-between px-4">
+
+  <!-- LEFT spacer (keeps title centered visually) -->
+  <div class="w-10"></div>
+
+  <!-- CENTER TITLE -->
+  <div class="text-center flex-1">
+    <h1 class="font-rajdhani text-xl sm:text-3xl md:text-4xl leading-tight font-extrabold">
+      Digital Library
+      <span class="text-yellow-300">for</span>
+      Running Staff
+    </h1>
+    <h2 class="font-rajdhani text-4xl sm:text-4xl md:text-5xl font-extrabold mt-2">
+      G&SR
+    </h2>
+    <p class="text-sm ">General & Subsidiary Rules of the Konkan Railway</p>
+  </div>
+
+  <!-- RIGHT: HAMBURGER -->
+  <div class="absolute bottom-3 right-4">
+    <button id="hamburgerBtn"
+      class="bg-gradient-to-b from-blue-900 via-blue-500 to-blue-900 
+             hover:from-blue-800 hover:to-blue-950 
+             text-white p-2 rounded-md 
+             border border-blue-950 
+             shadow-lg 
+             focus:outline-none focus:ring-2 focus:ring-blue-900 
+             transition duration-150 ease-in-out"
+      aria-label="Toggle Menu" aria-expanded="false">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"
+        viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round"
+          d="M4 6h16M4 12h16M4 18h16"></path>
+      </svg>
+    </button>
+
+    <!-- Dropdown -->
+    <div id="dropdownMenu"
+      class="hidden absolute right-0 mt-2 bg-white border border-blue-800 shadow-lg z-50 rounded-md w-52">
+      <a href="index.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Home</a>
+      <a href="so_lobby_selector.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Shed Order</a>
+      <a href="safetycircular.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Safety Circular</a>
+      <a href="counselling.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Counselling Topic</a>
+      <a href="wtt.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">WTT</a>
+      <a href="accidentmanual.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Accident Manual</a>
+      <a href="othercirculars.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Other Circulars</a>
+      <a href="readingmaterials.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Reading Materials</a>
+      <a href="tsd.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">TSD</a>
+    </div>
+  </div>
+
+</div>
+</header>
+
+<!-- CONTENT -->
+
+
+<div class="flex justify-center mt-6 sm:mt-10 lg:mt-16">
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 w-full max-w-3xl px-4">
+
+
+    <!-- WTT PART A -->
+    <div class="lobby-card" style="--accent:#2563eb"
+         onclick="openWTT('documents/G&SR/G&SR_english.pdf')">
+      <div class="lobby-title">📘 G&SR - English</div>
+    </div>
+
+    <!-- WTT PART B -->
+    <div class="lobby-card" style="--accent:#dc2626"
+         onclick="openWTT('documents/G&SR/G&SR_hindi.pdf')">
+      <div class="lobby-title">📕 G&SR - Hindi</div>
+    </div>
+
+  </div>
+</div>
+
+<footer
+  class="fixed bottom-0 left-0 w-full z-40
+         flex items-center justify-center
+         text-xs sm:text-sm
+         text-gray-700
+         bg-white
+         shadow-[0_-2px_8px_rgba(0,0,0,0.08)]
+         h-[var(--footer-height)]">
+© <span class="footer-year ml-1"></span>&nbsp;Combined Crew Lobby · Madgaon. All Rights Reserved
+
+</footer>
+
 <script>
-const hamburgerBtn = document.getElementById("hamburgerBtn");
-const dropdownMenu = document.getElementById("dropdownMenu");
+  document.querySelectorAll(".footer-year").forEach(el => {
+    el.textContent = new Date().getFullYear();
+  });
+</script>
 
-hamburgerBtn.onclick = () => {
-  dropdownMenu.classList.toggle("hidden");
-};
+<script>
+  
 
-document.addEventListener("click", (e) => {
-  if (!hamburgerBtn.contains(e.target) && !dropdownMenu.contains(e.target)) {
+ async function openWTT(filePath) {
+  try {
+    const url = await getDownloadURL(ref(window.storage, filePath));
+    window.open(url, "_blank");
+  } catch (err) {
+    alert("Unable to open WTT document");
+    console.error(err);
+  }
+}
+
+  const hamburgerBtn = document.getElementById("hamburgerBtn");
+  const dropdownMenu = document.getElementById("dropdownMenu");
+
+  hamburgerBtn.addEventListener("click", e => {
+    e.stopPropagation();
+    dropdownMenu.classList.toggle("hidden");
+  });
+
+  document.addEventListener("click", e => {
+    if (!dropdownMenu.contains(e.target) && !hamburgerBtn.contains(e.target)) {
+      dropdownMenu.classList.add("hidden");
+    }
+  });
+  
+  document.addEventListener("keydown", e => {
+  if (e.key === "Escape") {
     dropdownMenu.classList.add("hidden");
   }
 });
