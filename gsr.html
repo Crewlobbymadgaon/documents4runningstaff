@@ -197,25 +197,39 @@ window.getDownloadURL = getDownloadURL;
   }
 }
 
+  
+  
+  
   const hamburgerBtn = document.getElementById("hamburgerBtn");
   const dropdownMenu = document.getElementById("dropdownMenu");
 
+  // Toggle menu
   hamburgerBtn.addEventListener("click", e => {
     e.stopPropagation();
     dropdownMenu.classList.toggle("hidden");
   });
 
+  // Close on outside click
   document.addEventListener("click", e => {
     if (!dropdownMenu.contains(e.target) && !hamburgerBtn.contains(e.target)) {
       dropdownMenu.classList.add("hidden");
     }
   });
-  
+
+  // ✅ CLOSE MENU WHEN ANY MENU ITEM IS CLICKED
+  dropdownMenu.querySelectorAll("a").forEach(link => {
+    link.addEventListener("click", () => {
+      dropdownMenu.classList.add("hidden");
+    });
+  });
+
+  // Close on Escape
   document.addEventListener("keydown", e => {
-  if (e.key === "Escape") {
-    dropdownMenu.classList.add("hidden");
-  }
-});
+    if (e.key === "Escape") {
+      dropdownMenu.classList.add("hidden");
+    }
+  });
+
 </script>
 
 </body>
