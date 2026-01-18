@@ -30,7 +30,7 @@ const firebaseConfig = {
   apiKey: "AIzaSyD4BfU5OKhKFynJMVC2k4qFEgmeDhLlSIM",
   authDomain: "doc4runningstaff-d000b.firebaseapp.com",
   projectId: "doc4runningstaff-d000b",
-  storageBucket: "doc4runningstaff-d000b.firebasestorage.app",
+  storageBucket: "doc4runningstaff-d000b.appspot.com",
   messagingSenderId: "34983733068",
   appId: "1:34983733068:web:bbe8a3d902eecaab8bd1e9"
 };
@@ -361,29 +361,7 @@ async function loadCounseltopic(year) {
   }
 }
 
-    // Optional: show broken entry instead of hiding
-    const errorCard = document.createElement("div");
-    errorCard.className =
-      "bg-red-50 rounded-xl p-4 border-2 border-red-300";
-
-    errorCard.innerHTML = `
-      <div class="font-bold text-red-700">
-        Counselling Topic ${data.orderNo || ""}
-      </div>
-      <div class="text-red-600 text-sm">
-        PDF not available / path error
-      </div>
-    `;
-
-    list.appendChild(errorCard);
-  }
-}
-  } catch (err) {
-    console.error("Error loading Counselling Topic:", err);
-    list.innerHTML =
-      "<p class='text-center text-red-600 font-semibold'>Error loading data</p>";
-  }
-}
+   
 async function openCounselling(filePath) {
   try {
     const url = await getDownloadURL(ref(window.storage, filePath));
