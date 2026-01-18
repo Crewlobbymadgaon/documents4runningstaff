@@ -11,6 +11,28 @@
 
   <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
+  <script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
+import { getStorage, ref, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-storage.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyD4BfU5OKhKFynJMVC2k4qFEgmeDhLlSIM",
+  authDomain: "doc4runningstaff-d000b.firebaseapp.com",
+  projectId: "doc4runningstaff-d000b",
+  storageBucket: "doc4runningstaff-d000b.appspot.com",
+  messagingSenderId: "34983733068",
+  appId: "1:34983733068:web:bbe8a3d902eecaab8bd1e9"
+};
+
+const app = initializeApp(firebaseConfig);
+const storage = getStorage(app);
+
+// expose globally
+window.storage = storage;
+window.ref = ref;
+window.getDownloadURL = getDownloadURL;
+</script>
+
 
   <style>
     .font-rajdhani { font-family: 'Rajdhani', sans-serif; }
@@ -134,13 +156,13 @@
 
     <!-- WTT PART A -->
     <div class="lobby-card" style="--accent:#2563eb"
-         onclick="openWTT('documents/wtt/Part A.pdf')">
+         onclick="openWTT('documents/wtt/part_a.pdf')">
       <div class="lobby-title">📘 WTT – Part A</div>
     </div>
 
     <!-- WTT PART B -->
     <div class="lobby-card" style="--accent:#dc2626"
-         onclick="openWTT('documents/wtt/wtt_part_b.pdf')">
+         onclick="openWTT('documents/wtt/part_b.pdf')">
       <div class="lobby-title">📕 WTT – Part B</div>
     </div>
 
@@ -168,9 +190,15 @@
 <script>
   
 
-  function openWTT(path) {
-    window.open(path, "_blank");
+ async function openWTT(filePath) {
+  try {
+    const url = await getDownloadURL(ref(window.storage, filePath));
+    window.open(url, "_blank");
+  } catch (err) {
+    alert("Unable to open WTT document");
+    console.error(err);
   }
+}
 
   const hamburgerBtn = document.getElementById("hamburgerBtn");
   const dropdownMenu = document.getElementById("dropdownMenu");
