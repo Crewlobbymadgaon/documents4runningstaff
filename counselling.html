@@ -285,6 +285,22 @@ document.addEventListener("click", (e) => {
   }
 });
  
+  function toRoman(num) {
+  const romans = [
+    ["M",1000],["CM",900],["D",500],["CD",400],
+    ["C",100],["XC",90],["L",50],["XL",40],
+    ["X",10],["IX",9],["V",5],["IV",4],["I",1]
+  ];
+  let result = "";
+  for (const [r, v] of romans) {
+    while (num >= v) {
+      result += r;
+      num -= v;
+    }
+  }
+  return result;
+}
+
 async function loadCounseltopic(year) {
   const list = document.getElementById("counsellingTopicList");
   list.innerHTML = "<p class='text-center'>Loading...</p>";
@@ -329,39 +345,41 @@ async function loadCounseltopic(year) {
 
     list.innerHTML = "";
 
-    for (const data of docs) {
-      const card = document.createElement("div");
-      card.className = "shed-card cursor-pointer";
-      card.onclick = () => openCounselling(data.filePath);
+    const monthCount = {}; // keeps count per monthYear
 
-      card.innerHTML = `
-  <div class="flex items-start justify-between gap-3">
-    
-    <!-- LEFT -->
-    <div class="flex-1 min-w-0">
-      
-      <!-- HEADING -->
-      <div class="shed-title">
-  🧠 ${data.monthYear}
-</div>
+for (const data of docs) {
+  const month = data.monthYear;
 
+  // increment count for this month
+  monthCount[month] = (monthCount[month] || 0) + 1;
 
-      <!-- DESCRIPTION -->
-      <div class="shed-desc line-clamp-3">
-        ${data.description || ""}
+  const roman = toRoman(monthCount[month]);
+
+  const card = document.createElement("div");
+  card.className = "shed-card cursor-pointer";
+  card.onclick = () => openCounselling(data.filePath);
+
+  card.innerHTML = `
+    <div class="flex items-start justify-between gap-3">
+      <div class="flex-1 min-w-0">
+        <div class="shed-title">
+          🧠 ${month} (${roman})
+        </div>
+        <div class="shed-desc line-clamp-3">
+          ${data.description || ""}
+        </div>
+      </div>
+      <div class="shed-btn shrink-0 self-end pointer-events-none">
+        View
       </div>
     </div>
+  `;
 
-    <!-- RIGHT -->
-    <div class="shed-btn shrink-0 self-end pointer-events-none">
-      View
-    </div>
+  list.appendChild(card);
+}
 
-  </div>
-`;
 
-      list.appendChild(card);
-    }
+    
 
   } catch (err) {
     console.error("Error loading Counselling Topic:", err);
