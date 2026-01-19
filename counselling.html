@@ -88,7 +88,6 @@ select.custom-select-center {
 }
 
 .shed-card {
-  position: relative; 
   background: linear-gradient(135deg, #ffffff, #f8fafc);
   border-radius: 16px;
   border-left: 6px solid #1d4ed8;
@@ -98,20 +97,7 @@ select.custom-select-center {
     inset 0 1px 0 rgba(255,255,255,.8),
     0 10px 22px rgba(0,0,0,.12);
 
-  transition:
-  transform .12s cubic-bezier(.4,0,.2,1),
-  box-shadow .12s cubic-bezier(.4,0,.2,1);
-  
-  -webkit-tap-highlight-color: transparent;
-  touch-action: manipulation;
-  will-change: transform, box-shadow;
-  
-}
-      .shed-card.is-pressed {
-  transform: scale(0.95) translateY(2px);
-  box-shadow:
-    inset 0 3px 8px rgba(0,0,0,0.25),
-    0 6px 14px rgba(0,0,0,0.28);
+  transition: transform .2s ease, box-shadow .2s ease;
 }
 
 .shed-card:hover {
@@ -120,30 +106,6 @@ select.custom-select-center {
     inset 0 1px 0 rgba(255,255,255,.8),
     0 18px 36px rgba(0,0,0,.18);
 }
-
-      /* Touch glow overlay */
-.shed-card::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background: radial-gradient(
-    circle at center,
-    rgba(29,78,216,0.25) 0%,
-    rgba(29,78,216,0.15) 40%,
-    transparent 65%
-  );
-  opacity: 0;
-  transition: opacity .12s ease;
-  pointer-events: none;
-}
-      /* REMOVE this completely */
-/* .shed-card:active::after { opacity: 1; } */
-
-.shed-card.is-pressed::after {
-  opacity: 1;
-}
-
 
 .shed-title {
   font-size: 15px;
@@ -192,15 +154,6 @@ select.custom-select-center {
 .shed-card:hover {
   border-left-color: #1e40af;
 }
-      @media (hover: hover) and (pointer: fine) {
-  .shed-card:hover {
-    transform: translateY(-4px);
-    box-shadow:
-      inset 0 1px 0 rgba(255,255,255,.8),
-      0 18px 36px rgba(0,0,0,.18);
-    border-left-color: #1e40af;
-  }
-      }
     </style>
   </head>
   <body class="bg-gray-50 text-gray-800 min-h-screen flex flex-col">
@@ -353,6 +306,7 @@ async function loadCounseltopic(year) {
   list.innerHTML = "<p class='text-center'>Loading...</p>";
 
   try {
+    // 🔹 Fetch ALL counselling docs first
     const q = query(
       collection(db, "documents"),
       where("category", "==", "counselling")
@@ -366,6 +320,7 @@ async function loadCounseltopic(year) {
       return;
     }
 
+    // 🔹 Filter by year from monthYear (Jan-2026 → 2026)
     const docs = snapshot.docs
       .map(d => d.data())
       .filter(d => d.monthYear?.endsWith(`-${year}`))
@@ -375,12 +330,14 @@ async function loadCounseltopic(year) {
           May: 5, Jun: 6, Jul: 7, Aug: 8,
           Sep: 9, Oct: 10, Nov: 11, Dec: 12
         };
+
         const [ma] = a.monthYear.split("-");
         const [mb] = b.monthYear.split("-");
+
         return (monthMap[mb] || 0) - (monthMap[ma] || 0);
       });
 
-    if (!docs.length) {
+    if (docs.length === 0) {
       list.innerHTML =
         "<p class='text-center text-red-600 font-semibold'>No Counselling Topic available</p>";
       return;
@@ -388,66 +345,50 @@ async function loadCounseltopic(year) {
 
     list.innerHTML = "";
 
-    /* Count per month */
-    const monthTotals = {};
-    docs.forEach(d => {
-      monthTotals[d.monthYear] = (monthTotals[d.monthYear] || 0) + 1;
-    });
+    // total topics per month
+const monthTotals = {};
+docs.forEach(d => {
+  monthTotals[d.monthYear] = (monthTotals[d.monthYear] || 0) + 1;
+});
 
-    const monthIndex = {};
 
-    for (const data of docs) {
-      const month = data.monthYear;
-      monthIndex[month] = (monthIndex[month] || 0) + 1;
+    const monthIndex = {}; // running index per month
 
-      const suffix =
-        monthTotals[month] > 1
-          ? ` (${toRoman(monthIndex[month])})`
-          : "";
+for (const data of docs) {
+  const month = data.monthYear;
 
-      const card = document.createElement("div");
-      card.className = "shed-card cursor-pointer";
+  // running index
+  monthIndex[month] = (monthIndex[month] || 0) + 1;
 
-      /* PRESS FEEDBACK */
-      card.addEventListener("pointerdown", () => {
-        card.classList.add("is-pressed");
-      });
+  // show (I), (II) only if more than one topic exists
+  const suffix =
+    monthTotals[month] > 1
+      ? ` (${toRoman(monthIndex[month])})`
+      : "";
 
-      card.addEventListener("pointerup", () => {
-        card.classList.remove("is-pressed");
-      });
+  const card = document.createElement("div");
+  card.className = "shed-card cursor-pointer";
+  card.onclick = () => openCounselling(data.filePath);
 
-      card.addEventListener("pointercancel", () => {
-        card.classList.remove("is-pressed");
-      });
-
-      /* SINGLE CLICK */
-      card.addEventListener("click", async () => {
-        card.classList.remove("is-pressed");
-        card.style.transform = "none";
-        card.style.boxShadow = "";
-        card.blur();
-
-        await new Promise(r => requestAnimationFrame(r));
-        openCounselling(data.filePath);
-      });
-
-      card.innerHTML = `
-        <div class="flex items-start justify-between gap-3">
-          <div class="flex-1 min-w-0">
-            <div class="shed-title">🧠 ${month}${suffix}</div>
-            <div class="shed-desc line-clamp-3">
-              ${data.description || ""}
-            </div>
-          </div>
-          <div class="shed-btn shrink-0 self-end pointer-events-none">
-            View
-          </div>
+  card.innerHTML = `
+    <div class="flex items-start justify-between gap-3">
+      <div class="flex-1 min-w-0">
+        <div class="shed-title">
+          🧠 ${month}${suffix}
         </div>
-      `;
+        <div class="shed-desc line-clamp-3">
+          ${data.description || ""}
+        </div>
+      </div>
+      <div class="shed-btn shrink-0 self-end pointer-events-none">
+        View
+      </div>
+    </div>
+  `;
 
-      list.appendChild(card);
-    }
+  list.appendChild(card);
+}
+    
 
   } catch (err) {
     console.error("Error loading Counselling Topic:", err);
@@ -456,8 +397,7 @@ async function loadCounseltopic(year) {
   }
 }
 
-
-
+   
 async function openCounselling(filePath) {
   try {
     const url = await getDownloadURL(ref(window.storage, filePath));
@@ -512,58 +452,6 @@ if ('serviceWorker' in navigator) {
  
 });
 
-  window.addEventListener("pageshow", () => {
-  document.querySelectorAll(".shed-card").forEach(card => {
-    card.classList.remove("is-pressed");
-    card.style.transform = "none";
-    card.style.boxShadow = "";
-  });
-});
-
-  function attachShedCard(card, filePath) {
-
-  card.addEventListener("pointerdown", () => {
-    card.classList.add("is-pressed");
-  });
-
-  card.addEventListener("pointerup", () => {
-    card.classList.remove("is-pressed");
-  });
-
-  card.addEventListener("pointercancel", () => {
-    card.classList.remove("is-pressed");
-  });
-
-  card.addEventListener("click", async () => {
-    // FORCE shadow removal BEFORE opening PDF
-    card.classList.remove("is-pressed");
-    card.blur();
-
-    await new Promise(r => requestAnimationFrame(r));
-    openCounselling(filePath);
-  });
-}
-  function resetAllCards() {
-  document.querySelectorAll(".shed-card").forEach(card => {
-    card.classList.remove("is-pressed");
-    card.blur();
-    card.style.transform = "none";
-    card.style.boxShadow = "";
-  });
-}
-
-/* Back from PDF / tab restore */
-window.addEventListener("pageshow", resetAllCards);
-
-/* App/tab resumed */
-document.addEventListener("visibilitychange", () => {
-  if (!document.hidden) resetAllCards();
-});
-
-/* Android safety */
-window.addEventListener("focus", resetAllCards);
-
-
 </script>
     </main>
 <footer
@@ -583,7 +471,6 @@ window.addEventListener("focus", resetAllCards);
     el.textContent = new Date().getFullYear();
   });
 </script>
-
 
 </body>
 </html>
