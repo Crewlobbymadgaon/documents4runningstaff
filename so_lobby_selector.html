@@ -77,13 +77,15 @@
   pointer-events: none;
 }
 
-/* Hover = lift forward */
-.lobby-card:hover {
-  transform: translateY(-8px);
-  box-shadow:
-    0 2px 0 rgba(255,255,255,0.9) inset,
-    0 20px 36px rgba(0,0,0,0.18),
-    0 40px 70px rgba(0,0,0,0.28);
+/* ✅ Enable hover ONLY on real hover devices (desktop/laptop) */
+@media (hover: hover) and (pointer: fine) {
+  .lobby-card:hover {
+    transform: translateY(-8px);
+    box-shadow:
+      0 2px 0 rgba(255,255,255,0.9) inset,
+      0 20px 36px rgba(0,0,0,0.18),
+      0 40px 70px rgba(0,0,0,0.28);
+  }
 }
 
 /* Active = pressed */
