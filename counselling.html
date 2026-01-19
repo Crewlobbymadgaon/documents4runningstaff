@@ -64,10 +64,10 @@ const storage = getStorage(app);
       .font-rajdhani {
         font-family: 'Rajdhani', sans-serif;
       }
-      html, body {
-  height: 100%;
+html, body {
+  height: auto;
+  overflow-y: auto;
   overscroll-behavior-y: contain;
-  scroll-behavior: auto;
 }
 
 body {
@@ -161,7 +161,7 @@ select.custom-select-center {
 }
     </style>
   </head>
-  <body class="bg-gray-50 text-gray-800 min-h-screen flex flex-col">
+  <body class="bg-gray-50 text-gray-800">
 
 <header class="sticky top-0 z-50
   bg-gradient-to-r from-blue-900 via-blue-700 to-blue-900
@@ -241,7 +241,7 @@ select.custom-select-center {
 </div> <!-- Ends the flex row: justify-between -->
 </header>
 
-    <main class="flex-1 pb-[var(--footer-height)]">
+    <main class="pb-[var(--footer-height)]">
 
 <section class="px-4 mt-8">
   <div id="counsellingTopicList" class="grid gap-4 max-w-2xl mx-auto"></div>
