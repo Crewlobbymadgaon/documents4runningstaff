@@ -154,13 +154,36 @@ select.custom-select-center {
 .shed-card:hover {
   border-left-color: #1e40af;
 }
+      /* === STICKY HEADER FIX (MOBILE SAFE) === */
+
+html {
+  height: 100%;
+}
+
+body {
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* iOS + Android sticky stability */
+header {
+  position: -webkit-sticky;
+  top: 0;
+  will-change: transform;
+}
+
+/* Never allow body to be scroll container */
+html, body {
+  overscroll-behavior-y: auto;
+}
     </style>
   </head>
   <body class="bg-gray-50 text-gray-800 min-h-screen flex flex-col">
 
-<header class="sticky top-0 z-50
-  bg-gradient-to-r from-blue-900 via-blue-700 to-blue-900
-  text-white py-3 shadow-md">
+<header
+  class="sticky top-0 z-[9999]
+         bg-gradient-to-r from-blue-900 via-blue-700 to-blue-900
+         text-white shadow-md">
 
 
   <div class="text-center px-4">
