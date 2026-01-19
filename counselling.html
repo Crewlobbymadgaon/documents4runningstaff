@@ -56,23 +56,22 @@ const storage = getStorage(app);
     --footer-height: 48px;
   }
 
-  body {
-    padding-bottom: var(--footer-height);
-    overflow-x: hidden;
-  }
+  html {
+  height: 100%;
+}
+
+body {
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+      html, body {
+  overscroll-behavior-y: auto;
+      }
       
       .font-rajdhani {
         font-family: 'Rajdhani', sans-serif;
       }
-html, body {
-  height: auto;
-  overflow-y: auto;
-  overscroll-behavior-y: contain;
-}
 
-body {
-  overflow-y: auto;
-}
 
       @keyframes fade-in {
   from { opacity: 0; transform: translateY(10px); }
@@ -159,15 +158,20 @@ select.custom-select-center {
 .shed-card:hover {
   border-left-color: #1e40af;
 }
+      header {
+  position: -webkit-sticky;
+  will-change: transform;
+  }
     </style>
   </head>
 
 
 <body class="bg-gray-50 text-gray-800 min-h-screen">
 
-<header class="sticky top-0 z-50
-  bg-gradient-to-r from-blue-900 via-blue-700 to-blue-900
-  text-white shadow-md">
+<header
+  class="sticky top-0 z-[9999]
+         bg-gradient-to-r from-blue-900 via-blue-700 to-blue-900
+         text-white shadow-md">
 
 
   <div class="text-center px-3 sm:px-4">
