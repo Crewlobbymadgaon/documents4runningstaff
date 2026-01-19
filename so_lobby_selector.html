@@ -253,13 +253,34 @@
   });
 
   
+  
+  document.querySelectorAll(".lobby-card").forEach(card => {
+
+    // 🔹 Release immediately after tap
+    card.addEventListener("touchend", () => {
+      card.blur();
+      card.style.transform = "none";
+      card.style.boxShadow = "";
+    });
+
+    // 🔹 Also release if user scrolls instead of navigating
+    card.addEventListener("touchcancel", () => {
+      card.blur();
+      card.style.transform = "none";
+      card.style.boxShadow = "";
+    });
+
+  });
+
+  // 🔹 Safety reset when coming back
   window.addEventListener("pageshow", () => {
     document.querySelectorAll(".lobby-card").forEach(card => {
-      card.style.transition = "transform 0.15s ease, box-shadow 0.15s ease";
+      card.blur();
       card.style.transform = "none";
       card.style.boxShadow = "";
     });
   });
-    </script>
+</script>
+     
 </body>
 </html>
