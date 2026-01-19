@@ -440,7 +440,49 @@ for (const data of docs) {
   }
 }
 
-   
+  
+  function attachShedCardRelease() {
+    document.querySelectorAll(".shed-card").forEach(card => {
+
+      // 🔹 Release immediately after tap
+      card.addEventListener("touchend", () => {
+        card.blur();
+        card.style.transform = "none";
+        card.style.boxShadow = "";
+      });
+
+      // 🔹 If gesture is cancelled (scroll, multi-touch)
+      card.addEventListener("touchcancel", () => {
+        card.blur();
+        card.style.transform = "none";
+        card.style.boxShadow = "";
+      });
+
+      // 🔹 Mouse fallback
+      card.addEventListener("mouseup", () => {
+        card.blur();
+        card.style.transform = "none";
+        card.style.boxShadow = "";
+      });
+    });
+  }
+
+  // 🔹 Call AFTER cards are created
+  const originalLoad = loadCounseltopic;
+  loadCounseltopic = async function (year) {
+    await originalLoad(year);
+    attachShedCardRelease();
+  };
+
+  // 🔹 Safety reset when returning via back button
+  window.addEventListener("pageshow", () => {
+    document.querySelectorAll(".shed-card").forEach(card => {
+      card.blur();
+      card.style.transform = "none";
+      card.style.boxShadow = "";
+    });
+  });
+
 async function openCounselling(filePath) {
   try {
     const url = await getDownloadURL(ref(window.storage, filePath));
