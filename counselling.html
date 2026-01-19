@@ -97,7 +97,14 @@ select.custom-select-center {
     inset 0 1px 0 rgba(255,255,255,.8),
     0 10px 22px rgba(0,0,0,.12);
 
-  transition: transform .2s ease, box-shadow .2s ease;
+  transition:
+  transform .14s cubic-bezier(.4,0,.2,1),
+  box-shadow .14s cubic-bezier(.4,0,.2,1);
+  
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  will-change: transform, box-shadow;
+  
 }
 
 .shed-card:hover {
@@ -106,6 +113,33 @@ select.custom-select-center {
     inset 0 1px 0 rgba(255,255,255,.8),
     0 18px 36px rgba(0,0,0,.18);
 }
+/* 🔥 Mobile / touch press feedback */
+.shed-card:active {
+  transform: scale(0.95) translateY(2px);
+  box-shadow:
+    inset 0 3px 8px rgba(0,0,0,0.25),
+    0 6px 14px rgba(0,0,0,0.28);
+}
+      /* Touch glow overlay */
+.shed-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    circle at center,
+    rgba(29,78,216,0.25) 0%,
+    rgba(29,78,216,0.18) 25%,
+    rgba(29,78,216,0.10) 45%,
+    transparent 65%
+  );
+  opacity: 0;
+  transition: opacity 0.12s ease;
+  pointer-events: none;
+}
+      .shed-card:active::after {
+  opacity: 1;
+      }
 
 .shed-title {
   font-size: 15px;
@@ -154,6 +188,15 @@ select.custom-select-center {
 .shed-card:hover {
   border-left-color: #1e40af;
 }
+      @media (hover: hover) and (pointer: fine) {
+  .shed-card:hover {
+    transform: translateY(-4px);
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.8),
+      0 18px 36px rgba(0,0,0,.18);
+    border-left-color: #1e40af;
+  }
+      }
     </style>
   </head>
   <body class="bg-gray-50 text-gray-800 min-h-screen flex flex-col">
