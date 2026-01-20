@@ -172,35 +172,53 @@ header {
 html, body {
   overscroll-behavior-y: auto;
 }
+.lobby-pill {
+  flex: 1 1 0;
+  min-width: 0;
+  text-align: center;
 
-      .lobby-chip {
-  padding: 4px 8px;
-  border-radius: 4px;
   font-family: 'Rajdhani', sans-serif;
   font-weight: 700;
-  font-size: 12px;
-  color: #1e3a8a;
+  font-size: 11px;
+
+  color: #1d4ed8;                 /* blue */
   background: transparent;
-  border: 1px solid transparent;
-  cursor: pointer;
-  transition: all 0.15s ease;
+
+  padding: 5px 8px;
+  border-radius: 999px;
+  border: 1.5px solid #1d4ed8;
+
   white-space: nowrap;
+  cursor: pointer;
+
+  transition:
+    background-color 0.18s ease,
+    color 0.18s ease,
+    box-shadow 0.18s ease,
+    transform 0.12s ease;
 }
 
-.lobby-chip:hover {
-  background: #1d4ed8;
-  color: white;
+/* ✅ Hover (desktop) */
+@media (hover: hover) {
+  .lobby-pill:hover {
+    background: rgba(29, 78, 216, 0.12);
+    box-shadow: inset 0 0 0 1px #1d4ed8;
+    transform: translateY(-1px);
+  }
 }
 
-.lobby-chip:active {
-  transform: scale(0.95);
+/* ✅ Tap feedback (mobile) */
+.lobby-pill:active {
+  background: rgba(29, 78, 216, 0.18);
+  transform: scale(0.96);
 }
 
-/* Desktop enhancement */
+/* Desktop refinement */
 @media (min-width: 640px) {
-  .lobby-chip {
+  .lobby-pill {
     font-size: 14px;
-    padding: 6px 12px;
+    padding: 6px 16px;
+    flex: initial;
   }
 }
     </style>
@@ -300,42 +318,27 @@ html, body {
   </div>
 </div>
 </div> <!-- Ends the flex row: justify-between -->
-</header>
-    <section class="bg-gray-50">
-  <div class="max-w-xl mx-auto px-3 mt-3">
 
-    <div
-      class="flex items-center gap-2
-             bg-white
-             border border-blue-200
-             rounded-md
-             shadow-sm
-             px-2 py-1
-             overflow-hidden">
+<!-- OTHER LOBBIES : SIMPLE MENU -->
+<section
+  class="bg-blue-50
+         border-t border-blue-200">
+  <div class="max-w-3xl mx-auto px-3">
 
-      <!-- Label -->
-      <span
-        class="text-[11px] sm:text-xs
-               font-semibold
-               text-gray-500
-               uppercase
-               tracking-wide
-               whitespace-nowrap">
-        Select lobby
-      </span>
-
-      <!-- Lobby menu -->
-      <div id="otherLobbies"
-        class="flex gap-1
-               flex-nowrap
-               whitespace-nowrap
-               overflow-hidden">
-      </div>
-
-    </div>
+    <nav id="otherLobbies"
+      class="flex justify-center gap-6
+             text-white
+             text-sm sm:text-base
+             font-semibold
+             py-2
+             whitespace-nowrap
+             overflow-x-auto">
+      <!-- Filled by JS -->
+    </nav>
 
   </div>
 </section>
+</header>
 
     <main class="flex-1 pb-[var(--footer-height)]">
 
@@ -386,41 +389,48 @@ document.addEventListener("click", (e) => {
   }
 });
 
-  const LOBBY_NAME_MAP = {
+const LOBBY_NAME_MAP = {
   MAO: "Madgaon Lobby",
   RN: "Ratnagiri Lobby",
   VEN: "Verna Lobby",
   SL: "Surathkal Lobby"
 };
-  document.addEventListener("DOMContentLoaded", () => {
+
+document.addEventListener("DOMContentLoaded", () => {
 
   const ALL_LOBBIES = ["MAO", "RN", "SL", "VEN"];
 
-  // Get selected lobby from selector page
+  // Get selected lobby
   const selectedLobby =
     localStorage.getItem("selectedLobby") || "MAO";
 
   /* === Show selected lobby below heading === */
   document.getElementById("selectedLobbyTitle").textContent =
-  LOBBY_NAME_MAP[selectedLobby] || selectedLobby;
-  /* === Show other lobbies below header === */
+    LOBBY_NAME_MAP[selectedLobby] || selectedLobby;
+
+  /* === Show other lobbies (FULL NAME, MENU STYLE) === */
   const otherContainer = document.getElementById("otherLobbies");
   otherContainer.innerHTML = "";
 
   ALL_LOBBIES
-    .filter(lobby => lobby !== selectedLobby)
-    .forEach(lobby => {
-      const chip = document.createElement("span");
-      chip.textContent = lobby;
-      chip.className = "lobby-chip cursor-pointer";
-      chip.onclick = () => {
-        localStorage.setItem("selectedLobby", lobby);
+    .filter(code => code !== selectedLobby)
+    .forEach(code => {
+      const item = document.createElement("span");
+
+      // ✅ FULL NAME instead of code
+      item.textContent = LOBBY_NAME_MAP[code];
+
+      // ✅ Menu-style class (not chip-style)
+      item.className = "lobby-pill";
+      item.onclick = () => {
+        localStorage.setItem("selectedLobby", code);
         location.reload();
       };
-      otherContainer.appendChild(chip);
+
+      otherContainer.appendChild(item);
     });
 
-  /* === Make available for Firestore === */
+  /* === Firestore hook === */
   window.currentLobby = selectedLobby.toLowerCase(); // mao, rn, sl, ven
 });
  
