@@ -189,11 +189,16 @@ select.custom-select-center {
 <!-- Centered Year Selector with padding compensation -->
 <div class="relative inline-block w-32 sm:w-40">
  <select id="yearSelect" onchange="highlightSelectedYear()"
-    class="appearance-none w-full bg-gradient-to-b from-blue-900 via-blue-500 to-blue-900
-           text-white text-xl font-bold 
-           px-0 py-2 rounded-md border border-blue-950 
-           focus:bg-blue-950 focus:outline-none focus:ring-1 focus:ring-blue-950 shadow 
-           text-center custom-select-center">
+  class="appearance-none
+         w-32 sm:w-40
+         bg-gradient-to-b from-blue-900 via-blue-500 to-blue-900
+         text-white text-xl font-bold
+         py-2
+         rounded-md
+         border border-blue-950
+         shadow
+         text-center custom-select-center
+         focus:outline-none focus:ring-0">
     <option class="bg-white text-blue-900 hover:bg-blue-100 transition duration-150 ease-in-out" value="2022">&nbsp;&nbsp;&nbsp;&nbsp;2022&nbsp;&nbsp;&nbsp;&nbsp;</option>
     <option class="bg-white text-blue-900 hover:bg-blue-100 transition duration-150 ease-in-out" value="2023">&nbsp;&nbsp;&nbsp;&nbsp;2023&nbsp;&nbsp;&nbsp;&nbsp;</option>
   </select>
