@@ -175,16 +175,21 @@ html, body {
 .lobby-pill {
   flex: 1 1 0;
   min-width: 0;
-  text-align: center;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   font-family: 'Rajdhani', sans-serif;
   font-weight: 700;
   font-size: 11px;
 
+  line-height: 1;   /* 🔑 important */
+
   color: #1d4ed8;
   background: transparent;
 
-  padding: 5px 8px;
+  padding: 6px 10px;
   border-radius: 999px;
   border: 1.5px solid #1d4ed8;
 
@@ -193,13 +198,10 @@ html, body {
 
   user-select: none;
   -webkit-user-select: none;
-  -ms-user-select: none;
   -webkit-tap-highlight-color: transparent;
-  tap-highlight-color: transparent;
 
   transition:
     background-color 0.18s ease,
-    color 0.18s ease,
     box-shadow 0.18s ease,
     transform 0.12s ease;
 }
@@ -332,13 +334,10 @@ html, body {
   <div class="max-w-3xl mx-auto px-3">
 
     <nav id="otherLobbies"
-      class="flex justify-center gap-6
-             text-white
-             text-sm sm:text-base
-             font-semibold
-             py-2
-             whitespace-nowrap
-             overflow-x-auto">
+  class="flex justify-center items-center
+         gap-3 sm:gap-6
+         py-2
+         whitespace-nowrap">
       <!-- Filled by JS -->
     </nav>
 
