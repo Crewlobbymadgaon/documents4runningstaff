@@ -190,24 +190,36 @@
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 w-full max-w-5xl px-4">
 
     <!-- Madgaon -->
-    <a href="shed_order_mao.html" class="lobby-card" style="--accent:#2563eb;">
-      <div class="lobby-title">MADGAON</div>
-    </a>
+<a href="shed_order.html"
+   class="lobby-card"
+   style="--accent:#2563eb;"
+   onclick="setLobby('MAO')">
+  <div class="lobby-title">MADGAON</div>
+</a>
 
     <!-- Ratnagiri -->
-    <a href="shed_order_rn.html" class="lobby-card" style="--accent:#16a34a;">
-      <div class="lobby-title">RATNAGIRI</div>
-    </a>
+    <a href="shed_order.html"
+   class="lobby-card"
+   style="--accent:#16a34a;"
+   onclick="setLobby('RN')">
+  <div class="lobby-title">RATNAGIRI</div>
+</a>
 
     <!-- Verna -->
-    <a href="shed_order_ven.html" class="lobby-card" style="--accent:#d97706;">
-      <div class="lobby-title">VERNA</div>
-    </a>
+    <a href="shed_order.html"
+   class="lobby-card"
+   style="--accent:#d97706;"
+   onclick="setLobby('VEN')">
+  <div class="lobby-title">VERNA</div>
+</a>
 
     <!-- Surathkal -->
-    <a href="shed_order_sl.html" class="lobby-card" style="--accent:#4f46e5;">
-      <div class="lobby-title">SURATKAL</div>
-    </a>
+    <a href="shed_order.html"
+   class="lobby-card"
+   style="--accent:#4f46e5;"
+   onclick="setLobby('SL')">
+  <div class="lobby-title">SURATKAL</div>
+</a>
 
   </div>
 </div>
@@ -234,6 +246,11 @@
       span.classList.remove("scale-110");
     });
   });
+
+    
+function setLobby(code) {
+  localStorage.setItem("selectedLobby", code);
+}
 </script>
 <footer
   class="fixed bottom-0 left-0 w-full z-40
