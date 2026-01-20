@@ -172,7 +172,31 @@ header {
 html, body {
   overscroll-behavior-y: auto;
 }
-      
+
+      .lobby-chip {
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 800;
+  font-size: 18px;
+  color: #1e3a8a;
+  background: #eff6ff;
+  border: 1.5px solid #1d4ed8;
+  letter-spacing: 1px;
+  transition: all .15s ease;
+}
+
+.lobby-chip:hover {
+  background: #1d4ed8;
+  color: white;
+}
+
+@media (max-width: 640px) {
+  .lobby-chip {
+    font-size: 16px;
+    padding: 5px 12px;
+  }
+}
     </style>
   </head>
   <body class="bg-gray-50 text-gray-800 min-h-screen">
@@ -194,8 +218,19 @@ html, body {
   <h2 class="font-rajdhani text-4xl sm:text-4xl md:text-5xl font-extrabold mt-2">
     Shed Order
   </h2>
-      <h3 class="font-rajdhani text-2xl sm:text-2xl md:text-3xl font-extrabold mt-2">Madgaon Lobby
-      </h3>
+    <div class="mt-3 text-center">
+  <span id="selectedLobbyTitle"
+    class="inline-block
+           font-rajdhani font-extrabold
+           text-2xl sm:text-3xl
+           text-blue-900
+           bg-yellow-200/70
+           px-6 py-1
+           rounded-xl
+           shadow-sm">
+  </span>
+    </div>
+    
     </div>
 
 <!-- Year Selector (center) and Hamburger (right) on same line -->
@@ -257,6 +292,17 @@ html, body {
 </div>
 </div> <!-- Ends the flex row: justify-between -->
 </header>
+    <section class="bg-gray-50">
+  <div class="max-w-xl mx-auto px-4 mt-4">
+    <div id="otherLobbies"
+      class="flex justify-center gap-3
+             bg-white rounded-xl
+             border-l-4 border-blue-700
+             shadow-md
+             py-3">
+    </div>
+  </div>
+    </section>
 
     <main class="flex-1 pb-[var(--footer-height)]">
 
@@ -306,6 +352,44 @@ document.addEventListener("click", (e) => {
     hamburgerBtn.setAttribute("aria-expanded", "false");
   }
 });
+
+  const LOBBY_NAME_MAP = {
+  MAO: "Madgaon Lobby",
+  RN: "Ratnagiri Lobby",
+  VEN: "Verna Lobby",
+  SL: "Surathkal Lobby"
+};
+  document.addEventListener("DOMContentLoaded", () => {
+
+  const ALL_LOBBIES = ["MAO", "RN", "SL", "VEN"];
+
+  // Get selected lobby from selector page
+  const selectedLobby =
+    localStorage.getItem("selectedLobby") || "MAO";
+
+  /* === Show selected lobby below heading === */
+  document.getElementById("selectedLobbyTitle").textContent =
+  LOBBY_NAME_MAP[selectedLobby] || selectedLobby;
+  /* === Show other lobbies below header === */
+  const otherContainer = document.getElementById("otherLobbies");
+  otherContainer.innerHTML = "";
+
+  ALL_LOBBIES
+    .filter(lobby => lobby !== selectedLobby)
+    .forEach(lobby => {
+      const chip = document.createElement("span");
+      chip.textContent = lobby;
+      chip.className = "lobby-chip cursor-pointer";
+      chip.onclick = () => {
+        localStorage.setItem("selectedLobby", lobby);
+        location.reload();
+      };
+      otherContainer.appendChild(chip);
+    });
+
+  /* === Make available for Firestore === */
+  window.currentLobby = selectedLobby.toLowerCase(); // mao, rn, sl, ven
+});
  
 async function loadShedOrders(year) {
   const list = document.getElementById("shedOrderList");
@@ -316,7 +400,7 @@ async function loadShedOrders(year) {
     const q = query(
       collection(db, "documents"),
       where("category", "==", "shed_order"),
-      where("lobby", "==", "mao"),
+      where("lobby", "==", window.currentLobby),
       where("year", "==", Number(year))
     );
 
