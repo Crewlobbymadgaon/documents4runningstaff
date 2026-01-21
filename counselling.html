@@ -91,6 +91,8 @@ select.custom-select-center {
   appearance: none;
 }
 
+/* === SHED ORDER / COUNSELLING – UNIFIED CARD === */
+
 .shed-card {
   background: linear-gradient(135deg, #ffffff, #f8fafc);
   border-radius: 16px;
@@ -102,7 +104,6 @@ select.custom-select-center {
     0 10px 22px rgba(0,0,0,.12);
 
   transition: transform .2s ease, box-shadow .2s ease;
-
   cursor: pointer;
 
   user-select: none;
@@ -112,6 +113,15 @@ select.custom-select-center {
   -webkit-tap-highlight-color: transparent;
   tap-highlight-color: transparent;
 }
+
+.shed-card:hover {
+  transform: translateY(-4px);
+  border-left-color: #1e40af;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.8),
+    0 18px 36px rgba(0,0,0,.18);
+}
+
 .shed-card:active {
   transform: scale(0.98);
   box-shadow:
@@ -119,20 +129,7 @@ select.custom-select-center {
     0 6px 14px rgba(0,0,0,.2);
 }
 
-.shed-card:hover {
-  transform: translateY(-4px);
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.8),
-    0 18px 36px rgba(0,0,0,.18);
-}
-
-.shed-card:hover {
-  transform: translateY(-4px);
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.8),
-    0 18px 36px rgba(0,0,0,.18);
-}
-
+/* Title */
 .shed-title {
   font-size: 15px;
   font-weight: 800;
@@ -140,6 +137,7 @@ select.custom-select-center {
   letter-spacing: .3px;
 }
 
+/* Description */
 .shed-desc {
   font-size: 14px;
   color: #374151;
@@ -147,38 +145,25 @@ select.custom-select-center {
   line-height: 1.35;
 }
 
+/* View button (visual only) */
 .shed-btn {
   color: #1d4ed8;
   font-size: 12px;
   font-weight: 700;
 
-  border: 1.5px solid #1d4ed8; /* tight outline */
-  padding: 2px 8px;           /* compact */
-  border-radius: 6px;         /* not pill */
+  border: 1.5px solid #1d4ed8;
+  padding: 2px 8px;
+  border-radius: 6px;
 
-  line-height: 1.2;
   background: transparent;
-
-  pointer-events: none;       /* card handles click */
+  pointer-events: none;
 }
 
-.shed-btn:active {
-  transform: scale(.96);
-}
-
-/* Mobile tuning */
+/* Mobile */
 @media (max-width: 640px) {
   .shed-card {
     padding: 12px 14px;
   }
-}
-
-      .shed-card {
-  cursor: pointer;
-}
-
-.shed-card:hover {
-  border-left-color: #1e40af;
 }
       header {
   position: -webkit-sticky;
