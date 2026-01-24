@@ -92,16 +92,12 @@
       font-weight: 600; /* Normal professional weight */
     }
   }
-  .latest-card-item {
+.latest-card-item {
   background: linear-gradient(135deg, #ffffff, #f8fafc);
-  border-radius: 14px;
-  padding: 14px 16px;
   cursor: pointer;
-
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.8),
-    0 10px 22px rgba(0,0,0,.12);
-
+  padding: 12px 14px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,.10);
   transition: transform .2s ease, box-shadow .2s ease;
 }
 
@@ -125,22 +121,89 @@
   background: transparent;
   pointer-events: none;       /* card handles click */
 }
+
+.section-title {
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .4px;
+}
+#slogan {
+  white-space: nowrap;        /* ⛔ no line break */
+  overflow: hidden;           /* hide overflow safely */
+  text-overflow: ellipsis;    /* graceful cut if very long */
+  display: inline-block;
+  max-width: 100%;
+}
+#slogan {
+  font-size: 0.9rem;          /* mobile */
+}
+
+@keyframes introFadeUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.intro-line {
+  opacity: 0;
+  animation: introFadeUp 0.8s ease-out forwards;
+}
+
+.intro-line:nth-child(1) { animation-delay: 0.2s; }
+.intro-line:nth-child(2) { animation-delay: 0.9s; }
+.intro-line:nth-child(3) { animation-delay: 1.6s; }
 </style>
     
   </head>
 
   <body class="bg-gray-50 text-gray-800">
-  <main class="pb-[var(--footer-height)]">
+      
+<!-- 🔹 INTRO SPLASH SCREEN -->
+<div id="intro-screen"
+     class="fixed inset-0 z-[9999]
+            flex items-center justify-center
+            bg-gradient-to-br from-blue-900 via-blue-700 to-blue-900
+            transition-opacity duration-700">
+
+  <h1 class="font-rajdhani font-extrabold text-center text-white tracking-wide">
+
+    <div class="intro-line text-[clamp(1.6rem,6vw,4.8rem)]">
+      Digital Library
+    </div>
+
+    <div class="intro-line text-yellow-300
+                text-[clamp(1.1rem,4vw,2.6rem)]
+                my-2">
+      For
+    </div>
+
+    <div class="intro-line text-[clamp(1.6rem,6vw,4.8rem)]">
+      Running Staff
+    </div>
+
+  </h1>
+</div>
+
+<div id="app" class="opacity-0 transition-opacity duration-700">
+  <!-- 🔹 YOUR EXISTING HOME PAGE CODE GOES HERE -->
+
     <div class="sticky top-0 z-50">
 
     <!-- Header -->
     <header class="bg-gradient-to-r from-blue-900 via-blue-700 to-blue-900 text-white py-3 shadow-md">
   <div class="text-center px-4">
-    <h1 class="font-rajdhani text-4xl sm:text-5xl md:text-6xl leading-tight font-extrabold">
-      Digital Library<br class="sm:hidden" />
-      <span class="text-yellow-300">for</span><br class="sm:hidden" />
-      Running Staff
-    </h1>
+<h1 class="font-rajdhani font-extrabold text-center
+           whitespace-nowrap
+           overflow-hidden
+           text-[clamp(1rem,5.2vw,6rem)]
+           leading-tight">
+  Digital Library <span class="text-yellow-300">for</span> Running Staff
+</h1>
     <div class="mt-1 text-base sm:text-xl italic text-yellow-200 transition-opacity duration-700 ease-in opacity-100">
       <span id="slogan"></span>
     </div>
@@ -186,33 +249,76 @@
     </div>
   </div>
 </div>
-    
 
-   <div id="latest-banner" class="bg-white text-center py-2 border-b border-gray-300">
-  <span class="font-bold text-red-700 text-base sm:text-xl animate-pulse">
-    🚨 Latest Circulars for Running Staff
-  </span>
+<div id="latest-banner"
+     class="flex items-center justify-between
+            mb-3
+            bg-white
+            border border-blue-700
+            rounded-none
+            px-3 py-2">
+
+<button id="prevSubject"
+  class="w-9 h-9
+         flex items-center justify-center
+         rounded-full
+         bg-gradient-to-b from-blue-900 via-blue-600 to-blue-900
+         border border-blue-950
+         shadow-md
+         hover:brightness-110
+         transition">
+  <svg viewBox="0 0 24 24"
+       class="w-4 h-4"
+       fill="none"
+       stroke="white"
+       stroke-width="3"
+       stroke-linecap="round"
+       stroke-linejoin="round">
+    <polyline points="15 18 9 12 15 6"></polyline>
+  </svg>
+</button>
+
+ <h2 id="subjectTitle"
+    class="text-[15px] sm:text-[17px]
+           font-extrabold
+           tracking-wide
+           text-blue-900
+           uppercase
+           text-center flex-1">
+  Latest Shed Order
+</h2>
+
+<button id="nextSubject"
+  class="w-9 h-9
+         flex items-center justify-center
+         rounded-full
+         bg-gradient-to-b from-blue-900 via-blue-600 to-blue-900
+         border border-blue-950
+         shadow-md
+         hover:brightness-110
+         transition">
+  <svg viewBox="0 0 24 24"
+       class="w-4 h-4"
+       fill="none"
+       stroke="white"
+       stroke-width="3"
+       stroke-linecap="round"
+       stroke-linejoin="round">
+    <polyline points="9 18 15 12 9 6"></polyline>
+  </svg>
+</button>
 </div>
-    </div>
+</div>
+
+  <main class="pb-[var(--footer-height)]">
 
       <!-- Main Content Wrapper -->
 <div id="main-content">
- <!-- Main Content -->
- 
-    
+  <div class="p-4 max-w-3xl mx-auto">
+    <div id="subject-content"></div>
+  </div>
+</div>
 
-<!-- LATEST DOCUMENTS -->
-<div class="p-4 space-y-6 max-w-3xl mx-auto">
-
-  <div id="latest-shed"></div>
-  
-  <div id="latest-safety"></div>
-  <div id="latest-counselling"></div>
-<div id="latest-correction"></div>
-</div>
-</div>
-</div>
-    
     
 <div id="menu-items"
      class="hidden mt-6
@@ -324,9 +430,43 @@ const colorMap = {
   { code: "sl",  name: "Surathkal" }
 ];
 
-async function loadLatestShedOrder() {
-  const box = document.getElementById("latest-shed");
+const subjects = [
+  {
+    key: "shed",
+    title: "📋 Latest Shed Order",
+    loader: () => loadLatestShedOrder("subject-content")
+  },
+  {
+    key: "safety",
+    title: "⚠️ Latest Safety Circular",          // ✅ FIXED
+    loader: () => loadLatestSafety("subject-content")
+  },
+  {
+    key: "counselling",
+    title: "🧠 Latest Counselling Topic",        // ✅ FIXED
+    loader: () => loadLatestCounselling("subject-content")
+  },
+  {
+    key: "correction",
+    title: "📘 Latest Correction Slip",
+    loader: () => loadLatestCorrectionSlips("subject-content")
+  }
+];
 
+let currentIndex = 0;
+
+
+function renderSubject() {
+  const subject = subjects[currentIndex];
+  document.getElementById("subjectTitle").textContent = subject.title;
+
+  const box = document.getElementById("subject-content");
+  box.innerHTML = "";
+  subject.loader();
+}
+
+async function loadLatestShedOrder() {
+  const box = document.getElementById("subject-content");
   // Skeleton
   box.innerHTML = `
     <div class="animate-pulse bg-gray-100 border border-gray-300 p-5 rounded-xl shadow"></div>
@@ -404,9 +544,7 @@ async function loadLatestShedOrder() {
                   rounded-xl shadow-md p-5
                   transition hover:shadow-lg">
 
-        <h2 class="text-[18px] font-bold text-blue-900 mb-4 flex items-center gap-2">
-          📋 Shed Order
-        </h2>
+        
 
         <div class="space-y-3">
           ${rows.join("")}
@@ -420,10 +558,10 @@ async function loadLatestShedOrder() {
 }
 
   
-async function loadLatest({ category, containerId, title, color, icon }) {
+
+async function loadLatestCounselling(containerId) {
   const box = document.getElementById(containerId);
 
-  // Skeleton
   box.innerHTML = `
     <div class="animate-pulse bg-gray-100 border border-gray-300 p-4 rounded-xl shadow"></div>
   `;
@@ -431,7 +569,7 @@ async function loadLatest({ category, containerId, title, color, icon }) {
   try {
     const q = query(
       collection(db, "documents"),
-      where("category", "==", category)
+      where("category", "==", "counselling")
     );
 
     const snap = await getDocs(q);
@@ -440,57 +578,115 @@ async function loadLatest({ category, containerId, title, color, icon }) {
       return;
     }
 
+    // 🔹 Latest by latestRank
     const docs = snap.docs
       .map(d => d.data())
       .filter(d => typeof d.latestRank === "number")
-      .sort((a, b) => b.latestRank - a.latestRank);
+      .sort((a, b) => a.latestRank - b.latestRank);
 
-    if (!docs.length) {
+    const data = docs[0];
+    if (!data) {
       box.innerHTML = "";
       return;
     }
 
-    const data = docs[0];
-    const c = colorMap[color];
-
     box.innerHTML = `
-  <div class="bg-white border border-blue-500 rounded-xl shadow-md p-4">
+      <div class="bg-white border border-blue-500 rounded-xl shadow-md p-4">
 
-    <h2 class="text-[17px] font-bold text-blue-900 mb-3 flex items-center gap-2">
-      ${icon} ${title}
-    </h2>
+        <h2 class="text-[17px] font-extrabold text-blue-900 mb-3 tracking-wide">
+          🧠 ${data.monthYear || ""}
+        </h2>
 
-    <div class="latest-card-item ${c.bg} border-l-4 ${c.border}"
-         onclick="openLatest('${data.filePath}')">
+        <div class="latest-card-item bg-blue-50 border-l-4 border-blue-500"
+             onclick="openLatest('${data.filePath}')">
 
-      <div class="flex justify-between gap-3">
+          <div class="flex justify-between gap-3">
+            <div class="flex-1 min-w-0">
+              <div class="text-[14px] text-gray-700 line-clamp-2">
+                ${data.description || ""}
+              </div>
+            </div>
 
-        <div class="flex-1 min-w-0">
-          <div class="text-[15px] font-bold text-gray-900">
-            ${data.circularNo || data.orderNo || ""}
-          </div>
-
-          <div class="text-[14px] text-gray-700 line-clamp-2">
-            ${data.title || data.description || ""}
+            <div class="latest-view self-end">
+              View
+            </div>
           </div>
         </div>
-
-        <div class="latest-view self-end">
-          View
-        </div>
-
       </div>
-    </div>
-  </div>
-`;
+    `;
   } catch (err) {
-    console.error("Latest load error:", category, err);
+    console.error("Latest counselling error:", err);
     box.innerHTML = "";
   }
 }
 
+async function loadLatestSafety(containerId) {
+  const box = document.getElementById(containerId);
+
+  box.innerHTML = `
+    <div class="animate-pulse bg-gray-100 border border-gray-300 p-4 rounded-xl shadow"></div>
+  `;
+
+  try {
+    const q = query(
+      collection(db, "documents"),
+      where("category", "==", "safety_circular")
+    );
+
+    const snap = await getDocs(q);
+    if (snap.empty) {
+      box.innerHTML = "";
+      return;
+    }
+
+    // 🔹 Latest by latestRank
+    const docs = snap.docs
+      .map(d => d.data())
+      .filter(d => typeof d.latestRank === "number")
+      .sort((a, b) => a.latestRank - b.latestRank);
+
+    const data = docs[0];
+    if (!data) {
+      box.innerHTML = "";
+      return;
+    }
+
+    box.innerHTML = `
+      <div class="bg-white border border-blue-500 rounded-xl shadow-md p-4">
+
+        <h2 class="text-[17px] font-extrabold text-blue-900 mb-3 tracking-wide">
+          ⚠️ ${data.circularNo || ""}
+        </h2>
+
+        <div class="latest-card-item bg-yellow-50 border-l-4 border-yellow-500"
+             onclick="openLatest('${data.filePath}')">
+
+          <div class="flex justify-between gap-3">
+            <div class="flex-1 min-w-0">
+              <div class="text-[14px] text-gray-700 line-clamp-2">
+                ${data.title || data.description || ""}
+              </div>
+            </div>
+
+            <div class="latest-view self-end">
+              View
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  } catch (err) {
+    console.error("Latest safety circular error:", err);
+    box.innerHTML = "";
+  }
+}
+
+
+
+
+
 async function loadLatestCorrectionSlips() {
-  const box = document.getElementById("latest-correction");
+  const box = document.getElementById("subject-content");
 
   box.innerHTML = `
     <div class="animate-pulse bg-gray-100 border border-gray-300 p-5 rounded-xl shadow"></div>
@@ -563,9 +759,7 @@ async function loadLatestCorrectionSlips() {
       <div class="bg-white border border-blue-300
                   rounded-xl shadow-md p-5">
 
-        <h2 class="text-[18px] font-bold text-blue-900 mb-4">
-          📘 Correction Slip
-        </h2>
+       
 
         <div class="space-y-3">
           ${rows.join("")}
@@ -585,81 +779,6 @@ window.openLatest = async function (filePath) {
 };
 
 /* 🔹 Load all latest cards */
-window.addEventListener("DOMContentLoaded", () => {
-  loadLatestShedOrder();
-  
-  loadLatest({
-    category: "safety_circular",
-    containerId: "latest-safety",
-    title: "Safety Circular",
-    color: "yellow",
-    icon: "⚠️"
-  });
-
-  loadLatest({
-    category: "counselling",
-    containerId: "latest-counselling",
-    title: "Counselling Topic",
-    color: "blue",
-    icon: "🧠"
-  });
-loadLatestCorrectionSlips();
-  
-
-  rotateSlogan();
-});
-
-
-
-window.addEventListener("DOMContentLoaded", () => {
-
-  const menuBtn = document.getElementById("menu-button");
-  const homeBtn = document.getElementById("home-button");
-  const menuItems = document.getElementById("menu-items");
-  const mainContent = document.getElementById("main-content");
-  const banner = document.getElementById("latest-banner");
-
-  menuBtn.addEventListener("click", () => {
-    menuBtn.classList.add("hidden");
-    homeBtn.classList.remove("hidden");
-
-    mainContent.classList.add("hidden");
-    banner.classList.add("hidden");
-
-    menuItems.classList.remove("hidden");
-  });
-
-  homeBtn.addEventListener("click", () => {
-    homeBtn.classList.add("hidden");
-    menuBtn.classList.remove("hidden");
-
-    menuItems.classList.add("hidden");
-
-    mainContent.classList.remove("hidden");
-    banner.classList.remove("hidden");
-  });
-
-});
-
-
-  // ✅ Rotating slogans
-  const slogans = [
-    'Our Mission: Zero SPAD – हमारा लक्ष्य: शून्य SPAD',
-    'Safety First, Always!',
-    'Alert Today – Alive Tomorrow',
-    'Better Late Than Never – Drive Safe!'
-  ];
-
-  let currentSlogan = 0;
-  const sloganEl = document.getElementById('slogan');
-
-  function rotateSlogan() {
-    sloganEl.textContent = slogans[currentSlogan];
-    currentSlogan = (currentSlogan + 1) % slogans.length;
-  }
-
-  rotateSlogan();
-  setInterval(rotateSlogan, 3000);
 
   
 
@@ -684,8 +803,118 @@ window.addEventListener("DOMContentLoaded", () => {
     });
   });
 
+// 🔹 Safe slogan rotation
+const slogans = [
+  'Our Mission: Zero SPAD – हमारा लक्ष्य: शून्य SPAD',
+  'Safety First, Always!',
+  'Alert Today – Alive Tomorrow',
+  'Better Late Than Never – Drive Safe!'
+];
+
+let sloganIndex = 0;
+function rotateSlogan() {
+  const el = document.getElementById("slogan");
+  if (!el) return;
+  el.textContent = slogans[sloganIndex];
+  sloganIndex = (sloganIndex + 1) % slogans.length;
+}
+
+window.addEventListener("DOMContentLoaded", () => {
+
+  // 🔹 UI Elements
+  const menuBtn = document.getElementById("menu-button");
+  const homeBtn = document.getElementById("home-button");
+  const mainContent = document.getElementById("main-content");
+  const menuItems = document.getElementById("menu-items");
+  
+  
+
+  // ✅ INITIAL STATE → HOME PAGE
+  mainContent.classList.remove("hidden");
+  menuItems.classList.add("hidden");
+  
+  menuBtn.classList.remove("hidden");
+  homeBtn.classList.add("hidden");
 
 
+
+  // 🔹 HOME CLICK
+ homeBtn.onclick = () => {
+  homeBtn.classList.add("hidden");
+  menuBtn.classList.remove("hidden");
+
+  // ✅ show latest banner on home
+  document.getElementById("latest-banner").classList.remove("hidden");
+
+  // hide menu
+  menuItems.classList.add("hidden");
+
+  // show home content
+  mainContent.classList.remove("hidden");
+};
+
+menuBtn.onclick = () => {
+  menuBtn.classList.add("hidden");
+  homeBtn.classList.remove("hidden");
+
+  // ❌ hide latest banner on menu
+  document.getElementById("latest-banner").classList.add("hidden");
+
+  // hide home content
+  mainContent.classList.add("hidden");
+
+  // show menu
+  menuItems.classList.remove("hidden");
+};
+  // 🔹 Start slogan
+  rotateSlogan();
+  setInterval(rotateSlogan, 3000);
+  
+  renderSubject();
+});
+
+window.openSection = function (type) {
+  const box = document.getElementById("subject-content");
+  box.classList.remove("hidden");
+  box.innerHTML = "<p class='text-center'>Loading...</p>";
+
+  if (type === "shed") {
+    loadLatestShedOrder();
+  }
+
+  if (type === "safety") {
+    loadLatest({
+      category: "safety_circular",
+      containerId: "section-content",
+      title: "Safety Circular",
+      color: "yellow",
+      icon: "⚠️"
+    });
+  }
+
+  if (type === "counselling") {
+    loadLatest({
+      category: "counselling",
+      containerId: "section-content",
+      title: "Counselling Topic",
+      color: "blue",
+      icon: "🧠"
+    });
+  }
+
+  if (type === "correction") {
+    loadLatestCorrectionSlips();
+  }
+};
+document.getElementById("prevSubject").onclick = () => {
+  currentIndex = (currentIndex - 1 + subjects.length) % subjects.length;
+  renderSubject();
+};
+
+document.getElementById("nextSubject").onclick = () => {
+  currentIndex = (currentIndex + 1) % subjects.length;
+  renderSubject();
+};
 </script>
 
 <footer
@@ -702,6 +931,24 @@ window.addEventListener("DOMContentLoaded", () => {
 <script>
   document.querySelectorAll(".footer-year").forEach(el => {
     el.textContent = new Date().getFullYear();
+  });
+  
+  
+ 
+  window.addEventListener("DOMContentLoaded", () => {
+    const intro = document.getElementById("intro-screen");
+    const app = document.getElementById("app");
+
+    setTimeout(() => {
+      intro.classList.add("opacity-0");
+      intro.style.pointerEvents = "none";
+
+      setTimeout(() => {
+        intro.remove();
+        app.classList.remove("opacity-0");
+      }, 700);
+
+    }, 2500); // ⏱ intro duration
   });
 </script>
 
