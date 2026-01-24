@@ -934,10 +934,22 @@ document.getElementById("nextSubject").onclick = () => {
   });
   
   
- 
   window.addEventListener("DOMContentLoaded", () => {
     const intro = document.getElementById("intro-screen");
     const app = document.getElementById("app");
+
+    // 🔹 Check if intro already shown
+    const introShown = sessionStorage.getItem("introShown");
+
+    if (introShown) {
+      // Skip intro completely
+      intro.remove();
+      app.classList.remove("opacity-0");
+      return;
+    }
+
+    // 🔹 First visit → show intro
+    sessionStorage.setItem("introShown", "true");
 
     setTimeout(() => {
       intro.classList.add("opacity-0");
@@ -948,8 +960,9 @@ document.getElementById("nextSubject").onclick = () => {
         app.classList.remove("opacity-0");
       }, 700);
 
-    }, 2500); // ⏱ intro duration
+    }, 2500);
   });
+
 </script>
 
   </body>
