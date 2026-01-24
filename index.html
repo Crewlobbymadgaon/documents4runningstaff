@@ -183,6 +183,47 @@
 .intro-line:nth-child(1) { animation-delay: 0.2s; }
 .intro-line:nth-child(2) { animation-delay: 0.9s; }
 .intro-line:nth-child(3) { animation-delay: 1.6s; }
+
+
+/* ===============================
+   MOBILE COMPACT MENU (≤640px)
+   =============================== */
+@media (max-width: 640px) {
+
+  #menu-items {
+    gap: 12px;                /* reduce grid gap */
+  }
+
+  .menu-card {
+    padding: 14px 12px;       /* was 24px 18px */
+    border-radius: 14px;
+    gap: 6px;                 /* reduce inner spacing */
+  }
+
+  .menu-icon {
+    font-size: 26px;          /* was 34px */
+  }
+
+  .menu-title {
+    font-size: 12px;          /* compact text */
+    font-weight: 700;
+    line-height: 1.15;
+  }
+}
+
+      @media (max-width: 360px) {
+  #menu-items {
+    gap: 10px;
+  }
+
+  .menu-icon {
+    font-size: 24px;
+  }
+
+  .menu-title {
+    font-size: 11px;
+  }
+}
 </style>
     
   </head>
@@ -347,12 +388,12 @@
 
     
 <div id="menu-items"
-     class="hidden mt-6
-            grid grid-cols-1
+     class="hidden mt-4
+            grid grid-cols-2
             sm:grid-cols-2
             lg:grid-cols-3
             xl:grid-cols-3
-            gap-5 px-4 sm:px-6
+            gap-4 px-4 sm:px-6
             max-w-screen-2xl mx-auto">
 
   <a href="so_lobby_selector.html" class="menu-card" style="--accent:#dc2626;">
