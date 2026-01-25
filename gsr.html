@@ -67,14 +67,39 @@ window.getDownloadURL = getDownloadURL;
       background: var(--accent);
     }
 
-    .lobby-card:hover {
-      transform: translateY(-8px);
-      box-shadow:
-        0 2px 0 rgba(255,255,255,0.9) inset,
-        0 20px 36px rgba(0,0,0,0.18),
-        0 40px 70px rgba(0,0,0,0.28);
-    }
+/* ===============================
+   DESKTOP HOVER ONLY
+   =============================== */
+@media (hover: hover) and (pointer: fine) {
+  .lobby-card:hover {
+    transform: translateY(-8px);
+    box-shadow:
+      0 2px 0 rgba(255,255,255,0.9) inset,
+      0 20px 36px rgba(0,0,0,0.18),
+      0 40px 70px rgba(0,0,0,0.28);
+  }
+}
 
+ /* ===============================
+   MOBILE TOUCH FEEDBACK
+   =============================== */
+@media (hover: none) and (pointer: coarse) {
+  .lobby-card {
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
+  }
+
+  .lobby-card:active {
+    transform: scale(0.96);
+    background: rgba(59,130,246,0.06);
+  }
+}
+
+/* Prevent ghost hover / double tap zoom */
+.lobby-card {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
     .lobby-title {
       font-family: 'Rajdhani', sans-serif;
       font-size: 20px;
