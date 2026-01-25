@@ -106,7 +106,10 @@ select.custom-select-center {
   tap-highlight-color: transparent;
 }
 
-@media (hover: hover) {
+/* ===============================
+   DESKTOP HOVER ONLY (SAFE)
+   =============================== */
+@media (hover: hover) and (pointer: fine) {
   .shed-card:hover {
     transform: translateY(-4px);
     border-left-color: #1e40af;
@@ -115,7 +118,25 @@ select.custom-select-center {
       0 18px 36px rgba(0,0,0,.18);
   }
 }
+      
+/* ===============================
+   MOBILE TOUCH FEEDBACK
+   =============================== */
+@media (hover: none) and (pointer: coarse) {
+  .shed-card {
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
+  }
 
+  .shed-card:active {
+    transform: scale(0.96);
+    background: rgba(59,130,246,0.06);
+  }
+}
+
+/* Prevent ghost hover / double tap zoom */
+.shed-card {
+  touch-action: manipulation;
+}
 .shed-card:active {
   transform: scale(0.98);
   box-shadow:
