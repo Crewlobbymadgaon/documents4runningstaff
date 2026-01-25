@@ -58,7 +58,17 @@ window.getDownloadURL = getDownloadURL;
   user-select: none;
 }
 
-/* Desktop / large screens */
+.lobby-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 5px;
+  width: 100%;
+  background: var(--accent);
+}
+
+/* ✅ DESKTOP / LAPTOP */
 @media (min-width: 768px) {
   .lobby-card:hover {
     transform: translateY(-8px);
@@ -69,7 +79,7 @@ window.getDownloadURL = getDownloadURL;
   }
 }
 
-/* Mobile touch */
+/* ✅ MOBILE / TOUCH */
 @media (hover: none) and (pointer: coarse) {
   .lobby-card:active {
     transform: scale(0.96);
@@ -77,56 +87,13 @@ window.getDownloadURL = getDownloadURL;
   }
 }
 
-    .lobby-card::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      height: 5px;
-      width: 100%;
-      background: var(--accent);
-    }
-
-/* ===============================
-   DESKTOP / LARGE SCREEN HOVER
-   =============================== */
-@media (min-width: 768px) {
-  .lobby-card:hover {
-    transform: translateY(-8px);
-    box-shadow:
-      0 2px 0 rgba(255,255,255,0.9) inset,
-      0 20px 36px rgba(0,0,0,0.18),
-      0 40px 70px rgba(0,0,0,0.28);
-  }
+.lobby-title {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: .5px;
+  color: #0f172a;
 }
-
- /* ===============================
-   MOBILE TOUCH FEEDBACK
-   =============================== */
-@media (hover: none) and (pointer: coarse) {
-  .lobby-card {
-    transition: transform 0.12s ease, box-shadow 0.12s ease;
-  }
-
-  .lobby-card:active {
-    transform: scale(0.96);
-    background: rgba(59,130,246,0.06);
-  }
-}
-
-/* Prevent ghost hover / double tap zoom */
-.lobby-card {
-  touch-action: manipulation;
-  -webkit-tap-highlight-color: transparent;
-  user-select: none;
-}
-    .lobby-title {
-      font-family: 'Rajdhani', sans-serif;
-      font-size: 20px;
-      font-weight: 700;
-      letter-spacing: .5px;
-      color: #0f172a;
-    }
   </style>
 </head>
 
