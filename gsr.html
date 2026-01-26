@@ -112,50 +112,22 @@ window.getDownloadURL = getDownloadURL;
   padding: 12px;
 }
 
-/* Compact group heading */
-.gsr-group-title {
-  font-family: 'Rajdhani', sans-serif;
-  font-size: 20px;              /* desktop */
-  font-weight: 900;
-  letter-spacing: 1px;
-  color: #1e3a8a;
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-
-  text-align: center;
-  line-height: 1.2;
-  min-height: 42px;             /* 🔑 makes all headings equal height */
-}
-
-/* Mobile */
-@media (max-width: 480px) {
-  .gsr-group-title {
-    font-size: 16px;
-    min-height: 34px;
-  }
-}
 
   .lobby-card div:last-child {
-    font-size: 11px;
-    font-weight: 600;
+    font-size: 14px;
+    font-weight: 700;
   }
-}
+
 /* Mobile tightening */
 @media (max-width: 480px) {
   .gsr-group {
     padding: 8px;
   }
-
-  .gsr-group-title {
-    font-size: 14px;
-    font-weight: 800;
-    justify-content: center;
-    text-align: center;
-  }
 }
+
+
+
 
 /* ✅ CENTERED DIVIDER (GLOBAL) */
 .gsr-divider {
@@ -186,6 +158,32 @@ window.getDownloadURL = getDownloadURL;
   .kr-logo,
   .ir-logo {
     height: 22px;
+  }
+}
+/* ================================
+   GROUP HEADING – FINAL (LOCKED)
+   ================================ */
+.gsr-group-title {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 22px;            /* Desktop size */
+  font-weight: 900;
+  letter-spacing: 1px;
+  color: #1e3a8a;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  text-align: center;
+  line-height: 1.2;
+  min-height: 44px;           /* SAME height for all headings */
+}
+
+@media (max-width: 480px) {
+  .gsr-group-title {
+    font-size: 16px;
+    min-height: 34px;
   }
 }
   </style>
