@@ -172,10 +172,12 @@ window.getDownloadURL = getDownloadURL;
   padding-top: 10px;
 }
 .kr-logo {
-  height: 26px;        /* desktop */
+  height: 26px;
   width: auto;
   margin-right: 8px;
+  vertical-align: middle;
 }
+
 
 @media (max-width: 480px) {
   .kr-logo {
@@ -260,17 +262,20 @@ window.getDownloadURL = getDownloadURL;
 
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
         <div class="lobby-card" style="--accent:#2563eb"
-             data-file="documents/G&SR/G&SR_english.pdf">
-          <div class="lobby-title">📘 G&amp;SR – English</div>
-          <div class="text-[18px] sm:text-xl font-extrabold text-gray-900 tracking-wider"> (KRCL) </div>
+     data-file="documents/G&SR/G&SR_english.pdf">
+  <div class="lobby-title">📘 G&amp;SR – English</div>
+  <div class="text-[18px] sm:text-xl font-extrabold text-gray-900 tracking-wider">
+    (KRCL)
+  </div>
+</div>
 
-        <div class="lobby-card" style="--accent:#dc2626"
-             data-file="documents/G&SR/G&SR_hindi.pdf">
-          <div class="lobby-title">📕 G&amp;SR – Hindi</div>
-         <div class="text-[18px] sm:text-xl font-extrabold text-gray-900 tracking-wider"> (KRCL) </div>
-        </div>
-      </div>
-    </div>
+<div class="lobby-card" style="--accent:#dc2626"
+     data-file="documents/G&SR/G&SR_hindi.pdf">
+  <div class="lobby-title">📕 G&amp;SR – Hindi</div>
+  <div class="text-[18px] sm:text-xl font-extrabold text-gray-900 tracking-wider">
+    (KRCL)
+  </div>
+</div>
 
     <!-- ================= OTHER ZONES ================= -->
     <div class="gsr-group">
