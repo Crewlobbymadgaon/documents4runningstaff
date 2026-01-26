@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>WTT</title>
+  <title>G&amp;SR</title>
 
   <link rel="manifest" href="/documents4runningstaff/manifest.json" />
   <link rel="icon" href="/documents4runningstaff/favicon.ico" />
@@ -42,20 +42,27 @@ window.getDownloadURL = getDownloadURL;
 
 .lobby-card {
   position: relative;
-  height: 96px;
+  height: 78px;
+  border-radius: 14px;
   background: linear-gradient(135deg, #ffffff, #f1f5f9);
-  border-radius: 18px;
   box-shadow:
     inset 0 2px 0 rgba(255,255,255,0.9),
     0 12px 20px rgba(0,0,0,0.12),
     0 24px 48px rgba(0,0,0,0.18);
-  transition: transform .25s ease, box-shadow .25s ease;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2px;
+
   cursor: pointer;
   overflow: hidden;
-
-  touch-action: manipulation;
-  -webkit-tap-highlight-color: transparent;
   user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
 }
 
 .lobby-card::before {
@@ -68,32 +75,106 @@ window.getDownloadURL = getDownloadURL;
   background: var(--accent);
 }
 
-/* ✅ DESKTOP / LAPTOP */
-@media (min-width: 768px) {
+/* ✅ DESKTOP HOVER */
+@media (hover: hover) and (pointer: fine) {
   .lobby-card:hover {
-    transform: translateY(-8px);
+    transform: translateY(-6px);
     box-shadow:
       inset 0 2px 0 rgba(255,255,255,0.9),
-      0 20px 36px rgba(0,0,0,0.18),
-      0 40px 70px rgba(0,0,0,0.28);
+      0 18px 34px rgba(0,0,0,0.18),
+      0 36px 60px rgba(0,0,0,0.26);
   }
 }
 
-/* ✅ MOBILE / TOUCH */
-@media (hover: none) and (pointer: coarse) {
-  .lobby-card:active {
-    transform: scale(0.96);
-    background: rgba(59,130,246,0.06);
-  }
+/* ✅ MOBILE TOUCH FEEDBACK */
+.lobby-card.touch-active {
+  transform: scale(0.96);
+  box-shadow:
+    inset 0 3px 8px rgba(0,0,0,0.18),
+    0 6px 14px rgba(0,0,0,0.16);
+  background: rgba(59,130,246,0.06);
 }
+
 
 .lobby-title {
   font-family: 'Rajdhani', sans-serif;
-  font-size: 20px;
-  font-weight: 700;
-  letter-spacing: .5px;
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: .4px;
   color: #0f172a;
+  line-height: 1.2;
 }
+/* Compact group wrapper */
+.gsr-group {
+  background: #f8fafc;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 12px;
+}
+
+/* Compact group heading */
+.gsr-group-title {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 15px;
+  font-weight: 900;
+  letter-spacing: .4px;
+  color: #1e3a8a;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Slim divider */
+.gsr-divider {
+  height: 1.5px;
+  background: linear-gradient(to right, #1e40af, transparent);
+  margin-bottom: 10px;
+}
+@media (max-width: 480px) {
+  .lobby-title {
+    font-size: 15px;
+    font-weight: 800;
+  }
+
+  .lobby-card div:last-child {
+    font-size: 11px;
+    font-weight: 600;
+  }
+}
+/* Mobile tightening */
+@media (max-width: 480px) {
+  .gsr-group {
+    padding: 8px;
+  }
+
+  .gsr-group-title {
+    font-size: 14px;
+    font-weight: 800;
+    justify-content: center;
+    text-align: center;
+  }
+}
+
+/* ✅ CENTERED DIVIDER (GLOBAL) */
+.gsr-divider {
+  height: 2px;
+  width: 60%;
+  margin: 6px auto 10px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    #1e40af,
+    transparent
+  );
+}
+
+/* ✅ VISUAL SEPARATION BETWEEN GROUPS */
+.gsr-group + .gsr-group {
+  border-top: 2px dashed #c7d2fe;
+  padding-top: 10px;
+}
+
   </style>
 </head>
 
@@ -157,27 +238,51 @@ window.getDownloadURL = getDownloadURL;
 </header>
 
 <!-- CONTENT -->
+<div class="flex justify-center mt-3 pb-4">
+  <div class="w-full max-w-3xl px-3 space-y-4">
 
+    <!-- ================= KRCL ================= -->
+    <div class="gsr-group">
+      <div class="gsr-group-title">🚆 Konkan Railway</div>
+      <div class="gsr-divider"></div>
 
-<div class="flex justify-center mt-6 sm:mt-10 lg:mt-16">
-  <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 w-full max-w-3xl px-4">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+        <div class="lobby-card" style="--accent:#2563eb"
+             data-file="documents/G&SR/G&SR_english.pdf">
+          <div class="lobby-title">📘 G&amp;SR – English</div>
+          <div class="text-sm font-semibold text-gray-600">(KRCL)</div>
+        </div>
 
-
-    <!-- WTT PART A -->
-    <div class="lobby-card" style="--accent:#2563eb"
-         onclick="openWTT('documents/G&SR/G&SR_english.pdf')">
-      <div class="lobby-title">📘 G&SR - English</div>
+        <div class="lobby-card" style="--accent:#dc2626"
+             data-file="documents/G&SR/G&SR_hindi.pdf">
+          <div class="lobby-title">📕 G&amp;SR – Hindi</div>
+          <div class="text-sm font-semibold text-gray-600">(KRCL)</div>
+        </div>
+      </div>
     </div>
 
-    <!-- WTT PART B -->
-    <div class="lobby-card" style="--accent:#dc2626"
-         onclick="openWTT('documents/G&SR/G&SR_hindi.pdf')">
-      <div class="lobby-title">📕 G&SR - Hindi</div>
+    <!-- ================= OTHER ZONES ================= -->
+    <div class="gsr-group">
+      <div class="gsr-group-title">🚉 Other Zonal Railways</div>
+      <div class="gsr-divider"></div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+        <div class="lobby-card" style="--accent:#16a34a"
+             data-file="documents/G&SR/SR_GSR.pdf">
+          <div class="lobby-title">📗 G&amp;SR</div>
+          <div class="text-sm font-semibold text-gray-600">(Southern Railway)</div>
+        </div>
+
+        <div class="lobby-card" style="--accent:#7c3aed"
+             data-file="documents/G&SR/SWR_GSR.pdf">
+          <div class="lobby-title">📙 G&amp;SR</div>
+          <div class="text-sm font-semibold text-gray-600">(South Western Railway)</div>
+        </div>
+      </div>
     </div>
 
   </div>
 </div>
-
 <footer
   class="fixed bottom-0 left-0 w-full z-40
          flex items-center justify-center
@@ -194,22 +299,27 @@ window.getDownloadURL = getDownloadURL;
   document.querySelectorAll(".footer-year").forEach(el => {
     el.textContent = new Date().getFullYear();
   });
-</script>
-
-<script>
   
+async function opengsr(filePath, el) {
 
- async function openWTT(filePath) {
-  try {
-    const url = await getDownloadURL(ref(window.storage, filePath));
-    window.open(url, "_blank");
-  } catch (err) {
-    alert("Unable to open WTT document");
-    console.error(err);
-  }
+  // ✅ show press feedback FIRST
+  if (el) el.classList.add("touch-active");
+
+  // small delay so eye can see feedback
+  setTimeout(async () => {
+    try {
+      const url = await getDownloadURL(ref(window.storage, filePath));
+      window.open(url, "_blank");
+    } catch (err) {
+      alert("Unable to open document");
+      console.error(err);
+    } finally {
+      if (el) el.classList.remove("touch-active");
+    }
+  }, 120); // same timing feel as index
 }
 
-  
+
   
   
   const hamburgerBtn = document.getElementById("hamburgerBtn");
@@ -242,7 +352,52 @@ window.getDownloadURL = getDownloadURL;
     }
   });
 
+
+document.querySelectorAll(".lobby-card").forEach(card => {
+
+  const filePath = card.dataset.file;
+  if (!filePath) return;
+
+  // 🔹 TOUCH START → show feedback
+  card.addEventListener("touchstart", () => {
+    card.classList.add("touch-active");
+  }, { passive: true });
+
+  // 🔹 TOUCH END → SNAP BACK FIRST, then open
+  card.addEventListener("touchend", () => {
+
+    // ✅ REMOVE VISUAL STATE IMMEDIATELY
+    card.classList.remove("touch-active");
+
+    // ✅ OPEN PDF AFTER UI PAINT
+    setTimeout(async () => {
+      try {
+        const url = await getDownloadURL(ref(window.storage, filePath));
+        window.open(url, "_blank");
+      } catch (e) {
+        alert("Unable to open document");
+      }
+    }, 0);
+  });
+
+  // 🔹 SAFETY
+  card.addEventListener("touchcancel", () => {
+    card.classList.remove("touch-active");
+  });
+
+  // 🔹 DESKTOP CLICK
+  card.addEventListener("click", async () => {
+    try {
+      const url = await getDownloadURL(ref(window.storage, filePath));
+      window.open(url, "_blank");
+    } catch (e) {
+      alert("Unable to open document");
+    }
+  });
+
+});
 </script>
+
 
 </body>
 </html>
