@@ -115,24 +115,28 @@ window.getDownloadURL = getDownloadURL;
 /* Compact group heading */
 .gsr-group-title {
   font-family: 'Rajdhani', sans-serif;
-  font-size: 18px;           /* 🔼 bigger */
+  font-size: 20px;              /* desktop */
   font-weight: 900;
-  letter-spacing: .8px;
+  letter-spacing: 1px;
   color: #1e3a8a;
-  margin-bottom: 6px;
 
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 10px;
+
   text-align: center;
+  line-height: 1.2;
+  min-height: 42px;             /* 🔑 makes all headings equal height */
 }
 
-
+/* Mobile */
 @media (max-width: 480px) {
-  .lobby-title {
-    font-size: 15px;
-    font-weight: 800;
+  .gsr-group-title {
+    font-size: 16px;
+    min-height: 34px;
   }
+}
 
   .lobby-card div:last-child {
     font-size: 11px;
@@ -171,30 +175,17 @@ window.getDownloadURL = getDownloadURL;
   border-top: 2px dashed #c7d2fe;
   padding-top: 10px;
 }
-.kr-logo {
-  height: 26px;
-  width: auto;
-  margin-right: 8px;
-  vertical-align: middle;
-}
-
-
-@media (max-width: 480px) {
-  .kr-logo {
-    height: 22px;      /* mobile */
-  }
-}
+.kr-logo,
 .ir-logo {
-  height: 26px;
+  height: 28px;        /* desktop */
   width: auto;
-  margin-right: 8px;
-  vertical-align: middle;
+  flex-shrink: 0;
 }
 
-
 @media (max-width: 480px) {
+  .kr-logo,
   .ir-logo {
-    height: 22px;      /* mobile */
+    height: 22px;
   }
 }
   </style>
