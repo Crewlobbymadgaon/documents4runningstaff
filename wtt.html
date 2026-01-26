@@ -40,48 +40,152 @@ window.getDownloadURL = getDownloadURL;
     :root { --footer-height: 48px; }
     body { padding-bottom: var(--footer-height); }
 
-    .lobby-card {
-      position: relative;
-      height: 96px;
-      background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%);
-      border-radius: 18px;
-      box-shadow:
-        0 2px 0 rgba(255,255,255,0.9) inset,
-        0 12px 20px rgba(0,0,0,0.12),
-        0 24px 48px rgba(0,0,0,0.18);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: transform .25s ease, box-shadow .25s ease;
-      cursor: pointer;
-      overflow: hidden;
-    }
+.lobby-card {
+  position: relative;
+  height: 78px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #ffffff, #f1f5f9);
+  box-shadow:
+    inset 0 2px 0 rgba(255,255,255,0.9),
+    0 12px 20px rgba(0,0,0,0.12),
+    0 24px 48px rgba(0,0,0,0.18);
 
-    .lobby-card::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      height: 5px;
-      width: 100%;
-      background: var(--accent);
-    }
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2px;
 
-    .lobby-card:hover {
-      transform: translateY(-8px);
-      box-shadow:
-        0 2px 0 rgba(255,255,255,0.9) inset,
-        0 20px 36px rgba(0,0,0,0.18),
-        0 40px 70px rgba(0,0,0,0.28);
-    }
+  cursor: pointer;
+  overflow: hidden;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 
-    .lobby-title {
-      font-family: 'Rajdhani', sans-serif;
-      font-size: 20px;
-      font-weight: 700;
-      letter-spacing: .5px;
-      color: #0f172a;
-    }
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+.lobby-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 5px;
+  width: 100%;
+  background: var(--accent);
+}
+
+/* ✅ DESKTOP HOVER */
+@media (hover: hover) and (pointer: fine) {
+  .lobby-card:hover {
+    transform: translateY(-6px);
+    box-shadow:
+      inset 0 2px 0 rgba(255,255,255,0.9),
+      0 18px 34px rgba(0,0,0,0.18),
+      0 36px 60px rgba(0,0,0,0.26);
+  }
+}
+
+/* ✅ MOBILE TOUCH FEEDBACK */
+.lobby-card.touch-active {
+  transform: scale(0.96);
+  box-shadow:
+    inset 0 3px 8px rgba(0,0,0,0.18),
+    0 6px 14px rgba(0,0,0,0.16);
+  background: rgba(59,130,246,0.06);
+}
+
+
+.lobby-title {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: .4px;
+  color: #0f172a;
+  line-height: 1.2;
+}
+/* Compact group wrapper */
+.gsr-group {
+  background: #f8fafc;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 12px;
+}
+
+
+
+  .lobby-card div:last-child {
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+/* Mobile tightening */
+@media (max-width: 480px) {
+  .gsr-group {
+    padding: 8px;
+  }
+}
+
+
+
+
+/* ✅ CENTERED DIVIDER (GLOBAL) */
+.gsr-divider {
+  height: 2px;
+  width: 60%;
+  margin: 6px auto 10px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    #1e40af,
+    transparent
+  );
+}
+
+/* ✅ VISUAL SEPARATION BETWEEN GROUPS */
+.gsr-group + .gsr-group {
+  border-top: 2px dashed #c7d2fe;
+  padding-top: 10px;
+}
+.kr-logo,
+.ir-logo {
+  height: 28px;        /* desktop */
+  width: auto;
+  flex-shrink: 0;
+}
+
+@media (max-width: 480px) {
+  .kr-logo,
+  .ir-logo {
+    height: 22px;
+  }
+}
+/* ================================
+   GROUP HEADING – FINAL (LOCKED)
+   ================================ */
+.gsr-group-title {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 22px;            /* Desktop size */
+  font-weight: 900;
+  letter-spacing: 1px;
+  color: #1e3a8a;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  text-align: center;
+  line-height: 1.2;
+  min-height: 44px;           /* SAME height for all headings */
+}
+
+@media (max-width: 480px) {
+  .gsr-group-title {
+    font-size: 16px;
+    min-height: 34px;
+  }
+}
   </style>
 </head>
 
@@ -106,12 +210,12 @@ window.getDownloadURL = getDownloadURL;
         WTT
       </h2>
 
-      <p class="text-xs sm:text-sm mt-1 opacity-90">
+      <p class="text-xs sm:text-sm mt-1 opacity-95 font-medium tracking-wide">
         Working Time Table
       </p>
     </div>
 
-    <!-- HAMBURGER -->
+    <!-- HAMBURGER (lower on mobile) -->
     <div class="absolute bottom-2 sm:bottom-3 right-4">
       <button id="hamburgerBtn"
         class="bg-gradient-to-b from-blue-900 via-blue-500 to-blue-900 
@@ -133,9 +237,9 @@ window.getDownloadURL = getDownloadURL;
       <a href="so_lobby_selector.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Shed Order</a>
       <a href="safetycircular.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Safety Circular</a>
       <a href="counselling.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Counselling Topic</a>
-      <a href="othercirculars.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Other Circulars</a>
-      <a href="gsr.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">G&SR</a>
+      <a href="gsr.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">G&amp;SR</a>
       <a href="accidentmanual.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Accident Manual</a>
+      <a href="othercirculars.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Other Circulars</a>
       <a href="readingmaterials.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Reading Materials</a>
       <a href="tsd.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">TSD</a>
     </div>
@@ -145,27 +249,62 @@ window.getDownloadURL = getDownloadURL;
 </header>
 
 <!-- CONTENT -->
+<div class="flex justify-center mt-3 pb-4">
+  <div class="w-full max-w-3xl px-3 space-y-4">
 
+    <!-- ================= KRCL ================= -->
+    <div class="gsr-group">
+     <div class="gsr-group-title">
+  <img src="kr_logo.webp" alt="KR Logo" class="kr-logo">
+  Konkan Railway
+</div>
 
-<div class="flex justify-center mt-6 sm:mt-10 lg:mt-16">
-  <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 w-full max-w-3xl px-4">
+      <div class="gsr-divider"></div>
 
-
-    <!-- WTT PART A -->
-    <div class="lobby-card" style="--accent:#2563eb"
-         onclick="openWTT('documents/wtt/part_a.pdf')">
-      <div class="lobby-title">📘 WTT – Part A</div>
-    </div>
-
-    <!-- WTT PART B -->
-    <div class="lobby-card" style="--accent:#dc2626"
-         onclick="openWTT('documents/wtt/part_b.pdf')">
-      <div class="lobby-title">📕 WTT – Part B</div>
-    </div>
-
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+        <div class="lobby-card" style="--accent:#2563eb"
+     data-file="documents/wtt/part_a.pdf">
+  <div class="lobby-title">📘 WTT - Part A</div>
+  <div class="text-[18px] sm:text-xl font-extrabold text-gray-900 tracking-wider">
+    (KRCL)
   </div>
 </div>
 
+<div class="lobby-card" style="--accent:#dc2626"
+     data-file="documents/wtt/part_b.pdf">
+  <div class="lobby-title">📕 WTT - Part B</div>
+  <div class="text-[18px] sm:text-xl font-extrabold text-gray-900 tracking-wider">
+    (KRCL)
+  </div>
+</div></div></div>
+
+    <!-- ================= OTHER ZONES ================= -->
+    <div class="gsr-group">
+  <div class="gsr-group-title">
+    <img src="ir_logo.webp" alt="IR Logo" class="ir-logo">
+    Other Zonal Railways
+  </div>
+
+  <div class="gsr-divider"></div>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+    <div class="lobby-card" style="--accent:#16a34a"
+         data-file="documents/wtt/sr.pdf">
+      <div class="lobby-title">📗 WTT</div>
+      <div class="text-[18px] sm:text-xl font-extrabold text-gray-900 tracking-wider">
+        Southern Railway (PGT Div)
+      </div>
+    </div>
+
+    <div class="lobby-card" style="--accent:#7c3aed"
+         data-file="documents/wtt/swr.pdf">
+      <div class="lobby-title">📙 WTT</div>
+      <div class="text-[18px] sm:text-xl font-extrabold text-gray-900 tracking-wider">
+        South Western Railway (UBL Div)
+      </div>
+    </div>
+  </div>
+</div></div></div>
 <footer
   class="fixed bottom-0 left-0 w-full z-40
          flex items-center justify-center
@@ -182,21 +321,29 @@ window.getDownloadURL = getDownloadURL;
   document.querySelectorAll(".footer-year").forEach(el => {
     el.textContent = new Date().getFullYear();
   });
-</script>
-
-<script>
   
+async function opengsr(filePath, el) {
 
- async function openWTT(filePath) {
-  try {
-    const url = await getDownloadURL(ref(window.storage, filePath));
-    window.open(url, "_blank");
-  } catch (err) {
-    alert("Unable to open WTT document");
-    console.error(err);
-  }
+  // ✅ show press feedback FIRST
+  if (el) el.classList.add("touch-active");
+
+  // small delay so eye can see feedback
+  setTimeout(async () => {
+    try {
+      const url = await getDownloadURL(ref(window.storage, filePath));
+      window.open(url, "_blank");
+    } catch (err) {
+      alert("Unable to open document");
+      console.error(err);
+    } finally {
+      if (el) el.classList.remove("touch-active");
+    }
+  }, 120); // same timing feel as index
 }
 
+
+  
+  
   const hamburgerBtn = document.getElementById("hamburgerBtn");
   const dropdownMenu = document.getElementById("dropdownMenu");
 
@@ -227,7 +374,52 @@ window.getDownloadURL = getDownloadURL;
     }
   });
 
+
+document.querySelectorAll(".lobby-card").forEach(card => {
+
+  const filePath = card.dataset.file;
+  if (!filePath) return;
+
+  // 🔹 TOUCH START → show feedback
+  card.addEventListener("touchstart", () => {
+    card.classList.add("touch-active");
+  }, { passive: true });
+
+  // 🔹 TOUCH END → SNAP BACK FIRST, then open
+  card.addEventListener("touchend", () => {
+
+    // ✅ REMOVE VISUAL STATE IMMEDIATELY
+    card.classList.remove("touch-active");
+
+    // ✅ OPEN PDF AFTER UI PAINT
+    setTimeout(async () => {
+      try {
+        const url = await getDownloadURL(ref(window.storage, filePath));
+        window.open(url, "_blank");
+      } catch (e) {
+        alert("Unable to open document");
+      }
+    }, 0);
+  });
+
+  // 🔹 SAFETY
+  card.addEventListener("touchcancel", () => {
+    card.classList.remove("touch-active");
+  });
+
+  // 🔹 DESKTOP CLICK
+  card.addEventListener("click", async () => {
+    try {
+      const url = await getDownloadURL(ref(window.storage, filePath));
+      window.open(url, "_blank");
+    } catch (e) {
+      alert("Unable to open document");
+    }
+  });
+
+});
 </script>
+
 
 </body>
 </html>
