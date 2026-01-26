@@ -171,6 +171,17 @@ window.getDownloadURL = getDownloadURL;
   border-top: 2px dashed #c7d2fe;
   padding-top: 10px;
 }
+.kr-logo {
+  height: 26px;        /* desktop */
+  width: auto;
+  margin-right: 8px;
+}
+
+@media (max-width: 480px) {
+  .kr-logo {
+    height: 22px;      /* mobile */
+  }
+}
 
   </style>
 </head>
@@ -240,7 +251,11 @@ window.getDownloadURL = getDownloadURL;
 
     <!-- ================= KRCL ================= -->
     <div class="gsr-group">
-      <div class="gsr-group-title">🚆 Konkan Railway</div>
+     <div class="gsr-group-title">
+  <img src="kr_logo.png" alt="KR Logo" class="kr-logo">
+  Konkan Railway
+</div>
+
       <div class="gsr-divider"></div>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
