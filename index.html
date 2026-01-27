@@ -21,6 +21,7 @@
       
       :root {
   --footer-height: 48px;
+  
 }
       
   #menu-items, #main-content {
@@ -218,9 +219,9 @@
 }
 
 /* ===============================
-   DESKTOP HOVER (MOUSE / TRACKPAD ONLY)
+   DESKTOP HOVER ONLY (SAFE)
    =============================== */
-@media (hover: hover) and (pointer: fine) {
+@media (min-width: 768px) {
 
   .menu-card:hover {
     transform: translateY(-6px);
@@ -234,6 +235,7 @@
       0 16px 32px rgba(0,0,0,.18);
   }
 }
+
 @media (max-width: 767px) {
   .menu-card:active,
   .latest-card-item:active,
@@ -245,7 +247,6 @@
     background: rgba(59,130,246,0.06);
   }
 }
-
 .menu-card,
 .latest-card-item {
   touch-action: manipulation;
@@ -307,7 +308,8 @@
 
 
 <!-- Header with Menu and Home Icons -->
-<div class="bg-gradient-to-r from-blue-900 via-blue-700 to-blue-900 px-4 sm:px-6 md:px-8">
+<div id="nav-bar"
+     class="bg-gradient-to-r from-blue-900 via-blue-700 to-blue-900 px-4 sm:px-6 md:px-8">
   <div class="max-w-7xl mx-auto text-center">
     <div class="flex justify-center gap-3 py-2 sm:py-3">
 <div class="inline-flex items-center gap-2 
@@ -317,15 +319,7 @@
                 rounded-md border border-blue-950 shadow-lg">
   
 
-        <!-- Menu Icon Button -->
-        <button id="menu-button" class="transition focus:outline-none">
-          <div class="flex items-center gap-2">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="white" viewBox="0 0 24 24" class="w-4 h-4 sm:w-5 sm:h-5">
-              <path d="M4 6h16M4 12h16M4 18h16" stroke="white" stroke-width="2" stroke-linecap="round"/>
-            </svg>
-            <span>Menu</span>
-          </div>
-        </button>
+     
 
         <!-- Home Icon Button (initially hidden) -->
         <button id="home-button" class="transition focus:outline-none hidden">
@@ -418,6 +412,11 @@
             xl:grid-cols-3
             gap-4 px-4 sm:px-6
             max-w-screen-2xl mx-auto">
+    
+ <a href="#" onclick="goHomeFromMenu()" class="menu-card" style="--accent:#2563eb;">
+  <span class="menu-icon">📰</span>
+  <span class="menu-title">LATEST CIRCULARS</span>
+</a>   
 
   <a href="so_lobby_selector.html" class="menu-card" style="--accent:#dc2626;">
     <span class="menu-icon">📋</span>
@@ -444,15 +443,12 @@
     <span class="menu-title">G &amp; SR</span>
   </a>
 
-<a href="javascript:void(0)"
-   class="menu-card"
-   style="--accent:#2563eb;"
-   onclick="openLatest('documents/accident_manual/Accident_Manaul_2021.pdf')">
-  <span class="menu-icon">🚨</span>
-  <span class="menu-title">ACCIDENT MANUAL</span>
-</a>
-
-   <a href="correction.html" class="menu-card" style="--accent:#f59e0b;">
+  <a href="accident_manual.html" class="menu-card" style="--accent:#2563eb;">
+    <span class="menu-icon">🚨</span>
+    <span class="menu-title">ACCIDENT MANUAL</span>
+  </a>
+  
+ <a href="correction.html" class="menu-card" style="--accent:#f59e0b;">
   <span class="menu-icon">📝</span>
   <span class="menu-title">CORRECTION SLIPS</span>
 </a>
@@ -483,6 +479,12 @@
   <span class="menu-icon">🎥</span>
   <span class="menu-title">VIDEOS</span>
 </a>
+
+<a href="phone_directory.html" class="menu-card" style="--accent:#15803d;">
+  <span class="menu-icon">📞</span>
+  <span class="menu-title">PHONE DIRECTORY</span>
+</a>
+
 
 
 
@@ -904,7 +906,7 @@ window.openLatest = async function (filePath) {
 
   document.querySelectorAll("a").forEach(link => {
     link.addEventListener("click", () => {
-      const textSpan = link.querySelector(".menu-text");
+      const textSpan = link.querySelector(".menu-title");
       if (!textSpan) return;
 
       textSpan.classList.add("scale-110");
@@ -941,49 +943,33 @@ function rotateSlogan() {
 window.addEventListener("DOMContentLoaded", () => {
 
   // 🔹 UI Elements
-  const menuBtn = document.getElementById("menu-button");
+  
   const homeBtn = document.getElementById("home-button");
   const mainContent = document.getElementById("main-content");
   const menuItems = document.getElementById("menu-items");
   
   
+const navBar = document.getElementById("nav-bar");
 
-  // ✅ INITIAL STATE → HOME PAGE
-  mainContent.classList.remove("hidden");
-  menuItems.classList.add("hidden");
-  
-  menuBtn.classList.remove("hidden");
+// ✅ MENU GRID IS HOME
+mainContent.classList.add("hidden");
+menuItems.classList.remove("hidden");
+document.getElementById("latest-banner").classList.add("hidden");
+
+// 🔥 THIS FIXES HEADER HEIGHT
+navBar.classList.add("hidden");
+homeBtn.classList.add("hidden");
+
+homeBtn.onclick = () => {
+  const navBar = document.getElementById("nav-bar");
+
+  // back to Menu Grid (Home)
   homeBtn.classList.add("hidden");
+  navBar.classList.add("hidden");
 
-
-
-  // 🔹 HOME CLICK
- homeBtn.onclick = () => {
-  homeBtn.classList.add("hidden");
-  menuBtn.classList.remove("hidden");
-
-  // ✅ show latest banner on home
-  document.getElementById("latest-banner").classList.remove("hidden");
-
-  // hide menu
-  menuItems.classList.add("hidden");
-
-  // show home content
-  mainContent.classList.remove("hidden");
-};
-
-menuBtn.onclick = () => {
-  menuBtn.classList.add("hidden");
-  homeBtn.classList.remove("hidden");
-
-  // ❌ hide latest banner on menu
   document.getElementById("latest-banner").classList.add("hidden");
-
-  // hide home content
-  mainContent.classList.add("hidden");
-
-  // show menu
-  menuItems.classList.remove("hidden");
+  document.getElementById("main-content").classList.add("hidden");
+  document.getElementById("menu-items").classList.remove("hidden");
 };
   // 🔹 Start slogan
   rotateSlogan();
@@ -992,39 +978,7 @@ menuBtn.onclick = () => {
   renderSubject();
 });
 
-window.openSection = function (type) {
-  const box = document.getElementById("subject-content");
-  box.classList.remove("hidden");
-  box.innerHTML = "<p class='text-center'>Loading...</p>";
 
-  if (type === "shed") {
-    loadLatestShedOrder();
-  }
-
-  if (type === "safety") {
-    loadLatest({
-      category: "safety_circular",
-      containerId: "section-content",
-      title: "Safety Circular",
-      color: "yellow",
-      icon: "⚠️"
-    });
-  }
-
-  if (type === "counselling") {
-    loadLatest({
-      category: "counselling",
-      containerId: "section-content",
-      title: "Counselling Topic",
-      color: "blue",
-      icon: "🧠"
-    });
-  }
-
-  if (type === "correction") {
-    loadLatestCorrectionSlips();
-  }
-};
 document.getElementById("prevSubject").onclick = () => {
   currentIndex = (currentIndex - 1 + subjects.length) % subjects.length;
   renderSubject();
@@ -1083,6 +1037,20 @@ document.getElementById("nextSubject").onclick = () => {
   });
 
 </script>
+<script>
+function goHomeFromMenu() {
+  const homeBtn = document.getElementById("home-button");
+  const navBar = document.getElementById("nav-bar");
 
+  // show latest page
+  document.getElementById("latest-banner").classList.remove("hidden");
+  document.getElementById("menu-items").classList.add("hidden");
+  document.getElementById("main-content").classList.remove("hidden");
+
+  // ✅ show navigation only here
+  navBar.classList.remove("hidden");
+  homeBtn.classList.remove("hidden");
+}
+</script>
   </body>
     </html>
