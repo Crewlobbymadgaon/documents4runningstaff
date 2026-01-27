@@ -442,10 +442,10 @@
     <span class="menu-icon">📘</span>
     <span class="menu-title">G &amp; SR</span>
   </a>
-<a href="documents/accident_manual/Accident_Manaul_2021.pdf"
+<a href="#"
    class="menu-card"
    style="--accent:#2563eb;"
-   target="_blank">
+   onclick="openLatest('documents/accident_manual/Accident_Manaul_2021.pdf')">
   <span class="menu-icon">🚨</span>
   <span class="menu-title">ACCIDENT MANUAL</span>
 </a>
@@ -989,6 +989,11 @@ document.getElementById("prevSubject").onclick = () => {
 document.getElementById("nextSubject").onclick = () => {
   currentIndex = (currentIndex + 1) % subjects.length;
   renderSubject();
+};
+
+  window.openLatest = async function (filePath) {
+  const url = await getDownloadURL(ref(storage, filePath));
+  window.open(url, "_blank");
 };
 </script>
 
