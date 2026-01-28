@@ -337,7 +337,7 @@ async function loadGsrCorrectionSlips() {
   try {
     const q = query(
       collection(db, "documents"),
-      where("category", "==", "gsr_correction")
+      where("category", "==", "correction_slip")
     );
 
     const snapshot = await getDocs(q);
