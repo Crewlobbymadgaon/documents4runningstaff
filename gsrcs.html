@@ -296,16 +296,24 @@ select.custom-select-center {
 
 
 <script>
-  // Toggle Dropdown
+
 const hamburgerBtn = document.getElementById("hamburgerBtn");
 const dropdownMenu = document.getElementById("dropdownMenu");
 
+// Toggle Dropdown
 hamburgerBtn.addEventListener("click", (e) => {
-  e.stopPropagation(); // Prevent click from bubbling to document
-  dropdownMenu.classList.toggle("hidden");
+  e.stopPropagation();
 
-  const isHidden = dropdownMenu.classList.contains("hidden");
-  hamburgerBtn.setAttribute("aria-expanded", !isHidden);
+  const isOpen = !dropdownMenu.classList.contains("hidden");
+
+  if (isOpen) {
+    dropdownMenu.classList.add("hidden");
+    hamburgerBtn.setAttribute("aria-expanded", "false");
+    hamburgerBtn.blur(); // ✅ RESET BUTTON STATE
+  } else {
+    dropdownMenu.classList.remove("hidden");
+    hamburgerBtn.setAttribute("aria-expanded", "true");
+  }
 });
 
 // Close dropdown when a link inside it is clicked
@@ -313,6 +321,7 @@ dropdownMenu.querySelectorAll("a").forEach(link => {
   link.addEventListener("click", () => {
     dropdownMenu.classList.add("hidden");
     hamburgerBtn.setAttribute("aria-expanded", "false");
+    hamburgerBtn.blur(); // ✅ RESET
   });
 });
 
@@ -325,15 +334,20 @@ document.addEventListener("click", (e) => {
   ) {
     dropdownMenu.classList.add("hidden");
     hamburgerBtn.setAttribute("aria-expanded", "false");
+    hamburgerBtn.blur(); // ✅ RESET
   }
 });
-    document.addEventListener("keydown", (e) => {
+
+// Close on Escape key
+document.addEventListener("keydown", (e) => {
   if (e.key === "Escape" && !dropdownMenu.classList.contains("hidden")) {
     dropdownMenu.classList.add("hidden");
     hamburgerBtn.setAttribute("aria-expanded", "false");
+    hamburgerBtn.blur(); // ✅ RESET
   }
 });
- 
+
+
   
 
 async function loadGsrCorrectionSlips() {
