@@ -364,20 +364,20 @@ async function loadGsrCorrectionSlips() {
       card.onclick = () => openCorrectionSlip(data.filePath);
 
       card.innerHTML = `
-        <div class="flex items-start justify-between gap-3">
-          <div class="flex-1 min-w-0">
-            <div class="shed-title">
-              📘 Correction Slip No. ${data.slipNo}
-            </div>
-            <div class="shed-desc line-clamp-3">
-              ${data.description || "G&SR Correction Slip"}
-            </div>
-          </div>
-          <div class="shed-btn shrink-0 self-end">
-            View
-          </div>
-        </div>
-      `;
+  <div class="flex items-start justify-between gap-3">
+    <div class="flex-1 min-w-0">
+      <div class="shed-title">
+        📘 Correction Slip No. ${String(data.slipNo).padStart(2, "0")}
+      </div>
+      <div class="shed-desc line-clamp-3">
+        ${data.description || "G&SR Correction Slip"}
+      </div>
+    </div>
+    <div class="shed-btn shrink-0 self-end">
+      View
+    </div>
+  </div>
+`;
 
       list.appendChild(card);
     }
