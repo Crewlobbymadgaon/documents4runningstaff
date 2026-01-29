@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Latest Circulars</title>
+    <link rel="manifest" href="/documents4runningstaff/manifest.json" />
+    <link rel="icon" href="/documents4runningstaff/favicon.ico" />
+    <link rel="apple-touch-icon" href="/documents4runningstaff/icon-192.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600&display=swap" rel="stylesheet" />
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600&display=swap" as="style" />
+    
+    <meta name="theme-color" content="#1f2937" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+
+    <style>
+      .font-rajdhani {
+        font-family: 'Rajdhani', sans-serif;
+      }
+      
+      :root {
+  --footer-height: 48px;
+  
+}
+      
+  #menu-items, #main-content {
+    transition: opacity 0.3s ease;
+  }
+
+  .fade-hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+
+.menu-card {
+    position: relative;
+    padding: 24px 18px;
+    border-radius: 18px;
+    background: linear-gradient(135deg, #ffffff, #f1f5f9);
+    box-shadow:
+      0 14px 32px rgba(0,0,0,0.12),
+      inset 0 0 0 1px rgba(255,255,255,0.8);
+    text-decoration: none;
+    color: #0f172a;
+    transition: all .25s ease;
+    overflow: hidden;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .menu-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 4px;
+    width: 100%;
+    background: var(--accent);
+  }
+
+  
+
+  .menu-card:active {
+    transform: scale(0.95);
+  }
+
+  /* ICON */
+  .menu-icon {
+    font-size: 34px;
+    line-height: 1;
+  }
+
+  .menu-title {
+    font-size: 14px;      /* Mobile size */
+    font-weight: 700;    /* BOLD on mobile */
+    text-align: center;
+    letter-spacing: .4px;
+    line-height: 1.25;
+  }
+
+  @media (min-width: 640px) {
+    .menu-title {
+      font-size: 18px;   /* Desktop size */
+      font-weight: 600; /* Normal professional weight */
+    }
+  }
+/* Disable text selection & tap highlight on clickable cards */
+.latest-card-item {
+  user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+
+  -webkit-tap-highlight-color: transparent;
+  tap-highlight-color: transparent;
+}
+
+.latest-card-item {
+  background: linear-gradient(135deg, #ffffff, #f8fafc);
+  cursor: pointer;
+  padding: 12px 14px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,.10);
+  transition: transform .2s ease, box-shadow .2s ease;
+
+  /* 🔹 REMOVE TEXT HIGHLIGHT ON CLICK */
+  user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.latest-card-item * {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+
+
+/* Optional: subtle press feedback (recommended) */
+.latest-card-item:active {
+  transform: scale(0.98);
+}
+/* Visual-only outlined View button */
+.latest-view {
+  font-size: 12px;
+  font-weight: 700;
+  color: #1d4ed8;
+
+  border: 1.5px solid #1d4ed8; /* tight outline */
+  padding: 2px 8px;           /* minimal padding */
+  border-radius: 6px;         /* compact rectangle */
+
+  line-height: 1.2;
+  background: transparent;
+  pointer-events: none;       /* card handles click */
+}
+
+.section-title {
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .4px;
+}
+#slogan {
+  white-space: nowrap;        /* ⛔ no line break */
+  overflow: hidden;           /* hide overflow safely */
+  text-overflow: ellipsis;    /* graceful cut if very long */
+  display: inline-block;
+  max-width: 100%;
+}
+#slogan {
+  font-size: 0.9rem;          /* mobile */
+}
+
+@keyframes introFadeUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+
+
+/* ===============================
+   MOBILE COMPACT MENU (≤640px)
+   =============================== */
+@media (max-width: 640px) {
+
+  #menu-items {
+    gap: 12px;                /* reduce grid gap */
+  }
+
+  .menu-card {
+    padding: 14px 12px;       /* was 24px 18px */
+    border-radius: 14px;
+    gap: 6px;                 /* reduce inner spacing */
+  }
+
+  .menu-icon {
+    font-size: 26px;          /* was 34px */
+  }
+
+  .menu-title {
+    font-size: 12px;          /* compact text */
+    font-weight: 700;
+    line-height: 1.15;
+  }
+}
+
+      @media (max-width: 360px) {
+  #menu-items {
+    gap: 10px;
+  }
+
+  .menu-icon {
+    font-size: 24px;
+  }
+
+  .menu-title {
+    font-size: 11px;
+  }
+}
+
+/* ===============================
+   DESKTOP HOVER ONLY (SAFE)
+   =============================== */
+@media (min-width: 768px) {
+
+  .menu-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 26px 60px rgba(0,0,0,0.22);
+  }
+
+  .latest-card-item:hover {
+    transform: translateY(-3px);
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.8),
+      0 16px 32px rgba(0,0,0,.18);
+  }
+}
+
+@media (max-width: 767px) {
+  .menu-card:active,
+  .latest-card-item:active,
+  .lobby-card:active {
+    transform: scale(0.96);
+    box-shadow:
+      inset 0 3px 8px rgba(0,0,0,0.18),
+      0 6px 14px rgba(0,0,0,0.16);
+    background: rgba(59,130,246,0.06);
+  }
+}
+.menu-card,
+.latest-card-item {
+  touch-action: manipulation;
+}
+</style>
+    
+  </head>
+
+  <body class="bg-gray-50 text-gray-800">
+      
+ <!-- 🔹 YOUR EXISTING HOME PAGE CODE GOES HERE -->
+
+    <div class="sticky top-0 z-50">
+
+    <!-- Header -->
+  <header
+  class="relative bg-gradient-to-r from-blue-900 via-blue-700 to-blue-900
+         text-white py-3 shadow-md">
+
+  <div class="text-center px-4">
+    <h1 class="font-rajdhani font-extrabold
+               whitespace-nowrap overflow-hidden
+               text-[clamp(1rem,5.2vw,6rem)]
+               leading-tight">
+      Digital Library <span class="text-yellow-300">for</span> Running Staff
+    </h1>
+
+    <h2 class="font-rajdhani text-3xl sm:text-4xl md:text-5xl
+               font-extrabold mt-2">
+      Latest Circulars
+    </h2>
+  </div>
+
+  <!-- 🍔 HAMBURGER -->
+  <div class="absolute bottom-1 right-4">
+    <button id="hamburgerBtn"
+      aria-expanded="false"
+      class="bg-gradient-to-b from-blue-900 via-blue-600 to-blue-900
+             text-white p-2 rounded-md
+             border border-blue-950
+             shadow-lg
+             focus:outline-none focus:ring-2 focus:ring-blue-900">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"
+           viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round"
+              d="M4 6h16M4 12h16M4 18h16"/>
+      </svg>
+    </button>
+
+    <!-- DROPDOWN -->
+    <div id="dropdownMenu"
+      class="hidden absolute right-0 mt-1 w-56
+             bg-white border border-blue-800
+             rounded-md shadow-lg z-50">
+
+      <a href="index.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Home</a>
+      <a href="so_lobby_selector.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Shed Order</a>
+      <a href="safetycircular.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Safety Circular</a>
+      <a href="counselling.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Counselling Topic</a>
+      <a href="gsr.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">G&SR</a>
+      <a href="wtt.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">WTT</a>
+      <a href="accidentmanual.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Accident Manual</a>
+      <a href="cirrection.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Correction Slips</a>
+      <a href="readingmaterials.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Reading Materials</a>
+      <a href="tsd.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">TSD</a>
+    </div>
+  </div>
+</header>
+
+
+     
+
+
+
+<div id="latest-banner"
+     class="flex items-center justify-between
+            mb-3
+            bg-white
+            border border-blue-700
+            rounded-none
+            px-3 py-2">
+
+<button id="prevSubject"
+  class="w-9 h-9
+         flex items-center justify-center
+         rounded-full
+         bg-gradient-to-b from-blue-900 via-blue-600 to-blue-900
+         border border-blue-950
+         shadow-md
+         transition">
+  <svg viewBox="0 0 24 24"
+       class="w-4 h-4"
+       fill="none"
+       stroke="white"
+       stroke-width="3"
+       stroke-linecap="round"
+       stroke-linejoin="round">
+    <polyline points="15 18 9 12 15 6"></polyline>
+  </svg>
+</button>
+
+ <h2 id="subjectTitle"
+    class="text-[15px] sm:text-[17px]
+           font-extrabold
+           tracking-wide
+           text-blue-900
+           uppercase
+           text-center flex-1">
+  Shed Order
+</h2>
+
+<button id="nextSubject"
+  class="w-9 h-9
+         flex items-center justify-center
+         rounded-full
+         bg-gradient-to-b from-blue-900 via-blue-600 to-blue-900
+         border border-blue-950
+         shadow-md
+         transition">
+  <svg viewBox="0 0 24 24"
+       class="w-4 h-4"
+       fill="none"
+       stroke="white"
+       stroke-width="3"
+       stroke-linecap="round"
+       stroke-linejoin="round">
+    <polyline points="9 18 15 12 9 6"></polyline>
+  </svg>
+</button>
+</div>
+</div>
+
+<main class="p-4 max-w-3xl mx-auto pb-[var(--footer-height)]">
+  <div id="subject-content"></div>
+</main>
+
+<script>
+const hamburgerBtn = document.getElementById("hamburgerBtn");
+  const dropdownMenu = document.getElementById("dropdownMenu");
+
+  // Toggle menu
+  hamburgerBtn.addEventListener("click", e => {
+    e.stopPropagation();
+    dropdownMenu.classList.toggle("hidden");
+  });
+
+  // Close on outside click
+  document.addEventListener("click", e => {
+    if (!dropdownMenu.contains(e.target) && !hamburgerBtn.contains(e.target)) {
+      dropdownMenu.classList.add("hidden");
+    }
+  });
+
+  // ✅ CLOSE MENU WHEN ANY MENU ITEM IS CLICKED
+  dropdownMenu.querySelectorAll("a").forEach(link => {
+    link.addEventListener("click", () => {
+      dropdownMenu.classList.add("hidden");
+    });
+  });
+
+  // Close on Escape
+  document.addEventListener("keydown", e => {
+    if (e.key === "Escape") {
+      dropdownMenu.classList.add("hidden");
+    }
+  });
+
+</script>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
+import { getFirestore, collection, query, where, getDocs } 
+  from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+import { getStorage, ref, getDownloadURL } 
+  from "https://www.gstatic.com/firebasejs/12.7.0/firebase-storage.js";
+
+/* ===============================
+   FIREBASE INIT
+   =============================== */
+const firebaseConfig = {
+  apiKey: "AIzaSyD4BfU5OKhKFynJMVC2k4qFEgmeDhLlSIM",
+  authDomain: "doc4runningstaff-d000b.firebaseapp.com",
+  projectId: "doc4runningstaff-d000b",
+  storageBucket: "doc4runningstaff-d000b.firebasestorage.app",
+  messagingSenderId: "34983733068",
+  appId: "1:34983733068:web:bbe8a3d902eecaab8bd1e9"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const storage = getStorage(app);
+
+/* ===============================
+   OPEN PDF
+   =============================== */
+window.openLatest = async (filePath) => {
+  const url = await getDownloadURL(ref(storage, filePath));
+  window.open(url, "_blank");
+};
+
+async function loadLatestShedOrder() {
+  const box = document.getElementById("subject-content");
+  // Skeleton
+  box.innerHTML = `
+    <div class="animate-pulse bg-gray-100 border border-gray-300 p-5 rounded-xl shadow"></div>
+  `;
+
+  try {
+    const shedLobbies = [
+      { code: "mao", name: "Madgaon Lobby",   bg: "bg-blue-50",   border: "border-blue-500" },
+      { code: "rn",  name: "Ratnagiri Lobby", bg: "bg-green-50",  border: "border-green-500" },
+      { code: "ven", name: "Verna Lobby",     bg: "bg-amber-50",  border: "border-amber-500" },
+      { code: "sl",  name: "Surathkal Lobby", bg: "bg-indigo-50", border: "border-indigo-500" }
+    ];
+
+    const rows = [];
+
+    for (const lobby of shedLobbies) {
+      const q = query(
+        collection(db, "documents"),
+        where("category", "==", "shed_order"),
+        where("lobby", "==", lobby.code)
+      );
+
+      const snap = await getDocs(q);
+
+      const latest = snap.docs
+        .map(d => d.data())
+        .find(d => d.latestRank === 1);
+
+      if (!latest) continue;
+
+      const orderNo =
+        latest.orderNo ||
+        latest.title?.match(/\d{2}\/\d{4}/)?.[0] ||
+        "";
+
+      rows.push(`
+  <div class="latest-card-item ${lobby.bg} border-l-4 ${lobby.border}"
+       onclick="openLatest('${latest.filePath}')">
+
+    <div class="flex justify-between gap-3">
+
+      <div class="flex-1 min-w-0">
+        <!-- LOBBY (PRIMARY) -->
+        <div class="text-[15px] sm:text-[16px]
+                    font-extrabold text-gray-900
+                    tracking-wide uppercase">
+          ${lobby.name}
+        </div>
+
+        <!-- SHED ORDER NUMBER (SECONDARY BUT STRONG) -->
+        <div class="text-[14px] sm:text-[15px]
+                    font-bold text-blue-900
+                    mt-0.5">
+          Shed Order No : ${orderNo}
+        </div>
+
+        <!-- DESCRIPTION -->
+        <div class="text-[14px] text-gray-700 line-clamp-2 mt-1">
+          ${latest.description || ""}
+        </div>
+      </div>
+
+      <div class="latest-view self-end shrink-0">
+        View
+      </div>
+
+    </div>
+  </div>
+`);
+    } // ✅ FOR LOOP CLOSED HERE
+
+    if (!rows.length) {
+      box.innerHTML = "";
+      return;
+    }
+
+    box.innerHTML = `
+      <div class="bg-white border border-blue-500
+                  rounded-xl shadow-md p-5
+                  transition hover:shadow-lg">
+
+        
+
+        <div class="space-y-3">
+          ${rows.join("")}
+        </div>
+      </div>
+    `;
+  } catch (err) {
+    console.error("Latest shed order error:", err);
+    box.innerHTML = "";
+  }
+}
+
+  
+
+async function loadLatestCounselling() {
+  const box = document.getElementById("subject-content");
+
+  box.innerHTML = `
+    <div class="animate-pulse bg-gray-100 border border-gray-300 p-4 rounded-xl shadow"></div>
+  `;
+
+  try {
+    const q = query(
+      collection(db, "documents"),
+      where("category", "==", "counselling")
+    );
+
+    const snap = await getDocs(q);
+    if (snap.empty) {
+      box.innerHTML = "";
+      return;
+    }
+
+    // 🔹 Latest by latestRank
+    const docs = snap.docs
+      .map(d => d.data())
+      .filter(d => typeof d.latestRank === "number")
+      .sort((a, b) => a.latestRank - b.latestRank);
+
+    const data = docs[0];
+    if (!data) {
+      box.innerHTML = "";
+      return;
+    }
+
+    box.innerHTML = `
+  <div class="bg-white border border-blue-500 rounded-xl shadow-md p-4">
+
+    <div class="latest-card-item bg-blue-50 border-l-4 border-blue-500"
+         onclick="openLatest('${data.filePath}')">
+
+      <div class="flex justify-between gap-3">
+
+        <div class="flex-1 min-w-0">
+          
+          <!-- MONTH–YEAR (INSIDE CARD) -->
+          <div class="text-[15px] font-extrabold text-blue-900 tracking-wide mb-1">
+            🧠 ${data.monthYear || ""}
+          </div>
+
+          <!-- DESCRIPTION -->
+          <div class="text-[14px] text-gray-700 line-clamp-2">
+            ${data.description || ""}
+          </div>
+
+        </div>
+
+        <div class="latest-view self-end shrink-0">
+          View
+        </div>
+
+      </div>
+    </div>
+  </div>
+`;
+  } catch (err) {
+    console.error("Latest counselling error:", err);
+    box.innerHTML = "";
+  }
+}
+
+async function loadLatestSafety() {
+  const box = document.getElementById("subject-content");
+
+  box.innerHTML = `
+    <div class="animate-pulse bg-gray-100 border border-gray-300 p-4 rounded-xl shadow"></div>
+  `;
+
+  try {
+    const q = query(
+      collection(db, "documents"),
+      where("category", "==", "safety_circular")
+    );
+
+    const snap = await getDocs(q);
+    if (snap.empty) {
+      box.innerHTML = "";
+      return;
+    }
+
+    // 🔹 Latest by latestRank
+    const docs = snap.docs
+      .map(d => d.data())
+      .filter(d => typeof d.latestRank === "number")
+      .sort((a, b) => a.latestRank - b.latestRank);
+
+    const data = docs[0];
+    if (!data) {
+      box.innerHTML = "";
+      return;
+    }
+
+    box.innerHTML = `
+  <div class="bg-white border border-blue-500 rounded-xl shadow-md p-4">
+
+    <div class="latest-card-item bg-yellow-50 border-l-4 border-yellow-500"
+         onclick="openLatest('${data.filePath}')">
+
+      <div class="flex justify-between gap-3">
+
+        <div class="flex-1 min-w-0">
+
+          <!-- SAFETY CIRCULAR NO (INSIDE CARD) -->
+          <div class="text-[15px] font-extrabold text-blue-900 tracking-wide mb-1">
+            ⚠️ ${data.circularNo || ""}
+          </div>
+
+          <!-- TITLE / DESCRIPTION -->
+          <div class="text-[14px] text-gray-700 line-clamp-2">
+            ${data.title || data.description || ""}
+          </div>
+
+        </div>
+
+        <div class="latest-view self-end shrink-0">
+          View
+        </div>
+
+      </div>
+    </div>
+  </div>
+`;
+  } catch (err) {
+    console.error("Latest safety circular error:", err);
+    box.innerHTML = "";
+  }
+}
+
+
+
+
+
+async function loadLatestCorrectionSlips() {
+  const box = document.getElementById("subject-content");
+
+  box.innerHTML = `
+    <div class="animate-pulse bg-gray-100 border border-gray-300 p-5 rounded-xl shadow"></div>
+  `;
+
+  try {
+    const sections = [
+      { key: "gsr",      name: "G&SR",            bg: "bg-blue-50",   border: "border-blue-500" },
+      { key: "accident", name: "Accident Manual", bg: "bg-red-50",    border: "border-red-500" },
+      { key: "wtt_a",    name: "WTT – Part A",    bg: "bg-green-50",  border: "border-green-500" },
+      { key: "wtt_b",    name: "WTT – Part B",    bg: "bg-amber-50",  border: "border-amber-500" }
+    ];
+
+    const rows = [];
+
+    for (const sec of sections) {
+      const q = query(
+        collection(db, "documents"),
+        where("category", "==", "correction_slip"),
+        where("section", "==", sec.key)
+      );
+
+      const snap = await getDocs(q);
+
+      const latest = snap.docs
+  .map(d => d.data())
+  .filter(d => typeof d.latestRank === "number")
+  .sort((a, b) => a.latestRank - b.latestRank)[0];
+      if (!latest) continue;
+
+      
+      rows.push(`
+  <div class="latest-card-item ${sec.bg} border-l-4 ${sec.border}"
+       onclick="openLatest('${latest.filePath}')">
+
+    <div class="flex justify-between gap-4">
+
+      <div class="flex-1 min-w-0">
+        <div class="text-[15px] font-extrabold text-blue-900">
+          ${sec.name} CS No : ${String(latest.slipNo).padStart(2, "0")}
+        </div>
+
+        <div class="text-[14px] text-gray-700 line-clamp-2">
+          ${latest.description || ""}
+        </div>
+      </div>
+
+      <div class="latest-view self-end">
+        View
+      </div>
+
+    </div>
+  </div>
+`);
+    }
+
+    if (!rows.length) {
+      box.innerHTML = "";
+      return;
+    }
+
+    box.innerHTML = `
+      <div class="bg-white border border-blue-300
+                  rounded-xl shadow-md p-5">
+
+       
+
+        <div class="space-y-3">
+          ${rows.join("")}
+        </div>
+      </div>
+    `;
+  } catch (err) {
+    console.error("Correction Slip load error:", err);
+    box.innerHTML = "";
+  }
+}
+  
+const subjects = [
+  { title: "📋 Shed Order",        loader: loadLatestShedOrder },
+  { title: "⚠️ Safety Circular",   loader: loadLatestSafety },
+  { title: "🧠 Counselling Topic", loader: loadLatestCounselling },
+  { title: "📝 Correction Slip",   loader: loadLatestCorrectionSlips }
+];
+
+let currentIndex = 0; // 🔥 default → Safety Circular
+
+/* ===============================
+   RENDER
+   =============================== */
+function renderSubject() {
+  const subject = subjects[currentIndex];
+  document.getElementById("subjectTitle").textContent = subject.title;
+  const box = document.getElementById("subject-content");
+  box.innerHTML = "";
+  subject.loader();
+}
+
+/* ===============================
+   INIT (ONLY PLACE)
+   =============================== */
+window.addEventListener("DOMContentLoaded", () => {
+
+  document.getElementById("prevSubject").addEventListener("click", () => {
+    currentIndex = (currentIndex - 1 + subjects.length) % subjects.length;
+    renderSubject();
+  });
+
+  document.getElementById("nextSubject").addEventListener("click", () => {
+    currentIndex = (currentIndex + 1) % subjects.length;
+    renderSubject();
+  });
+
+  renderSubject(); // 🚀 first load
+});
+</script>
+
+<footer
+  class="fixed bottom-0 left-0 w-full z-40
+         flex items-center justify-center
+         text-xs sm:text-sm
+         text-gray-700
+         bg-white
+         shadow-[0_-2px_8px_rgba(0,0,0,0.08)]
+         h-[var(--footer-height)]">
+  © <span class="footer-year ml-1"></span>&nbsp;Combined Crew Lobby · Madgaon. All Rights Reserved
+</footer>
+
+<script>
+/* ===============================
+   FOOTER YEAR
+   =============================== */
+document.querySelectorAll(".footer-year").forEach(el => {
+  el.textContent = new Date().getFullYear();
+});
+
+</script>
+  </body>
+    </html>
