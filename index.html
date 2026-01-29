@@ -24,14 +24,10 @@
   
 }
       
-  #menu-items, #main-content {
+  #menu-items {
     transition: opacity 0.3s ease;
   }
 
-  .fade-hidden {
-  opacity: 0;
-  pointer-events: none;
-}
 
 
 .menu-card {
@@ -90,62 +86,9 @@
       font-weight: 600; /* Normal professional weight */
     }
   }
-/* Disable text selection & tap highlight on clickable cards */
-.latest-card-item {
-  user-select: none;
-  -webkit-user-select: none;
-  -ms-user-select: none;
-
-  -webkit-tap-highlight-color: transparent;
-  tap-highlight-color: transparent;
-}
-
-.latest-card-item {
-  background: linear-gradient(135deg, #ffffff, #f8fafc);
-  cursor: pointer;
-  padding: 12px 14px;
-  border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0,0,0,.10);
-  transition: transform .2s ease, box-shadow .2s ease;
-
-  /* 🔹 REMOVE TEXT HIGHLIGHT ON CLICK */
-  user-select: none;
-  -webkit-user-select: none;
-  -ms-user-select: none;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.latest-card-item * {
-  user-select: none;
-  -webkit-user-select: none;
-}
 
 
 
-/* Optional: subtle press feedback (recommended) */
-.latest-card-item:active {
-  transform: scale(0.98);
-}
-/* Visual-only outlined View button */
-.latest-view {
-  font-size: 12px;
-  font-weight: 700;
-  color: #1d4ed8;
-
-  border: 1.5px solid #1d4ed8; /* tight outline */
-  padding: 2px 8px;           /* minimal padding */
-  border-radius: 6px;         /* compact rectangle */
-
-  line-height: 1.2;
-  background: transparent;
-  pointer-events: none;       /* card handles click */
-}
-
-.section-title {
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: .4px;
-}
 #slogan {
   white-space: nowrap;        /* ⛔ no line break */
   overflow: hidden;           /* hide overflow safely */
@@ -227,19 +170,10 @@
     transform: translateY(-6px);
     box-shadow: 0 26px 60px rgba(0,0,0,0.22);
   }
-
-  .latest-card-item:hover {
-    transform: translateY(-3px);
-    box-shadow:
-      inset 0 1px 0 rgba(255,255,255,.8),
-      0 16px 32px rgba(0,0,0,.18);
-  }
 }
 
 @media (max-width: 767px) {
-  .menu-card:active,
-  .latest-card-item:active,
-  .lobby-card:active {
+  .menu-card:active {
     transform: scale(0.96);
     box-shadow:
       inset 0 3px 8px rgba(0,0,0,0.18),
@@ -247,8 +181,7 @@
     background: rgba(59,130,246,0.06);
   }
 }
-.menu-card,
-.latest-card-item {
+.menu-card {
   touch-action: manipulation;
 }
 </style>
@@ -309,7 +242,7 @@
 
 <!-- Header with Menu and Home Icons -->
 <div id="nav-bar"
-     class="bg-gradient-to-r from-blue-900 via-blue-700 to-blue-900 px-4 sm:px-6 md:px-8">
+     class="hidden bg-gradient-to-r from-blue-900 via-blue-700 to-blue-900 px-4 sm:px-6 md:px-8">
   <div class="max-w-7xl mx-auto text-center">
     <div class="flex justify-center gap-3 py-2 sm:py-3">
 <div class="inline-flex items-center gap-2 
@@ -336,76 +269,14 @@
   </div>
 </div>
 
-<div id="latest-banner"
-     class="flex items-center justify-between
-            mb-3
-            bg-white
-            border border-blue-700
-            rounded-none
-            px-3 py-2">
 
-<button id="prevSubject"
-  class="w-9 h-9
-         flex items-center justify-center
-         rounded-full
-         bg-gradient-to-b from-blue-900 via-blue-600 to-blue-900
-         border border-blue-950
-         shadow-md
-         transition">
-  <svg viewBox="0 0 24 24"
-       class="w-4 h-4"
-       fill="none"
-       stroke="white"
-       stroke-width="3"
-       stroke-linecap="round"
-       stroke-linejoin="round">
-    <polyline points="15 18 9 12 15 6"></polyline>
-  </svg>
-</button>
-
- <h2 id="subjectTitle"
-    class="text-[15px] sm:text-[17px]
-           font-extrabold
-           tracking-wide
-           text-blue-900
-           uppercase
-           text-center flex-1">
-  Latest Shed Order
-</h2>
-
-<button id="nextSubject"
-  class="w-9 h-9
-         flex items-center justify-center
-         rounded-full
-         bg-gradient-to-b from-blue-900 via-blue-600 to-blue-900
-         border border-blue-950
-         shadow-md
-         transition">
-  <svg viewBox="0 0 24 24"
-       class="w-4 h-4"
-       fill="none"
-       stroke="white"
-       stroke-width="3"
-       stroke-linecap="round"
-       stroke-linejoin="round">
-    <polyline points="9 18 15 12 9 6"></polyline>
-  </svg>
-</button>
-</div>
-</div>
 
   <main class="pb-[var(--footer-height)]">
 
-      <!-- Main Content Wrapper -->
-<div id="main-content">
-  <div class="p-4 max-w-3xl mx-auto">
-    <div id="subject-content"></div>
-  </div>
-</div>
 
     
 <div id="menu-items"
-     class="hidden mt-4
+     class="mt-4
             grid grid-cols-2
             sm:grid-cols-2
             lg:grid-cols-3
@@ -413,7 +284,7 @@
             gap-4 px-4 sm:px-6
             max-w-screen-2xl mx-auto">
     
- <a href="#" onclick="goHomeFromMenu()" class="menu-card" style="--accent:#2563eb;">
+<a href="latest.html" class="menu-card" style="--accent:#2563eb;">
   <span class="menu-icon">📰</span>
   <span class="menu-title">LATEST CIRCULARS</span>
 </a>   
@@ -496,437 +367,9 @@
  
   </main>
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
-import {
-  getFirestore,
-  collection,
-  query,
-  where,
-  orderBy,
-  limit,
-  getDocs
-} from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
-import {
-  getStorage,
-  ref,
-  getDownloadURL
-} from "https://www.gstatic.com/firebasejs/12.7.0/firebase-storage.js";
 
-/* 🔹 Firebase init */
-const firebaseConfig = {
-  apiKey: "AIzaSyD4BfU5OKhKFynJMVC2k4qFEgmeDhLlSIM",
-  authDomain: "doc4runningstaff-d000b.firebaseapp.com",
-  projectId: "doc4runningstaff-d000b",
-  storageBucket: "doc4runningstaff-d000b.firebasestorage.app",
-  messagingSenderId: "34983733068",
-  appId: "1:34983733068:web:bbe8a3d902eecaab8bd1e9"
-};
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-const storage = getStorage(app);
-
-/* 🔹 COLOR MAP (Tailwind-safe) */
-const colorMap = {
-  red:   { bg: "bg-red-100",   border: "border-red-600",   text: "text-red-800",   btn: "bg-red-600 active:bg-red-700 md:hover:bg-red-700" },
-  yellow:{ bg: "bg-yellow-100",border: "border-yellow-600",text: "text-yellow-800",btn: "bg-yellow-600 active:bg-yellow-700 md:hover:bg-yellow-700" },
-  blue:  { bg: "bg-blue-100",  border: "border-blue-600",  text: "text-blue-800",  btn: "bg-blue-600 active:bg-blue-700 md:hover:bg-blue-700" },
-  green: { bg: "bg-green-100", border: "border-green-600", text: "text-green-800", btn: "bg-green-600 active:bg-green-700 md:hover:bg-green-700" },
-  indigo:{ bg: "bg-indigo-100",border: "border-indigo-600",text: "text-indigo-800",btn: "bg-indigo-600 active:bg-indigo-700 md:hover:bg-indigo-700" },
-  gray:  { bg: "bg-gray-200",  border: "border-gray-500",  text: "text-gray-800",  btn: "bg-gray-600 active:bg-gray-700 md:hover:bg-gray-700" }
-};
-
-  const shedLobbies = [
-  { code: "mao", name: "Madgaon" },
-  { code: "rn",  name: "Ratnagiri" },
-  { code: "ven", name: "Verna" },
-  { code: "sl",  name: "Surathkal" }
-];
-
-const subjects = [
-  {
-    key: "shed",
-    title: "📋 Latest Shed Order",
-    loader: () => loadLatestShedOrder("subject-content")
-  },
-  {
-    key: "safety",
-    title: "⚠️ Latest Safety Circular",          // ✅ FIXED
-    loader: () => loadLatestSafety("subject-content")
-  },
-  {
-    key: "counselling",
-    title: "🧠 Latest Counselling Topic",        // ✅ FIXED
-    loader: () => loadLatestCounselling("subject-content")
-  },
-  {
-    key: "correction",
-    title: "📘 Latest Correction Slip",
-    loader: () => loadLatestCorrectionSlips("subject-content")
-  }
-];
-
-let currentIndex = 0;
-
-
-function renderSubject() {
-  const subject = subjects[currentIndex];
-  document.getElementById("subjectTitle").textContent = subject.title;
-
-  const box = document.getElementById("subject-content");
-  box.innerHTML = "";
-  subject.loader();
-}
-
-async function loadLatestShedOrder() {
-  const box = document.getElementById("subject-content");
-  // Skeleton
-  box.innerHTML = `
-    <div class="animate-pulse bg-gray-100 border border-gray-300 p-5 rounded-xl shadow"></div>
-  `;
-
-  try {
-    const shedLobbies = [
-      { code: "mao", name: "Madgaon Lobby",   bg: "bg-blue-50",   border: "border-blue-500" },
-      { code: "rn",  name: "Ratnagiri Lobby", bg: "bg-green-50",  border: "border-green-500" },
-      { code: "ven", name: "Verna Lobby",     bg: "bg-amber-50",  border: "border-amber-500" },
-      { code: "sl",  name: "Surathkal Lobby", bg: "bg-indigo-50", border: "border-indigo-500" }
-    ];
-
-    const rows = [];
-
-    for (const lobby of shedLobbies) {
-      const q = query(
-        collection(db, "documents"),
-        where("category", "==", "shed_order"),
-        where("lobby", "==", lobby.code)
-      );
-
-      const snap = await getDocs(q);
-
-      const latest = snap.docs
-        .map(d => d.data())
-        .find(d => d.latestRank === 1);
-
-      if (!latest) continue;
-
-      const orderNo =
-        latest.orderNo ||
-        latest.title?.match(/\d{2}\/\d{4}/)?.[0] ||
-        "";
-
-      rows.push(`
-  <div class="latest-card-item ${lobby.bg} border-l-4 ${lobby.border}"
-       onclick="openLatest('${latest.filePath}')">
-
-    <div class="flex justify-between gap-3">
-
-      <div class="flex-1 min-w-0">
-        <!-- LOBBY (PRIMARY) -->
-        <div class="text-[15px] sm:text-[16px]
-                    font-extrabold text-gray-900
-                    tracking-wide uppercase">
-          ${lobby.name}
-        </div>
-
-        <!-- SHED ORDER NUMBER (SECONDARY BUT STRONG) -->
-        <div class="text-[14px] sm:text-[15px]
-                    font-bold text-blue-900
-                    mt-0.5">
-          Shed Order No : ${orderNo}
-        </div>
-
-        <!-- DESCRIPTION -->
-        <div class="text-[14px] text-gray-700 line-clamp-2 mt-1">
-          ${latest.description || ""}
-        </div>
-      </div>
-
-      <div class="latest-view self-end shrink-0">
-        View
-      </div>
-
-    </div>
-  </div>
-`);
-    } // ✅ FOR LOOP CLOSED HERE
-
-    if (!rows.length) {
-      box.innerHTML = "";
-      return;
-    }
-
-    box.innerHTML = `
-      <div class="bg-white border border-blue-500
-                  rounded-xl shadow-md p-5
-                  transition hover:shadow-lg">
-
-        
-
-        <div class="space-y-3">
-          ${rows.join("")}
-        </div>
-      </div>
-    `;
-  } catch (err) {
-    console.error("Latest shed order error:", err);
-    box.innerHTML = "";
-  }
-}
-
-  
-
-async function loadLatestCounselling(containerId) {
-  const box = document.getElementById(containerId);
-
-  box.innerHTML = `
-    <div class="animate-pulse bg-gray-100 border border-gray-300 p-4 rounded-xl shadow"></div>
-  `;
-
-  try {
-    const q = query(
-      collection(db, "documents"),
-      where("category", "==", "counselling")
-    );
-
-    const snap = await getDocs(q);
-    if (snap.empty) {
-      box.innerHTML = "";
-      return;
-    }
-
-    // 🔹 Latest by latestRank
-    const docs = snap.docs
-      .map(d => d.data())
-      .filter(d => typeof d.latestRank === "number")
-      .sort((a, b) => a.latestRank - b.latestRank);
-
-    const data = docs[0];
-    if (!data) {
-      box.innerHTML = "";
-      return;
-    }
-
-    box.innerHTML = `
-  <div class="bg-white border border-blue-500 rounded-xl shadow-md p-4">
-
-    <div class="latest-card-item bg-blue-50 border-l-4 border-blue-500"
-         onclick="openLatest('${data.filePath}')">
-
-      <div class="flex justify-between gap-3">
-
-        <div class="flex-1 min-w-0">
-          
-          <!-- MONTH–YEAR (INSIDE CARD) -->
-          <div class="text-[15px] font-extrabold text-blue-900 tracking-wide mb-1">
-            🧠 ${data.monthYear || ""}
-          </div>
-
-          <!-- DESCRIPTION -->
-          <div class="text-[14px] text-gray-700 line-clamp-2">
-            ${data.description || ""}
-          </div>
-
-        </div>
-
-        <div class="latest-view self-end shrink-0">
-          View
-        </div>
-
-      </div>
-    </div>
-  </div>
-`;
-  } catch (err) {
-    console.error("Latest counselling error:", err);
-    box.innerHTML = "";
-  }
-}
-
-async function loadLatestSafety(containerId) {
-  const box = document.getElementById(containerId);
-
-  box.innerHTML = `
-    <div class="animate-pulse bg-gray-100 border border-gray-300 p-4 rounded-xl shadow"></div>
-  `;
-
-  try {
-    const q = query(
-      collection(db, "documents"),
-      where("category", "==", "safety_circular")
-    );
-
-    const snap = await getDocs(q);
-    if (snap.empty) {
-      box.innerHTML = "";
-      return;
-    }
-
-    // 🔹 Latest by latestRank
-    const docs = snap.docs
-      .map(d => d.data())
-      .filter(d => typeof d.latestRank === "number")
-      .sort((a, b) => a.latestRank - b.latestRank);
-
-    const data = docs[0];
-    if (!data) {
-      box.innerHTML = "";
-      return;
-    }
-
-    box.innerHTML = `
-  <div class="bg-white border border-blue-500 rounded-xl shadow-md p-4">
-
-    <div class="latest-card-item bg-yellow-50 border-l-4 border-yellow-500"
-         onclick="openLatest('${data.filePath}')">
-
-      <div class="flex justify-between gap-3">
-
-        <div class="flex-1 min-w-0">
-
-          <!-- SAFETY CIRCULAR NO (INSIDE CARD) -->
-          <div class="text-[15px] font-extrabold text-blue-900 tracking-wide mb-1">
-            ⚠️ ${data.circularNo || ""}
-          </div>
-
-          <!-- TITLE / DESCRIPTION -->
-          <div class="text-[14px] text-gray-700 line-clamp-2">
-            ${data.title || data.description || ""}
-          </div>
-
-        </div>
-
-        <div class="latest-view self-end shrink-0">
-          View
-        </div>
-
-      </div>
-    </div>
-  </div>
-`;
-  } catch (err) {
-    console.error("Latest safety circular error:", err);
-    box.innerHTML = "";
-  }
-}
-
-
-
-
-
-async function loadLatestCorrectionSlips() {
-  const box = document.getElementById("subject-content");
-
-  box.innerHTML = `
-    <div class="animate-pulse bg-gray-100 border border-gray-300 p-5 rounded-xl shadow"></div>
-  `;
-
-  try {
-    const sections = [
-      { key: "gsr",      name: "G&SR",            bg: "bg-blue-50",   border: "border-blue-500" },
-      { key: "accident", name: "Accident Manual", bg: "bg-red-50",    border: "border-red-500" },
-      { key: "wtt_a",    name: "WTT – Part A",    bg: "bg-green-50",  border: "border-green-500" },
-      { key: "wtt_b",    name: "WTT – Part B",    bg: "bg-amber-50",  border: "border-amber-500" }
-    ];
-
-    const rows = [];
-
-    for (const sec of sections) {
-      const q = query(
-        collection(db, "documents"),
-        where("category", "==", "correction_slip"),
-        where("section", "==", sec.key)
-      );
-
-      const snap = await getDocs(q);
-
-      const latest = snap.docs
-  .map(d => d.data())
-  .filter(d => typeof d.latestRank === "number")
-  .sort((a, b) => a.latestRank - b.latestRank)[0];
-      if (!latest) continue;
-
-      
-      rows.push(`
-  <div class="latest-card-item ${sec.bg} border-l-4 ${sec.border}"
-       onclick="openLatest('${latest.filePath}')">
-
-    <div class="flex justify-between gap-4">
-
-      <div class="flex-1 min-w-0">
-        <div class="text-[15px] font-extrabold text-blue-900">
-          ${sec.name} CS No : ${String(latest.slipNo).padStart(2, "0")}
-        </div>
-
-        <div class="text-[14px] text-gray-700 line-clamp-2">
-          ${latest.description || ""}
-        </div>
-      </div>
-
-      <div class="latest-view self-end">
-        View
-      </div>
-
-    </div>
-  </div>
-`);
-    }
-
-    if (!rows.length) {
-      box.innerHTML = "";
-      return;
-    }
-
-    box.innerHTML = `
-      <div class="bg-white border border-blue-300
-                  rounded-xl shadow-md p-5">
-
-       
-
-        <div class="space-y-3">
-          ${rows.join("")}
-        </div>
-      </div>
-    `;
-  } catch (err) {
-    console.error("Correction Slip load error:", err);
-    box.innerHTML = "";
-  }
-}
-  
-/* 🔹 Open PDF */
-window.openLatest = async function (filePath) {
-  const url = await getDownloadURL(ref(storage, filePath));
-  window.open(url, "_blank");
-};
-
-/* 🔹 Load all latest cards */
-
-  
-
-
-  document.querySelectorAll("a").forEach(link => {
-    link.addEventListener("click", () => {
-      const textSpan = link.querySelector(".menu-title");
-      if (!textSpan) return;
-
-      textSpan.classList.add("scale-110");
-
-      setTimeout(() => {
-        textSpan.classList.remove("scale-110");
-      }, 300); // shorter duration for snappy feel
-    });
-  });
-
-  // Clean up enlarged text if user comes back via browser back button
-  window.addEventListener("pageshow", () => {
-    document.querySelectorAll(".menu-text").forEach(span => {
-      span.classList.remove("scale-110");
-    });
-  });
-
-// 🔹 Safe slogan rotation
+<script>
 const slogans = [
   'Our Mission: Zero SPAD – हमारा लक्ष्य: शून्य SPAD',
   'Safety First, Always!',
@@ -935,6 +378,7 @@ const slogans = [
 ];
 
 let sloganIndex = 0;
+
 function rotateSlogan() {
   const el = document.getElementById("slogan");
   if (!el) return;
@@ -943,58 +387,9 @@ function rotateSlogan() {
 }
 
 window.addEventListener("DOMContentLoaded", () => {
-
-  // 🔹 UI Elements
-  
-  const homeBtn = document.getElementById("home-button");
-  const mainContent = document.getElementById("main-content");
-  const menuItems = document.getElementById("menu-items");
-  
-  
-const navBar = document.getElementById("nav-bar");
-
-// ✅ MENU GRID IS HOME
-mainContent.classList.add("hidden");
-menuItems.classList.remove("hidden");
-document.getElementById("latest-banner").classList.add("hidden");
-
-// 🔥 THIS FIXES HEADER HEIGHT
-navBar.classList.add("hidden");
-homeBtn.classList.add("hidden");
-
-homeBtn.onclick = () => {
-  const navBar = document.getElementById("nav-bar");
-
-  // back to Menu Grid (Home)
-  homeBtn.classList.add("hidden");
-  navBar.classList.add("hidden");
-
-  document.getElementById("latest-banner").classList.add("hidden");
-  document.getElementById("main-content").classList.add("hidden");
-  document.getElementById("menu-items").classList.remove("hidden");
-};
-  // 🔹 Start slogan
   rotateSlogan();
   setInterval(rotateSlogan, 3000);
-  
-  renderSubject();
 });
-
-
-document.getElementById("prevSubject").onclick = () => {
-  currentIndex = (currentIndex - 1 + subjects.length) % subjects.length;
-  renderSubject();
-};
-
-document.getElementById("nextSubject").onclick = () => {
-  currentIndex = (currentIndex + 1) % subjects.length;
-  renderSubject();
-};
-
-  window.openLatest = async function (filePath) {
-  const url = await getDownloadURL(ref(storage, filePath));
-  window.open(url, "_blank");
-};
 </script>
 
 <footer
@@ -1014,50 +409,28 @@ document.getElementById("nextSubject").onclick = () => {
   });
   
   
-  window.addEventListener("DOMContentLoaded", () => {
-    const intro = document.getElementById("intro-screen");
-    const app = document.getElementById("app");
+window.addEventListener("DOMContentLoaded", () => {
+  const intro = document.getElementById("intro-screen");
+  const app = document.getElementById("app");
 
-    // 🔹 Check if intro already shown
-    const introShown = sessionStorage.getItem("introShown");
+  if (sessionStorage.getItem("introShown")) {
+    intro.remove();
+    app.classList.remove("opacity-0");
+    return;
+  }
 
-    if (introShown) {
-      // Skip intro completely
-      intro.remove();
-      app.classList.remove("opacity-0");
-      return;
-    }
+  sessionStorage.setItem("introShown", "true");
 
-    // 🔹 First visit → show intro
-    sessionStorage.setItem("introShown", "true");
+  setTimeout(() => {
+    intro.classList.add("opacity-0");
+    intro.style.pointerEvents = "none";
 
     setTimeout(() => {
-      intro.classList.add("opacity-0");
-      intro.style.pointerEvents = "none";
-
-      setTimeout(() => {
-        intro.remove();
-        app.classList.remove("opacity-0");
-      }, 700);
-
-    }, 2500);
-  });
-
-</script>
-<script>
-function goHomeFromMenu() {
-  const homeBtn = document.getElementById("home-button");
-  const navBar = document.getElementById("nav-bar");
-
-  // show latest page
-  document.getElementById("latest-banner").classList.remove("hidden");
-  document.getElementById("menu-items").classList.add("hidden");
-  document.getElementById("main-content").classList.remove("hidden");
-
-  // ✅ show navigation only here
-  navBar.classList.remove("hidden");
-  homeBtn.classList.remove("hidden");
-}
+      intro.remove();
+      app.classList.remove("opacity-0");
+    }, 700);
+  }, 2500);
+});
 </script>
   </body>
     </html>
