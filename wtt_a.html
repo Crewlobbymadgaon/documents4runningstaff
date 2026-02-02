@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes">
+    <title>wtt_a Correction Slips</title>
+    <link rel="manifest" href="/documents4runningstaff/manifest.json" />
+    <link rel="icon" href="/documents4runningstaff/favicon.ico" />
+    <link rel="apple-touch-icon" href="/documents4runningstaff/icon-192.png" />
+    <meta name="theme-color" content="#1f2937" />
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600&display=swap" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script defer src="main.js"></script>
+   
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
+import {
+  getFirestore,
+  collection,
+  query,
+  where,
+  getDocs,
+  
+} from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+
+import { getStorage, ref, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-storage.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyD4BfU5OKhKFynJMVC2k4qFEgmeDhLlSIM",
+  authDomain: "doc4runningstaff-d000b.firebaseapp.com",
+  projectId: "doc4runningstaff-d000b",
+  storageBucket: "doc4runningstaff-d000b.firebasestorage.app",
+  messagingSenderId: "34983733068",
+  appId: "1:34983733068:web:bbe8a3d902eecaab8bd1e9"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const storage = getStorage(app);
+
+  // expose globally
+  window.db = db;
+  window.storage = storage;
+  window.query = query;
+  window.where = where;
+  
+  window.getDocs = getDocs;
+  window.collection = collection;
+  window.ref = ref;
+  window.getDownloadURL = getDownloadURL;
+</script>
+
+    <style>
+     :root {
+    --footer-height: 48px;
+  }
+
+  html {
+  height: 100%;
+}
+
+body {
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+      html, body {
+  overscroll-behavior-y: auto;
+      }
+      
+      .font-rajdhani {
+        font-family: 'Rajdhani', sans-serif;
+      }
+
+
+      @keyframes fade-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+      /* Force selected text inside <select> to center in all browsers */
+.custom-select-center {
+  text-align: center;         /* Applies in Chrome */
+  text-align-last: center;    /* Applies in Firefox/Edge/Safari */
+}
+
+/* On iOS and some Android tablets, remove native appearance completely */
+select.custom-select-center {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+/* === SHED ORDER / COUNSELLING – UNIFIED CARD === */
+
+.shed-card {
+  background: linear-gradient(135deg, #ffffff, #f8fafc);
+  border-radius: 16px;
+  border-left: 6px solid #1d4ed8;
+  padding: 14px 16px;
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.8),
+    0 10px 22px rgba(0,0,0,.12);
+
+  transition: transform .2s ease, box-shadow .2s ease;
+  cursor: pointer;
+
+  user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+
+  -webkit-tap-highlight-color: transparent;
+  tap-highlight-color: transparent;
+}
+
+
+
+.shed-card:active {
+  transform: scale(0.98);
+  box-shadow:
+    inset 0 2px 6px rgba(0,0,0,.18),
+    0 6px 14px rgba(0,0,0,.2);
+}
+
+/* Title */
+.shed-title {
+  font-size: 15px;
+  font-weight: 800;
+  color: #1e3a8a;
+  letter-spacing: .3px;
+}
+
+/* Description */
+.shed-desc {
+  font-size: 14px;
+  color: #374151;
+  margin-top: 4px;
+  line-height: 1.35;
+}
+
+/* View button (visual only) */
+.shed-btn {
+  color: #1d4ed8;
+  font-size: 12px;
+  font-weight: 700;
+
+  border: 1.5px solid #1d4ed8;
+  padding: 2px 8px;
+  border-radius: 6px;
+
+  background: transparent;
+  pointer-events: none;
+}
+
+/* Mobile */
+@media (max-width: 640px) {
+  .shed-card {
+    padding: 12px 14px;
+  }
+}
+      header {
+  position: -webkit-sticky;
+  will-change: transform;
+  }
+  
+  /* ===============================
+   DESKTOP HOVER ONLY (SAFE)
+   =============================== */
+@media (hover: hover) and (pointer: fine) {
+  .shed-card:hover {
+    transform: translateY(-4px);
+    border-left-color: #1e40af;
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.8),
+      0 18px 36px rgba(0,0,0,.18);
+  }
+}
+
+/* ===============================
+   MOBILE TOUCH FEEDBACK
+   =============================== */
+@media (hover: none) and (pointer: coarse) {
+  .shed-card {
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
+  }
+
+  .shed-card:active {
+    transform: scale(0.96);
+    background: rgba(59,130,246,0.06);
+  }
+}
+
+/* Prevent double-tap zoom / ghost hover */
+.shed-card {
+  touch-action: manipulation;
+}
+/* 🔹 CLASS-BASED TOUCH FEEDBACK (matches menu cards) */
+.shed-card.touch-active {
+  transform: scale(0.96);
+  background: rgba(59,130,246,0.06);
+  box-shadow:
+    inset 0 2px 6px rgba(0,0,0,.18),
+    0 6px 14px rgba(0,0,0,.2);
+}
+
+/* 🔹 Disable :active on touch devices to avoid conflicts */
+@media (hover: none) and (pointer: coarse) {
+  .shed-card:active {
+    transform: none;
+    box-shadow: none;
+  }
+}
+
+    </style>
+  </head>
+
+
+<body class="bg-gray-50 text-gray-800">
+
+<!-- HEADER -->
+<header class="sticky top-0 z-50 relative
+  bg-gradient-to-r from-blue-900 via-blue-700 to-blue-900
+  text-white shadow-md">
+
+  <div class="relative px-4 pt-3 pb-5 sm:pb-4">
+
+    <!-- CENTERED TITLE -->
+    <div class="text-center max-w-3xl mx-auto">
+      <h1 class="font-rajdhani text-xl sm:text-3xl md:text-4xl leading-tight font-extrabold">
+        Digital Library
+        <span class="text-yellow-300">for</span>
+        Running Staff
+      </h1>
+
+      <h2 class="font-rajdhani mt-2 text-center leading-tight">
+  <span class="block text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-wide">
+    WTT Part A
+  </span>
+  <span class="block text-2xl sm:text-3xl md:text-4xl font-semibold tracking-wide opacity-90">
+    Correction Slips
+  </span>
+</h2>
+
+
+
+      
+    </div>
+
+    <!-- HAMBURGER (lower on mobile) -->
+    <div class="absolute bottom-1 sm:bottom-1 right-4">
+      <button id="hamburgerBtn"
+        class="bg-gradient-to-b from-blue-900 via-blue-500 to-blue-900 
+               hover:from-blue-800 hover:to-blue-950 
+               text-white p-2 rounded-md 
+               border border-blue-950 
+               shadow-lg 
+               focus:outline-none focus:ring-2 focus:ring-blue-900">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"
+          viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M4 6h16M4 12h16M4 18h16"></path>
+        </svg>
+      </button>
+
+      <div id="dropdownMenu"
+        class="hidden absolute right-0 mt-2 bg-white border border-blue-800 shadow-lg z-50 rounded-md w-52">
+      <a href="index.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Home</a>
+      <a href="latest.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Latest Circulars</a>
+      <a href="so_lobby_selector.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Shed Order</a>
+      <a href="safetycircular.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Safety Circular</a>
+      <a href="counselling.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Counselling Topic</a>
+      <a href="gsr.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">G&amp;SR</a>
+      <a href="wtt.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">WTT</a>
+      <a href="accidentmanual.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Accident Manual</a>
+      <a href="krabooks.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">KRA Books</a>
+      <a href="miscellaneous.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Miscellaneous Books</a>
+      <a href="tsd.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">TSD</a>
+      <a href="operating.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Operating</a>
+      <a href="videos.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Videos</a>
+      <a href="directory.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Phone Directory</a>
+    </div>
+  </div>
+
+</div>
+</header>
+
+<main class="pb-[calc(var(--footer-height)+16px)]">
+
+<section class="px-4 mt-8">
+  <div id="counsellingTopicList" class="grid gap-4 max-w-2xl mx-auto"></div>
+</section>
+
+
+
+
+
+<script>
+
+const hamburgerBtn = document.getElementById("hamburgerBtn");
+const dropdownMenu = document.getElementById("dropdownMenu");
+
+// Toggle Dropdown
+hamburgerBtn.addEventListener("click", (e) => {
+  e.stopPropagation();
+
+  const isOpen = !dropdownMenu.classList.contains("hidden");
+
+  if (isOpen) {
+    dropdownMenu.classList.add("hidden");
+    hamburgerBtn.setAttribute("aria-expanded", "false");
+    hamburgerBtn.blur(); // ✅ RESET BUTTON STATE
+  } else {
+    dropdownMenu.classList.remove("hidden");
+    hamburgerBtn.setAttribute("aria-expanded", "true");
+  }
+});
+
+// Close dropdown when a link inside it is clicked
+dropdownMenu.querySelectorAll("a").forEach(link => {
+  link.addEventListener("click", () => {
+    dropdownMenu.classList.add("hidden");
+    hamburgerBtn.setAttribute("aria-expanded", "false");
+    hamburgerBtn.blur(); // ✅ RESET
+  });
+});
+
+// Close dropdown if clicking outside
+document.addEventListener("click", (e) => {
+  if (
+    !dropdownMenu.classList.contains("hidden") &&
+    !dropdownMenu.contains(e.target) &&
+    !hamburgerBtn.contains(e.target)
+  ) {
+    dropdownMenu.classList.add("hidden");
+    hamburgerBtn.setAttribute("aria-expanded", "false");
+    hamburgerBtn.blur(); // ✅ RESET
+  }
+});
+
+// Close on Escape key
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && !dropdownMenu.classList.contains("hidden")) {
+    dropdownMenu.classList.add("hidden");
+    hamburgerBtn.setAttribute("aria-expanded", "false");
+    hamburgerBtn.blur(); // ✅ RESET
+  }
+});
+
+
+  
+
+async function loadGsrCorrectionSlips() {
+  const list = document.getElementById("counsellingTopicList");
+  list.innerHTML = "<p class='text-center'>Loading...</p>";
+
+  try {
+    const q = query(
+  collection(db, "documents"),
+  where("category", "==", "correction_slip"),
+  where("section", "==", "wtt_a")
+);
+
+  
+
+    const snapshot = await getDocs(q);
+
+    if (snapshot.empty) {
+      list.innerHTML =
+        "<p class='text-center text-red-600 font-semibold'>No Correction Slips available</p>";
+      return;
+    }
+
+    // 🔹 Sort by slip number (latest first)
+    const docs = snapshot.docs
+      .map(d => d.data())
+      .sort((a, b) => (b.slipNo || 0) - (a.slipNo || 0));
+
+    list.innerHTML = "";
+
+    for (const data of docs) {
+      const card = document.createElement("div");
+      card.className = "shed-card cursor-pointer";
+      card.onclick = () => openCorrectionSlip(data.filePath);
+
+      card.innerHTML = `
+  <div class="flex items-start justify-between gap-3">
+    <div class="flex-1 min-w-0">
+      <div class="shed-title">
+        📘 Correction Slip No. ${String(data.slipNo).padStart(2, "0")}
+      </div>
+      <div class="shed-desc line-clamp-3">
+        ${data.description || "G&SR Correction Slip"}
+      </div>
+    </div>
+    <div class="shed-btn shrink-0 self-end">
+      View
+    </div>
+  </div>
+`;
+
+      list.appendChild(card);
+    }
+
+  } catch (err) {
+    console.error("Error loading G&SR Correction Slips:", err);
+    list.innerHTML =
+      "<p class='text-center text-red-600 font-semibold'>Error loading data</p>";
+  }
+  
+  // 🔹 Attach touch feedback AFTER cards are rendered
+document.querySelectorAll(".shed-card").forEach(card => {
+
+  let isTouch = false;
+
+  card.addEventListener("touchstart", () => {
+    isTouch = true;
+    card.classList.add("touch-active");
+  }, { passive: true });
+
+  card.addEventListener("touchend", () => {
+    card.classList.remove("touch-active");
+  });
+
+  card.addEventListener("touchcancel", () => {
+    card.classList.remove("touch-active");
+  });
+
+  card.addEventListener("click", () => {
+    if (isTouch) isTouch = false;
+  });
+
+});
+
+}
+
+
+
+   
+async function openCorrectionSlip(filePath) {
+  try {
+    const url = await getDownloadURL(ref(window.storage, filePath));
+    window.open(url, "_blank");
+  } catch (err) {
+    alert("Unable to open document");
+    console.error(err);
+  }
+}
+
+
+window.addEventListener("DOMContentLoaded", () => {
+  loadGsrCorrectionSlips();
+});
+
+
+
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/service-worker.js')
+      .then(reg => console.log("Service Worker registered:", reg))
+      .catch(err => console.log("Service Worker registration failed:", err));
+  });
+}
+
+
+  document.addEventListener("keydown", (e) => {
+  // Close dropdown if open
+  if (e.key === "Escape" && !dropdownMenu.classList.contains("hidden")) {
+    dropdownMenu.classList.add("hidden");
+    hamburgerBtn.setAttribute("aria-expanded", "false");
+  }
+
+ 
+});
+
+</script>
+    </main>
+<footer
+  class="fixed bottom-0 left-0 w-full z-40
+         flex items-center justify-center
+         text-xs sm:text-sm
+         text-gray-700
+         bg-white
+         shadow-[0_-2px_8px_rgba(0,0,0,0.08)]
+         h-[var(--footer-height)]">
+© <span class="footer-year ml-1"></span>&nbsp;Combined Crew Lobby · Madgaon. All Rights Reserved
+
+</footer>
+
+<script>
+  document.querySelectorAll(".footer-year").forEach(el => {
+    el.textContent = new Date().getFullYear();
+  });
+</script>
+
+
+</body>
+</html>
