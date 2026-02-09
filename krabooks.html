@@ -152,7 +152,7 @@ body { padding-bottom: var(--footer-height); }
 @media (max-width: 480px) {
 
   .lobby-card {
-    height: 54px;
+    height: 58px;
     padding: 4px;
     border-radius: 12px;
   }
@@ -432,6 +432,26 @@ document.querySelectorAll(".lobby-card").forEach(card => {
   card.addEventListener("click", () => {
     window.location.href = page;
   });
+});
+
+  document.querySelectorAll(".menu-card[data-file]").forEach(card => {
+
+  card.addEventListener("click", async (e) => {
+    e.preventDefault();
+    card.classList.add("touch-active");
+
+    try {
+      const filePath = card.dataset.file;
+      const url = await getDownloadURL(ref(window.storage, filePath));
+      window.open(url, "_blank");
+    } catch (err) {
+      alert("Unable to open document");
+      console.error(err);
+    } finally {
+      setTimeout(() => card.classList.remove("touch-active"), 120);
+    }
+  });
+
 });
 </script>
 
