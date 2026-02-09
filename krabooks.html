@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KRA Books</title>
+
+  <link rel="manifest" href="/documents4runningstaff/manifest.json" />
+  <link rel="icon" href="/documents4runningstaff/favicon.ico" />
+  <meta name="theme-color" content="#1f2937" />
+
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
+import { getStorage, ref, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-storage.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyD4BfU5OKhKFynJMVC2k4qFEgmeDhLlSIM",
+  authDomain: "doc4runningstaff-d000b.firebaseapp.com",
+  projectId: "doc4runningstaff-d000b",
+  storageBucket: "doc4runningstaff-d000b.firebasestorage.app",
+  messagingSenderId: "34983733068",
+  appId: "1:34983733068:web:bbe8a3d902eecaab8bd1e9"
+};
+
+const app = initializeApp(firebaseConfig);
+const storage = getStorage(app);
+
+// expose globally
+window.storage = storage;
+window.ref = ref;
+window.getDownloadURL = getDownloadURL;
+</script>
+
+
+  <style>
+    /* ===============================
+   BASE
+   =============================== */
+.font-rajdhani { font-family: 'Rajdhani', sans-serif; }
+
+:root { --footer-height: 48px; }
+body { padding-bottom: var(--footer-height); }
+
+/* ===============================
+   LOBBY CARD (BASE / TABLET)
+   =============================== */
+.lobby-card {
+  position: relative;
+  height: 78px;
+  padding: 8px 6px;
+  border-radius: 14px;
+
+  background: linear-gradient(135deg, #ffffff, #f1f5f9);
+  box-shadow:
+    inset 0 2px 0 rgba(255,255,255,0.9),
+    0 12px 20px rgba(0,0,0,0.12),
+    0 24px 48px rgba(0,0,0,0.18);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+  overflow: hidden;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+.lobby-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 5px;
+  width: 100%;
+  background: var(--accent);
+}
+
+/* ===============================
+   TITLE (BASE / TABLET)
+   =============================== */
+.lobby-title {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: 0.4px;
+  color: #0f172a;
+  line-height: 1.2;
+  text-align: center;
+}
+
+/* ===============================
+   DESKTOP HOVER
+   =============================== */
+@media (hover: hover) and (pointer: fine) {
+  .lobby-card:hover {
+    transform: translateY(-6px);
+    box-shadow:
+      inset 0 2px 0 rgba(255,255,255,0.9),
+      0 18px 34px rgba(0,0,0,0.18),
+      0 36px 60px rgba(0,0,0,0.26);
+  }
+}
+
+/* ===============================
+   TOUCH FEEDBACK
+   =============================== */
+.lobby-card.touch-active {
+  transform: scale(0.96);
+  box-shadow:
+    inset 0 3px 8px rgba(0,0,0,0.18),
+    0 6px 14px rgba(0,0,0,0.16);
+  background: rgba(59,130,246,0.06);
+}
+
+/* ===============================
+   GROUP WRAPPER
+   =============================== */
+.gsr-group {
+  background: #f8fafc;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 12px;
+}
+
+.gsr-divider {
+  height: 2px;
+  width: 60%;
+  margin: 6px auto 10px;
+  background: linear-gradient(to right, transparent, #1e40af, transparent);
+}
+
+.gsr-group-title {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 22px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  color: #1e3a8a;
+  text-align: center;
+  line-height: 1.2;
+  min-height: 44px;
+}
+
+/* ===============================
+   MOBILE (≤ 480px)
+   =============================== */
+@media (max-width: 480px) {
+
+  .lobby-card {
+    height: 54px;
+    padding: 4px;
+    border-radius: 12px;
+  }
+
+  .lobby-title {
+    font-size: 14px;
+    line-height: 1.05;
+    letter-spacing: 0.3px;
+
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .gsr-group {
+    padding: 6px;
+  }
+
+  .gsr-group-title {
+    font-size: 15px;
+    min-height: 32px;
+  }
+
+  .gsr-divider {
+    margin: 3px auto 5px;
+  }
+}
+
+/* ===============================
+   DESKTOP (≥ 1024px)
+   =============================== */
+@media (min-width: 1024px) {
+
+  .lobby-card {
+    height: auto;
+    min-height: 90px;
+    padding: 10px 8px;
+  }
+
+  .lobby-title {
+    font-size: 18px;
+    line-height: 1.25;
+  }
+}
+  </style>
+</head>
+
+<body class="bg-gray-50 text-gray-800">
+
+<!-- HEADER -->
+<header class="sticky top-0 z-50 relative
+  bg-gradient-to-r from-blue-900 via-blue-700 to-blue-900
+  text-white shadow-md">
+
+  <div class="relative px-4 pt-3 pb-5 sm:pb-4">
+
+    <!-- CENTERED TITLE -->
+    <div class="text-center max-w-3xl mx-auto">
+      <h1 class="font-rajdhani text-xl sm:text-3xl md:text-4xl leading-tight font-extrabold">
+        Digital Library
+        <span class="text-yellow-300">for</span>
+        Running Staff
+      </h1>
+
+      <h2 class="font-rajdhani text-3xl sm:text-4xl md:text-5xl font-extrabold mt-2">
+        KRA Books
+      </h2>
+
+      
+    </div>
+
+    <!-- HAMBURGER (lower on mobile) -->
+    <div class="absolute bottom-2 sm:bottom-3 right-4">
+      <button id="hamburgerBtn"
+        class="bg-gradient-to-b from-blue-900 via-blue-500 to-blue-900 
+               hover:from-blue-800 hover:to-blue-950 
+               text-white p-2 rounded-md 
+               border border-blue-950 
+               shadow-lg 
+               focus:outline-none focus:ring-2 focus:ring-blue-900">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"
+          viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M4 6h16M4 12h16M4 18h16"></path>
+        </svg>
+      </button>
+
+      <div id="dropdownMenu"
+        class="hidden absolute right-0 mt-2 bg-white border border-blue-800 shadow-lg z-50 rounded-md w-52">
+      <a href="index.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Home</a>
+      <a href="latest.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Latest Circulars</a>
+      <a href="so_lobby_selector.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Shed Order</a>
+      <a href="safetycircular.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Safety Circular</a>
+      <a href="counselling.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Counselling Topic</a>
+      <a href="gsr.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">G&amp;SR</a>
+      <a href="wtt.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">WTT</a>
+      <a href="accidentmanual.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Accident Manual</a>
+      <a href="correction.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Correction Slips</a>
+      <a href="miscellaneous.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Miscellaneous Books</a>
+      <a href="tsd.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">TSD</a>
+      <a href="operating.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Operating</a>
+      <a href="videos.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Videos</a>
+      <a href="directory.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Phone Directory</a>
+    </div>
+  </div>
+
+</div>
+</header>
+
+<div class="flex justify-center mt-3 pb-4">
+  <div class="w-full max-w-3xl px-3 space-y-4">
+
+    <!-- ================= KRCL ================= -->
+    
+<!-- ================= DIESEL ================= -->
+<div class="gsr-group">
+  <div class="gsr-group-title">📘 Diesel</div>
+  <div class="gsr-divider"></div>
+
+  <div class="grid grid-cols-2 gap-5">
+
+    <!-- Diesel Part 1 -->
+    <div class="lobby-card" style="--accent:#2563eb"
+         data-file="documents/KRA_books/diesel_books/Diesel_Loco_Part_1.pdf">
+      <div class="lobby-title">Diesel Loco – Part 1 (English)</div>
+    </div>
+
+    
+
+    <!-- Diesel Part 2 -->
+    <div class="lobby-card" style="--accent:#2563eb"
+         data-file="documents/KRA_books/diesel_books/Diesel_Loco_Part_2.pdf">
+      <div class="lobby-title">Diesel Loco– Part 2 (English)</div>
+    </div>
+
+
+  </div>
+</div>
+
+<!-- ================= ELECTRIC ================= -->
+<div class="gsr-group">
+  <div class="gsr-group-title">📕 Electric</div>
+  <div class="gsr-divider"></div>
+
+  <div class="grid grid-cols-2 gap-5">
+
+    <!-- Electric Book 1 -->
+    <div class="lobby-card" style="--accent:#dc2626"
+         data-file="documents/KRA_books/Conventional_English.pdf">
+      <div class="lobby-title">Conventional Loco (English)</div>
+    </div>
+
+    <div class="lobby-card" style="--accent:#dc2626"
+         data-file="documents/KRA_books/Conventional_Hindi.pdf">
+      <div class="lobby-title">Conventional Loco (Hindi)</div>
+    </div>
+
+    <!-- Electric Book 2 -->
+    <div class="lobby-card" style="--accent:#dc2626"
+         data-file="documents/KRA_books/3_Phase_English.pdf">
+      <div class="lobby-title">3 Phase Loco (English)</div>
+    </div>
+
+    <div class="lobby-card" style="--accent:#dc2626"
+         data-file="documents/KRA_books/3_Phase_Hindi.pdf">
+      <div class="lobby-title">3 Phase Loco (Hindi)</div>
+    </div>
+
+    <!-- Electric Book 3 -->
+    <div class="lobby-card" style="--accent:#dc2626"
+         data-file="documents/KRA_books/WCAM3_English.pdf">
+      <div class="lobby-title">WCAM3 (English)</div>
+    </div>
+
+    <div class="lobby-card" style="--accent:#dc2626"
+         data-file="documents/KRA_books/WCAM3_Hindi.pdf">
+      <div class="lobby-title">WCAM3 (Hindi)</div>
+    </div>
+
+  </div>
+</div>
+
+
+ </div></div>
+<footer
+  class="fixed bottom-0 left-0 w-full z-40
+         flex items-center justify-center
+         text-xs sm:text-sm
+         text-gray-700
+         bg-white
+         shadow-[0_-2px_8px_rgba(0,0,0,0.08)]
+         h-[var(--footer-height)]">
+© <span class="footer-year ml-1"></span>&nbsp;Combined Crew Lobby · Madgaon. All Rights Reserved
+
+</footer>
+
+<script>
+  document.querySelectorAll(".footer-year").forEach(el => {
+    el.textContent = new Date().getFullYear();
+  });
+  
+async function opengsr(filePath, el) {
+
+  // ✅ show press feedback FIRST
+  if (el) el.classList.add("touch-active");
+
+  // small delay so eye can see feedback
+  setTimeout(async () => {
+    try {
+      const url = await getDownloadURL(ref(window.storage, filePath));
+      window.open(url, "_blank");
+    } catch (err) {
+      alert("Unable to open document");
+      console.error(err);
+    } finally {
+      if (el) el.classList.remove("touch-active");
+    }
+  }, 120); // same timing feel as index
+}
+
+
+  
+  
+  const hamburgerBtn = document.getElementById("hamburgerBtn");
+  const dropdownMenu = document.getElementById("dropdownMenu");
+
+  // Toggle menu
+  hamburgerBtn.addEventListener("click", e => {
+    e.stopPropagation();
+    dropdownMenu.classList.toggle("hidden");
+  });
+
+  // Close on outside click
+  document.addEventListener("click", e => {
+    if (!dropdownMenu.contains(e.target) && !hamburgerBtn.contains(e.target)) {
+      dropdownMenu.classList.add("hidden");
+    }
+  });
+
+  // ✅ CLOSE MENU WHEN ANY MENU ITEM IS CLICKED
+  dropdownMenu.querySelectorAll("a").forEach(link => {
+    link.addEventListener("click", () => {
+      dropdownMenu.classList.add("hidden");
+    });
+  });
+
+  // Close on Escape
+  document.addEventListener("keydown", e => {
+    if (e.key === "Escape") {
+      dropdownMenu.classList.add("hidden");
+    }
+  });
+
+
+document.querySelectorAll(".lobby-card").forEach(card => {
+  const page = card.dataset.page;
+  if (!page) return;
+
+  // Touch feedback
+  card.addEventListener("touchstart", () => {
+    card.classList.add("touch-active");
+  }, { passive: true });
+
+  card.addEventListener("touchend", () => {
+    card.classList.remove("touch-active");
+    setTimeout(() => {
+      window.location.href = page;
+    }, 100);
+  });
+
+  card.addEventListener("touchcancel", () => {
+    card.classList.remove("touch-active");
+  });
+
+  // Desktop click
+  card.addEventListener("click", () => {
+    window.location.href = page;
+  });
+});
+</script>
+
+
+
+</body>
+</html>
