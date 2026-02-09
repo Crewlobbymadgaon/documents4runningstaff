@@ -418,44 +418,56 @@ document.querySelectorAll(".lobby-card[data-page]").forEach(card => {
 /* ===============================
    LOBBY CARDS – FIREBASE FILE OPEN
    =============================== */
-document.querySelectorAll(".lobby-card[data-file]").forEach(card => {
+document.querySelectorAll(".lobby-card").forEach(card => {
 
-  // Touch feedback (mobile)
+  const filePath = card.dataset.file;
+  if (!filePath) return;
+
+  let isOpening = false;
+
+  // ✅ TOUCH START — instant press feedback
   card.addEventListener("touchstart", () => {
+    if (isOpening) return;
     card.classList.add("touch-active");
   }, { passive: true });
 
-  card.addEventListener("touchend", async (e) => {
+  // ✅ TOUCH END — KEEP feedback, then open
+  card.addEventListener("touchend", (e) => {
+    if (isOpening) return;
     e.preventDefault();
-    card.classList.remove("touch-active");
 
-    try {
-      const url = await getDownloadURL(
-        ref(window.storage, card.dataset.file)
-      );
-      window.open(url, "_blank", "noopener");
-    } catch (err) {
-      alert("Unable to open document");
-      console.error(err);
-    }
+    isOpening = true;
+
+    setTimeout(async () => {
+      try {
+        const url = await getDownloadURL(
+          ref(window.storage, filePath)
+        );
+        window.open(url, "_blank", "noopener");
+      } catch (err) {
+        alert("Unable to open document");
+      } finally {
+        card.classList.remove("touch-active");
+        isOpening = false;
+      }
+    }, 120); // 👈 THIS is the magic delay
   });
 
+  // Safety
   card.addEventListener("touchcancel", () => {
     card.classList.remove("touch-active");
+    isOpening = false;
   });
 
-  // Desktop click
-  card.addEventListener("click", async (e) => {
-    e.preventDefault();
-
+  // ✅ DESKTOP CLICK
+  card.addEventListener("click", async () => {
     try {
       const url = await getDownloadURL(
-        ref(window.storage, card.dataset.file)
+        ref(window.storage, filePath)
       );
       window.open(url, "_blank", "noopener");
-    } catch (err) {
+    } catch {
       alert("Unable to open document");
-      console.error(err);
     }
   });
 
