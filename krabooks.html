@@ -415,13 +415,12 @@ document.querySelectorAll(".lobby-card[data-page]").forEach(card => {
   });
 
 });
-
 /* ===============================
-   MENU CARDS (FIREBASE FILE OPEN)
+   LOBBY CARDS – FIREBASE FILE OPEN
    =============================== */
-document.querySelectorAll(".menu-card[data-file]").forEach(card => {
+document.querySelectorAll(".lobby-card[data-file]").forEach(card => {
 
-  // Touch feedback
+  // Touch feedback (mobile)
   card.addEventListener("touchstart", () => {
     card.classList.add("touch-active");
   }, { passive: true });
@@ -434,7 +433,7 @@ document.querySelectorAll(".menu-card[data-file]").forEach(card => {
       const url = await getDownloadURL(
         ref(window.storage, card.dataset.file)
       );
-      window.open(url, "_blank");
+      window.open(url, "_blank", "noopener");
     } catch (err) {
       alert("Unable to open document");
       console.error(err);
@@ -448,11 +447,12 @@ document.querySelectorAll(".menu-card[data-file]").forEach(card => {
   // Desktop click
   card.addEventListener("click", async (e) => {
     e.preventDefault();
+
     try {
       const url = await getDownloadURL(
         ref(window.storage, card.dataset.file)
       );
-      window.open(url, "_blank");
+      window.open(url, "_blank", "noopener");
     } catch (err) {
       alert("Unable to open document");
       console.error(err);
