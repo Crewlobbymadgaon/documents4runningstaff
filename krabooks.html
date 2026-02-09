@@ -275,19 +275,19 @@ body { padding-bottom: var(--footer-height); }
 
  <div class="grid grid-cols-2 sm:grid-cols-2 gap-5">
 
-    <!-- Diesel Part 1 -->
-    <div class="lobby-card" style="--accent:#2563eb"
-         data-file="documents/KRA_books/diesel_books/Diesel_Loco_Part_1.pdf">
-      <div class="lobby-title">Diesel Loco – Part 1 (English)</div>
-    </div>
+<div class="lobby-card"
+     style="--accent:#2563eb"
+     onclick="opengsr('documents/KRA_books/diesel_books/Diesel_Loco_Part_1.pdf', this)">
+  <div class="lobby-title">Diesel Loco – Part 1 (English)</div>
+</div>
 
     
 
-    <!-- Diesel Part 2 -->
-    <div class="lobby-card" style="--accent:#2563eb"
-         data-file="documents/KRA_books/diesel_books/Diesel_Loco_Part_2.pdf">
-      <div class="lobby-title">Diesel Loco– Part 2 (English)</div>
-    </div>
+<div class="lobby-card"
+     style="--accent:#2563eb"
+     onclick="opengsr('documents/KRA_books/diesel_books/Diesel_Loco_Part_1.pdf', this)">
+  <div class="lobby-title">Diesel Loco – Part 2 (English)</div>
+</div>
 
 
   </div>
@@ -418,62 +418,30 @@ document.querySelectorAll(".lobby-card[data-page]").forEach(card => {
 /* ===============================
    LOBBY CARDS – FIREBASE FILE OPEN
    =============================== */
-document.querySelectorAll(".lobby-card").forEach(card => {
 
-  const filePath = card.dataset.file;
-  if (!filePath) return;
+</script>
+<script>
+async function opengsr(filePath, el) {
 
-  let isOpening = false;
+  // ✅ show press feedback FIRST
+  if (el) el.classList.add("touch-active");
 
-  // ✅ TOUCH START — instant press feedback
-  card.addEventListener("touchstart", () => {
-    if (isOpening) return;
-    card.classList.add("touch-active");
-  }, { passive: true });
-
-  // ✅ TOUCH END — KEEP feedback, then open
-  card.addEventListener("touchend", (e) => {
-    if (isOpening) return;
-    e.preventDefault();
-
-    isOpening = true;
-
-    setTimeout(async () => {
-      try {
-        const url = await getDownloadURL(
-          ref(window.storage, filePath)
-        );
-        window.open(url, "_blank", "noopener");
-      } catch (err) {
-        alert("Unable to open document");
-      } finally {
-        card.classList.remove("touch-active");
-        isOpening = false;
-      }
-    }, 120); // 👈 THIS is the magic delay
-  });
-
-  // Safety
-  card.addEventListener("touchcancel", () => {
-    card.classList.remove("touch-active");
-    isOpening = false;
-  });
-
-  // ✅ DESKTOP CLICK
-  card.addEventListener("click", async () => {
+  // ✅ exact same timing as gsr.html
+  setTimeout(async () => {
     try {
       const url = await getDownloadURL(
         ref(window.storage, filePath)
       );
       window.open(url, "_blank", "noopener");
-    } catch {
+    } catch (err) {
       alert("Unable to open document");
+      console.error(err);
+    } finally {
+      if (el) el.classList.remove("touch-active");
     }
-  });
-
-});
+  }, 120);
+}
 </script>
-
 
 
 </body>
