@@ -60,10 +60,12 @@
     background: var(--accent);
   }
 
-  
-
-  .menu-card:active {
-    transform: scale(0.95);
+  .menu-card.touch-active {
+  transform: scale(0.96);
+  box-shadow:
+    inset 0 3px 8px rgba(0,0,0,0.18),
+    0 6px 14px rgba(0,0,0,0.16);
+  background: rgba(59,130,246,0.06);
   }
 
   /* ICON */
@@ -172,15 +174,7 @@
   }
 }
 
-@media (max-width: 767px) {
-  .menu-card:active {
-    transform: scale(0.96);
-    box-shadow:
-      inset 0 3px 8px rgba(0,0,0,0.18),
-      0 6px 14px rgba(0,0,0,0.16);
-    background: rgba(59,130,246,0.06);
-  }
-}
+
 .menu-card {
   touch-action: manipulation;
 }
@@ -463,5 +457,25 @@ window.addEventListener("DOMContentLoaded", () => {
   }, 2500);
 });
 </script>
+      <script>
+document.querySelectorAll(".menu-card").forEach(card => {
+
+  // TOUCH START → show feedback immediately
+  card.addEventListener("touchstart", () => {
+    card.classList.add("touch-active");
+  }, { passive: true });
+
+  // TOUCH END → snap back, then let click/open happen
+  card.addEventListener("touchend", () => {
+    card.classList.remove("touch-active");
+  });
+
+  // SAFETY
+  card.addEventListener("touchcancel", () => {
+    card.classList.remove("touch-active");
+  });
+
+});
+      </script>
   </body>
     </html>
