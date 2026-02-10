@@ -104,11 +104,11 @@ select.custom-select-center {
   -webkit-tap-highlight-color: transparent;
   tap-highlight-color: transparent;
 }
-.shed-card:active {
-  transform: scale(0.98);
+.shed-card.touch-active {
+  transform: scale(0.96);
   box-shadow:
-    inset 0 2px 6px rgba(0,0,0,.18),
-    0 6px 14px rgba(0,0,0,.2);
+    inset 0 3px 8px rgba(0,0,0,0.22),
+    0 6px 14px rgba(0,0,0,0.18);
 }
 
 .shed-card:hover {
@@ -610,6 +610,36 @@ if ('serviceWorker' in navigator) {
 });
 
 </script>
+      <script>
+document.addEventListener("DOMContentLoaded", () => {
+
+  document.addEventListener("touchstart", e => {
+    const card = e.target.closest(".shed-card");
+    if (!card) return;
+    card.classList.add("touch-active");
+  }, { passive: true });
+
+  document.addEventListener("touchend", e => {
+    const card = e.target.closest(".shed-card");
+    if (!card) return;
+    card.classList.remove("touch-active");
+  });
+
+  document.addEventListener("touchcancel", e => {
+    const card = e.target.closest(".shed-card");
+    if (!card) return;
+    card.classList.remove("touch-active");
+  });
+
+});
+
+// Safety reset when navigating back
+window.addEventListener("pageshow", () => {
+  document.querySelectorAll(".shed-card").forEach(card => {
+    card.classList.remove("touch-active");
+  });
+});
+      </script>
     </main>
 <footer
   class="fixed bottom-0 left-0 w-full z-40
