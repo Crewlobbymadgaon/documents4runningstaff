@@ -385,11 +385,19 @@
   const storage = getStorage(app);
 
   // 🔴 THIS LINE IS CRITICAL
-  window.openLatest = async function (filePath) {
-    const fileRef = ref(storage, filePath);
-    const url = await getDownloadURL(fileRef);
-    window.open(url, "_blank");
-  };
+  window.openLatest = function (filePath) {
+  const win = window.open("", "_blank"); // open immediately
+
+  getDownloadURL(ref(storage, filePath))
+    .then(url => {
+      win.location.href = url;
+    })
+    .catch(err => {
+      win.close();
+      alert("Accident Manual not found / access denied");
+      console.error(err);
+    });
+};
 </script>
 
 <script>
