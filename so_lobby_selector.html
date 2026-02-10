@@ -90,11 +90,6 @@
   pointer-events: none;
 }
 
-/* Show glow on tap */
-.lobby-card:active::after {
-  opacity: 1;
-}
-
 /* ✅ Enable hover ONLY on real hover devices (desktop/laptop) */
 @media (hover: hover) and (pointer: fine) {
   .lobby-card:hover {
@@ -106,13 +101,6 @@
   }
 }
 
-/* 🔥 EXTRA-DEEP mobile press feedback */
-.lobby-card:active {
-  transform: scale(0.92) translateY(3px);
-  box-shadow:
-    inset 0 3px 8px rgba(0,0,0,0.35),
-    0 3px 8px rgba(0,0,0,0.35);
-}
 
   .lobby-title {
     font-family: 'Rajdhani', sans-serif;
@@ -129,7 +117,12 @@
       font-size: 18px;
     }
   }
-
+.lobby-card.touch-active {
+  transform: scale(0.96);
+  box-shadow:
+    inset 0 3px 8px rgba(0,0,0,0.22),
+    0 6px 14px rgba(0,0,0,0.18);
+}
   </style>
 </head>
 
@@ -271,32 +264,32 @@ function setLobby(code) {
 
   
   
+  
+document.querySelectorAll(".lobby-card").forEach(card => {
+
+  // TOUCH START → press feedback
+  card.addEventListener("touchstart", () => {
+    card.classList.add("touch-active");
+  }, { passive: true });
+
+  // TOUCH END → snap back (navigation will happen naturally)
+  card.addEventListener("touchend", () => {
+    card.classList.remove("touch-active");
+  });
+
+  // TOUCH CANCEL → safety
+  card.addEventListener("touchcancel", () => {
+    card.classList.remove("touch-active");
+  });
+
+});
+
+// Safety reset when returning via back button
+window.addEventListener("pageshow", () => {
   document.querySelectorAll(".lobby-card").forEach(card => {
-
-    // 🔹 Release immediately after tap
-    card.addEventListener("touchend", () => {
-      card.blur();
-      card.style.transform = "none";
-      card.style.boxShadow = "";
-    });
-
-    // 🔹 Also release if user scrolls instead of navigating
-    card.addEventListener("touchcancel", () => {
-      card.blur();
-      card.style.transform = "none";
-      card.style.boxShadow = "";
-    });
-
+    card.classList.remove("touch-active");
   });
-
-  // 🔹 Safety reset when coming back
-  window.addEventListener("pageshow", () => {
-    document.querySelectorAll(".lobby-card").forEach(card => {
-      card.blur();
-      card.style.transform = "none";
-      card.style.boxShadow = "";
-    });
-  });
+});
 </script>
      
 </body>
