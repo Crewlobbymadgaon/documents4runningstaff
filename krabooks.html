@@ -151,22 +151,7 @@ body { padding-bottom: var(--footer-height); }
    =============================== */
 @media (max-width: 480px) {
 
-  .lobby-card {
-    height: 58px;
-    padding: 4px;
-    border-radius: 12px;
-  }
-
-  .lobby-title {
-    font-size: 14px;
-    line-height: 1.05;
-    letter-spacing: 0.3px;
-
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
+ 
 
   .gsr-group {
     padding: 6px;
@@ -196,6 +181,50 @@ body { padding-bottom: var(--footer-height); }
   .lobby-title {
     font-size: 18px;
     line-height: 1.25;
+  }
+}
+
+/* ===============================
+   MOBILE CARD – INDEX STYLE
+   =============================== */
+@media (max-width: 480px) {
+
+  .lobby-card {
+    height: 68px;
+    padding: 6px;
+    border-radius: 14px;
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,0.9),
+      0 6px 14px rgba(0,0,0,0.14),
+      0 14px 28px rgba(0,0,0,0.18);
+  }
+
+  .lobby-title {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    text-align: center;
+  }
+
+  .title-main {
+    font-size: 16px;
+    font-weight: 800;
+    line-height: 1.15;
+    color: #0f172a;
+
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .title-sub {
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+    color: #475569;
+    text-transform: uppercase;
   }
 }
   </style>
@@ -277,18 +306,23 @@ body { padding-bottom: var(--footer-height); }
 
 <div class="lobby-card"
      style="--accent:#2563eb"
-     onclick="opengsr('documents/KRA_books/diesel_books/Diesel_Loco_Part_1.pdf', this)">
-  <div class="lobby-title">Diesel Loco – Part 1 (English)</div>
+     data-file="documents/KRA_books/Diesel_Loco_Part_1.pdf">
+<div class="lobby-title">
+  <span class="title-main">Diesel Loco – Part 1</span>
+  <span class="title-sub">English</span>
+</div>
 </div>
 
     
 
 <div class="lobby-card"
      style="--accent:#2563eb"
-     onclick="opengsr('documents/KRA_books/diesel_books/Diesel_Loco_Part_1.pdf', this)">
-  <div class="lobby-title">Diesel Loco – Part 2 (English)</div>
+     data-file="documents/KRA_books/Diesel_Loco_Part_2.pdf">
+ <div class="lobby-title">
+  <span class="title-main">Diesel Loco – Part 2</span>
+  <span class="title-sub">English</span>
 </div>
-
+</div>
 
   </div>
 </div>
@@ -300,37 +334,54 @@ body { padding-bottom: var(--footer-height); }
 
   <div class="grid grid-cols-2 sm:grid-cols-2 gap-5">
     <!-- Electric Book 1 -->
-    <div class="lobby-card" style="--accent:#dc2626"
-         data-file="documents/KRA_books/Conventional_English.pdf">
-      <div class="lobby-title">Conventional Loco (English)</div>
-    </div>
-
-    <div class="lobby-card" style="--accent:#dc2626"
-         data-file="documents/KRA_books/Conventional_Hindi.pdf">
-      <div class="lobby-title">Conventional Loco (Hindi)</div>
-    </div>
+<div class="lobby-card" style="--accent:#dc2626"
+     data-file="documents/KRA_books/Conventional_English.pdf">
+  <div class="lobby-title">
+    <span class="title-main">Conventional Loco</span>
+    <span class="title-sub">English</span>
+  </div>
+</div>
+   <div class="lobby-card" style="--accent:#dc2626"
+     data-file="documents/KRA_books/Conventional_Hindi.pdf">
+  <div class="lobby-title">
+    <span class="title-main">Conventional Loco</span>
+    <span class="title-sub">Hindi</span>
+  </div>
+</div>
 
     <!-- Electric Book 2 -->
-    <div class="lobby-card" style="--accent:#dc2626"
-         data-file="documents/KRA_books/3_Phase_English.pdf">
-      <div class="lobby-title">3 Phase Loco (English)</div>
-    </div>
+    <div class="lobby-card" style="--accent:#16a34a"
+     data-file="documents/KRA_books/3_Phase_English.pdf">
+  <div class="lobby-title">
+    <span class="title-main">3 Phase Loco</span>
+    <span class="title-sub">English</span>
+  </div>
+</div>
 
-    <div class="lobby-card" style="--accent:#dc2626"
-         data-file="documents/KRA_books/3_Phase_Hindi.pdf">
-      <div class="lobby-title">3 Phase Loco (Hindi)</div>
-    </div>
+   <div class="lobby-card" style="--accent:#16a34a"
+     data-file="documents/KRA_books/3_Phase_Hindi.pdf">
+  <div class="lobby-title">
+    <span class="title-main">3 Phase Loco</span>
+    <span class="title-sub">Hindi</span>
+  </div>
+</div>
 
     <!-- Electric Book 3 -->
-    <div class="lobby-card" style="--accent:#dc2626"
-         data-file="documents/KRA_books/WCAM3_English.pdf">
-      <div class="lobby-title">WCAM3 (English)</div>
-    </div>
+  <div class="lobby-card" style="--accent:#7c3aed"
+     data-file="documents/KRA_books/WCAM3_English.pdf">
+  <div class="lobby-title">
+    <span class="title-main">WCAM3</span>
+    <span class="title-sub">Engliish</span>
+  </div>
+</div>
 
-    <div class="lobby-card" style="--accent:#dc2626"
-         data-file="documents/KRA_books/WCAM3_Hindi.pdf">
-      <div class="lobby-title">WCAM3 (Hindi)</div>
-    </div>
+<div class="lobby-card" style="--accent:#7c3aed"
+     data-file="documents/KRA_books/WCAM3_Hindi.pdf">
+  <div class="lobby-title">
+    <span class="title-main">WCAM3</span>
+    <span class="title-sub">Hindi</span>
+  </div>
+</div>
 
   </div>
 </div>
@@ -388,61 +439,71 @@ document.addEventListener("keydown", e => {
   if (e.key === "Escape") dropdownMenu.classList.add("hidden");
 });
 
-/* ===============================
-   LOBBY CARDS (PAGE NAVIGATION)
-   =============================== */
-document.querySelectorAll(".lobby-card[data-page]").forEach(card => {
 
-  // Touch feedback
+/* ===============================
+   LOBBY CARDS – FIREBASE FILE OPEN
+   =============================== */
+
+</script>
+
+<script>
+document.querySelectorAll(".lobby-card[data-file]").forEach(card => {
+
+  const filePath = card.dataset.file;
+
+  /* ===============================
+     📱 MOBILE — EXACT GSR BEHAVIOUR
+     =============================== */
+
   card.addEventListener("touchstart", () => {
     card.classList.add("touch-active");
   }, { passive: true });
 
-  card.addEventListener("touchend", () => {
+  card.addEventListener("touchend", async () => {
+    // 🔑 SNAP BACK IMMEDIATELY (this is the key)
     card.classList.remove("touch-active");
-    setTimeout(() => {
-      window.location.href = card.dataset.page;
-    }, 120);
+
+    try {
+      const url = await getDownloadURL(
+        ref(window.storage, filePath)
+      );
+      window.open(url, "_blank", "noopener");
+    } catch {
+      alert("Unable to open document");
+    }
   });
 
   card.addEventListener("touchcancel", () => {
     card.classList.remove("touch-active");
   });
 
-  // Desktop click
-  card.addEventListener("click", () => {
-    window.location.href = card.dataset.page;
+  /* ===============================
+     🖥 DESKTOP — SIMPLE & CLEAN
+     =============================== */
+
+  card.addEventListener("mousedown", () => {
+    card.classList.add("touch-active");
   });
 
-});
-/* ===============================
-   LOBBY CARDS – FIREBASE FILE OPEN
-   =============================== */
+  card.addEventListener("mouseup", async () => {
+    card.classList.remove("touch-active");
 
-</script>
-<script>
-async function opengsr(filePath, el) {
-
-  // ✅ show press feedback FIRST
-  if (el) el.classList.add("touch-active");
-
-  // ✅ exact same timing as gsr.html
-  setTimeout(async () => {
     try {
       const url = await getDownloadURL(
         ref(window.storage, filePath)
       );
       window.open(url, "_blank", "noopener");
-    } catch (err) {
+    } catch {
       alert("Unable to open document");
-      console.error(err);
-    } finally {
-      if (el) el.classList.remove("touch-active");
     }
-  }, 120);
-}
-</script>
+  });
 
+  card.addEventListener("mouseleave", () => {
+    card.classList.remove("touch-active");
+  });
+
+});
+</script>
 
 </body>
 </html>
