@@ -451,17 +451,37 @@ document.querySelectorAll(".lobby-card[data-file]").forEach(card => {
 
   const filePath = card.dataset.file;
 
+  let startX = 0;
+  let startY = 0;
+  let isScrolling = false;
+
   /* ===============================
-     📱 MOBILE — EXACT GSR BEHAVIOUR
+     📱 MOBILE SAFE TAP
      =============================== */
 
-  card.addEventListener("touchstart", () => {
+  card.addEventListener("touchstart", (e) => {
+    const touch = e.touches[0];
+    startX = touch.clientX;
+    startY = touch.clientY;
+    isScrolling = false;
     card.classList.add("touch-active");
   }, { passive: true });
 
+  card.addEventListener("touchmove", (e) => {
+    const touch = e.touches[0];
+    const diffX = Math.abs(touch.clientX - startX);
+    const diffY = Math.abs(touch.clientY - startY);
+
+    if (diffX > 10 || diffY > 10) {
+      isScrolling = true;   // User is scrolling
+      card.classList.remove("touch-active");
+    }
+  }, { passive: true });
+
   card.addEventListener("touchend", async () => {
-    // 🔑 SNAP BACK IMMEDIATELY (this is the key)
     card.classList.remove("touch-active");
+
+    if (isScrolling) return; // 🚫 Do NOT open if scroll detected
 
     try {
       const url = await getDownloadURL(
@@ -478,16 +498,10 @@ document.querySelectorAll(".lobby-card[data-file]").forEach(card => {
   });
 
   /* ===============================
-     🖥 DESKTOP — SIMPLE & CLEAN
+     🖥 DESKTOP
      =============================== */
 
-  card.addEventListener("mousedown", () => {
-    card.classList.add("touch-active");
-  });
-
-  card.addEventListener("mouseup", async () => {
-    card.classList.remove("touch-active");
-
+  card.addEventListener("click", async () => {
     try {
       const url = await getDownloadURL(
         ref(window.storage, filePath)
@@ -498,12 +512,7 @@ document.querySelectorAll(".lobby-card[data-file]").forEach(card => {
     }
   });
 
-  card.addEventListener("mouseleave", () => {
-    card.classList.remove("touch-active");
-  });
-
 });
 </script>
-
 </body>
 </html>
