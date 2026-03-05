@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Digital Library for Running Staff</title>
     <link rel="manifest" href="/documents4runningstaff/manifest.json" />
-    <link rel="icon" href="/documents4runningstaff/favicon.ico" />
     <link rel="apple-touch-icon" href="/documents4runningstaff/icon-192.png" />
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600&display=swap" rel="stylesheet" />
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600&display=swap" as="style" />
@@ -477,5 +476,19 @@ document.querySelectorAll(".menu-card").forEach(card => {
 
 });
       </script>
+      <script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker
+      .register("/documents4runningstaff/sw.js")
+      .then(reg => {
+        console.log("Service Worker registered", reg.scope);
+      })
+      .catch(err => {
+        console.log("Service Worker failed", err);
+      });
+  });
+}
+</script>
   </body>
     </html>
