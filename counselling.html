@@ -449,10 +449,13 @@ for (const data of docs) {
 
    
 async function openCounselling(filePath) {
+  const win = window.open("", "_blank");
+
   try {
     const url = await getDownloadURL(ref(window.storage, filePath));
-    window.open(url, "_blank");
+    win.location.href = url;
   } catch (err) {
+    win.close();
     alert("Unable to open document");
     console.error(err);
   }
@@ -485,22 +488,14 @@ loadCounseltopic(currentYear);
 
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/service-worker.js')
+    navigator.serviceWorker.register('/documents4runningstaff/sw.js')
       .then(reg => console.log("Service Worker registered:", reg))
       .catch(err => console.log("Service Worker registration failed:", err));
   });
 }
 
 
-  document.addEventListener("keydown", (e) => {
-  // Close dropdown if open
-  if (e.key === "Escape" && !dropdownMenu.classList.contains("hidden")) {
-    dropdownMenu.classList.add("hidden");
-    hamburgerBtn.setAttribute("aria-expanded", "false");
-  }
-
- 
-});
+  
 
 </script>
     </main>
