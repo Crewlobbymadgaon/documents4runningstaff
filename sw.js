@@ -152,22 +152,31 @@ self.addEventListener('fetch', event => {
   }
 
   /* ---- 4. CDN / CROSS-ORIGIN (best effort) ---- */
-  if (url.origin !== location.origin) {
-    event.respondWith((async () => {
-      const cached = await caches.match(req);
-      if (cached) return cached;
+ /* ---- 4. FIREBASE PDF CACHE (FAST LOAD) ---- */
+if (url.origin.includes("firebasestorage.googleapis.com")) {
 
-      try {
-        const res = await fetch(req);
-        try {
-          const runtime = await caches.open(RUNTIME);
-          runtime.put(req, res.clone());
-        } catch {}
-        return res;
-      } catch {
-        return new Response('', { status: 504 });
+  event.respondWith((async () => {
+
+    const runtime = await caches.open(RUNTIME);
+
+    const cached = await runtime.match(req);
+    if (cached) return cached;
+
+    try {
+      const res = await fetch(req);
+
+      if (res.ok) {
+        runtime.put(req, res.clone());
       }
-    })());
-    return;
-  }
+
+      return res;
+
+    } catch {
+      return new Response("PDF unavailable offline", { status: 504 });
+    }
+
+  })());
+
+  return;
+}
 });
