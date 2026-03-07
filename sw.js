@@ -179,4 +179,26 @@ if (url.origin.includes("firebasestorage.googleapis.com")) {
 
   return;
 }
+
+   /* ---- 5. OTHER CDN FILES ---- */
+if (url.origin !== location.origin) {
+
+  event.respondWith((async () => {
+
+    const cached = await caches.match(req);
+    if (cached) return cached;
+
+    try {
+      const res = await fetch(req);
+      const runtime = await caches.open(RUNTIME);
+      runtime.put(req, res.clone());
+      return res;
+    } catch {
+      return new Response('', { status: 504 });
+    }
+
+  })());
+
+  return;
+}
 });
