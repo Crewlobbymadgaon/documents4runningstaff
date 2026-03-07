@@ -440,10 +440,13 @@ document.querySelectorAll(".shed-card").forEach(card => {
 
    
 async function openCorrectionSlip(filePath) {
+  const win = window.open("", "_blank");
+
   try {
     const url = await getDownloadURL(ref(window.storage, filePath));
-    window.open(url, "_blank");
+    win.location.href = url;
   } catch (err) {
+    win.close();
     alert("Unable to open document");
     console.error(err);
   }
