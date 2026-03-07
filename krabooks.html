@@ -7,6 +7,8 @@
 
   <link rel="manifest" href="/documents4runningstaff/manifest.json" />
   <link rel="icon" href="/documents4runningstaff/favicon.ico" />
+  <link rel="preconnect" href="https://firebasestorage.googleapis.com">
+  <link rel="dns-prefetch" href="https://firebasestorage.googleapis.com">
   <meta name="theme-color" content="#1f2937" />
 
   <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600&display=swap" rel="stylesheet">
@@ -371,7 +373,7 @@ body { padding-bottom: var(--footer-height); }
      data-file="documents/KRA_books/WCAM3_English.pdf">
   <div class="lobby-title">
     <span class="title-main">WCAM3</span>
-    <span class="title-sub">Engliish</span>
+    <span class="title-sub">English</span>
   </div>
 </div>
 
@@ -483,14 +485,20 @@ document.querySelectorAll(".lobby-card[data-file]").forEach(card => {
 
     if (isScrolling) return; // 🚫 Do NOT open if scroll detected
 
-    try {
-      const url = await getDownloadURL(
-        ref(window.storage, filePath)
-      );
-      window.open(url, "_blank", "noopener");
-    } catch {
-      alert("Unable to open document");
-    }
+   const win = window.open("", "_blank");
+
+try {
+  const url = await getDownloadURL(
+    ref(window.storage, filePath)
+  );
+
+  win.location.href = url;
+
+} catch {
+  win.close();
+  alert("Unable to open document");
+}
+    
   });
 
   card.addEventListener("touchcancel", () => {
@@ -502,15 +510,22 @@ document.querySelectorAll(".lobby-card[data-file]").forEach(card => {
      =============================== */
 
   card.addEventListener("click", async () => {
-    try {
-      const url = await getDownloadURL(
-        ref(window.storage, filePath)
-      );
-      window.open(url, "_blank", "noopener");
-    } catch {
-      alert("Unable to open document");
-    }
-  });
+
+  const win = window.open("", "_blank");
+
+  try {
+    const url = await getDownloadURL(
+      ref(window.storage, filePath)
+    );
+
+    win.location.href = url;
+
+  } catch {
+    win.close();
+    alert("Unable to open document");
+  }
+
+});
 
 });
 </script>
