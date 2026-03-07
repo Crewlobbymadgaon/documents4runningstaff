@@ -294,9 +294,11 @@ document.querySelectorAll(".menu-card").forEach(card => {
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
     navigator.serviceWorker
-      .register("/documents4runningstaff/sw.js")
-      .then(reg => console.log("Service Worker registered"))
-      .catch(err => console.log("Service Worker failed", err));
+      .register("/documents4runningstaff/sw.js", {
+        scope: "/documents4runningstaff/"
+      })
+      .then(reg => console.log("Service Worker registered:", reg))
+      .catch(err => console.log("Service Worker failed:", err));
   });
 }
 </script>
