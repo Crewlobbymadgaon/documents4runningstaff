@@ -9,7 +9,8 @@
     <link rel="apple-touch-icon" href="/documents4runningstaff/icon-192.png" />
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600&display=swap" rel="stylesheet" />
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600&display=swap" as="style" />
-    
+    <link rel="preconnect" href="https://firebasestorage.googleapis.com">
+    <link rel="dns-prefetch" href="https://firebasestorage.googleapis.com">
     <meta name="theme-color" content="#1f2937" />
     <script src="https://cdn.tailwindcss.com"></script>
     
@@ -437,8 +438,17 @@ const storage = getStorage(app);
    OPEN PDF
    =============================== */
 window.openLatest = async (filePath) => {
-  const url = await getDownloadURL(ref(storage, filePath));
-  window.open(url, "_blank");
+
+  const win = window.open("", "_blank");
+
+  try {
+    const url = await getDownloadURL(ref(storage, filePath));
+    win.location.href = url;
+  } catch {
+    win.close();
+    alert("Unable to open document");
+  }
+
 };
 
 async function loadLatestShedOrder() {
@@ -458,25 +468,38 @@ async function loadLatestShedOrder() {
 
     const rows = [];
 
-    for (const lobby of shedLobbies) {
-      const q = query(
-        collection(db, "documents"),
-        where("category", "==", "shed_order"),
-        where("lobby", "==", lobby.code)
-      );
+    const queries = shedLobbies.map(async (lobby) => {
 
-      const snap = await getDocs(q);
+  const q = query(
+    collection(db, "documents"),
+    where("category", "==", "shed_order"),
+    where("lobby", "==", lobby.code)
+  );
 
-      const latest = snap.docs
-        .map(d => d.data())
-        .find(d => d.latestRank === 1);
+  const snap = await getDocs(q);
 
-      if (!latest) continue;
+  const latest = snap.docs
+    .map(d => d.data())
+    .find(d => d.latestRank === 1);
 
-      const orderNo =
-        latest.orderNo ||
-        latest.title?.match(/\d{2}\/\d{4}/)?.[0] ||
-        "";
+  if (!latest) return null;
+
+  const orderNo =
+    latest.orderNo ||
+    latest.title?.match(/\d{2}\/\d{4}/)?.[0] ||
+    "";
+
+  return { lobby, latest, orderNo };
+
+});
+
+const results = await Promise.all(queries);
+
+for (const result of results) {
+
+  if (!result) continue;
+
+  const { lobby, latest, orderNo } = result;
 
       rows.push(`
   <div class="latest-card-item ${lobby.bg} border-l-4 ${lobby.border}"
@@ -764,7 +787,7 @@ const subjects = [
   { title: "📝 Correction Slip",   loader: loadLatestCorrectionSlips }
 ];
 
-let currentIndex = 0; // 🔥 default → Safety Circular
+let currentIndex = 0; 
 
 /* ===============================
    RENDER
@@ -794,6 +817,16 @@ window.addEventListener("DOMContentLoaded", () => {
 
   renderSubject(); // 🚀 first load
 });
+
+
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker
+      .register("/documents4runningstaff/sw.js")
+      .then(() => console.log("Service Worker registered"))
+      .catch(err => console.log("Service Worker failed", err));
+  });
+}
 </script>
 
 <footer
