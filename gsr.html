@@ -8,7 +8,9 @@
   <link rel="manifest" href="/documents4runningstaff/manifest.json" />
   <link rel="icon" href="/documents4runningstaff/favicon.ico" />
   <meta name="theme-color" content="#1f2937" />
-
+  <link rel="preconnect" href="https://www.gstatic.com">
+  <link rel="preconnect" href="https://firebasestorage.googleapis.com">
+  <link rel="dns-prefetch" href="https://firebasestorage.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <script type="module">
@@ -327,24 +329,6 @@ window.getDownloadURL = getDownloadURL;
     el.textContent = new Date().getFullYear();
   });
   
-async function opengsr(filePath, el) {
-
-  // ✅ show press feedback FIRST
-  if (el) el.classList.add("touch-active");
-
-  // small delay so eye can see feedback
-  setTimeout(async () => {
-    try {
-      const url = await getDownloadURL(ref(window.storage, filePath));
-      window.open(url, "_blank");
-    } catch (err) {
-      alert("Unable to open document");
-      console.error(err);
-    } finally {
-      if (el) el.classList.remove("touch-active");
-    }
-  }, 120); // same timing feel as index
-}
 
 
   
@@ -385,44 +369,72 @@ document.querySelectorAll(".lobby-card").forEach(card => {
   const filePath = card.dataset.file;
   if (!filePath) return;
 
-  // 🔹 TOUCH START → show feedback
+  let isTouch = false;
+
+  // TOUCH START
   card.addEventListener("touchstart", () => {
+    isTouch = true;
     card.classList.add("touch-active");
   }, { passive: true });
 
-  // 🔹 TOUCH END → SNAP BACK FIRST, then open
+  // TOUCH END
   card.addEventListener("touchend", () => {
 
-    // ✅ REMOVE VISUAL STATE IMMEDIATELY
     card.classList.remove("touch-active");
 
-    // ✅ OPEN PDF AFTER UI PAINT
-    setTimeout(async () => {
-      try {
-        const url = await getDownloadURL(ref(window.storage, filePath));
-        window.open(url, "_blank");
-      } catch (e) {
-        alert("Unable to open document");
-      }
-    }, 0);
+   setTimeout(async () => {
+
+  const win = window.open("", "_blank");
+
+  try {
+    const url = await getDownloadURL(ref(window.storage, filePath));
+    win.location.href = url;
+  } catch {
+    win.close();
+    alert("Unable to open document");
+  }
+
+}, 0);
+
   });
 
-  // 🔹 SAFETY
+  // TOUCH CANCEL
   card.addEventListener("touchcancel", () => {
     card.classList.remove("touch-active");
   });
 
-  // 🔹 DESKTOP CLICK
-  card.addEventListener("click", async () => {
-    try {
-      const url = await getDownloadURL(ref(window.storage, filePath));
-      window.open(url, "_blank");
-    } catch (e) {
-      alert("Unable to open document");
-    }
-  });
+  // DESKTOP CLICK
+ card.addEventListener("click", async () => {
+
+  if (isTouch) {
+    isTouch = false;
+    return;
+  }
+
+  const win = window.open("", "_blank");
+
+  try {
+    const url = await getDownloadURL(ref(window.storage, filePath));
+    win.location.href = url;
+  } catch {
+    win.close();
+    alert("Unable to open document");
+  }
 
 });
+
+});
+
+
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker
+      .register('/documents4runningstaff/sw.js')
+      .then(() => console.log("Service Worker registered"))
+      .catch(err => console.log("Service Worker failed", err));
+  });
+}
 </script>
 
 
