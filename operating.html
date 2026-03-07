@@ -6,12 +6,14 @@
   <title>Operating Documents</title>
 
 
-  <link rel="manifest" href="/documents4runningstaff/manifest.json" />
+ <link rel="manifest" href="/documents4runningstaff/manifest.json" />
   <link rel="icon" href="/documents4runningstaff/favicon.ico" />
   <meta name="theme-color" content="#1f2937" />
-
+  <link rel="preconnect" href="https://firebasestorage.googleapis.com">
+  <link rel="dns-prefetch" href="https://firebasestorage.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
+  
   
   <style>
   
@@ -221,17 +223,19 @@
 
   // 🔴 THIS LINE IS CRITICAL
   window.openLatest = function (filePath) {
-  const win = window.open("", "_blank"); // open immediately
+
+  const win = window.open("about:blank", "_blank");
 
   getDownloadURL(ref(storage, filePath))
     .then(url => {
-      win.location.href = url;
+      win.location.replace(url);
     })
     .catch(err => {
       win.close();
-      alert("Accident Manual not found / access denied");
+      alert("Document not found");
       console.error(err);
     });
+
 };
 </script>
 
@@ -311,6 +315,27 @@ document.querySelectorAll(".menu-card").forEach(card => {
       isTouch = false;
     }
   });
+
+});
+
+
+const docs = [
+"documents/operating/Operating_Manual.pdf",
+"documents/operating/Block_Working_Manual.pdf",
+"documents/operating/Disaster_Management_Plan_2024.pdf"
+];
+
+docs.forEach(path => {
+
+  const link = document.createElement("link");
+  link.rel = "prefetch";
+
+  link.href =
+  "https://firebasestorage.googleapis.com/v0/b/doc4runningstaff-d000b.firebasestorage.app/o/"
+  + encodeURIComponent(path)
+  + "?alt=media";
+
+  document.head.appendChild(link);
 
 });
 </script>
