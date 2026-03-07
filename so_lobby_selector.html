@@ -7,9 +7,9 @@
 
   <!-- Tailwind CSS -->
     
-    <script src="https://cdn.jsdelivr.net/npm/idb@7/build/iife/index-min.js"></script>
+    
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+   
   
   <!-- Rajdhani Font -->
   <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600&display=swap" rel="stylesheet">
@@ -220,25 +220,10 @@
 
   <!-- Redirect Logic -->
   <script>
-    document.querySelectorAll("a").forEach(link => {
-    link.addEventListener("click", () => {
-      const textSpan = link.querySelector(".menu-text");
-      if (!textSpan) return;
-
-      textSpan.classList.add("scale-110");
-
-      setTimeout(() => {
-        textSpan.classList.remove("scale-110");
-      }, 300); // shorter duration for snappy feel
-    });
-  });
+   
 
   // Clean up enlarged text if user comes back via browser back button
-  window.addEventListener("pageshow", () => {
-    document.querySelectorAll(".menu-text").forEach(span => {
-      span.classList.remove("scale-110");
-    });
-  });
+  
 
     
 function setLobby(code) {
@@ -290,6 +275,10 @@ window.addEventListener("pageshow", () => {
     card.classList.remove("touch-active");
   });
 });
+
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("/documents4runningstaff/sw.js");
+}
 </script>
      
 </body>
