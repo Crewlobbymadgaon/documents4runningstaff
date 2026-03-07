@@ -12,27 +12,7 @@
 
   <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
-  <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
-import { getStorage, ref, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-storage.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyD4BfU5OKhKFynJMVC2k4qFEgmeDhLlSIM",
-  authDomain: "doc4runningstaff-d000b.firebaseapp.com",
-  projectId: "doc4runningstaff-d000b",
-  storageBucket: "doc4runningstaff-d000b.firebasestorage.app",
-  messagingSenderId: "34983733068",
-  appId: "1:34983733068:web:bbe8a3d902eecaab8bd1e9"
-};
-
-const app = initializeApp(firebaseConfig);
-const storage = getStorage(app);
-
-// expose globally
-window.storage = storage;
-window.ref = ref;
-window.getDownloadURL = getDownloadURL;
-</script>
+  
 
   <style>
   
@@ -310,6 +290,15 @@ document.querySelectorAll(".menu-card").forEach(card => {
   });
 
 });
+
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker
+      .register("/documents4runningstaff/sw.js")
+      .then(reg => console.log("Service Worker registered"))
+      .catch(err => console.log("Service Worker failed", err));
+  });
+}
 </script>
 
 </body>
