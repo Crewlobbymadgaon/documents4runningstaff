@@ -7,6 +7,9 @@
     <link rel="manifest" href="/documents4runningstaff/manifest.json" />
     <link rel="icon" href="/documents4runningstaff/favicon.ico" />
     <link rel="apple-touch-icon" href="/documents4runningstaff/icon-192.png" />
+    <link rel="preconnect" href="https://firebasestorage.googleapis.com">
+    <link rel="dns-prefetch" href="https://firebasestorage.googleapis.com">
+    <link rel="preconnect" href="https://www.gstatic.com">
     <meta name="theme-color" content="#1f2937" />
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600&display=swap" rel="stylesheet" />
     <script src="https://cdn.tailwindcss.com"></script>
@@ -435,18 +438,24 @@ document.querySelectorAll(".shed-card").forEach(card => {
 }
 
 
-
+const urlCache = {};
    
 async function openCorrectionSlip(filePath) {
   try {
-    const url = await getDownloadURL(ref(window.storage, filePath));
-    window.open(url, "_blank");
+
+    if (!urlCache[filePath]) {
+      urlCache[filePath] = await getDownloadURL(
+        ref(window.storage, filePath)
+      );
+    }
+
+    window.open(urlCache[filePath], "_blank", "noopener");
+
   } catch (err) {
     alert("Unable to open document");
     console.error(err);
   }
 }
-
 
 window.addEventListener("DOMContentLoaded", () => {
   loadGsrCorrectionSlips();
@@ -457,7 +466,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/service-worker.js')
+    navigator.serviceWorker.register('/documents4runningstaff/sw.js')
       .then(reg => console.log("Service Worker registered:", reg))
       .catch(err => console.log("Service Worker registration failed:", err));
   });
