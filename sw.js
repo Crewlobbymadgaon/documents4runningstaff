@@ -89,6 +89,16 @@ self.addEventListener('message', event => {
   }
 });
 
+async function limitCache(cacheName, maxItems) {
+  const cache = await caches.open(cacheName);
+  const keys = await cache.keys();
+
+  if (keys.length > maxItems) {
+    await cache.delete(keys[0]);
+    limitCache(cacheName, maxItems);
+  }
+}
+
 /* ---------- FETCH ---------- */
 self.addEventListener('fetch', event => {
   const req = event.request;
@@ -110,10 +120,11 @@ self.addEventListener('fetch', event => {
         return network;
       } catch {
         const cache = await caches.open(CACHE_NAME);
-        return (
-          (await cache.match(`${BASE}/index.html`)) ||
-          (await cache.match(`${BASE}/offline.html`))
-        );
+       return (
+  (await cache.match(req)) ||
+  (await cache.match(`${BASE}/index.html`)) ||
+  (await cache.match(`${BASE}/offline.html`))
+);
       }
     })());
     return;
@@ -131,7 +142,8 @@ self.addEventListener('fetch', event => {
       try {
         const res = await fetch(req);
         const runtime = await caches.open(RUNTIME);
-        runtime.put(req, res.clone());
+       runtime.put(req, res.clone());
+       limitCache(RUNTIME, 60);
         return res;
       } catch {
         return new Response('', { status: 504 });
@@ -142,26 +154,30 @@ self.addEventListener('fetch', event => {
 
   /* ---- 3. PDFs & LOCAL HTML DOCS (network-first) ---- */
   if (
-    url.origin === location.origin &&
-    /\.(pdf|html)$/i.test(url.pathname)
-  ) {
-    event.respondWith((async () => {
-      const runtime = await caches.open(RUNTIME);
-      try {
-        const res = await fetch(req);
-        if (res.ok) runtime.put(req, res.clone());
-        return res;
-      } catch {
-        const cached = await runtime.match(req);
-        return cached || caches.match(`${BASE}/offline.html`);
-      }
-    })());
-    return;
-  }
+  url.origin === location.origin &&
+  /\.(pdf|html)$/i.test(url.pathname)
+) {
+  event.respondWith((async () => {
+    const runtime = await caches.open(RUNTIME);
+    try {
+      const res = await fetch(req);
 
-  /* ---- 4. CDN / CROSS-ORIGIN (best effort) ---- */
- /* ---- 4. FIREBASE PDF CACHE (FAST LOAD) ---- */
-if (url.origin.includes("firebasestorage.googleapis.com")) {
+      if (res.ok) {
+        runtime.put(req, res.clone());
+        limitCache(RUNTIME, 60);
+      }
+
+      return res;
+    } catch {
+      const cached = await runtime.match(req);
+      return cached || caches.match(`${BASE}/offline.html`);
+    }
+  })());
+  return;
+}
+
+ /* ---- FIREBASE PDF CACHE (FAST LOAD) ---- */
+if (url.hostname === "firebasestorage.googleapis.com") {
 
   event.respondWith((async () => {
 
@@ -171,16 +187,23 @@ if (url.origin.includes("firebasestorage.googleapis.com")) {
     if (cached) return cached;
 
     try {
+
       const res = await fetch(req);
 
       if (res.ok) {
         runtime.put(req, res.clone());
+        limitCache(RUNTIME, 60);
       }
 
       return res;
 
     } catch {
+
+      const cached = await runtime.match(req);
+      if (cached) return cached;
+
       return new Response("PDF unavailable offline", { status: 504 });
+
     }
 
   })());
