@@ -909,6 +909,13 @@ function setHeaderHeight() {
 
 window.addEventListener("load", setHeaderHeight);
 window.addEventListener("resize", setHeaderHeight);
+
+
+</script>
+<script>
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("/documents4runningstaff/sw.js");
+}
 </script>
 
 </body>
