@@ -9,6 +9,7 @@
     <link rel="apple-touch-icon" href="/documents4runningstaff/icon-192.png" />
     <link rel="preconnect" href="https://firebasestorage.googleapis.com">
      <link rel="dns-prefetch" href="https://firebasestorage.googleapis.com">
+     <link rel="preconnect" href="https://www.gstatic.com">
     <meta name="theme-color" content="#1f2937" />
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600&display=swap" rel="stylesheet" />
     <script src="https://cdn.tailwindcss.com"></script>
@@ -113,7 +114,37 @@ select.custom-select-center {
     0 6px 14px rgba(0,0,0,0.18);
 }
 
+/* ===============================
+   DESKTOP HOVER ONLY
+   =============================== */
+@media (hover: hover) and (pointer: fine) {
+  .shed-card:hover {
+    transform: translateY(-4px);
+    border-left-color: #1e40af;
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.8),
+      0 18px 36px rgba(0,0,0,.18);
+  }
+}
 
+/* ===============================
+   MOBILE TOUCH FEEDBACK
+   =============================== */
+@media (hover: none) and (pointer: coarse) {
+  .shed-card {
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
+  }
+
+  .shed-card:active {
+    transform: scale(0.96);
+    background: rgba(59,130,246,0.06);
+  }
+}
+
+/* Prevent double-tap zoom */
+.shed-card {
+  touch-action: manipulation;
+}
 
 .shed-title {
   font-size: 15px;
@@ -646,6 +677,13 @@ window.addEventListener("pageshow", () => {
     card.classList.remove("touch-active");
   });
 });
+
+
+document.addEventListener("touchmove", e => {
+  const card = e.target.closest(".shed-card");
+  if (!card) return;
+  card.classList.remove("touch-active");
+});
       </script>
     </main>
 <footer
@@ -667,4 +705,4 @@ window.addEventListener("pageshow", () => {
 </script>
 
 </body>
-</html>
+</html><!--  -->
