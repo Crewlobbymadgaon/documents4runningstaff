@@ -370,37 +370,41 @@ window.getDownloadURL = getDownloadURL;
   });
 
 
-document.querySelectorAll(".lobby-card").forEach(card => {
+document.addEventListener("DOMContentLoaded", () => {
 
-  const filePath = card.dataset.file;
-  if (!filePath) return;
+  document.querySelectorAll(".lobby-card").forEach(card => {
 
-  // Press animation
-  card.addEventListener("pointerdown", () => {
-    card.classList.add("touch-active");
-  });
+    const filePath = card.dataset.file;
+    if (!filePath) return;
 
-  card.addEventListener("pointerleave", () => {
-    card.classList.remove("touch-active");
-  });
+    // Press animation
+    card.addEventListener("pointerdown", () => {
+      card.classList.add("touch-active");
+    });
 
-  // Click handler
-  card.addEventListener("click", async () => {
+    card.addEventListener("pointerleave", () => {
+      card.classList.remove("touch-active");
+    });
 
-    try {
+    // Click handler
+    card.addEventListener("click", async () => {
 
-      const url = await getDownloadURL(ref(window.storage, filePath));
+      try {
 
-      window.open(url, "_blank");
+        const url = await getDownloadURL(ref(window.storage, filePath));
 
-    } catch (e) {
+        window.open(url, "_blank");
 
-      alert("Unable to open document");
-      console.error(e);
+      } catch (e) {
 
-    }
+        alert("Unable to open document");
+        console.error(e);
 
-    card.classList.remove("touch-active");
+      }
+
+      card.classList.remove("touch-active");
+
+    });
 
   });
 
