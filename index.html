@@ -181,27 +181,29 @@
 /* ===============================
    MOBILE COMPACT MENU (≤640px)
    =============================== */
-@media (max-width: 640px) {
+@media (max-width:640px){
 
-  #menu-items {
-    gap: 12px;                /* reduce grid gap */
+  #menu-items{
+    gap:10px;
+    margin-top:16px;
   }
 
-  .menu-card {
-    padding: 14px 12px;       /* was 24px 18px */
-    border-radius: 14px;
-    gap: 6px;                 /* reduce inner spacing */
+  .menu-card{
+    padding:10px 8px;
+    border-radius:12px;
+    gap:4px;
+    min-height:72px;
   }
 
-  .menu-icon {
-    font-size: 26px;          /* was 34px */
+  .menu-icon{
+    font-size:22px;
   }
 
-  .menu-title {
-    font-size: 12px;          /* compact text */
-    font-weight: 700;
-    line-height: 1.15;
+  .menu-title{
+    font-size:11px;
+    line-height:1.1;
   }
+
 }
 
       @media (max-width: 360px) {
@@ -271,7 +273,7 @@
     <div class="sticky top-0 z-50">
 
     <!-- Header -->
-    <header class="bg-gradient-to-r from-blue-900 via-blue-700 to-blue-900 text-white py-3 shadow-md">
+    <header class="sticky top-0 z-50 bg-gradient-to-r from-blue-900 via-blue-700 to-blue-900 text-white py-2 shadow-md">
   <div class="text-center px-4">
 <h1 class="font-rajdhani font-extrabold text-center
            whitespace-nowrap
