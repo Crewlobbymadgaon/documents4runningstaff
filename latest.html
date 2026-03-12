@@ -2,7 +2,7 @@
 <html lang="en" class="h-full">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
     <title>Latest Circulars</title>
     <link rel="manifest" href="/documents4runningstaff/manifest.json" />
     <link rel="icon" href="/documents4runningstaff/favicon.ico" />
@@ -24,7 +24,18 @@
   --footer-height: 48px;
   
 }
-      
+     
+html {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+button,
+.menu-card,
+.latest-card-item,
+a {
+  touch-action: manipulation;
+} 
   #menu-items, #main-content {
     transition: opacity 0.3s ease;
   }
@@ -78,7 +89,7 @@
   }
 
   .menu-title {
-    font-size: 14px;      /* Mobile size */
+    font-size: 15px;      /* Mobile size */
     font-weight: 700;    /* BOLD on mobile */
     text-align: center;
     letter-spacing: .4px;
@@ -212,10 +223,11 @@
   }
 }
 
+
 /* ===============================
-   DESKTOP HOVER ONLY (SAFE)
+   DESKTOP HOVER ONLY
    =============================== */
-@media (min-width: 768px) {
+@media (hover: hover) and (pointer: fine) {
 
   .menu-card:hover {
     transform: translateY(-6px);
@@ -228,6 +240,7 @@
       inset 0 1px 0 rgba(255,255,255,.8),
       0 16px 32px rgba(0,0,0,.18);
   }
+
 }
 
 @media (max-width: 767px) {
@@ -244,6 +257,35 @@
 .menu-card,
 .latest-card-item {
   touch-action: manipulation;
+}
+
+/* ===============================
+   TABLET OPTIMIZATION (iPad)
+   =============================== */
+@media (min-width: 641px) and (max-width: 1024px) {
+
+  #menu-items{
+    gap:16px;
+  }
+
+  .menu-card{
+    padding:20px 16px;
+    border-radius:16px;
+  }
+
+  .menu-icon{
+    font-size:30px;
+  }
+
+  .menu-title{
+    font-size:16px;
+    font-weight:700;
+  }
+
+  .latest-card-item{
+    padding:16px 16px;
+  }
+
 }
 </style>
     
@@ -439,11 +481,11 @@ const storage = getStorage(app);
    =============================== */
 window.openLatest = async (filePath) => {
 
-  const win = window.open("", "_blank");
+  const win = window.open("about:blank", "_blank");
 
   try {
     const url = await getDownloadURL(ref(storage, filePath));
-    win.location.href = url;
+    win.location.replace(url);
   } catch {
     win.close();
     alert("Unable to open document");
