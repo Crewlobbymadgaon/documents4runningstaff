@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes">
-    <title>Safety Circularr</title>
+    <title>Safety Circular</title>
     <link rel="manifest" href="/documents4runningstaff/manifest.json" />
     <link rel="icon" href="/documents4runningstaff/favicon.ico" />
     <link rel="apple-touch-icon" href="/documents4runningstaff/icon-192.png" />
@@ -106,6 +106,8 @@ select.custom-select-center {
 
   -webkit-tap-highlight-color: transparent;
   tap-highlight-color: transparent;
+  will-change: transform;
+  transform: translateZ(0);
 }
 
 /* ===============================
@@ -124,26 +126,31 @@ select.custom-select-center {
 /* ===============================
    MOBILE TOUCH FEEDBACK
    =============================== */
+
+  /* ===============================
+   TOUCH FEEDBACK (MOBILE + TABLET)
+   =============================== */
 @media (hover: none) and (pointer: coarse) {
-  .shed-card {
+
+  .shed-card{
     transition: transform 0.12s ease, box-shadow 0.12s ease;
   }
 
-  .shed-card:active {
-    transform: scale(0.96);
+  .shed-card:active{
+    transform: scale(0.97);
+
+    box-shadow:
+      inset 0 3px 8px rgba(0,0,0,0.18),
+      0 6px 14px rgba(0,0,0,0.16);
+
     background: rgba(59,130,246,0.06);
   }
+
 }
 
-/* Prevent ghost hover / double tap zoom */
-.shed-card {
+/* Prevent double tap zoom */
+.shed-card{
   touch-action: manipulation;
-}
-.shed-card:active {
-  transform: scale(0.98);
-  box-shadow:
-    inset 0 2px 6px rgba(0,0,0,.18),
-    0 6px 14px rgba(0,0,0,.2);
 }
 
 .shed-title {
@@ -471,6 +478,9 @@ if ('serviceWorker' in navigator) {
  
 });
 
+</script>
+<script>
+document.addEventListener("touchstart", function(){}, {passive:true});
 </script>
   </main>
 <footer
