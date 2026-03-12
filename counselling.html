@@ -111,9 +111,9 @@ select.custom-select-center {
   -ms-user-select: none;
 
   -webkit-tap-highlight-color: transparent;
-  tap-highlight-color: transparent;
   will-change: transform;
 transform: translateZ(0);
+contain: layout paint;
 }
 
 
@@ -178,28 +178,25 @@ transform: translateZ(0);
 /* ===============================
    TOUCH FEEDBACK (MOBILE + TABLET)
    =============================== */
-@media (hover: none) and (pointer: coarse) {
 
-  .shed-card{
-    transition: transform 0.12s ease, box-shadow 0.12s ease;
-  }
+  /* ===============================
+   TOUCH FEEDBACK (MOBILE + TABLET)
+   =============================== */
+.shed-card:active{
+  transform: scale(0.97);
 
-  .shed-card:active{
-    transform: scale(0.97);
+  box-shadow:
+    inset 0 3px 8px rgba(0,0,0,0.18),
+    0 6px 14px rgba(0,0,0,0.16);
 
-    box-shadow:
-      inset 0 3px 8px rgba(0,0,0,0.18),
-      0 6px 14px rgba(0,0,0,0.16);
-
-    background: rgba(59,130,246,0.06);
-  }
-
+  background: rgba(59,130,246,0.06);
 }
 
-/* Prevent double-tap zoom / ghost hover */
-.shed-card {
+/* Prevent double tap zoom */
+.shed-card{
   touch-action: manipulation;
 }
+
     </style>
   </head>
 
@@ -454,7 +451,7 @@ for (const data of docs) {
 
    
 async function openCounselling(filePath) {
-  const win = window.open("", "_blank");
+  const win = window.open("about:blank", "_blank");
 
   try {
     const url = await getDownloadURL(ref(window.storage, filePath));
