@@ -23,8 +23,7 @@ import {
   collection,
   query,
   where,
-  getDocs,
-  orderBy
+  getDocs
 } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
 
 import { getStorage, ref, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-storage.js";
@@ -47,7 +46,7 @@ const storage = getStorage(app);
   window.storage = storage;
   window.query = query;
   window.where = where;
-  window.orderBy = orderBy;
+
   window.getDocs = getDocs;
   window.collection = collection;
   window.ref = ref;
@@ -95,8 +94,10 @@ select.custom-select-center {
   box-shadow:
     inset 0 1px 0 rgba(255,255,255,.8),
     0 10px 22px rgba(0,0,0,.12);
-
-  transition: transform .2s ease, box-shadow .2s ease;
+transition: transform .2s ease, box-shadow .2s ease;
+will-change: transform;
+transform: translateZ(0);
+contain: layout paint;
 
   cursor: pointer;
 
@@ -186,9 +187,7 @@ select.custom-select-center {
   }
 }
 
-      .shed-card {
-  cursor: pointer;
-}
+
 
       /* === STICKY HEADER FIX (MOBILE SAFE) === */
 
@@ -577,20 +576,11 @@ list.appendChild(card);
   }
 }
 async function openShedOrder(filePath) {
-
-  const win = window.open("about:blank", "_blank");
-
   try {
-
     const url = await getDownloadURL(ref(window.storage, filePath));
-
-    win.location.replace(url);
-
+    window.open(url, "_blank", "noopener");
   } catch (err) {
-
-    win.close();
     alert("Unable to open document");
-
   }
 }
 // 🔹 Year selector handler
