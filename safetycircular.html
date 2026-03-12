@@ -22,8 +22,7 @@ import {
   collection,
   query,
   where,
-  getDocs,
-  orderBy
+  getDocs
 } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
 
 import { getStorage, ref, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-storage.js";
@@ -46,7 +45,7 @@ const storage = getStorage(app);
   window.storage = storage;
   window.query = query;
   window.where = where;
-  window.orderBy = orderBy;
+
   window.getDocs = getDocs;
   window.collection = collection;
   window.ref = ref;
@@ -60,6 +59,9 @@ const storage = getStorage(app);
       html,body {
   height: 100%;
   overscroll-behavior-y: none;
+}
+html {
+  -webkit-tap-highlight-color: transparent;
 }
 :root {
     --footer-height: 48px;
@@ -105,9 +107,10 @@ select.custom-select-center {
   -ms-user-select: none;
 
   -webkit-tap-highlight-color: transparent;
-  tap-highlight-color: transparent;
-  will-change: transform;
+ 
+ will-change: transform;
   transform: translateZ(0);
+  contain: layout paint;
 }
 
 /* ===============================
@@ -130,22 +133,14 @@ select.custom-select-center {
   /* ===============================
    TOUCH FEEDBACK (MOBILE + TABLET)
    =============================== */
-@media (hover: none) and (pointer: coarse) {
+.shed-card:active{
+  transform: scale(0.97);
 
-  .shed-card{
-    transition: transform 0.12s ease, box-shadow 0.12s ease;
-  }
+  box-shadow:
+    inset 0 3px 8px rgba(0,0,0,0.18),
+    0 6px 14px rgba(0,0,0,0.16);
 
-  .shed-card:active{
-    transform: scale(0.97);
-
-    box-shadow:
-      inset 0 3px 8px rgba(0,0,0,0.18),
-      0 6px 14px rgba(0,0,0,0.16);
-
-    background: rgba(59,130,246,0.06);
-  }
-
+  background: rgba(59,130,246,0.06);
 }
 
 /* Prevent double tap zoom */
