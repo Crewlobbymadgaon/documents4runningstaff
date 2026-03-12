@@ -576,12 +576,18 @@ list.appendChild(card);
   }
 }
 async function openShedOrder(filePath) {
+
+  // open tab immediately (Safari safe)
+  const win = window.open("about:blank", "_blank");
+
   try {
     const url = await getDownloadURL(ref(window.storage, filePath));
-    window.open(url, "_blank", "noopener");
+    win.location.href = url;
   } catch (err) {
+    win.close();
     alert("Unable to open document");
   }
+
 }
 // 🔹 Year selector handler
 function highlightSelectedYear() {
