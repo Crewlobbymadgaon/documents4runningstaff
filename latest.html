@@ -78,9 +78,7 @@ a {
 
   
 
-  .menu-card:active {
-    transform: scale(0.95);
-  }
+
 
   /* ICON */
   .menu-icon {
@@ -102,42 +100,39 @@ a {
       font-weight: 600; /* Normal professional weight */
     }
   }
-/* Disable text selection & tap highlight on clickable cards */
-.latest-card-item {
-  user-select: none;
-  -webkit-user-select: none;
-  -ms-user-select: none;
+/* Latest circular card */
 
-  -webkit-tap-highlight-color: transparent;
-  tap-highlight-color: transparent;
+.latest-card-item{
+  background: linear-gradient(135deg,#ffffff,#f8fafc);
+  cursor:pointer;
+
+  padding:12px 14px;
+  border-radius:12px;
+
+  box-shadow:0 4px 10px rgba(0,0,0,.10);
+
+  transition:transform .15s ease, box-shadow .15s ease;
+
+  /* disable text selection */
+  user-select:none;
+  -webkit-user-select:none;
+  -ms-user-select:none;
+
+  /* remove tap highlight */
+  -webkit-tap-highlight-color:transparent;
+
+  /* smoother animation */
+  will-change:transform;
+  transform:translateZ(0);
 }
 
-.latest-card-item {
-  background: linear-gradient(135deg, #ffffff, #f8fafc);
-  cursor: pointer;
-  padding: 12px 14px;
-  border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0,0,0,.10);
-  transition: transform .2s ease, box-shadow .2s ease;
-
-  /* 🔹 REMOVE TEXT HIGHLIGHT ON CLICK */
-  user-select: none;
-  -webkit-user-select: none;
-  -ms-user-select: none;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.latest-card-item * {
-  user-select: none;
-  -webkit-user-select: none;
+.latest-card-item *{
+  user-select:none;
+  -webkit-user-select:none;
 }
 
 
 
-/* Optional: subtle press feedback (recommended) */
-.latest-card-item:active {
-  transform: scale(0.98);
-}
 /* Visual-only outlined View button */
 .latest-view {
   font-size: 12px;
@@ -243,16 +238,22 @@ a {
 
 }
 
-@media (max-width: 767px) {
+@media (hover: none) and (pointer: coarse) {
+
   .menu-card:active,
   .latest-card-item:active,
-  .lobby-card:active {
-    transform: scale(0.96);
+  .lobby-card:active,
+  button:active {
+
+    transform: scale(0.97);
+
     box-shadow:
       inset 0 3px 8px rgba(0,0,0,0.18),
       0 6px 14px rgba(0,0,0,0.16);
+
     background: rgba(59,130,246,0.06);
   }
+
 }
 .menu-card,
 .latest-card-item {
@@ -870,7 +871,9 @@ if ("serviceWorker" in navigator) {
   });
 }
 </script>
-
+<script>
+document.addEventListener("touchstart", function(){}, {passive:true});
+</script>
 <footer
   class="fixed bottom-0 left-0 w-full z-40
          flex items-center justify-center
