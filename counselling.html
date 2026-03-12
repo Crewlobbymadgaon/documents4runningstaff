@@ -175,9 +175,6 @@ contain: layout paint;
 }
 
 
-/* ===============================
-   TOUCH FEEDBACK (MOBILE + TABLET)
-   =============================== */
 
   /* ===============================
    TOUCH FEEDBACK (MOBILE + TABLET)
@@ -495,12 +492,12 @@ if ('serviceWorker' in navigator) {
       .catch(err => console.log("Service Worker registration failed:", err));
   });
 }
-
-
-  
-
 </script>
-    </main>
+
+<script>
+document.addEventListener("touchstart", function(){}, {passive:true});
+</script>
+</main>
 <footer
   class="fixed bottom-0 left-0 w-full z-40
          flex items-center justify-center
