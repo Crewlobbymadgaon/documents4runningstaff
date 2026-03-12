@@ -238,22 +238,22 @@ a {
 
 }
 
-@media (hover: none) and (pointer: coarse) {
+/* ===============================
+   TOUCH FEEDBACK (MOBILE + TABLET)
+   =============================== */
 
-  .menu-card:active,
-  .latest-card-item:active,
-  .lobby-card:active,
-  button:active {
+/* ===============================
+   TOUCH FEEDBACK
+   =============================== */
 
-    transform: scale(0.97);
+.latest-card-item:active{
+  transform: scale(0.97);
 
-    box-shadow:
-      inset 0 3px 8px rgba(0,0,0,0.18),
-      0 6px 14px rgba(0,0,0,0.16);
+  box-shadow:
+    inset 0 3px 8px rgba(0,0,0,0.18),
+    0 6px 14px rgba(0,0,0,0.16);
 
-    background: rgba(59,130,246,0.06);
-  }
-
+  background: rgba(59,130,246,0.06);
 }
 .menu-card,
 .latest-card-item {
