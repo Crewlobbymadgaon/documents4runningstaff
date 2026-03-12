@@ -59,6 +59,7 @@
   touch-action: manipulation;
   will-change: transform, box-shadow;
     
+  transform: translateZ(0);
 }
 
 /* Accent strip */
@@ -117,11 +118,18 @@
       font-size: 18px;
     }
   }
-.lobby-card.touch-active {
-  transform: scale(0.96);
-  box-shadow:
-    inset 0 3px 8px rgba(0,0,0,0.22),
-    0 6px 14px rgba(0,0,0,0.18);
+@media (hover: none) and (pointer: coarse) {
+
+  .lobby-card:active {
+    transform: scale(0.97);
+
+    box-shadow:
+      inset 0 3px 8px rgba(0,0,0,0.18),
+      0 6px 14px rgba(0,0,0,0.16);
+
+    background: rgba(59,130,246,0.06);
+  }
+
 }
   </style>
 </head>
@@ -230,6 +238,9 @@ function setLobby(code) {
   localStorage.setItem("selectedLobby", code);
 }
 </script>
+<script>
+document.addEventListener("touchstart", function(){}, {passive:true});
+</script>
 <footer
   class="fixed bottom-0 left-0 w-full z-40
          flex items-center justify-center
@@ -250,31 +261,7 @@ function setLobby(code) {
   
   
   
-document.querySelectorAll(".lobby-card").forEach(card => {
 
-  // TOUCH START → press feedback
-  card.addEventListener("touchstart", () => {
-    card.classList.add("touch-active");
-  }, { passive: true });
-
-  // TOUCH END → snap back (navigation will happen naturally)
-  card.addEventListener("touchend", () => {
-    card.classList.remove("touch-active");
-  });
-
-  // TOUCH CANCEL → safety
-  card.addEventListener("touchcancel", () => {
-    card.classList.remove("touch-active");
-  });
-
-});
-
-// Safety reset when returning via back button
-window.addEventListener("pageshow", () => {
-  document.querySelectorAll(".lobby-card").forEach(card => {
-    card.classList.remove("touch-active");
-  });
-});
 
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker.register("/documents4runningstaff/sw.js");
