@@ -370,41 +370,62 @@ window.getDownloadURL = getDownloadURL;
   });
 
 
-document.addEventListener("DOMContentLoaded", () => {
+document.querySelectorAll(".lobby-card").forEach(card => {
 
-  document.querySelectorAll(".lobby-card").forEach(card => {
+  const filePath = card.dataset.file;
+  if (!filePath) return;
 
-    const filePath = card.dataset.file;
-    if (!filePath) return;
+  let isTouch = false;
 
-    // Press animation
-    card.addEventListener("pointerdown", () => {
-      card.classList.add("touch-active");
-    });
+  // TOUCH START
+  card.addEventListener("touchstart", () => {
+    isTouch = true;
+    card.classList.add("touch-active");
+  }, { passive: true });
 
-    card.addEventListener("pointerleave", () => {
-      card.classList.remove("touch-active");
-    });
+  // TOUCH END
+  card.addEventListener("touchend", () => {
 
-    // Click handler
-    card.addEventListener("click", async () => {
+    card.classList.remove("touch-active");
+
+    setTimeout(async () => {
+
+      const win = window.open("", "_blank");
 
       try {
-
         const url = await getDownloadURL(ref(window.storage, filePath));
-
-        window.open(url, "_blank");
-
-      } catch (e) {
-
+        win.location.href = url;
+      } catch {
+        win.close();
         alert("Unable to open document");
-        console.error(e);
-
       }
 
-      card.classList.remove("touch-active");
+    }, 0);
 
-    });
+  });
+
+  // TOUCH CANCEL
+  card.addEventListener("touchcancel", () => {
+    card.classList.remove("touch-active");
+  });
+
+  // DESKTOP CLICK
+  card.addEventListener("click", async () => {
+
+    if (isTouch) {
+      isTouch = false;
+      return;
+    }
+
+    const win = window.open("", "_blank");
+
+    try {
+      const url = await getDownloadURL(ref(window.storage, filePath));
+      win.location.href = url;
+    } catch {
+      win.close();
+      alert("Unable to open document");
+    }
 
   });
 
