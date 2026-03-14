@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+
+<title>Manage Documents</title>
+<script src="https://cdn.tailwindcss.com"></script>
+
+</head>
+
+<body class="bg-gray-100">
+
+<header class="bg-blue-900 text-white p-4 text-center font-bold">
+Document Management
+</header>
+
+<div class="max-w-5xl mx-auto mt-6 bg-white p-6 rounded shadow">
+
+<table class="w-full text-sm">
+
+<thead class="bg-gray-200">
+
+<tr>
+
+<th class="p-2">Category</th>
+<th>Lobby</th>
+<th>Title</th>
+<th>Rank</th>
+<th>Action</th>
+
+</tr>
+
+</thead>
+
+<tbody id="docList"></tbody>
+
+</table>
+
+</div>
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
+
+import { getFirestore,collection,getDocs,deleteDoc,doc }
+from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+
+import { getStorage,ref,getDownloadURL }
+from "https://www.gstatic.com/firebasejs/12.7.0/firebase-storage.js";
+
+const firebaseConfig={
+apiKey:"YOUR KEY",
+projectId:"doc4runningstaff-d000b",
+storageBucket:"doc4runningstaff-d000b.firebasestorage.app"
+};
+
+const app=initializeApp(firebaseConfig);
+
+const db=getFirestore(app);
+
+const storage=getStorage(app);
+
+async function loadDocs(){
+
+const snap=await getDocs(collection(db,"documents"));
+
+let html="";
+
+snap.forEach(d=>{
+
+const data=d.data();
+
+html+=`
+<tr>
+
+<td class="p-2">${data.category}</td>
+
+<td>${data.lobby||"-"}</td>
+
+<td>${data.orderNo||data.title||""}</td>
+
+<td>${data.latestRank}</td>
+
+<td>
+
+<button onclick="viewDoc('${data.filePath}')"
+class="bg-blue-600 text-white px-2 py-1 rounded">
+View
+</button>
+
+<button onclick="deleteDoc('${d.id}')"
+class="bg-red-600 text-white px-2 py-1 rounded">
+Delete
+</button>
+
+</td>
+
+</tr>
+`;
+
+});
+
+docList.innerHTML=html;
+
+}
+
+window.viewDoc=async function(path){
+
+const url=await getDownloadURL(ref(storage,path));
+
+window.open(url);
+
+}
+
+loadDocs();
+
+</script>
+
+</body>
+</html>
