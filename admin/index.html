@@ -761,6 +761,11 @@ orderNo.classList.add("hidden");
 };
 
 </script>
+    <script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js');
+}
+</script>
 <div id="docModal" class="fixed inset-0 bg-black bg-opacity-40 hidden flex items-center justify-center">
 
 <div class="bg-white p-6 rounded shadow w-[95%] max-w-md">
