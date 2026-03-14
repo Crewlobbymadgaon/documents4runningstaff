@@ -1,6 +1,6 @@
 {
   "name": "Running Staff Library Admin",
-  "short_name": "Library Admin",
+  "short_name": "Admin",
   "start_url": "/documents4runningstaff/admin/",
   "display": "standalone",
   "background_color": "#1e3a8a",
