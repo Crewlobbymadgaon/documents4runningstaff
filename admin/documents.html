@@ -1,35 +1,107 @@
 <!DOCTYPE html>
+<html lang="en">
 
-<html>
 <head>
 
-<title>Manage Documents</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Library Admin</title>
+
 <script src="https://cdn.tailwindcss.com"></script>
 
 </head>
 
 <body class="bg-gray-100">
 
-<header class="bg-blue-900 text-white p-4 text-center font-bold">
-Document Management
+<header class="bg-blue-900 text-white text-center py-3 font-bold text-lg">
+Running Staff Digital Library — Admin Panel
 </header>
 
-<div class="max-w-5xl mx-auto mt-6 bg-white p-6 rounded shadow">
+
+<!-- LOGIN -->
+
+<div id="loginBox" class="max-w-sm mx-auto mt-10 bg-white p-6 rounded shadow">
+
+<h2 class="text-lg font-bold mb-4 text-center">Admin Login</h2>
+
+<input id="email" class="border p-2 w-full mb-3 rounded" placeholder="Email">
+
+<input id="password" type="password" class="border p-2 w-full mb-4 rounded" placeholder="Password">
+
+<button onclick="login()" class="w-full bg-blue-700 text-white py-2 rounded">
+Login
+</button>
+
+</div>
+
+
+<!-- ADMIN PANEL -->
+
+<div id="adminPanel" class="hidden max-w-6xl mx-auto mt-6">
+
+<!-- CATEGORY BUTTONS -->
+
+<div class="flex gap-2 mb-3">
+
+<button onclick="loadDocs('shed_order')" class="bg-blue-700 text-white px-3 py-1 rounded">Shed Orders</button>
+
+<button onclick="loadDocs('safety_circular')" class="bg-blue-700 text-white px-3 py-1 rounded">Safety Circular</button>
+
+<button onclick="loadDocs('counselling')" class="bg-blue-700 text-white px-3 py-1 rounded">Counselling</button>
+
+<button onclick="loadDocs('correction_slip')" class="bg-blue-700 text-white px-3 py-1 rounded">Correction Slip</button>
+
+</div>
+
+
+<!-- FILTER BAR -->
+
+<div class="flex gap-2 mb-4">
+
+<select id="yearFilter" class="border p-2 rounded hidden">
+<option value="">All Years</option>
+</select>
+
+<select id="lobbyFilter" class="border p-2 rounded hidden">
+<option value="">All Lobby</option>
+<option value="mao">Madgaon</option>
+<option value="rn">Ratnagiri</option>
+<option value="ven">Verna</option>
+<option value="sl">Surathkal</option>
+</select>
+
+<select id="sectionFilter" class="border p-2 rounded hidden">
+<option value="">All Section</option>
+<option value="gsr">G&SR</option>
+<option value="accident">Accident Manual</option>
+<option value="wtt_a">WTT Part A</option>
+<option value="wtt_b">WTT Part B</option>
+</select>
+
+</div>
+
+
+<!-- DOCUMENT TABLE -->
+
+<div class="bg-white p-5 rounded shadow">
+
+<h2 class="font-bold mb-3">Manage Documents</h2>
+
+<div class="overflow-x-auto">
 
 <table class="w-full text-sm">
 
 <thead class="bg-gray-200">
-
 <tr>
-
 <th class="p-2">Category</th>
 <th>Lobby</th>
+<th>Section</th>
 <th>Title</th>
-<th>Rank</th>
+<th>Date</th>
+<th>Latest</th>
 <th>Action</th>
-
 </tr>
-
 </thead>
 
 <tbody id="docList"></tbody>
@@ -38,64 +110,151 @@ Document Management
 
 </div>
 
+</div>
+
+</div>
+
+
+
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
 
-import { getFirestore,collection,getDocs,deleteDoc,doc }
-from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+import {
+getFirestore,
+collection,
+getDocs,
+deleteDoc,
+doc,
+updateDoc,
+query,
+where
+} from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
 
-import { getStorage,ref,getDownloadURL }
-from "https://www.gstatic.com/firebasejs/12.7.0/firebase-storage.js";
+import {
+getStorage,
+ref,
+getDownloadURL
+} from "https://www.gstatic.com/firebasejs/12.7.0/firebase-storage.js";
 
-const firebaseConfig={
-apiKey:"YOUR KEY",
-projectId:"doc4runningstaff-d000b",
-storageBucket:"doc4runningstaff-d000b.firebasestorage.app"
+import {
+getAuth,
+signInWithEmailAndPassword
+} from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
+
+
+const firebaseConfig = {
+
+apiKey: "AIzaSyBcnbWtF-BoluQava2x52JENzaOJJhqxVA",
+authDomain: "doc4runningstaff-d000b.firebaseapp.com",
+projectId: "doc4runningstaff-d000b",
+storageBucket: "doc4runningstaff-d000b.firebasestorage.app",
+messagingSenderId: "34983733068",
+appId: "1:34983733068:web:bbe8a3d902eecaab8bd1e9"
+
 };
 
-const app=initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
 
-const db=getFirestore(app);
+const db = getFirestore(app);
+const storage = getStorage(app);
+const auth = getAuth(app);
 
-const storage=getStorage(app);
+let currentCategory="";
 
-async function loadDocs(){
 
-const snap=await getDocs(collection(db,"documents"));
+const categoryNames = {
+
+shed_order:"Shed Order",
+safety_circular:"Safety Circular",
+counselling:"Counselling",
+correction_slip:"Correction Slip"
+
+};
+
+
+
+window.login = async function(){
+
+try{
+
+await signInWithEmailAndPassword(auth,email.value,password.value);
+
+loginBox.style.display="none";
+
+adminPanel.classList.remove("hidden");
+
+loadDocs('shed_order');
+
+}
+
+catch{
+
+alert("Login failed");
+
+}
+
+};
+
+
+
+function getTitle(data){
+
+if(data.category==="shed_order") return data.orderNo;
+
+if(data.category==="safety_circular") return data.circularNo;
+
+if(data.category==="counselling") return data.monthYear;
+
+if(data.category==="correction_slip")
+return "CS "+String(data.slipNo).padStart(2,"0");
+
+return "";
+
+}
+
+
+
+function renderDocs(list){
 
 let html="";
 
-snap.forEach(d=>{
+list.forEach(data=>{
 
-const data=d.data();
+const title=getTitle(data);
+
+const date=data.createdAt
+? new Date(data.createdAt).toLocaleString()
+: "";
 
 html+=`
+
 <tr>
 
-<td class="p-2">${data.category}</td>
+<td>${categoryNames[data.category]}</td>
 
-<td>${data.lobby||"-"}</td>
+<td>${data.lobby || "-"}</td>
 
-<td>${data.orderNo||data.title||""}</td>
+<td>${data.section || "-"}</td>
 
-<td>${data.latestRank}</td>
+<td>${title}</td>
+
+<td>${date}</td>
+
+<td>${data.latestRank===1?"✔":""}</td>
 
 <td>
 
-<button onclick="viewDoc('${data.filePath}')"
-class="bg-blue-600 text-white px-2 py-1 rounded">
-View
-</button>
+<button onclick="viewDoc('${data.filePath}')" class="bg-blue-600 text-white px-2 py-1 rounded">View</button>
 
-<button onclick="deleteDoc('${d.id}')"
-class="bg-red-600 text-white px-2 py-1 rounded">
-Delete
-</button>
+<button onclick="setLatest('${data.id}')" class="bg-green-600 text-white px-2 py-1 rounded">Latest</button>
+
+<button onclick="deleteDoc('${data.id}')" class="bg-red-600 text-white px-2 py-1 rounded">Delete</button>
 
 </td>
 
 </tr>
+
 `;
 
 });
@@ -104,15 +263,188 @@ docList.innerHTML=html;
 
 }
 
-window.viewDoc=async function(path){
+
+
+async function loadDocs(category, fromFilter=false){
+
+currentCategory = category;
+
+/* reset filters only when category changes */
+
+if(!fromFilter){
+yearFilter.value="";
+lobbyFilter.value="";
+sectionFilter.value="";
+}
+
+/* hide filters */
+
+yearFilter.classList.add("hidden");
+lobbyFilter.classList.add("hidden");
+sectionFilter.classList.add("hidden");
+
+/* show needed filters */
+
+if(category==="shed_order"){
+yearFilter.classList.remove("hidden");
+lobbyFilter.classList.remove("hidden");
+}
+
+if(category==="safety_circular"){
+yearFilter.classList.remove("hidden");
+}
+
+if(category==="counselling"){
+yearFilter.classList.remove("hidden");
+}
+
+if(category==="correction_slip"){
+sectionFilter.classList.remove("hidden");
+}
+
+
+const q = query(
+collection(db,"documents"),
+where("category","==",category)
+);
+
+const snap = await getDocs(q);
+
+const docs=[];
+const years = new Set();
+
+snap.forEach(d=>{
+
+const data = d.data();
+data.id = d.id;
+
+docs.push(data);
+
+if(data.year){
+years.add(String(data.year));
+}
+
+});
+
+
+/* filter */
+
+const filtered = docs.filter(d=>{
+
+if(yearFilter.value && String(d.year)!==yearFilter.value) return false;
+
+if(lobbyFilter.value && d.lobby!==lobbyFilter.value) return false;
+
+if(sectionFilter.value && d.section!==sectionFilter.value) return false;
+
+return true;
+
+});
+
+
+renderDocs(filtered);
+
+
+/* build year dropdown */
+
+if(!fromFilter){
+
+yearFilter.innerHTML='<option value="">All Years</option>';
+
+Array.from(years)
+.sort((a,b)=>b-a)
+.forEach(y=>{
+const opt=document.createElement("option");
+opt.value=y;
+opt.textContent=y;
+yearFilter.appendChild(opt);
+});
+
+}
+}
+
+
+window.viewDoc = async function(path){
 
 const url=await getDownloadURL(ref(storage,path));
 
 window.open(url);
 
+};
+
+
+
+window.deleteDoc = async function(id){
+
+if(!confirm("Delete document?")) return;
+
+await deleteDoc(doc(db,"documents",id));
+
+loadDocs(currentCategory);
+
+};
+
+
+
+window.setLatest = async function(id){
+
+const snap = await getDocs(collection(db,"documents"));
+
+const targetDoc = snap.docs.find(d => d.id === id);
+
+const targetData = targetDoc.data();
+
+for(const d of snap.docs){
+
+const data = d.data();
+
+let sameGroup=false;
+
+if(targetData.category==="shed_order"){
+
+sameGroup =
+data.category==="shed_order" &&
+data.lobby===targetData.lobby;
+
 }
 
-loadDocs();
+else if(targetData.category==="correction_slip"){
+
+sameGroup =
+data.category==="correction_slip" &&
+data.section===targetData.section;
+
+}
+
+else{
+
+sameGroup = data.category===targetData.category;
+
+}
+
+if(sameGroup){
+
+await updateDoc(doc(db,"documents",d.id),{latestRank:null});
+
+}
+
+}
+
+await updateDoc(doc(db,"documents",id),{latestRank:1});
+
+loadDocs(currentCategory);
+
+};
+
+
+/* filter triggers */
+
+yearFilter.onchange=()=>loadDocs(currentCategory,true);
+lobbyFilter.onchange=()=>loadDocs(currentCategory,true);
+sectionFilter.onchange=()=>loadDocs(currentCategory,true);
+
+
+window.loadDocs=loadDocs;
 
 </script>
 
