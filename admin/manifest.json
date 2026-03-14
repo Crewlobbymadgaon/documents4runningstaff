@@ -1,0 +1,20 @@
+{
+  "name": "Running Staff Library Admin",
+  "short_name": "Library Admin",
+  "start_url": "/documents4runningstaff/admin/",
+  "display": "standalone",
+  "background_color": "#1e3a8a",
+  "theme_color": "#1e3a8a",
+  "icons": [
+    {
+      "src": "/documents4runningstaff/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/documents4runningstaff/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
