@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Panel</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+</head>
+
+<body class="bg-gray-100">
+
+<!-- HEADER -->
+
+<header class="bg-blue-900 text-white text-center py-3 font-bold text-lg">
+Running Staff Digital Library — Admin Panel
+</header>
+
+<!-- LOGIN -->
+
+<div id="loginBox" class="max-w-sm mx-auto mt-10 bg-white p-6 rounded shadow">
+
+<h2 class="text-lg font-bold mb-4 text-center">Admin Login</h2>
+
+<input id="email"
+class="border p-2 w-full mb-3 rounded"
+placeholder="Email">
+
+<input id="password"
+type="password"
+class="border p-2 w-full mb-4 rounded"
+placeholder="Password">
+
+<button onclick="login()"
+class="w-full bg-blue-700 text-white py-2 rounded">
+Login </button>
+
+</div>
+
+<!-- ADMIN PANEL -->
+
+<div id="adminPanel" class="hidden max-w-6xl mx-auto mt-6">
+
+<!-- UPLOAD BOX -->
+
+<div class="bg-white p-5 rounded shadow mb-6">
+
+<h2 class="font-bold mb-3">Upload Document</h2>
+
+<div class="grid md:grid-cols-2 gap-3">
+
+<select id="category" class="border p-2 rounded">
+
+<option value="shed_order">Shed Order</option>
+<option value="safety_circular">Safety Circular</option>
+<option value="counselling">Counselling</option>
+<option value="correction_slip">Correction Slip</option>
+
+</select>
+
+<select id="lobby" class="border p-2 rounded">
+
+<option value="">Lobby</option>
+<option value="mao">Madgaon</option>
+<option value="rn">Ratnagiri</option>
+<option value="ven">Verna</option>
+<option value="sl">Surathkal</option>
+
+</select>
+
+<input id="orderNo"
+placeholder="Order / Circular Number"
+class="border p-2 rounded">
+
+<input id="description"
+placeholder="Description"
+class="border p-2 rounded">
+
+<input type="file" id="fileInput" class="border p-2 rounded">
+
+<button onclick="uploadDoc()"
+class="bg-blue-700 text-white rounded p-2">
+Upload </button>
+
+</div>
+
+</div>
+
+<!-- DOCUMENT TABLE -->
+
+<div class="bg-white p-5 rounded shadow">
+
+<h2 class="font-bold mb-3">Manage Documents</h2>
+
+<div class="overflow-x-auto">
+
+<table class="w-full text-sm">
+
+<thead class="bg-gray-200">
+
+<tr>
+
+<th class="p-2">Category</th>
+<th>Lobby</th>
+<th>Title</th>
+<th>Rank</th>
+<th>Action</th>
+
+</tr>
+
+</thead>
+
+<tbody id="docList"></tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
+
+import {
+getFirestore,
+collection,
+addDoc,
+getDocs,
+deleteDoc,
+doc,
+updateDoc
+} from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+
+import {
+getStorage,
+ref,
+uploadBytes,
+getDownloadURL
+} from "https://www.gstatic.com/firebasejs/12.7.0/firebase-storage.js";
+
+import {
+getAuth,
+signInWithEmailAndPassword
+} from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
+
+
+const firebaseConfig = {
+apiKey: "AIzaSyBcnbWtF-BoluQava2x52JENzaOJJhqxVA",
+authDomain: "doc4runningstaff-d000b.firebaseapp.com",
+projectId: "doc4runningstaff-d000b",
+storageBucket: "doc4runningstaff-d000b.firebasestorage.app",
+messagingSenderId: "34983733068",
+appId: "1:34983733068:web:bbe8a3d902eecaab8bd1e9"
+};
+
+
+const app = initializeApp(firebaseConfig);
+
+const db = getFirestore(app);
+
+const storage = getStorage(app);
+
+const auth = getAuth(app);
+
+
+
+window.login = async function(){
+
+try{
+
+await signInWithEmailAndPassword(
+auth,
+email.value,
+password.value
+);
+
+loginBox.style.display="none";
+
+adminPanel.classList.remove("hidden");
+
+loadDocs();
+
+}catch{
+
+alert("Login failed");
+
+}
+
+}
+
+
+
+window.uploadDoc = async function(){
+
+const file=fileInput.files[0];
+
+if(!file){
+alert("Select file");
+return;
+}
+
+const filePath="documents/"+Date.now()+"_"+file.name;
+
+await uploadBytes(ref(storage,filePath),file);
+
+await addDoc(collection(db,"documents"),{
+
+category:category.value,
+lobby:lobby.value,
+orderNo:orderNo.value,
+description:description.value,
+filePath:filePath,
+latestRank:1,
+uploadedAt:Date.now()
+
+});
+
+alert("Uploaded");
+
+loadDocs();
+
+}
+
+
+
+async function loadDocs(){
+
+const snap=await getDocs(collection(db,"documents"));
+
+let html="";
+
+snap.forEach(d=>{
+
+const data=d.data();
+
+const title=data.orderNo||data.title||data.circularNo||data.monthYear||"";
+
+html+=`
+
+<tr>
+
+<td class="p-2">${data.category}</td>
+
+<td>${data.lobby||"-"}</td>
+
+<td>${title}</td>
+
+<td>${data.latestRank||"-"}</td>
+
+<td class="space-x-2">
+
+<button onclick="viewDoc('${data.filePath}')"
+class="bg-blue-600 text-white px-2 py-1 rounded">
+View
+</button>
+
+<button onclick="setLatest('${d.id}')"
+class="bg-green-600 text-white px-2 py-1 rounded">
+Latest
+</button>
+
+<button onclick="deleteDoc('${d.id}')"
+class="bg-red-600 text-white px-2 py-1 rounded">
+Delete
+</button>
+
+</td>
+
+</tr>
+
+`;
+
+});
+
+docList.innerHTML=html;
+
+}
+
+
+
+window.viewDoc = async function(path){
+
+const url=await getDownloadURL(ref(storage,path));
+
+window.open(url);
+
+}
+
+
+
+window.deleteDoc = async function(id){
+
+if(!confirm("Delete document?")) return;
+
+await deleteDoc(doc(db,"documents",id));
+
+loadDocs();
+
+}
+
+
+
+window.setLatest = async function(id){
+
+await updateDoc(doc(db,"documents",id),{
+latestRank:1
+});
+
+loadDocs();
+
+}
+
+</script>
+
+</body>
+</html>
