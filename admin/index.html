@@ -15,14 +15,15 @@
 
 <body class="bg-gray-100">
 
-<header class="bg-blue-900 text-white text-center py-3 font-bold text-lg sticky top-0 z-10">
+<header class="bg-blue-900 text-white text-center py-3 font-bold text-base sm:text-lg sticky top-0 z-10">
 Running Staff Digital Library — Admin Panel
 </header>
 
 
+
 <!-- LOGIN -->
 
-<div id="loginBox" class="w-[90%] max-w-sm mx-auto mt-10 bg-white p-6 rounded shadow">
+<div id="loginBox" class="w-[92%] sm:w-full max-w-sm mx-auto mt-10 bg-white p-6 rounded shadow">
 
 <h2 class="text-lg font-bold mb-4 text-center">Admin Login</h2>
 
@@ -30,35 +31,56 @@ Running Staff Digital Library — Admin Panel
 
 <input id="password" type="password" class="border p-2 w-full mb-4 rounded" placeholder="Password">
 
-<button onclick="login()" class="w-full bg-blue-700 text-white py-2 rounded">
-Login
+<button id="loginBtn"
+onclick="login()"
+class="w-full bg-blue-700 hover:bg-blue-800 text-white py-2 rounded transition active:scale-95 shadow-sm hover:shadow-md">
+
+🔐 Login
+
 </button>
 
 </div>
 
 
+
 <!-- ADMIN PANEL -->
 
-<div id="adminPanel" class="hidden max-w-6xl mx-auto mt-6">
+<div id="adminPanel" class="hidden max-w-6xl mx-auto mt-6 px-3 sm:px-4">
 
-    <!-- UPLOAD DOCUMENT -->
+<div class="flex mb-5 border-b">
 
-<!-- UPLOAD BOX -->
+<button id="uploadBtn"
+onclick="showMenu('upload')"
+class="px-5 py-2 text-sm font-semibold border-b-4 border-transparent text-gray-600">
+📤 Upload Document
+</button>
+
+<button id="manageBtn"
+onclick="showMenu('manage')"
+class="px-5 py-2 text-sm font-semibold border-b-4 border-transparent text-gray-600">
+📂 Manage Documents
+</button>
+
+</div>
+
+<!-- UPLOAD MENU -->
+
+<div id="uploadMenu" class="hidden">
 
 <div class="bg-white p-5 rounded shadow mb-6">
 
 <h2 class="font-bold mb-3">Upload Document</h2>
 
-<div class="grid md:grid-cols-2 gap-3">
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
 
-<select id="category" class="border p-2 rounded" onchange="updateForm()">
+<select id="category" class="border p-2 rounded" onchange="updateForm(); autoSuggestNumber();">
 <option value="shed_order">Shed Order</option>
 <option value="safety_circular">Safety Circular</option>
 <option value="counselling">Counselling</option>
 <option value="correction_slip">Correction Slip</option>
 </select>
 
-<select id="lobby" class="border p-2 rounded">
+<select id="lobby" class="border p-2 rounded" onchange="autoSuggestNumber()">
 <option value="">Lobby</option>
 <option value="mao">Madgaon</option>
 <option value="rn">Ratnagiri</option>
@@ -66,18 +88,31 @@ Login
 <option value="sl">Surathkal</option>
 </select>
 
-<select id="section" class="border p-2 rounded hidden">
+<select id="section" class="border p-2 rounded hidden" onchange="autoSuggestNumber()">
 <option value="gsr">G&SR</option>
 <option value="accident">Accident Manual</option>
 <option value="wtt_a">WTT Part A</option>
 <option value="wtt_b">WTT Part B</option>
 </select>
 
-<input id="year" placeholder="Year (2026)" class="border p-2 rounded">
+<select id="year" class="border p-2 rounded" onchange="autoSuggestNumber()">
+</select>
 
-<input id="monthYear"
-placeholder="Month-Year (Example: Mar-2026)"
-class="border p-2 rounded hidden">
+<select id="month" class="border p-2 rounded hidden">
+<option value="">Month</option>
+<option value="Jan">January</option>
+<option value="Feb">February</option>
+<option value="Mar">March</option>
+<option value="Apr">April</option>
+<option value="May">May</option>
+<option value="Jun">June</option>
+<option value="Jul">July</option>
+<option value="Aug">August</option>
+<option value="Sep">September</option>
+<option value="Oct">October</option>
+<option value="Nov">November</option>
+<option value="Dec">December</option>
+</select>
 
 <input id="orderNo" placeholder="Order / Circular / Slip Number" class="border p-2 rounded">
 
@@ -85,48 +120,72 @@ class="border p-2 rounded hidden">
 
 <input type="file" id="fileInput" class="border p-2 rounded">
 
-<button onclick="uploadDoc()" class="bg-blue-700 text-white rounded p-2">
-Upload
+<button id="uploadActionBtn"
+onclick="uploadDoc()"
+class="bg-blue-700 hover:bg-blue-800 text-white rounded px-4 py-2 transition active:scale-95 shadow-sm hover:shadow-md">
+📤 Upload
 </button>
 
 </div>
-
+</div>
 </div>
 
+<!-- MANAGE MENU -->
+
+<div id="manageMenu">
 
 <!-- CATEGORY BUTTONS -->
 
-<div class="flex flex-wrap gap-2 mb-3">
+<div class="flex flex-wrap gap-2 mb-3 justify-center sm:justify-start">
 
-<button onclick="loadDocs('shed_order')" class="bg-blue-700 text-white px-3 py-1 rounded">Shed Orders</button>
+<button id="btn_shed"
+onclick="loadDocs('shed_order')"
+class="catBtn bg-blue-700 text-white px-3 py-2 rounded text-sm transition active:scale-95">
+Shed Orders
+</button>
 
-<button onclick="loadDocs('safety_circular')" class="bg-blue-700 text-white px-3 py-1 rounded">Safety Circular</button>
+<button id="btn_safety"
+onclick="loadDocs('safety_circular')"
+class="catBtn bg-blue-700 text-white px-3 py-2 rounded text-sm transition active:scale-95">
+Safety Circular
+</button>
 
-<button onclick="loadDocs('counselling')" class="bg-blue-700 text-white px-3 py-1 rounded">Counselling</button>
+<button id="btn_counselling"
+onclick="loadDocs('counselling')"
+class="catBtn bg-blue-700 text-white px-3 py-2 rounded text-sm transition active:scale-95">
+Counselling
+</button>
 
-<button onclick="loadDocs('correction_slip')" class="bg-blue-700 text-white px-3 py-1 rounded">Correction Slip</button>
+<button id="btn_correction"
+onclick="loadDocs('correction_slip')"
+class="catBtn bg-blue-700 text-white px-3 py-2 rounded text-sm transition active:scale-95">
+Correction Slip
+</button>
 
 </div>
 
 
 <!-- FILTER BAR -->
 
-<div class="flex flex-wrap gap-2 mb-4">
+<div class="flex flex-wrap gap-3 mb-4">
 
-<select id="yearFilter" class="border p-2 rounded hidden">
-<option value="">All Years</option>
+<select id="yearFilter"
+class="border border-gray-300 rounded-lg px-3 py-2 bg-white shadow-sm focus:ring-2 focus:ring-blue-500 hidden">
+<option value="">📅 All Years</option>
 </select>
 
-<select id="lobbyFilter" class="border p-2 rounded hidden">
-<option value="">All Lobby</option>
+<select id="lobbyFilter"
+class="border border-gray-300 rounded-lg px-3 py-2 bg-white shadow-sm focus:ring-2 focus:ring-blue-500 hidden">
+<option value="">🏢 All Lobby</option>
 <option value="mao">Madgaon</option>
 <option value="rn">Ratnagiri</option>
 <option value="ven">Verna</option>
 <option value="sl">Surathkal</option>
 </select>
 
-<select id="sectionFilter" class="border p-2 rounded hidden">
-<option value="">All Section</option>
+<select id="sectionFilter"
+class="border border-gray-300 rounded-lg px-3 py-2 bg-white shadow-sm focus:ring-2 focus:ring-blue-500 hidden">
+<option value="">📂 All Section</option>
 <option value="gsr">G&SR</option>
 <option value="accident">Accident Manual</option>
 <option value="wtt_a">WTT Part A</option>
@@ -138,27 +197,25 @@ Upload
 
 <!-- DOCUMENT TABLE -->
 
-<div class="bg-white p-5 rounded shadow">
+<div class="bg-white rounded shadow">
 
-<h2 class="font-bold mb-3">Manage Documents</h2>
+<div class="w-full overflow-x-auto">
 
-<div class="overflow-x-auto w-full">
+<table class="min-w-[700px] w-full text-sm border border-gray-200">
 
-<table class="min-w-[700px] w-full text-sm">
-
-<thead class="bg-gray-200">
+<thead class="bg-blue-50 text-left text-xs uppercase text-gray-700">
 <tr>
-<th class="p-2">Category</th>
-<th>Lobby</th>
-<th>Section</th>
-<th>Title</th>
-<th>Date</th>
-<th>Latest</th>
-<th>Action</th>
+<th class="px-4 py-2 whitespace-nowrap">Category</th>
+<th class="px-4 py-2 whitespace-nowrap">Lobby</th>
+<th class="px-4 py-2 whitespace-nowrap">Section</th>
+<th class="px-4 py-2 whitespace-nowrap">Title</th>
+<th class="px-4 py-2 whitespace-nowrap">Date</th>
+<th class="px-4 py-2 text-center whitespace-nowrap">Latest</th>
+<th class="px-4 py-2 text-center whitespace-nowrap">Action</th>
 </tr>
 </thead>
 
-<tbody id="docList"></tbody>
+<tbody id="docList" class="divide-y divide-gray-200"></tbody>
 
 </table>
 
@@ -193,8 +250,11 @@ getDownloadURL
 
 import {
 getAuth,
-signInWithEmailAndPassword
+signInWithEmailAndPassword,
+onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
+
+import { getDoc } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
 
 
 const firebaseConfig = {
@@ -213,6 +273,21 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const storage = getStorage(app);
 const auth = getAuth(app);
+/* AUTO LOGIN */
+
+onAuthStateChanged(auth, (user) => {
+
+if(user){
+
+loginBox.style.display="none";
+adminPanel.classList.remove("hidden");
+
+showMenu('manage');
+loadDocs('shed_order');
+
+}
+
+});
 
 let currentCategory="";
 
@@ -232,30 +307,125 @@ import { uploadBytes } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-
 
 
 
+window.autoSuggestNumber = async function(){
 
+if(category.value==="counselling"){
+orderNo.value="";
+return;
+}
+
+if(category.value==="shed_order" && !lobby.value){
+orderNo.value="";
+return;
+}
+
+if(category.value==="correction_slip" && !section.value){
+orderNo.value="";
+return;
+}
+
+let q;
+
+/* SHED ORDER */
+
+if(category.value==="shed_order"){
+
+q = query(
+collection(db,"documents"),
+where("category","==","shed_order"),
+where("lobby","==",lobby.value),
+where("year","==",Number(year.value))
+);
+
+}
+
+/* SAFETY CIRCULAR */
+
+if(category.value==="safety_circular"){
+
+q = query(
+collection(db,"documents"),
+where("category","==","safety_circular"),
+where("year","==",Number(year.value))
+);
+
+}
+
+/* CORRECTION SLIP */
+
+if(category.value==="correction_slip"){
+
+q = query(
+collection(db,"documents"),
+where("category","==","correction_slip"),
+where("section","==",section.value)
+);
+
+}
+
+const snap = await getDocs(q);
+
+let max=0;
+
+snap.forEach(d=>{
+
+const data=d.data();
+
+let num=0;
+
+if(data.orderNo){
+num=parseInt(data.orderNo.split("/")[0]);
+}
+
+if(data.circularNo){
+num=parseInt(data.circularNo.split("/")[0]);
+}
+
+if(data.slipNo){
+num=parseInt(data.slipNo);
+}
+
+if(num>max) max=num;
+
+});
+
+orderNo.value = String(max+1).padStart(2,"0");
+
+};
 
 
 window.login = async function(){
+
+const btn = document.getElementById("loginBtn");
+
+btn.innerText = "Logging in...";
+btn.disabled = true;
+btn.classList.add("opacity-60");
 
 try{
 
 await signInWithEmailAndPassword(auth,email.value,password.value);
 
 loginBox.style.display="none";
-
 adminPanel.classList.remove("hidden");
 
+showMenu('manage');
 loadDocs('shed_order');
 
 }
-
 catch{
 
 alert("Login failed");
 
 }
 
-};
+/* restore button */
+
+btn.innerText = "🔐 Login";
+btn.disabled = false;
+btn.classList.remove("opacity-60");
+
+}
 
 
 
@@ -289,39 +459,63 @@ const date=data.createdAt
 : "";
 
 html+=`
+<tr class="odd:bg-white even:bg-gray-50 hover:bg-blue-50">
 
-<tr>
+<td class="px-4 py-2 whitespace-nowrap font-medium">
+${categoryNames[data.category]}
+</td>
 
-<td>${categoryNames[data.category]}</td>
+<td class="px-4 py-2 whitespace-nowrap">
+${data.lobby || "-"}
+</td>
 
-<td>${data.lobby || "-"}</td>
+<td class="px-4 py-2 whitespace-nowrap">
+${data.section || "-"}
+</td>
 
-<td>${data.section || "-"}</td>
+<td class="px-4 py-2 whitespace-nowrap text-blue-700">
+${title}
+</td>
 
-<td>${title}</td>
+<td class="px-4 py-2 whitespace-nowrap text-gray-600">
+${date}
+</td>
 
-<td>${date}</td>
+<td class="px-4 py-2 text-center whitespace-nowrap">
+${data.latestRank===1
+? '<span class="bg-green-100 text-green-700 text-xs px-2 py-1 rounded-full font-semibold">Latest</span>'
+: ''}
+</td>
 
-<td>${data.latestRank===1?"✔":""}</td>
+<td class="px-4 py-2 text-center whitespace-nowrap">
 
-<td>
+<div class="flex justify-center gap-1">
 
-<button onclick="viewDoc('${data.filePath}')" class="bg-blue-600 text-white px-2 py-1 rounded">View</button>
+<button onclick="viewDoc('${data.filePath}')"
+class="bg-blue-600 hover:bg-blue-700 text-white px-2 py-1 rounded text-xs">
+View
+</button>
 
+<button onclick="setLatest('${data.id}')"
+class="bg-green-600 hover:bg-green-700 text-white px-2 py-1 rounded text-xs">
+Latest
+</button>
 
+<button onclick="deleteDoc('${data.id}')"
+class="bg-red-600 hover:bg-red-700 text-white px-2 py-1 rounded text-xs">
+Delete
+</button>
 
-<button onclick="setLatest('${data.id}')" class="bg-green-600 text-white px-2 py-1 rounded">Latest</button>
-
-<button onclick="deleteDoc('${data.id}')" class="bg-red-600 text-white px-2 py-1 rounded">Delete</button>
-
-<button onclick="openDoc('${data.id}')" 
-class="bg-indigo-600 text-white px-2 py-1 rounded">
+<button onclick="openDoc('${data.id}')"
+class="bg-indigo-600 hover:bg-indigo-700 text-white px-2 py-1 rounded text-xs">
 Details
 </button>
+
+</div>
+
 </td>
 
 </tr>
-
 `;
 
 });
@@ -331,9 +525,23 @@ docList.innerHTML=html;
 }
 
 
-
 async function loadDocs(category, fromFilter=false){
 
+
+/* highlight selected category button */
+
+document.querySelectorAll(".catBtn").forEach(btn=>{
+btn.classList.remove("bg-blue-900");
+btn.classList.add("bg-blue-700");
+});
+
+if(category==="shed_order") btn_shed.classList.replace("bg-blue-700","bg-blue-900");
+
+if(category==="safety_circular") btn_safety.classList.replace("bg-blue-700","bg-blue-900");
+
+if(category==="counselling") btn_counselling.classList.replace("bg-blue-700","bg-blue-900");
+
+if(category==="correction_slip") btn_correction.classList.replace("bg-blue-700","bg-blue-900");
 currentCategory = category;
 
 /* reset filters only when category changes */
@@ -393,6 +601,52 @@ years.add(String(data.year));
 
 });
 
+/* sort newest first */
+
+docs.sort((a,b)=>{
+
+/* Shed Orders */
+
+if(category==="shed_order"){
+return (b.orderIndex || 0) - (a.orderIndex || 0);
+}
+
+/* Safety Circular */
+
+if(category==="safety_circular"){
+return (b.circularIndex || 0) - (a.circularIndex || 0);
+}
+
+/* Correction Slip */
+
+if(category==="correction_slip"){
+return (b.slipNo || 0) - (a.slipNo || 0);
+}
+
+/* Counselling */
+
+if(category==="counselling"){
+
+const months = {
+jan:1,feb:2,mar:3,apr:4,may:5,jun:6,
+jul:7,aug:8,sep:9,oct:10,nov:11,dec:12
+};
+
+const [mA,yA] = (a.monthYear || "").toLowerCase().split("-");
+const [mB,yB] = (b.monthYear || "").toLowerCase().split("-");
+
+const valA = Number(yA)*100 + (months[mA] || 0);
+const valB = Number(yB)*100 + (months[mB] || 0);
+
+return valB - valA;
+
+}
+
+/* fallback */
+
+return (b.createdAt || 0) - (a.createdAt || 0);
+
+});
 
 /* filter */
 
@@ -449,17 +703,32 @@ await deleteDoc(doc(db,"documents",id));
 
 loadDocs(currentCategory,true);
 
+/* update next number suggestion */
+setTimeout(autoSuggestNumber,300);
+
 };
 
 
 
 window.setLatest = async function(id){
 
-const snap = await getDocs(collection(db,"documents"));
+/* get clicked document */
 
-const targetDoc = snap.docs.find(d => d.id === id);
+const targetDoc = await getDoc(doc(db,"documents",id));
+if(!targetDoc.exists()) return;
 
 const targetData = targetDoc.data();
+
+/* load documents of same category */
+
+const q = query(
+collection(db,"documents"),
+where("category","==",targetData.category)
+);
+
+const snap = await getDocs(q);
+
+/* reset previous latest */
 
 for(const d of snap.docs){
 
@@ -490,18 +759,19 @@ sameGroup = data.category===targetData.category;
 }
 
 if(sameGroup){
-
 await updateDoc(doc(db,"documents",d.id),{latestRank:null});
-
 }
 
 }
+
+/* set new latest */
 
 await updateDoc(doc(db,"documents",id),{latestRank:1});
 
 loadDocs(currentCategory,true);
 
 };
+
 
 
 /* filter triggers */
@@ -534,19 +804,18 @@ let editingId=null;
 
 window.openDoc = async function(id){
 
-const snap = await getDocs(collection(db,"documents"));
+const targetDoc = await getDoc(doc(db,"documents",id));
 
-const target = snap.docs.find(d=>d.id===id);
+if(!targetDoc.exists()) return;
 
-if(!target) return;
-
-const docData = target.data();
+const docData = targetDoc.data();
 
 editingId=id;
 
 editCategory.value = docData.category || "";
 editDescription.value = docData.description || "";
 editYear.value = docData.year || "";
+editTitle.value = getTitle(docData);
 
 docModal.classList.remove("hidden");
 
@@ -557,6 +826,7 @@ editBtn.onclick = function(){
 
 editDescription.disabled=false;
 editYear.disabled=false;
+editTitle.disabled=false;
 
 saveBtn.classList.remove("hidden");
 
@@ -565,12 +835,32 @@ saveBtn.classList.remove("hidden");
 
 saveBtn.onclick = async function(){
 
-await updateDoc(doc(db,"documents",editingId),{
+const updateData = {
+description: editDescription.value,
+year: Number(editYear.value)
+};
 
-description:editDescription.value,
-year:Number(editYear.value)
+const cat = editCategory.value;
 
-});
+/* update only relevant field */
+
+if(cat === "shed_order"){
+updateData.orderNo = editTitle.value;
+}
+
+if(cat === "safety_circular"){
+updateData.circularNo = editTitle.value;
+}
+
+if(cat === "counselling"){
+updateData.monthYear = editTitle.value;
+}
+
+if(cat === "correction_slip"){
+updateData.slipNo = Number(editTitle.value.replace(/\D/g,''));
+}
+
+await updateDoc(doc(db,"documents",editingId), updateData);
 
 alert("Document updated");
 
@@ -594,11 +884,66 @@ saveBtn.classList.add("hidden");
 
 
 window.uploadDoc = async function(){
+    
+    
+
+const btn = document.getElementById("uploadActionBtn");
+
+/* VALIDATE REQUIRED FIELDS */
+
+if(!category.value){
+alert("Select Category");
+return;
+}
+
+if(category.value==="shed_order" && !lobby.value){
+alert("Select Lobby");
+return;
+}
+
+if(category.value==="correction_slip" && !section.value){
+alert("Select Section");
+return;
+}
+
+if(category.value==="counselling" && !month.value){
+alert("Select Month");
+return;
+}
+
+if(category.value!=="counselling" && !orderNo.value.trim()){
+alert("Enter Order / Circular / Slip Number");
+return;
+}
+
+if(!description.value.trim()){
+alert("Enter Description");
+return;
+}
+
+if(!year.value){
+alert("Select Year");
+return;
+}
+
+if(!fileInput.files.length){
+alert("Select File");
+return;
+}
+
+btn.innerText = "Uploading...";
+btn.disabled = true;
+btn.classList.add("opacity-60");
+
+try{
 
 const file = fileInput.files[0];
 
 if(!file){
 alert("Select file");
+btn.innerText="📤 Upload";
+btn.disabled=false;
+btn.classList.remove("opacity-60");
 return;
 }
 
@@ -610,8 +955,12 @@ await uploadBytes(ref(storage,filePath), file);
 
 /* INPUT VALUES */
 
-const yearValue = Number(year.value);
-const numberPart = orderNo.value.trim();
+let yearValue = Number(year.value);
+
+if(!yearValue){
+yearValue = new Date().getFullYear();
+}
+const numberPart = orderNo.value.trim().padStart(2,"0");
 
 /* VARIABLES */
 
@@ -656,7 +1005,7 @@ circularIndexValue = Number(yearValue + numberPart.padStart(2,"0"));
 
 if(category.value === "counselling"){
 
-monthYearValue = monthYear.value;
+monthYearValue = month.value + "-" + yearValue;
 
 }
 
@@ -677,21 +1026,15 @@ slipNoValue = Number(numberPart);
 const newDoc = await addDoc(collection(db,"documents"),{
 
 category: category.value,
-
 lobby: lobbyValue,
-
 section: sectionValue,
 
 orderNo: orderNoValue,
-
 circularNo: circularNoValue,
-
 monthYear: monthYearValue,
-
 slipNo: slipNoValue,
 
 orderIndex: orderIndexValue,
-
 circularIndex: circularIndexValue,
 
 description: description.value,
@@ -701,7 +1044,6 @@ year: yearValue,
 filePath: filePath,
 
 latestRank: null,
-
 createdAt: Date.now()
 
 });
@@ -709,32 +1051,40 @@ createdAt: Date.now()
 
 /* ASK ADMIN IF LATEST */
 
-setTimeout(async () => {
-
-const markLatest = confirm("Mark this document as latest?");
-
-if(markLatest){
-await setLatest(newDoc.id);
-}
-
-},300);
-
-
-alert("Document Uploaded");
-
+openLatestModal(newDoc.id);
 
 /* RESET FORM */
 
 fileInput.value="";
 orderNo.value="";
 description.value="";
-monthYear.value="";
-year.value="";
 
+if(category.value==="counselling"){
+month.value="";
+}
+
+year.value = new Date().getFullYear();
 
 /* RELOAD TABLE */
 
 loadDocs(category.value,true);
+
+/* update next number automatically */
+setTimeout(autoSuggestNumber,300);
+
+}
+catch(err){
+
+console.error(err);
+alert("Upload failed");
+
+}
+
+/* RESTORE BUTTON */
+
+btn.innerText="📤 Upload";
+btn.disabled=false;
+btn.classList.remove("opacity-60");
 
 };
 
@@ -742,7 +1092,8 @@ window.updateForm = function(){
 
 lobby.classList.add("hidden");
 section.classList.add("hidden");
-monthYear.classList.add("hidden");
+month.classList.add("hidden");
+
 orderNo.classList.remove("hidden");
 
 if(category.value==="shed_order"){
@@ -754,23 +1105,110 @@ section.classList.remove("hidden");
 }
 
 if(category.value==="counselling"){
-monthYear.classList.remove("hidden");
+month.classList.remove("hidden");
 orderNo.classList.add("hidden");
 }
 
 };
 
+
+window.showMenu = function(menu){
+
+const uploadMenu = document.getElementById("uploadMenu");
+const manageMenu = document.getElementById("manageMenu");
+
+const uploadBtn = document.getElementById("uploadBtn");
+const manageBtn = document.getElementById("manageBtn");
+
+/* reset buttons */
+
+uploadBtn.classList.remove("border-blue-700","text-blue-700");
+manageBtn.classList.remove("border-blue-700","text-blue-700");
+
+/* show selected */
+
+if(menu === "upload"){
+
+uploadMenu.classList.remove("hidden");
+manageMenu.classList.add("hidden");
+
+uploadBtn.classList.add("border-blue-700","text-blue-700");
+
+/* auto update next number */
+setTimeout(autoSuggestNumber,200);
+
+}
+
+if(menu === "manage"){
+
+uploadMenu.classList.add("hidden");
+manageMenu.classList.remove("hidden");
+
+manageBtn.classList.add("border-blue-700","text-blue-700");
+
+}
+
+}
+
+
+/* populate year dropdown */
+
+const currentYear = new Date().getFullYear();
+
+for(let y=currentYear; y>=2020; y--){
+
+const opt = document.createElement("option");
+opt.value = y;
+opt.textContent = y;
+
+year.appendChild(opt);
+
+}
+
+/* default year */
+
+year.value = currentYear;
 </script>
     <script>
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('sw.js');
 }
+
+
+let latestDocId = null;
+
+function openLatestModal(id){
+latestDocId = id;
+document.getElementById("latestModal").classList.remove("hidden");
+}
+
+function closeLatestModal(){
+document.getElementById("latestModal").classList.add("hidden");
+latestDocId = null;
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+
+document.getElementById("yesLatestBtn").onclick = async function(){
+
+if(!latestDocId) return;
+
+await window.setLatest(latestDocId);
+
+closeLatestModal();
+
+};
+
+});
+
 </script>
 <div id="docModal" class="fixed inset-0 bg-black bg-opacity-40 hidden flex items-center justify-center">
 
-<div class="bg-white p-6 rounded shadow w-[95%] max-w-md">
+<div class="bg-white p-5 rounded shadow w-[94%] max-w-md">
 
 <h2 class="text-lg font-bold mb-3">Document Details</h2>
+<label class="text-sm">Title / Number</label>
+<input id="editTitle" class="border p-2 w-full mb-2" disabled>
 
 <label class="text-sm">Category</label>
 <input id="editCategory" class="border p-2 w-full mb-2" disabled>
@@ -802,5 +1240,31 @@ Close
 </div>
 
 
+
+<div id="latestModal" class="fixed inset-0 bg-black bg-opacity-40 hidden flex items-center justify-center">
+
+<div class="bg-white p-5 rounded shadow text-center w-[90%] max-w-sm">
+
+<p class="text-lg font-semibold mb-4">
+Mark this document as latest?
+</p>
+
+<div class="flex justify-center gap-4">
+
+<button id="yesLatestBtn"
+class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded">
+Yes
+</button>
+
+<button onclick="closeLatestModal()"
+class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded">
+No
+</button>
+
+</div>
+
+</div>
+
+</div>
 </body>
 </html>
