@@ -1,0 +1,2859 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<link rel="apple-touch-icon" href="abnormal-working-192.png">
+  <link rel="manifest" href="/Abnormal-Working/manifest.json">
+  <meta name="theme-color" content="#1976d2">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="mobile-web-app-capable" content="yes">
+<title>Abnormal Working - A Quick Reference</title>
+
+<style>
+:root{
+  --header-height: 88px;
+  --accent-blue: #1976d2;
+  --accent-green: #388e3c;
+  --card-font-min: 15px;
+  --card-font-mid: 1.6vw;
+  --card-font-max: 18px;
+  --footer-height: 48px;
+  }
+
+
+/* Page shell */
+html,body{ height:100%; margin:0; font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; background:#f9f9f9; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; scroll-behavior:smooth; color:#222; }
+
+/* utility: no-scroll toggle */
+.no-scroll { overflow: hidden !important; }
+
+/* skip link */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+.skip-link:focus {
+  left: 10px;
+  top: 10px;
+  width: auto;
+  height: auto;
+  padding: 8px 12px;
+  background: #000;
+  color: #fff;
+  border-radius: 4px;
+  z-index: 9999;
+}
+
+/* --- Uniform Header (Perfectly Centered on Both Pages) --- */
+header,
+.category-mode header {
+  height: var(--header-height);
+  min-height: var(--header-height);
+  background: linear-gradient(90deg, var(--accent-blue), var(--accent-green));
+  padding: 0 20px;
+  position: sticky;
+  top: 0;
+  z-index: 110;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  display: flex;
+  align-items: center;    /* Vertically center everything */
+  justify-content: center;/* Horizontally center */
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+/* ===== Heading Layout ===== */
+
+/* ===== Main Title ===== */
+.title-main{
+  font-size: clamp(1.2rem, 4vw, 1.8rem);
+  font-weight:900;
+  letter-spacing:1px;
+  white-space: nowrap;
+}
+
+.title-sub{
+  font-size: clamp(0.7rem, 2.4vw, 0.95rem);
+  opacity:0.9;
+}
+
+
+
+
+
+
+/* small helper */
+.nowrap { white-space: nowrap; }
+
+/* App layout */
+.app{display:flex;flex-direction:column;height:calc(100% - var(--header-height));}
+#selectionPage{padding:18px;overflow-y:auto;flex:1 1 auto;}
+#systemPage{display:none;flex-direction:column;height:100%;}
+.subheader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  padding: 12px 20px;
+  border-bottom: 2px solid #ddd;
+  position: sticky;
+  top: var(--header-height);
+  z-index: 105;
+  box-sizing: border-box;
+  gap: 10px;
+}
+#systemTitle{font-size:1.2rem;color:#333;margin:0;text-align:center;font-weight:700;}
+#parentHeading { background:#fff; border-bottom:1px solid #e6eef6; position:sticky; z-index:104; display:none; padding:8px 20px; top:calc(var(--header-height)); }
+#parentHeadingText { font-size:1.1rem; font-weight:700; color:#000; text-align:center; }
+
+#systemMain{ flex:1 1 auto; overflow-y:auto; padding:20px; -webkit-overflow-scrolling: touch; box-sizing:border-box; }
+/* --- Home Screen Blocks (Improved, White & Larger Text) --- */
+.block-container{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  align-items:stretch;
+  gap:24px;
+  margin-top:40px;
+  padding:0 16px;
+  max-width:900px;
+  margin-left:auto;
+  margin-right:auto;
+}
+
+/* Main tiles */
+.block {
+  flex: 1 1 260px;
+  max-width: 340px;
+  min-height: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 20px;
+  padding: 20px;
+  box-sizing: border-box;
+  cursor: pointer;
+  text-align: center;
+  font-weight: 900;
+  color: #fff;  /* White text */
+  font-size: clamp(24px, 4vw, 36px); /* Bigger, responsive */
+  letter-spacing: 0.5px;
+  text-transform: none;
+  text-shadow: 0 3px 12px rgba(0,0,0,0.35);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  user-select: none;
+}
+
+/* Gradient backgrounds */
+.block.abs {
+  background: linear-gradient(145deg, #1976d2, #42a5f5);
+}
+.block.auto {
+  background: linear-gradient(145deg, #2e7d32, #66bb6a);
+}
+/* New: Miscellaneous tile styling */
+.block.misc {
+  background: linear-gradient(145deg, #6a1b9a, #8e24aa);
+}
+
+/* Hover & focus effects */
+.block:hover, .block:focus {
+  transform: translateY(-6px) scale(1.03);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+  outline: none;
+}
+
+/* Tap effect */
+.block:active {
+  transform: translateY(2px) scale(0.97);
+}
+
+/* Subtle highlight overlay */
+.block::before {
+  content: "";
+  position: absolute;
+  left: -20%;
+  top: -40%;
+  width: 140%;
+  height: 60%;
+  transform: rotate(-18deg);
+  background: linear-gradient(180deg, rgba(255,255,255,0.15), rgba(255,255,255,0));
+  pointer-events: none;
+  mix-blend-mode: overlay;
+}
+
+/* Mobile adjustments */
+@media (max-width: 720px) {
+  .block {
+    min-height: 140px;
+    font-size: clamp(20px, 5vw, 28px);
+  }
+}
+@media (max-width: 420px) {
+  .block {
+    min-height: 120px;
+    font-size: clamp(18px, 6vw, 24px);
+  }
+}
+
+
+
+/* Grid layout */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 20px;
+  margin: 20px auto;
+  max-width: 980px;
+  align-content: start;
+}
+
+.grid-item {
+  background: #fff;
+  border-radius: 12px;
+  padding: 18px 16px;
+  margin: 6px;
+  font-size: 1.15rem;
+  font-weight: 700;
+  text-align: center;
+  line-height: 1.3;
+  user-select: none;
+  cursor: pointer;
+  box-shadow:
+    0 2px 4px rgba(0,0,0,0.06),
+    0 8px 16px rgba(0,0,0,0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+/* Hover effect */
+.grid-item:hover {
+  transform: translateY(-6px) scale(1.02);
+  background: #ffffff;
+  box-shadow:
+    0 8px 16px rgba(0, 0, 0, 0.12),
+    0 20px 40px rgba(0, 0, 0, 0.14);
+}
+
+/* Active (click/tap) effect */
+.grid-item:active {
+  transform: translateY(-2px) scale(0.98);
+  box-shadow:
+    0 4px 8px rgba(0,0,0,0.15),
+    0 10px 20px rgba(0,0,0,0.18);
+}
+
+/* Remove default focus ring */
+.grid-item:focus {
+  outline: none;
+}
+/* Cards: uniform, centered, readable */
+.card{ display:none; max-width:900px; margin:20px auto; background:white; border-radius:12px; box-shadow:0 6px 18px rgba(0,0,0,0.14); overflow:hidden; }
+
+/* universal box-sizing */
+html { box-sizing: border-box; }
+*, *:before, *:after { box-sizing: inherit; }
+
+/* Authority card (base) */
+#authorityCard {
+  display: none;
+  width: 100%;
+  max-width: 920px;
+  margin: 18px auto;
+  background: #fff;
+  border-radius: 1px;
+  box-shadow:
+    0 6px 12px rgba(0,0,0,0.08),
+    0 18px 36px rgba(0,0,0,0.12);
+  overflow: hidden;
+  position: relative;
+
+  flex-direction: column;
+  align-items: stretch;
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+
+/* slim accent strip (system color) */
+#authorityCard::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto auto 0;
+  height: 6px;
+  width: 100%;
+  display: block;
+}
+#authorityCard.abs::before { background: #1976d2; }
+#authorityCard.auto::before { background: #388e3c; }
+#authorityCard.misc::before { background: #8e24aa; } /* purple accent for misc */
+
+#authorityCard .sub-heading {
+  position: sticky;
+  top: 0;
+  z-index: 6;
+  background: rgba(224,247,250,0.88);
+  backdrop-filter: blur(3px);
+  padding: 8px 10px;
+  margin: 0;
+  font-family: serif;
+  font-size: 1rem;
+  font-weight: 700;
+  text-align: center;
+  color: #111;
+  border-bottom: 1px solid rgba(0,0,0,0.04);
+}
+
+/* === Enforce uniform horizontal length for all card boxes === */
+#authorityCard .card-body {
+  padding: 8px 10px !important;
+  gap: 8px !important;
+  font-size: 0.95rem;
+  line-height: 1.22;
+}
+
+#authorityCard .card-box,
+.card-box {
+  display: block !important;
+  box-sizing: border-box !important;
+  width: 100% !important;
+  max-width: 760px !important;
+  margin: 12px auto !important;
+  padding: 8px 10px !important;
+  border-radius: 12px !important;
+  align-self: stretch !important;
+  overflow: hidden;
+  word-break: break-word;
+}
+
+#authorityCard .card-box .card-box,
+.card-box .card-box {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 8px 0 !important;
+}
+
+#authorityCard .card-box p,
+#authorityCard .card-box .card-line {
+  display: block !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  margin: 6px 0 !important;
+  text-align: center !important;
+}
+
+/* Exception: left-aligned .card-html.left as bulleted paragraph style */
+#authorityCard .card-html.left,
+#authorityCard .card-html.left ul,
+#authorityCard .card-html.left ol {
+  text-align: left !important;
+  padding-left: 32px !important;
+  margin: 10px 0 !important;
+}
+
+#authorityCard .card-html.left ul {
+  list-style-type: disc !important;
+}
+
+#authorityCard .card-html.left ol {
+  list-style-type: decimal !important;
+}
+
+#authorityCard .card-html.left li {
+  margin: 8px 0 !important;
+  line-height: 1.35;
+  text-align: left !important;
+}
+
+/* small helper classes */
+.card-or {
+  font-weight: 700;
+  margin: 6px 0;
+  font-size: clamp(13px, 1.2vw, 15px);
+  color: #334155;
+  text-align: center;
+  line-height: 1.2;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.card-box {
+  border: 3px solid #ddd;
+  border-radius: 12px;
+  padding: 14px 18px;
+  margin: 12px 0;
+  background: #fff;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.12);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card-box:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 12px rgba(0,0,0,0.18);
+}
+
+
+@media (max-width:720px){
+  .card-box { padding:12px; }
+  #authorityCard .card-body { padding:18px 16px; }
+  .grid { gap:14px; margin:12px; }
+  .grid-item { padding:12px; font-size:1rem; }
+  .block{ height:120px; font-size:1rem; }
+
+  :root { --card-font-min: 16px; --card-font-mid: 2.4vw; --card-font-max: 20px; }
+
+  .card-box {
+    max-width: 92% !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .card-box .card-box,
+  #authorityCard .card-box .card-box {
+    max-width: 100% !important;
+  }
+}
+
+@media (max-width:420px){
+  #authorityCard .card-body { padding:16px 12px; }
+  .card-box { padding:10px; margin:10px 0; }
+  .block{ height:110px; }
+  :root { --card-font-min: 16px; --card-font-mid: 3.0vw; --card-font-max: 20px; }
+
+  .card-box {
+    max-width: 96% !important;
+    width: 100% !important;
+  }
+  .card-box .card-box,
+  #authorityCard .card-box .card-box {
+    max-width: 100% !important;
+  }
+}
+
+/* overlay & side menu */
+#overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.32); opacity: 0; pointer-events: none; transition: opacity .18s ease; z-index: 220; } #overlay.show { opacity:1; pointer-events:auto; }
+#sideMenu { position:fixed; top:0; right:-320px; width:300px; height:100vh; background:#fff; box-shadow:-8px 0 24px rgba(0,0,0,0.18); transition:right .24s cubic-bezier(.2,.9,.2,1); z-index:230; padding:16px; box-sizing:border-box; overflow-y:auto; display:flex; flex-direction:column; gap:10px; }
+#sideMenu.open { right:0; }
+#menuList { list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:6px; } #menuList button { display:block; width:100%; text-align:left; background:transparent; border:none; padding:10px 8px; font-size:0.98rem; border-radius:8px; cursor:pointer; }
+
+/* reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
+}
+
+/* Bottom center mobile menu */
+#bottomCenterMenu {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 12px;            /* little gap above safe area */
+  display: flex;
+  justify-content: center;
+  pointer-events: auto;
+  z-index: 9999;
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+
+/* inner wrapper keeps content centered and compact */
+#bottomCenterMenu .menu-inner {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  box-sizing: border-box;
+  width: min(96%, 560px);   /* responsive width cap */
+}
+
+/* pill style for each menu item */
+.menu-pill {
+  padding: 10px 18px;
+  border-radius: 999px;
+  border: none;
+  font-weight: 700;
+  color: #fff;
+  cursor: pointer;
+
+/* 3D style */
+  background: linear-gradient(145deg, #2196f3, #1565c0);
+  box-shadow:
+    0 6px 0 #0d47a1,
+    0 8px 20px rgba(0,0,0,0.25);
+
+  transition: all 0.15s ease;
+}
+
+/* press */
+.menu-pill:active {
+  transform: translateY(3px);
+  box-shadow:
+    0 2px 0 #0d47a1,
+    0 4px 10px rgba(0,0,0,0.2);
+}
+
+/* Respect safe-area inset for iPhone notch */
+@supports(padding: max(0px)) {
+  #bottomCenterMenu { padding-bottom: env(safe-area-inset-bottom); }
+  #bottomMenuSpacer { height: calc(76px + env(safe-area-inset-bottom)); }
+}
+
+/* Hide on wide desktop if you prefer (optional) */
+@media (min-width: 900px){
+  #bottomCenterMenu { bottom: 18px; }
+}
+/* === Home Tile Text (Slightly Reduced Size + Clean Glow) === */
+.block,
+.block *,
+.block a,
+.block:link,
+.block:visited {
+  text-decoration: none !important;
+  color: #ffffff !important;                   /* Pure white */
+  -webkit-text-fill-color: #ffffff !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  font-size: clamp(22px, 4.2vw, 32px);         /* reduced from 26–42px */
+  text-transform: none;
+  text-align: center;
+  text-shadow:
+    0 3px 10px rgba(0,0,0,0.45),
+    0 0 8px rgba(255,255,255,0.25),
+    1px 2px 2px rgba(0,0,0,0.35);
+  transition: text-shadow 0.3s ease, transform 0.3s ease;
+}
+
+/* Hover lift with brighter glow */
+.block:hover {
+  transform: translateY(-4px) scale(1.02);
+  text-shadow:
+    0 4px 14px rgba(0,0,0,0.55),
+    0 0 14px rgba(255,255,255,0.3),
+    1px 3px 3px rgba(0,0,0,0.45);
+}
+
+/* Make sure nested inline elements (spans, svg titles) also inherit white */
+.block span,
+.block p,
+.block div {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+/* --- Uniform round back button (same as menu button) --- */
+
+
+
+
+
+/* ------------------------------
+   Category (second-page) outline mode
+   Apply when body has .category-mode (added by JS)
+   ------------------------------ */
+
+/* Keep header identical to home */
+.category-mode header {
+  min-height: var(--header-height);
+  height: auto;
+}
+/* Match heading size exactly with home screen */
+.category-mode #mainHeading {
+  font-size: clamp(1.0rem, 3.0vw, 1.6rem);  /* same as home heading visual scale */
+  line-height: 1.15;
+  letter-spacing: 0.5px;
+  padding: 10px 52px;
+}
+.category-mode .block {
+  background: #ffffff !important;
+  color: #0b0b0b !important;
+  -webkit-text-fill-color: #0b0b0b !important;
+  border-radius: 16px;
+  border: 3px solid rgba(0,0,0,0.06);
+  box-shadow: 0 6px 14px rgba(0,0,0,0.06);
+  font-weight: 800;
+  font-size: clamp(18px, 3.8vw, 26px);   /* increased font size */
+  text-shadow: none;
+  transition: transform .20s ease, box-shadow .20s ease, background .18s ease, border-color .18s ease;
+  min-height: 120px;
+  max-width: 420px;
+  padding: 18px 22px;
+  overflow: visible;
+  box-sizing: border-box;
+}
+
+/* Colored outlines for each system (no fill) */
+.category-mode .block.abs {
+  border-color: #1976d2;                 /* blue outline */
+  color: #0f4fa8 !important;             /* blue-ish label color */
+  background: #fff !important;           /* ensure no gradient fill */
+}
+.category-mode .block.auto {
+  border-color: #2e7d32;                 /* green outline */
+  color: #1f6f2f !important;             /* green-ish label color */
+  background: #fff !important;
+}
+.category-mode .block.misc {
+  border-color: #8e24aa;                 /* purple outline */
+  color: #5e1288 !important;
+  background: #fff !important;
+}
+
+/* Hover: subtle tinted wash, keep mostly outline-only */
+.category-mode .block.abs:hover,
+.category-mode .block.abs:focus {
+  background: rgba(25,118,210,0.04);     /* very light blue wash on hover */
+  border-color: #1976d2;
+  box-shadow: 0 10px 30px rgba(25,118,210,0.08);
+  transform: translateY(-4px) scale(1.01);
+}
+.category-mode .block.auto:hover,
+.category-mode .block.auto:focus {
+  background: rgba(46,125,50,0.04);      /* very light green wash on hover */
+  border-color: #2e7d32;
+  box-shadow: 0 10px 30px rgba(56,142,60,0.08);
+  transform: translateY(-4px) scale(1.01);
+}
+.category-mode .block.misc:hover,
+.category-mode .block.misc:focus {
+  background: rgba(142,36,170,0.04);      /* very light purple wash on hover */
+  border-color: #8e24aa;
+  box-shadow: 0 10px 30px rgba(142,36,170,0.06);
+  transform: translateY(-4px) scale(1.01);
+}
+
+/* Ensure links inside the blocks inherit the outline text color */
+.category-mode .block,
+.category-mode .block a,
+.category-mode .block * {
+  color: inherit !important;
+  -webkit-text-fill-color: inherit !important;
+}
+
+/* Reduce sheen overlay used on home tiles so outlines stay crisp */
+.category-mode .block::before {
+  display: none;
+}
+
+
+/* Force single-column on touch (coarse pointer) devices — safe for phones */
+@media (pointer: coarse) {
+  .block-container {
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    max-width: 720px;     /* optional: caps how wide tiles can grow on big phones */
+    margin: 0 auto;
+    padding: 0 12px;
+  }
+  .block {
+    flex: 0 0 100%;
+    max-width: 100%;
+    width: 100%;
+    box-sizing: border-box;
+  }
+}
+.authority-list {
+    list-style: none;
+    padding-left: 0;
+    margin-left: 0;
+}
+
+.authority-list li {
+    position: relative;
+    padding-left: 28px; /* space for number */
+    text-indent: -20px; /* makes number hang left */
+    line-height: 1.4;
+}
+
+/* Footer (same design as counselling page) */
+.app-footer{
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: var(--footer-height);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #ffffff;
+  color: #374151;
+
+  font-size: 12px;
+  text-align: center;
+
+  box-shadow: 0 -2px 8px rgba(0,0,0,0.08);
+  z-index: 40;
+}
+
+
+/* slightly larger on bigger screens (like Tailwind sm:text-sm) */
+@media (min-width:640px){
+  .app-footer{
+    font-size:14px;
+  }
+}
+body{
+padding-bottom: calc(var(--footer-height) + 12px);
+}
+
+.app-footer{
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: var(--footer-height);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+  color: #374151;
+  font-size: 12px;
+  text-align: center;
+  box-shadow: 0 -2px 8px rgba(0,0,0,0.08);
+  z-index: 40;
+}
+
+
+
+
+
+.sys-tab.abs.active{
+  background: linear-gradient(to bottom, #0d47a1, #1976d2, #0d47a1);
+}
+
+.sys-tab.auto.active{
+  background: linear-gradient(to bottom, #1b5e20, #2e7d32, #1b5e20);
+}
+
+.sys-tab.misc.active{
+  background: linear-gradient(to bottom, #4a148c, #8e24aa, #4a148c);
+}
+
+.sys-tab:active{
+  transform: scale(0.92);
+  box-shadow:
+    inset 0 3px 6px rgba(0,0,0,0.35),
+    0 2px 6px rgba(0,0,0,0.3);
+}
+.system-tabs{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* equal width */
+  gap: 8px;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.sys-tab{
+  height: 44px;
+  width: 100%;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  text-align:center;
+  padding: 0 8px;
+
+  border-radius: 10px;
+  border: 1px solid #172554;
+
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #fff;
+
+  cursor: pointer;
+
+  /* default (inactive) */
+  background: linear-gradient(to bottom, #64748b, #94a3b8, #64748b);
+
+  box-shadow: 0 3px 8px rgba(0,0,0,0.25);
+
+  transition: all 0.2s ease;
+}
+
+
+.app-header{
+  height: clamp(80px, 14vw, 110px);
+  padding: 0 16px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  position:sticky;
+  top:0;
+  z-index:100;
+
+  /* SAME 3D STYLE AS TABS */
+  border-bottom: 1px solid #172554;
+
+  box-shadow:
+    0 4px 0 rgba(0,0,0,0.25),
+    0 8px 18px rgba(0,0,0,0.35);
+
+  transition: all 0.25s ease;
+}
+
+/* ===== SYSTEM MATCHING ===== */
+
+.app-header.abs{
+  background: linear-gradient(to bottom, #0d47a1, #1976d2, #0d47a1);
+}
+
+.app-header.auto{
+  background: linear-gradient(to bottom, #1b5e20, #2e7d32, #1b5e20);
+}
+
+.app-header.misc{
+  background: linear-gradient(to bottom, #4a148c, #8e24aa, #4a148c);
+}
+
+/* Title center */
+.header-title{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+
+  text-align:center;
+  color:white;
+
+  width:100%;
+  height:100%;
+
+  padding: 8px 70px 18px; /* bottom space for button */
+  box-sizing:border-box;
+
+  line-height:1.1;
+}
+
+
+.title-sub{
+  font-size:0.9rem;
+  opacity:0.9;
+}
+
+
+
+@media (max-width:480px){
+
+  .home-btn{
+    width:38px;
+    height:38px;
+    bottom:8px;
+    right:10px;
+  }
+
+  .home-btn svg{
+    width:18px;
+    height:18px;
+  }
+
+  .title-main{
+    font-size: clamp(1rem, 5vw, 1.4rem);
+  }
+
+  .header-title{
+    padding: 0 50px;
+  }
+}
+.home-btn-op{
+  position:absolute;
+  bottom:10px;
+  right:14px;
+
+  padding:8px;
+  border-radius:8px;
+
+  /* SAME AS HAMBURGER STYLE */
+  background: linear-gradient(to bottom, #1e3a8a, #3b82f6, #1e3a8a);
+
+  border:1px solid #172554;
+
+  box-shadow:
+    0 4px 10px rgba(0,0,0,0.35);
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  cursor:pointer;
+  transition: all 0.15s ease;
+}
+
+/* ICON */
+.home-btn-op svg{
+  width:22px;
+  height:22px;
+  stroke:white;
+  fill:none;
+  stroke-width:2;
+}
+
+/* PRESS EFFECT (same feel as menu-card touch) */
+.home-btn-op:active{
+  transform: scale(0.92);
+
+  box-shadow:
+    inset 0 3px 6px rgba(0,0,0,0.35),
+    0 2px 6px rgba(0,0,0,0.3);
+}
+
+/* DESKTOP HOVER */
+@media (hover:hover) and (pointer:fine){
+  .home-btn-op:hover{
+    background: linear-gradient(to bottom, #1e40af, #2563eb, #1e3a8a);
+  }
+}
+
+.system-switcher{
+  position: relative;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  height: 44px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+/* CENTER BUTTON */
+.sys-display{
+  width: 70%;
+  max-width: 320px;
+  height:44px;
+  border-radius:8px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  border:1px solid #172554;
+
+  font-size:0.9rem;
+  font-weight:700;
+  color:white;
+
+  background: linear-gradient(to bottom, #0d47a1, #1976d2, #0d47a1);
+
+  box-shadow:
+    0 4px 0 #0b3c91,
+    0 8px 18px rgba(0,0,0,0.35);
+
+  cursor:pointer;
+  transition: all 0.15s ease;
+}
+
+/* ARROWS FIXED */
+.nav-btn{
+  position:absolute;
+  top:50%;
+  transform: translateY(-50%);
+
+  width:44px;
+  height:44px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  border-radius:8px;
+
+  /* ✅ SAME STYLE AS HOME BUTTON */
+  background: linear-gradient(to bottom, #1e3a8a, #3b82f6, #1e3a8a);
+  border:1px solid #172554;
+
+  box-shadow:
+    0 4px 10px rgba(0,0,0,0.35);
+
+  cursor:pointer;
+  transition: all 0.15s ease;
+}
+
+/* LEFT / RIGHT positions */
+.nav-btn.left{ left:0; }
+.nav-btn.right{ right:0; }
+
+/* ICON STYLE */
+.nav-btn svg{
+  width:22px;
+  height:22px;
+  stroke:white;
+  fill:none;
+  stroke-width:2;
+}
+
+/* PRESS EFFECT (same as home) */
+.nav-btn:active{
+  transform: translateY(-50%) scale(0.92);
+
+  box-shadow:
+    inset 0 3px 6px rgba(0,0,0,0.35),
+    0 2px 6px rgba(0,0,0,0.3);
+}
+
+/* DESKTOP HOVER */
+@media (hover:hover) and (pointer:fine){
+  .nav-btn:hover{
+    background: linear-gradient(to bottom, #1e40af, #2563eb, #1e3a8a);
+  }
+}
+
+/* COMMON SIZE */
+.nav-btn,
+.sys-display{
+  height:46px;              /* ✅ slightly bigger & same */
+  border-radius:10px;
+}
+
+/* CENTER BUTTON */
+.sys-display{
+  width: 68%;
+  max-width: 320px;
+
+  font-size: clamp(1rem, 2.6vw, 1.15rem);  /* ✅ slightly bigger */
+  font-weight: 800;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  background: linear-gradient(to bottom, #0d47a1, #1976d2, #0d47a1);
+  border:1px solid #172554;
+
+  /* ✅ MATCH arrow depth */
+  box-shadow:
+    0 4px 10px rgba(0,0,0,0.35);
+
+  transition: all 0.15s ease;
+}
+
+/* PRESS EFFECT SAME AS ARROWS */
+.sys-display:active{
+  transform: scale(0.96);
+
+  box-shadow:
+    inset 0 3px 6px rgba(0,0,0,0.35),
+    0 2px 6px rgba(0,0,0,0.3);
+}
+</style>
+</head>
+<body class="bg-gray-50 text-gray-800 min-h-screen">
+  
+<a class="skip-link" href="#selectionPage">Skip to content</a>
+
+
+<header class="app-header">
+
+  <!-- LEFT HOME -->
+
+
+  <!-- TITLE -->
+ <div class="header-title">
+  <div class="title-main">ABNORMAL WORKING</div>
+  <div class="title-sub">A Quick Reference</div>
+</div>
+  <!-- RIGHT HOME -->
+<button class="home-btn-op" onclick="goLibraryHome()" aria-label="Home">
+  <svg viewBox="0 0 24 24">
+    <path d="M3 11L12 4l9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>
+  </svg>
+</button>
+
+</header>
+
+ <div id="selectionPage">
+
+  <div class="block-container" role="list">
+
+    <div class="block abs" tabindex="0" role="button"
+         onclick="selectSystem('Absolute Block System')">
+         Absolute Block System
+    </div>
+
+    <div class="block auto" tabindex="0" role="button"
+         onclick="selectSystem('Automatic Block System')">
+         Automatic Block System
+    </div>
+
+    <div class="block misc" tabindex="0" role="button"
+         onclick="selectSystem('Miscellaneous')">
+         Miscellaneous
+    </div>
+
+  </div>
+
+</div>
+
+  <div id="systemPage" aria-hidden="true">
+    <div class="subheader">
+   
+
+<div class="system-switcher">
+
+  <!-- LEFT ARROW -->
+  <button class="nav-btn left" onclick="prevSystem()">
+    <svg viewBox="0 0 24 24">
+      <path d="M15 6l-6 6 6 6"/>
+    </svg>
+  </button>
+
+  <!-- CURRENT SYSTEM -->
+  <button id="currentSystemBtn" class="sys-display"
+    onclick="selectSystem(currentSystem)">
+    Absolute Block System
+  </button>
+
+  <!-- RIGHT ARROW -->
+  <button class="nav-btn right" onclick="nextSystem()">
+    <svg viewBox="0 0 24 24">
+      <path d="M9 6l6 6-6 6"/>
+    </svg>
+  </button>
+
+</div>
+
+    </div>
+
+    <div id="parentHeading"><div id="parentHeadingText"></div></div>
+
+    <main id="systemMain" tabindex="0">
+      <div id="circumstancesGrid" class="grid" aria-label="Circumstances list"></div>
+      <div id="subMenuGrid" class="grid" aria-label="Submenu list" style="display:none;"></div>
+      <div id="authorityCard" class="card uniform" role="dialog" aria-modal="true" aria-label="Authority details" style="display:none;"></div>
+    </main>
+  </div>
+</div>
+
+<!-- overlay & side menu -->
+<div id="overlay" aria-hidden="true" onclick="closeMenu()"></div>
+<aside id="sideMenu" role="dialog" aria-modal="true" aria-hidden="true">
+  <div class="home-row">
+    <button id="menuHomeBtn" onclick="goHomeFromMenu()" aria-label="Go home">Home</button>
+  </div>
+
+  <div id="menuCurrentBlock">
+    <div class="system-name" id="menuCurrentSystem">No system selected</div>
+    <div class="system-note" id="menuSystemNote">Select a system from the main screen to see its subfolders here.</div>
+  </div>
+
+  <ul id="menuList" aria-label="System subfolders"></ul>
+</aside>
+
+  <script>
+/* ==============================
+   IndexedDB helper for Offline Data
+   ============================== */
+
+const DB_NAME = 'abnormal-working-db';
+const DB_VERSION = 1;
+const STORE_NAME = 'systems';
+
+function openDB() {
+  return new Promise((resolve, reject) => {
+    const req = indexedDB.open(DB_NAME, DB_VERSION);
+
+    req.onupgradeneeded = e => {
+      const db = e.target.result;
+      if (!db.objectStoreNames.contains(STORE_NAME)) {
+        db.createObjectStore(STORE_NAME, { keyPath: 'key' });
+      }
+    };
+
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error);
+  });
+}
+
+async function saveSystemData(systemKey, payload) {
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(STORE_NAME, 'readwrite');
+    tx.objectStore(STORE_NAME).put({
+      key: systemKey,
+      data: payload,
+      updatedAt: Date.now()
+    });
+    tx.oncomplete = resolve;
+    tx.onerror = () => reject(tx.error);
+  });
+}
+
+async function loadSystemData(systemKey) {
+  const db = await openDB();
+  return new Promise(resolve => {
+    const tx = db.transaction(STORE_NAME, 'readonly');
+    const req = tx.objectStore(STORE_NAME).get(systemKey);
+    req.onsuccess = () => resolve(req.result ? req.result.data : null);
+    req.onerror = () => resolve(null);
+  });
+}
+
+
+/* ----------------------------
+   The original app code starts here (unchanged logic).
+   I preserved your original data and UI behavior, with minor replacements
+   to avoid external fonts/icons (we already replaced FA with inline SVGs).
+   ---------------------------- */
+
+(async function(){
+
+  try {
+  
+
+    function el(id){ return document.getElementById(id); }
+    function clearChildren(node){ while(node && node.firstChild) node.removeChild(node.firstChild); }
+    function escapeHtml(unsafe) { if (unsafe === undefined || unsafe === null) return ""; return String(unsafe).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/\"/g,"&quot;").replace(/'/g,"&#039;"); }
+    function looksLikeHtml(s){ if (typeof s !== 'string') return false; const t = s.trim(); return /^<[\s\S]+>$/.test(t); }
+    function isLeafObject(obj){ if (typeof obj !== "object" || obj === null) return false; return Object.values(obj).every(v => v === null || typeof v === "string" || typeof v === "number" || typeof v === "boolean" || Array.isArray(v)); }
+
+    const ABS_DATA = {
+      "Normal Authority to Proceed": {
+        "Single Line": "<div class='card-box'><div class='card-line'>OFF aspect of LSS</div></div>",
+        "Double Line": "<div class='card-box'><div class='card-line'>OFF aspect of LSS</div></div>"
+      },
+      "Signal Failure": {
+        "Block Instrument/ Advance Starter": {
+          "Single Line": "<div class='card-box'><div class='card-line'>PLCT</div><div class='card-line'>(T/C 1425 or T/D 1425)</div></div>",
+          "Double Line":  "<div class='card-box'><div class='card-line'>T/369(3b) + PN</div></div>"
+        },
+        "Home Signal": "<div class='card-box'><div class='card-line'>Calling On Signal</div></div>"+"<div class='card-or'>or</div>"+"<div class='card-box'><div class='card-line'>T/369(3b) + PHS</div><div class='card-line'>(Speed 15 kmph)</div></div>",
+        "Starter Signal": "<div class='card-box'><div class='card-line'>Calling On Signal, if provided</div></div>"+"<div class='card-or'>or</div>"+" <div class='card-box'><div class='card-line'>T/369(3b) + PHS</div><div class='card-line'>(Speed 15 kmph (max))</div></div>",
+        "Shunt Signal":  "<div class='card-box'><div class='card-line'>Written Advice + PHS</div></div>",
+        "Shunting Permitted Indicator (SPI)": "<div class='card-box'><div class='card-line'>Endorsement on T/806 + PHS</div></div>"
+      },
+      "Other Occasions": {
+        "Reception on Non-Signalled Line": {
+          "": "<div class='card-box'><div class='card-line'>[T/510 or T/369(3b)]</div><div class='card-line'>+</div><div class='card-line'>Piloting</div></div>"+"<div class='card-or'>or</div>"+"  <div class='card-box'><div class='card-line'>As per SWR</div></div>"
+        },
+        "Reception on Obstructed Road": {
+          "": "<div class='card-box'><div class='card-line'>Calling On</div></div>"+"<div class='card-or'>or</div>"+"<div class='card-box'><div class='card-line'>T/509 + Piloting</div></div>"
+        },
+        "To Start from Non-Signalled Line": {
+          "": "<div class='card-box'><div class='card-line'>T/511</div><div class='card-line'>+</div><div class='card-line'>OFF aspect of LSS</div><div class='card-line'>+</div><div class='card-line'>Pilot Out</div></div>"
+        },
+        "Starting from Non-Signalled Line when LSS failed": {
+          "": "<div class='card-box'><div class='card-line'>T/511</div><div class='card-line'>+</div><div class='card-line'>Authority To Proceed</div><div class='card-line'>+</div><div class='card-line'>Pilot Out</div></div>"
+        },
+        "Despatch from a line having Common Starter": {
+          "": "<div class='card-box'><div class='card-line'>T/512</div><div class='card-line'>+</div><div class='card-line'>Authority To Proceed</div><div class='card-line'>+</div><div class='card-line'>Pilot Out</div></div>"
+        },
+        "For sending Relief Engine/Train in Obstructed Block Section": {
+          "": "<div class='card-box'><div class='card-line'>T/A 602</div><div class='card-line'>(Speed - 15/10/walking speed)</div></div>"
+        },
+        "To start the front portion of a Goods Train from Mid-Section": {
+          "": "<div class='card-box'><div class='card-line'>T/609</div><div class='card-line'>(without tail board/tail lamp)</div></div>"
+        },
+        "To send relief engine to clear rear portion (if front portion comes with T/609)": {
+          "": "<div class='card-box'><div class='card-line'>T/A 602</div><div class='card-line'>(Speed - 15/10/walking speed)</div></div>"
+        }
+      },
+      "Shunting - SR 8.15(1)": {
+        "Within the Station Section": {
+          "Single Line/Double Line": "<div class='card-box'><div class='card-line'>T/806</div></div>"
+        },
+        "Beyond Advance Starter and upto oppsite FSS": "<div class='card-box'><div class='card-line'>T/806</div><div class='card-line'>+</div><div class='card-line'>Shunt Key</div></div>",
+        "Beyond FSS (Block Back)": "<div class='card-box'><div class='card-line'>T/806</div><div class='card-line'>+</div><div class='card-line'>Shunt Key</div><div class='card-line'>+</div><div class='card-line'>Private Number</div></div>",
+        "Behind a Departed Train": "<div class='card-box'><div class='card-line'>Permitted Upto FSS</div><div class='card-line'>with</div><div class='card-line'>T/806 + Shunt Key</div></div>",
+        "In Advance of LSS (Block Forward) - On Double Line": "<div class='card-box'><div class='card-line'>T/806</div><div class='card-line'>+</div><div class='card-line'>Private Number</div></div>",
+        "In rear of Outermost Facing Points or BSLB/wrong line (Block Back) - On Double Line": "<div class='card-box'><div class='card-line'>T/806</div><div class='card-line'>+</div><div class='card-line'>Private Number</div></div>"
+      },
+      "Engine Pushing - SR 4.12(1)": {
+        "Permission": "<div class='card-box'><div class='card-line'>TMR written permission upto FSS</div></div>",
+        "SM to Permit": "<div class='card-box'><div class='card-line'>From FSS, SM to furnish with written order</div><div class='card-or'>or</div><div class='card-line'>Take OFF approach reception signal</div></div>",
+        "Engine Pushing Speed when TMR in leading vehicle (BV)": "<div class='card-box'><div class='card-line'>25kmph during Day</div><div class='card-line'>8 kmph during Night</div></div>"
+      },
+      "TSL working - SR 6.02(7)": {
+        "Right Direction": "<div class='card-box'><ul class='card-html left'><li>Double Line working is 'Suspended'</li><li>Ensure one line is clear</li><li>LSS cannot be taken OFF</li><li><strong>Authority - T/D 602 (3 parts)</strong><ul class='card-html left authority-list'><li>1. Line Clear Ticket</li><li>2. Authority to pass Signal in 'ON' position</li><li>3. Caution Order</li></ul></li><li>LP of first train to inform all Gatemen/Gangmen en route about TSL working and the line to be used.</li><li>Speed of First Train - 25 kmph</li><li>If first train is ART/SPARMV proceeding to an accident site - Normal Speed</li><li>Second and Subsequent train - MPS</li><li>Protection - as per GR 6.03</li><li>Train can be received on Signal at next Station</li><li>In case of failure of FSS, train to be dealt accordingly</li></ul></div>",
+        "Wrong Direction": "<div class='card-box'><ul class='card-html left'><li>Double Line working is 'Suspended'</li><li>Ensure one line is clear</li><li>LSS not available on Wrong Line</li><li><strong>Authority - T/D 602 (3 parts) + Pilot Out Memo</strong></li><li>Flasher Light to be kept ON</li><li>LP of first train to inform all Gatemen/Gangmen en route about TSL working and the line to be used.</li><li>LPs ensure for 'Neutral Section'</li><li>Speed of First Train - 25 kmph</li><li>If first train is ART/SPARMV proceeding to an accident site - Normal Speed</li><li>Second and Subsequent train - MPS</li><li>Protection - as per GR 6.03</li><li>LP to STOP at the Opposite FSS or LSS</li><li>Next Station - Train will be piloted with 'Pilot in Memo (T/510)'</li></ul></div>"
+      },
+      "TIC on Single Line - SR 6.02(5)": {
+        "Document for Opening Communication": "<div class='card-box'><div class='card-line'>T/B 602 (5 parts)</div>" +
+        "<div class='card-box'><ul class='card-html left authority-list'>" +
+        "<li>1. Authority to Proceed Without Line Clear</li>" +
+        "<li>2. Authority to pass Signals in 'ON' position</li>" +
+        "<li>3. Caution Order</li>" +
+        "<li>4. Line Clear Enquiry Message</li>" +
+        "<li>5. Conditional Line Clear Message</li>" +
+        "</ul></div></div>",
+        "For more than One Train": "<div class='card-box'><div class='card-line'>T/E 602</div></div>",
+        "Signals": "<div class='card-box'><div class='card-line'>Except LSS, fixed signals can be taken OFF</div></div>",
+        "Speed":  "<div class='card-box'><div class='card-line'>15/10/walking speed</div></div>",
+        "Tunnel": "<div class='card-box'><div class='card-line'>Visibility clearance to be ascertained</div></div>",
+        "Note": "<div class='card-box'><div class='card-line'>SM not to obstruct the line beyond outermost facing point</div></div>",
+        "Line Clear Reply": "<div class='card-box'><div class='card-line'>T/F 602</div></div>",
+        "Conditional Line Clear Ticket": "<div class='card-box'><div class='card-line'>[T/G 602 or T/H 602]</div><div class='card-line'>+</div><div class='card-line'>T/369(3b)</div></div>",
+        "Speed while Returning": "<div class='card-box'><div class='card-line'>Booked Speed</div></div>",
+        "At mid section": "<div class='card-box'><div class='card-line'>When two engines meet, LP and TMR will decide</div></div>",
+        "If only Engine or Engine + BV": "<div class='card-box'><div class='card-line'>T/B 602</div><div class='card-line'>(use only first 3 parts)</div></div>",
+        "Uneven Flow (one direction)": "<div class='card-box'><div class='card-box'><div class='card-line'><b>First Train</b></div><div class='card-line'>Booked Speed</div></div><div class='card-box'><div class='card-line'><b>Second and Subsequent</b></div><div class='card-line'>25/10 kmph</div><div class='card-line'>at 30 minute interval</div></div></div>",
+        "Even Flow (both direction)": "<div class='card-box'><div class='card-line'>All trains at Normal Speed</div></div>",
+        "Protection": "<div class='card-box'><div class='card-line'>250+250+10 meters</div></div>"
+      },
+     "TIC on Double Line - SR 6.02(4)": {
+    "Authority for working of trains during TIC on Double Line":
+        "<div class='card-box'><div class='card-line'>T/C 602 (3 parts)</div>" +
+        "<div class='card-box'><ul class='card-html left authority-list'>" +
+        "<li>1. Authority to Proceed Without Line Clear</li>" +
+        "<li>2. Authority to pass Signals in 'ON' position</li>" +
+        "<li>3. Caution Order</li>" +
+        "</ul></div></div>",
+
+    "Signals":
+        "<div class='card-box'><div class='card-line'>Except LSS, fixed signals can be taken OFF</div></div>",
+
+    "Speed":
+        "<div class='card-box'><div class='card-line'>25/10/walking speed</div></div>",
+
+    "Tunnel":
+        "<div class='card-box'><div class='card-line'>Visibility clearance to be ascertained</div></div>",
+
+    "Interval":
+        "<div class='card-box'><div class='card-line'>30 minutes after every train</div></div>",
+
+    "Protection":
+        "<div class='card-box'><div class='card-line'>250+250+10 meters</div></div>",
+
+    "Backing of Train":
+        "<div class='card-box'><div class='card-line'>Prohibited, except unavoidable circumstances</div></div>",
+
+    "At the FSS of Receiving Station":
+        "<div class='card-box'><div class='card-line'>LP to stop at FSS and whistle continuously; if no response within 10 minutes, send ALP to station and TMR to protect</div></div>"
+},
+
+
+"TIC in TSL - SR 6.02(6)": {
+  "Document for Opening Communication": "<div class='card-box'><div class='card-box'><div class='card-line'><b>Authority</b><br/><br/>T/B 602 + T/D 602</div></div><div class='card-box'><div class='card-line'><b>Speed</b><br/><br/>15/10/Walking Speed</div></div><div class='card-box'><div class='card-line'><b>Precautions</b><br/><br/>Follow the Procedures for TIC on Single Line of Absolute Block System</div></div></div>",
+
+  "For Train movements on Conditional Line Clear Ticket (either Wrong Line or Right Line)":
+  "<div class='card-box'><div class='card-box'><div class='card-line'><b>Authority</b><br/><br/>T/G 602 or T/H 602</div><div class='card-line'>+</div><div class='card-line'>T/369(3b)</div></div>   <div class='card-box'><div class='card-line'><b>Speed</b><br/><br/>         <div class='card-box'><div class='card-line'><i>Uneven Flow</i></div><ul class='card-html left'><li>First Train - Booked Speed</li><li>Second and Subsequent Trains - 25/10 kmph, after an interval of 30 minutes</li></ul></div>  <div class='card-box'><div class='card-line'><i>Even Flow</i></div><ul class='card-html left'><li>All Trains - Normal Speed</li></ul></div></div></div><div class='card-box'><div class='card-line'><b>Precautions</b><br/><br/>Follow the procedure for TIC on Single Line of Absolute Block System in case of even flow/uneven flow</div></div><div class='card-box'><div class='card-line'><b>Protection</b><br/><br/>250+250+10 meters</div></div><div class='card-box'><div class='card-line'><b>Reception</b><br/><br/><ul class='card-html left'><li><i>On Wrong Line</i> - Stop at the Opposite FSS or LSS of the receiving Station and the Train will then be 'Piloted In'</li><li><i>On Right Line</i> - The approach signal may be taken off</li></ul></div></div><div class='card-box'><div class='card-line'><b>NOTE</b><br/><br/>Whenever Trains are dealt on the Wrong Line, <b>Pilot Out</b> will be done using <b>T/511</b> or <b>Pilot Out Memo</b>, and <b>Pilot In</b> at the receiving station will be done using <b>T/510</b></div></div></div>"
+
+},
+
+      "Procedure to Pass Gate Stop Signal at ON - GR 3.73/SR 3.73(1)":
+        "<div class='card-box'><ul class='card-html left'><li>Stop at the Gate Stop Signal</li><li>Sound a Long Continuous Whistle</li><li>Wait for 1 minute by day and 2 minutes by night</li><li>Ensure 'G' marker below Stop signal</li><li>Proceed cautiously</li><li>If Hand Signalled by Gateman, then Proceed.<br/>If NOT, Stop 30 meters before the LC Gate</li><li>Ensure the LC Gate is closed</li><li>Pass the LC only when Hand Signalled by TMR or one of the Engine Crew</li><li>After the last vehicle clears, stop with clearance of about two vehicle lengths beyond the Gate.</li><li>TMR or Engine Crew to re-open the LC Gate</li><li>TMR/LP to report the occurrence at the next Station</li></ul></div>",
+      "Reporting of Rough/Slack Running - Lurch - SR 6.07(1)":
+        "<div class='card-box'><ul class='card-html left'><li>Stop the Train <b>without clearing the Block Section</b></li><li>Inform the Station Master through <b>available means of communication</b></li><li>On arrival at Station, give <b>written advice</b> to the Station Master</li></ul></div>",
+      "Goods Train Without Brake Van - SR 4.23(1)/ Without TMR - SR 4.25(1)": {
+        "Permitted By":
+          "<div class='card-box'><div class='card-line'><b>Without BV</b></div><div class='card-line'>Special Instruction</div></div>" +
+          "<div class='card-box'><div class='card-line'><b>Without TMR</b></div><div class='card-line'>Regional Operating Instruction</div></div>",
+        "Speed":
+          "<div class='card-box'><div class='card-line'><b>Without BV</b></div><div class='card-line'>Normal Speed</div></div>" +
+          "<div class='card-box'><div class='card-line'><b>Without TMR</b></div><div class='card-line'>Normal Speed<br/>(Not Permitted during TIC)</div></div>"
+      }
+    };
+
+
+    
+    const ATS_DATA = {
+      "Failure of Automatic Signal/Signals in between Stations": {
+  "": "<div class='card-box'><div class='card-box'><div class='card-line'><b>Authority</b><br/><br/>No Authority</div></div><div class='card-box'><div class='card-line'><b>Speed</b><br/><br/>15 kmph, when view is clear<br/>10 kmph, when view is not clear</div></div><div class='card-box'><div class='card-line'><b>Precautions (GR/SR 9.02)</b><br/><br/><ul class='card-html left'><li>Stop at the foot of Signal</li><li>Wait for:<ul class='card-html left' style='list-style: none; margin-left:10px; padding-left:0;'><li style='list-style-type: none;'>→ 1 minute by day</li><li style='list-style-type: none;'>→ 2 minutes by night</li></ul></li><li>Ensure 'A' Marker</li><li>Blow one long whistle</li><li>Exchange signal with TMR</li><li>Follow speed restriction up to next Signal</li><li>After passing the Automatic Stop signal at ‘ON’, ensure a minimum separation of <b>150 metres</b> (or <b>two clear OHE masts</b> on electrified sections) from the preceding train/obstruction. This distance may be reduced to <b>75 metres</b> (or <b>one clear OHE mast</b>) when an EMU train is following.</li></ul></div></div></div>",
+},
+
+"Prolonged Failure of Signals - SR 9.12.2(A)": {
+  "": 
+    "<div class='card-box'>" +
+      "<div class='card-box'>" +
+        "<div class='card-line'><b>Authority</b><br/><br/>T/D 912 (3 parts)</div>" +
+        "<div class='card-box'>" +
+          "<ul class='card-html left authority-list'>" +
+            "<li>1. Authority to Proceed</li>" +
+            "<li>2. Authority to pass Signals in 'ON' position</li>" +
+            "<li>3. Caution Order</li>" +
+          "</ul>" +
+        "</div>" +
+      "</div>" +
+    "</div>" +
+
+    "<div class='card-box'>" +
+      "<div class='card-line'><b>Speed</b><br/><br/></div>" +
+      "<div class='card-box'>" +
+        "<ul class='card-html left'>" +
+          "<li>First Train – 25 kmph / 10 kmph</li>" +
+          "<li>Subsequent Trains – Sectional speed, proceeding with great caution from 1 km before the semi-automatic/manual first reception signal</li>" +
+          "<li>Over Facing Points – 15 kmph</li>" +
+        "</ul>" +
+      "</div>" +
+    "</div>" +
+
+    "<div class='card-box'>" +
+      "<div class='card-line'><b>Precautions</b><br/><br/></div>" +
+      "<ul class='card-html left'>" +
+        "<li>Trains will work on Line Clear</li>" +
+        "<li>Starter / Manual Stop Signals / Gate Stop Signals will be hand-signalled past</li>" +
+        "<li>Cautiously pass level crossing gates only after ensuring the gates are closed</li>" +
+        "<li>At receiving station: follow signal aspects / else receive on T/369(3b)</li>" +
+      "</ul>" +
+    "</div>"
+},
+
+"Failure of Semi-Automatic Stop Signal, when Signal is 'ON' and illuminated 'A' marker lit": {
+  "": 
+    "<div class='card-box'>" +
+      "<div class='card-box'>" +
+        "<div class='card-line'><b>Authority</b><br/><br/>No Authority</div>" +
+      "</div>" +
+
+      "<div class='card-box'>" +
+        "<div class='card-line'><b>Speed</b><br/><br/></div>" +
+        "<div class='card-box'>" +
+          "<ul class='card-html left'>" +
+            "<li>Stop Dead</li>" +
+            "<li>15 kmph (visibility clear) /<br/>10 kmph (visibility not clear),<br/>up to the next Stop Signal</li>" +
+          "</ul>" +
+        "</div>" +
+      "</div>" +
+
+      "<div class='card-box'>" +
+        "<div class='card-line'><b>Precautions (GR/SR 9.02)</b><br/><br/></div>" +
+        "<ul class='card-html left'>" +
+          "<li>Stop at the foot of the signal</li>" +
+          "<li>Wait for:<ul class='card-html left' style='list-style: none; margin-left:10px; padding-left:0;'>" +
+              "<li>→ 1 minute by day</li>" +
+              "<li>→ 2 minutes by night</li>" +
+            "</ul></li>" +
+          "<li>Ensure the 'A' marker is lit</li>" +
+          "<li>Blow one long whistle</li>" +
+          "<li>Exchange signal with TMR</li>" +
+          "<li>Follow speed restriction up to the next signal</li>" +
+          "<li>After passing the Semi-automatic Stop Signal at ‘ON’ with the ‘A’ marker illuminated, maintain a minimum separation of <b>150 metres</b> (or <b>two clear OHE masts</b>) from any preceding train/obstruction. For EMU trains, this may be reduced to <b>75 metres</b> (or <b>one OHE mast</b>).</li>" +
+        "</ul>" +
+      "</div>" +
+    "</div>"
+},
+"Failure of Semi-Automatic Stop Signal (Last Stop Signal), when Signal is 'ON' and illuminated 'A' marker extinguished": {
+  "": 
+    "<div class='card-box'>" +
+
+      "<div class='card-box'>" +
+        "<div class='card-line'><b>Authority</b><br/><br/>T/369(3b)</div>" +
+      "</div>" +
+
+      "<div class='card-box'>" +
+        "<div class='card-line'><b>Speed</b><br/><br/></div>" +
+        "<div class='card-box'>" +
+          "<ul class='card-html left'>" +
+            "<li>Stop Dead</li>" +
+            "<li>15 kmph (visibility clear) /<br/>10 kmph (visibility not clear),<br/>up to the next Stop Signal</li>" +
+          "</ul>" +
+        "</div>" +
+      "</div>" +
+
+      "<div class='card-box'>" +
+        "<div class='card-line'><b>Precautions</b><br/><br/>Working as Manual Stop Signal</div>" +
+      "</div>" +
+
+    "</div>"
+},
+
+"Sending Relief Engine / Train into an Automatic Section": {
+  "": 
+    "<div class='card-box'>" +
+
+      "<div class='card-box'>" +
+        "<div class='card-line'><b>Authority</b><br/><br/>T/C 912 (2 parts)</div>" +
+        "<div class='card-box'>" +
+          "<ul class='card-html left authority-list'>" +
+            "<li>1. Authority to Proceed into Obstructed Block Section</li>" +
+            "<li>2. Caution Order</li>" +
+          "</ul>" +
+        "</div>" +
+      "</div>" +
+
+      "<div class='card-box'>" +
+        "<div class='card-line'><b>Speed</b><br/><br/></div>" +
+        "<div class='card-box'>" +
+          "<ul class='card-html left'>" +
+            "<li>15 kmph over the straight when the view ahead is clear</li>" +
+            "<li>10 kmph when view ahead is not clear</li>" +
+            "<li>Over facing points – 15 kmph</li>" +
+          "</ul>" +
+        "</div>" +
+      "</div>" +
+
+      "<div class='card-box'>" +
+        "<div class='card-line'><b>Precautions</b><br/><br/></div>" +
+        "<ul class='card-html left'>" +
+          "<li>If starting from Wrong Line, obtain <b>Pilot Out Memo</b>.</li>" +
+          "<li>Stop at the specified kilometre and follow instructions of the <b>TMR</b>.</li>" +
+          "<li><b>LP</b> to maintain a sharp lookout ahead throughout.</li>" +
+          "<li>Ensure all <b>LC Gates</b> en route are properly closed before passing.</li>" +
+          "<li>By day and night, LP must ensure the tunnel ahead is clear before entering; if in doubt, the train shall be piloted by a railway employee.</li>" +
+          "<li>LP shall stop at the foot of the <b>FSS</b> or the <b>LSS</b> (of the wrong line) as applicable.</li>" +
+          "<li>Sound one long whistle.</li>" +
+          "<li>Act as per the <b>Station Master’s</b> instructions.</li>" +
+          "<li>This form shall be handed over to the SM at the end of the authorised journey for record.</li>" +
+        "</ul>" +
+      "</div>" +
+
+    "</div>"
+},
+
+
+"Reporting of Rough/Slack running - Lurch in Automatic Block Section": {
+  "": 
+    
+      "<div class='card-box'>" +
+        "<div class='card-line'><b>Duties of LP and TMR</b><br/><br/></div>" +
+        "<ul class='card-html left'>" +
+          "<li>Stop the train in the section.</li>" +
+          "<li>Contact the <b>Station Master (SM)</b> in rear and confirm whether any train has already left in the rear.</li>" +
+          "<li>The train shall not move until the <b>TMR</b> of the lurch-experienced train conveys the message to the LP of the rear train.</li>" +
+          "<li>The LP of the lurch-experienced train may proceed ahead only after giving a proper message to the LP of the rear train.</li>" +
+          "<li>The LP of the rear train shall pass the spot only after ensuring safety — stop dead and proceed at <b>10 kmph</b> if safe.</li>" +
+          "<li>The LP of the first (lurch-experienced) train shall submit a written report at the next station.</li>" +
+        "</ul>" +
+      
+    "</div>"
+},
+
+"Shunting": {
+        "Upto LSS/ First Semi-Automatic Signal": {
+          "Single Line/Double Line": "<div class='card-box'><div class='card-line'>T/806</div></div>"
+        },
+        "Beyond LSS but upto First Automatic Stop Signal": "<div class='card-box'><div class='card-line'>T/806</div><div class='card-line'>+</div><div class='card-line'>Written Memo</div><div class='card-line'>+</div><div class='card-line'>Private Number</div></div>",
+        "Beyond the First Automatic Stop Signal (Block Forward)": "<div class='card-box'><div class='card-line'>(Ensure Section is Clear)</div><br/><div class='card-line'>T/806</div><div class='card-line'>+</div><div class='card-line'>Written Memo</div><div class='card-line'>+</div><div class='card-line'>Private Number</div></div>",
+        "Shunting into the Block Section in Rear/Wrong direction (Block Back)": "<div class='card-box'><div class='card-line'>(Ensure Section is Clear)</div><br/><div class='card-line'>T/806</div><div class='card-line'>+</div><div class='card-line'>Written Memo</div><div class='card-line'>+</div><div class='card-line'>Private Number</div></div>",
+        "Note": "<div class='card-box'><div class='card-line'>SM to ensure Semi-Automatic Signal to be kept in Manual Mode</div></div>",
+       },
+       
+"Failure of Gate Stop Signal": {
+        "Semi-Automatic Gate Stop Signal at 'ON', 'A' marker is Glowing": {
+  "": "<div class='card-box'><div class='card-line'><ul class='card-html left'><li><b>Stop Dead</b></li><li>Wait for <b>1 minute by day</b> and <b>2 minutes by night</b>.</li><li>Ensure <b>'G' marker</b> below Stop signal.</li><li>Sound one long whistle.</li><li>Exchange signal with <b>TMR</b>.</li><li>Proceed at <b>15 kmph</b> (when view is clear) or <b>10 kmph</b> (when not clear) up to the next Stop Signal.</li><li><b>LC Gate is closed</b>.</li><li>Follow procedure to pass <b>Automatic Signal at 'ON'</b>.</li></ul></div></div>",
+},
+
+"Semi-Automatic Gate Stop Signal at 'ON', 'A' marker is Extinguished, LC Gate is Closed and Gateman Showing Hand Signal": {
+  "": "<div class='card-box'><div class='card-line'><ul class='card-html left'><li><b>Stop Dead</b></li><li>Wait for <b>1 minute by day</b> and <b>2 minutes by night.</b></li><li>Ensure <b>'G' marker</b> below Stop signal.</li><li>Sound one long whistle.</li><li>Exchange signal with <b>TMR.</b></li><li>Proceed <b>cautiously.</b></li><li>Ensure <b>LC Gate</b> is closed or obtain <b>Hand Signal</b> from Gateman.</li><li>Proceed at <b>15 kmph</b> (when view is clear) or <b>10 kmph</b> (when not clear) up to the next Stop Signal.</li><li>Follow procedure to pass <b>Automatic Signal at 'ON'.</b></li></ul></div></div>",
+},
+
+"Semi-Automatic Gate Stop Signal at 'ON', 'A' marker is Extinguished, LC Gate is Open": {
+  "": "<div class='card-box'><div class='card-line'><ul class='card-html left'><li><b>Stop Dead.</b></li><li>Wait for <b>1 minute by day</b> and <b>2 minutes by night.</b></li><li>Ensure <b>'G' marker</b> below Stop signal.</li><li>Sound one long whistle.</li><li>Exchange signal with <b>TMR.</b></li><li>Proceed <b>cautiously up to LC Gate.</b></li><li>Stop <b>30 meters before the LC Gate.</b></li><li><b>ALP</b> to close the Gate, if <b>Gateman</b> is not available.</li><li>Pass the Gate cautiously and <b>stop after passing the Gate.</b></li><li><b>TMR</b> to open the Gate after the train passes.</li><li>Proceed at <b>15 kmph</b> (when view is clear) or <b>10 kmph</b> (when not clear) up to the next Stop Signal.</li><li>Follow procedure to pass <b>Automatic Signal at 'ON'.</b></li></ul></div></div>",
+},
+
+       },
+      
+"TSL Working - SR 9.12(3)": {
+
+  "Wrong Direction":
+    "<div class='card-box'>" +
+
+      "<div class='card-box'>" +
+        "<div class='card-line'><b>Authority</b><br/><br/>T/E 912 (3 parts)</div>" +
+        "<div class='card-box'>" +
+          "<ul class='card-html left authority-list'>" +
+            "<li>1. Line Clear Ticket</li>" +
+            "<li>2. Authority to pass signals in 'ON' position on Wrong Line with Caution Order</li>" +
+            "<li>3. Authority to pass signals in 'ON' position on Right Line with Caution Order</li>" +
+          "</ul>" +
+        "</div>" +
+      "</div>" +
+
+      "<div class='card-box'><div class='card-line'><b>Speed</b><br/><br/></div>" +
+        "<ul class='card-html left'>" +
+          "<li><b>First Train</b> – 25 kmph</li>" +
+          "<li><b>Subsequent Trains</b> – Sectional Speed</li>" +
+          "<li>At every change of direction, the <b>First Train</b> – 25 kmph</li>" +
+          "<li>Over facing points – 15 kmph</li>" +
+        "</ul>" +
+      "</div>" +
+
+      "<div class='card-box'><div class='card-line'><b>Precautions</b><br/><br/></div>" +
+        "<ul class='card-html left'>" +
+          "<li>Train will be Pilot Out.</li>" +
+          "<li>Ensure hand-signals at points and LC gates before passing.</li>" +
+          "<li>If First Train — switch ON flasher light and inform all Gatemen and Gangmen en route.</li>" +
+          "<li>Whistle freely.</li>" +
+          "<li>Cautiously pass LC gates only after ensuring they are properly closed.</li>" +
+          "<li>Stop at the Opposite FSS of the correct line or the LSS of the wrong line at the receiving station.</li>" +
+          "<li>Sound one long whistle.</li>" +
+          "<li>Train will be received on <b>T/510</b>.</li>" +
+          "<li>All trains will run with proper Line Clear.</li>" +
+        "</ul>" +
+      "</div>" +
+
+    "</div>",
+
+
+  "Right Direction":
+    "<div class='card-box'>" +
+
+      "<div class='card-box'>" +
+        "<div class='card-line'><b>Authority</b><br/><br/>T/E 912 (3 parts)</div>" +
+        "<div class='card-box'>" +
+          "<ul class='card-html left authority-list'>" +
+            "<li>1. Line Clear Ticket</li>" +
+            "<li>2. Authority to pass signals in 'ON' position on Wrong Line with Caution Order</li>" +
+            "<li>3. Authority to pass signals in 'ON' position on Right Line with Caution Order</li>" +
+          "</ul>" +
+        "</div>" +
+      "</div>" +
+
+      "<div class='card-box'><div class='card-line'><b>Speed</b><br/><br/></div>" +
+        "<ul class='card-html left'>" +
+          "<li><b>First Train</b> – 25 kmph</li>" +
+          "<li><b>Subsequent Trains</b> – Sectional Speed following signal aspects</li>" +
+          "<li>At every change of direction, the <b>First Train</b> – 25 kmph</li>" +
+          "<li>Over facing points – 15 kmph</li>" +
+        "</ul>" +
+      "</div>" +
+
+      "<div class='card-box'><div class='card-line'><b>Precautions</b><br/><br/></div>" +
+        "<ul class='card-html left'>" +
+
+          "<li><b>For First Train:</b></li>" +
+          "<ul class='card-html left'>" +
+            "<li>Pass Departure signals and all intervening Automatic signals between stations at 'ON'.</li>" +
+            "<li>Semi-automatic / Manual Stop Signals / Gate Stop Signals — hand-signalled.</li>" +
+            "<li>Cautiously pass LC gates only after ensuring they are closed.</li>" +
+          "</ul>" +
+
+          "<li><b>For Subsequent Trains following first train:</b></li>" +
+          "<ul class='card-html left'>" +
+            "<li>Pass Departure Signal at 'ON'.</li>" +
+            "<li>For intervening signals — follow signal aspects.</li>" +
+          "</ul>" +
+
+          "<li>At next station, train admitted on <b>signal</b> or on <b>T/369(3b)</b>.</li>" +
+          "<li>Each First Train on Right Line will run on Line Clear.</li>" +
+
+        "</ul>" +
+      "</div>" +
+
+    "</div>"
+},
+"TIC on Double Line - SR 9.12.2(B)": {
+  "": 
+    "<div class='card-box'>" +
+
+      "<div class='card-box'>" +
+        "<div class='card-line'><b>Authority</b><br/><br/>T/B 912 (4 parts)</div>" +
+        "<div class='card-box'>" +
+          "<ul class='card-html left authority-list'>" +
+            "<li>1. Authority to Proceed Without Line Clear</li>" +
+            "<li>2. Circumstances under which this authority is given</li>" +
+            "<li>3. Authority to pass signals in 'ON' position</li>" +
+            "<li>4. Caution Order</li>" +
+          "</ul>" +
+        "</div>" +
+      "</div>" +
+
+      "<div class='card-box'><div class='card-line'><b>Speed</b><br/><br/></div>" +
+        "<ul class='card-html left'>" +
+          "<li>15 kmph on straight track when the view ahead is clear</li>" +
+          "<li>10 kmph when the view ahead is not clear</li>" +
+          "<li>Over facing points – 15 kmph</li>" +
+        "</ul>" +
+      "</div>" +
+
+      "<div class='card-box'><div class='card-line'><b>Precautions</b><br/><br/></div>" +
+        "<ul class='card-html left'>" +
+          "<li>By day and night, LP must ensure the tunnel ahead is clear before entering; if in doubt, the train shall be piloted by a railway employee.</li>" +
+          "<li>Protection – 250 + 250 + 10 metres</li>" +
+          "<li>Following train at an interval of 25 minutes</li>" +
+          "<li>Stop at FSS; train will be received on <b>T/369(3b)</b></li>" +
+          "<li>On arrival, hand over this form to the Station Master of the receiving station</li>" +
+        "</ul>" +
+      "</div>" +
+
+    "</div>"
+},
+
+
+
+      
+"TIC in TSL - SR 9.12(5)": {
+
+  "Opening Communication, either on Wrong line or Right line": 
+    "<div class='card-box'>" +
+
+      "<div class='card-box'>" +
+        "<div class='card-line'><b>Authority</b><br/><br/>T/B 602 + T/A 912</div>" +
+      "</div>" +
+
+      "<div class='card-box'>" +
+        "<div class='card-line'><b>Speed</b><br/><br/>15 / 10 kmph / Walking Speed</div>" +
+      "</div>" +
+
+      "<div class='card-box'>" +
+        "<div class='card-line'><b>Precautions</b><br/><br/>Follow the procedure for TIC on Single Line of Automatic Block System (SR 9.12(4), Unified SR)</div>" +
+      "</div>" +
+
+    "</div>",
+
+
+  "For Train movements on Conditional Line Clear Ticket (either Wrong Line or Right Line)":
+    "<div class='card-box'>" +
+
+      "<div class='card-box'>" +
+        "<div class='card-line'><b>Authority</b><br/><br/>T/G 602 or T/H 602</div>" +
+        "<div class='card-line'>+</div>" +
+        "<div class='card-line'>T/A 912</div>" +
+      "</div>" +
+
+      "<div class='card-box'>" +
+        "<div class='card-line'><b>Speed</b><br/><br/></div>" +
+
+        "<div class='card-box'>" +
+          "<div class='card-line'><i>Uneven Flow</i></div>" +
+          "<ul class='card-html left'>" +
+            "<li>First Train – Booked Speed</li>" +
+            "<li>Second and Subsequent Trains – 25 / 10 kmph, after a 30-minute interval</li>" +
+          "</ul>" +
+        "</div>" +
+
+        "<div class='card-box'>" +
+          "<div class='card-line'><i>Even Flow</i></div>" +
+          "<ul class='card-html left'>" +
+            "<li>All Trains – Normal Speed</li>" +
+          "</ul>" +
+        "</div>" +
+      "</div>" +
+
+      "<div class='card-box'>" +
+        "<div class='card-line'><b>Precautions</b><br/><br/>Follow the procedure for TIC on Single Line of Automatic Block System (Even Flow / Uneven Flow) – (SR 9.12(4), Unified SR)</div>" +
+      "</div>" +
+
+      "<div class='card-box'>" +
+        "<div class='card-line'><b>Protection</b><br/><br/>250 + 250 + 10 metres</div>" +
+      "</div>" +
+
+      "<div class='card-box'>" +
+        "<div class='card-line'><b>Reception</b><br/><br/></div>" +
+        "<ul class='card-html left'>" +
+          "<li><i>On Wrong Line</i> – Stop at the Opposite FSS (correct line) or the LSS (wrong line). Train will then be <b>Piloted In</b>.</li>" +
+          "<li><i>On Right Line</i> – Approach signal may be taken ‘OFF’.</li>" +
+        "</ul>" +
+      "</div>" +
+
+      "<div class='card-box'>" +
+        "<div class='card-line'><b>NOTE</b><br/><br/></div>" +
+        "<ul class='card-html left'>" +
+          "<li>Whenever trains are dealt on the Wrong Line, <b>Pilot Out</b> shall be issued using <b>T/511</b> or Pilot Out Memo.</li>" +
+          "<li>At the receiving station, <b>Pilot In</b> shall be issued using <b>T/510</b>.</li>" +
+        "</ul>" +
+      "</div>" +
+
+    "</div>"
+
+},
+
+"Engine Push back in Automatic Section (G&SR 9.13)": {
+  "": 
+    "<div class='card-box'>" +
+      "<b>Engine pushing is prohibited in Automatic Section. However, in an emergency, the following precautions shall be observed:</b><br/><br/>" +
+      "<ul class='card-html left'>" +
+        "<li>Inform the Station Master in rear / Section Controller.</li>" +
+        "<li>Permission to push back shall be obtained from the SM in rear.</li>" +
+        "<li>The SM in rear may give permission only after ensuring that no train has been started behind.</li>" +
+        "<li>Permission shall be given through a message supported by a <b>Private Number</b>, and SM shall ensure that all LC gates en route are closed.</li>" +
+        "<li>During push back, the train shall move with great caution at a speed not exceeding <b>10 kmph</b>.</li>" +
+      "</ul>" +
+    "</div>"
+},
+
+ };
+
+
+    /* ------------------------------
+       NEW: Miscellaneous data object (placeholder entries)
+       Replace with real content as needed.
+       ------------------------------ */
+    const MISC_DATA = {
+      "Accident Alarm/Siren/Hooter Code":
+  "<div class='card-box'>" +
+    "<table style='width:100%; border-collapse:collapse; font-size:0.95rem;'>" +
+      "<tr><td style='padding:8px; border-bottom:4px solid #ddd; text-align:center;'>" +
+        "<div class='card-line'><b>Two Long Blasts</b><br/><br/>(45 seconds each, with a 5-second break in between)</div>" +
+      "</td></tr>" +
+      "<tr><td style='padding:8px;'><div class='card-line'>Accident in Loco or Traffic Yard at <b>Home Station</b><br/><br/>Only <b>ART</b> required</div></td></tr>" +
+    "</table>" +
+  "</div>" +
+
+  "<div class='card-box'>" +
+    "<table style='width:100%; border-collapse:collapse; font-size:0.95rem;'>" +
+      "<tr><td style='padding:8px; border-bottom:4px solid #ddd; text-align:center;'>" +
+        "<div class='card-line'><b>Three Long Blasts</b><br/><br/>(45 seconds each, with a 5-second break in between)</div>" +
+      "</td></tr>" +
+      "<tr><td style='padding:8px;'><div class='card-line'>Accident <b>Outside Home Station</b><br/><br/>Only <b>ART</b> required</div></td></tr>" +
+    "</table>" +
+  "</div>" +
+
+  "<div class='card-box'>" +
+    "<table style='width:100%; border-collapse:collapse; font-size:0.95rem;'>" +
+      "<tr><td style='padding:8px; border-bottom:4px solid #ddd; text-align:center;'>" +
+        "<div class='card-line'><b>Four Long Blasts</b><br/><br/>(45 seconds each, with a 5-second break in between)</div>" +
+      "</td></tr>" +
+      "<tr><td style='padding:8px;'><div class='card-line'>Accident at <b>Home Station</b><br/><br/><b>ARM & MFDTV + ART</b> required.</div></td></tr>" +
+    "</table>" +
+  "</div>" +
+
+  "<div class='card-box'>" +
+    "<table style='width:100%; border-collapse:collapse; font-size:0.95rem;'>" +
+      "<tr><td style='padding:8px; border-bottom:4px solid #ddd; text-align:center;'>" +
+        "<div class='card-line'><b>Five Long Blasts</b><br/><br/>(45 seconds each, with a 5-second break in between)</div>" +
+      "</td></tr>" +
+      "<tr><td style='padding:8px;'><div class='card-line'>Accident <b>Outside Home Station</b><br/><br/><b>ARM & MFDTV + ART</b> required.</div></td></tr>" +
+    "</table>" +
+  "</div>" +
+
+  "<div class='card-box'>" +
+    "<table style='width:100%; border-collapse:collapse; font-size:0.95rem;'>" +
+      "<tr><td style='padding:8px; border-bottom:4px solid #ddd; text-align:center;'>" +
+        "<div class='card-line'><b>One Long Blast</b><br/><br/>(90 seconds continuous)</div>" +
+      "</td></tr>" +
+      "<tr><td style='padding:8px;'><div class='card-line'>Cancellation of <b>ARM & MFDTV / ART</b> <br/>or<br/><b>Testing</b> of the hooter.</div></td></tr>" +
+    "</table>" +
+  "</div>"
+    ,
+      "Target Time for turning out of Self Propelled Accident Relief Medical Van (SPARMV)":
+  "<div class='card-box'>" +
+    "<table style='width:100%; border-collapse:collapse; font-size:0.95rem;'>" +
+      "<tr>" +
+        "<td style='padding:8px; border-bottom:4px solid #ddd; text-align:center;'>" +
+          "<div class='card-line'>In case of <b>Double Exit Siding</b></div>" +
+        "</td>" +
+      "</tr>" +
+      "<tr>" +
+        "<td style='padding:8px;'>" +
+          "<div class='card-line'><b>15 minutes</b><br/>(maximum time for despatch)</div>" +
+        "</td>" +
+      "</tr>" +
+    "</table>" +
+  "</div>" +
+
+  "<div class='card-box'>" +
+    "<table style='width:100%; border-collapse:collapse; font-size:0.95rem;'>" +
+      "<tr>" +
+        "<td style='padding:8px; border-bottom:4px solid #ddd; text-align:center;'>" +
+          "<div class='card-line'>In case of <b>Single Exit Siding</b></div>" +
+        "</td>" +
+      "</tr>" +
+      "<tr>" +
+        "<td style='padding:8px;'>" +
+          "<div class='card-line'><b>20 minutes</b><br/>(maximum time for despatch)</div>" +
+        "</td>" +
+      "</tr>" +
+    "</table>" +
+  "</div>",
+  
+  
+"Target Time for Movement of Accident Relief Train (ART)":
+  "<div class='card-box'>" +
+    "<table style='width:100%; border-collapse:collapse; font-size:0.95rem;'>" +
+      "<tr>" +
+        "<td style='padding:8px; border-bottom:4px solid #ddd; text-align:center;'>" +
+          "<div class='card-line'>During <b>Day</b></div>" +
+        "</td>" +
+      "</tr>" +
+      "<tr>" +
+        "<td style='padding:8px;'>" +
+          "<div class='card-line'><b>30 minutes</b><br/>(maximum time for despatch)</div>" +
+        "</td>" +
+      "</tr>" +
+    "</table>" +
+  "</div>" +
+
+  "<div class='card-box'>" +
+    "<table style='width:100%; border-collapse:collapse; font-size:0.95rem;'>" +
+      "<tr>" +
+        "<td style='padding:8px; border-bottom:4px solid #ddd; text-align:center;'>" +
+          "<div class='card-line'>During <b>Night</b></div>" +
+        "</td>" +
+      "</tr>" +
+      "<tr>" +
+        "<td style='padding:8px;'>" +
+          "<div class='card-line'><b>45 minutes</b><br/>(maximum time for despatch)</div>" +
+        "</td>" +
+      "</tr>" +
+    "</table>" +
+  "</div>",
+  
+  "Important Duties of Loco Pilot and Assistant Loco Pilot in case of an Accident": {
+
+  "At the time of an accident, the Loco Pilot and Assistant Loco Pilot must immediately":
+    "<div class='card-box'><ul class='card-html left'>" +
+      "<li>Switch ON the flasher light and switch OFF the headlight of the engine.</li>" +
+      "<li>Sound short whistles frequently to warn the LP of an approaching train.</li>" +
+      "<li>Arrange to protect the adjacent line and then the same line, in accordance with <b>GR 6.03</b> and <b>SR 6.03(1)</b>. Information should be exchanged with the TMR using walkie-talkie or any other available means.</li>" +
+      "<li>Arrange to advise the Controller and adjacent stations about the accident using the available means of communication.</li>" +
+      "<li>Take such technical precautions as may be necessary, or as prescribed by Special Instructions, to make the train safe.</li>" +
+      "<li>Render all possible assistance to the TMR, particularly in the assessment of damage to rolling stock and/or locomotive and in determining the nature of assistance required.</li>" +
+    "</ul></div>",
+
+
+  "Derailment or any other serious consequence due to suspected sabotage":
+    "<div class='card-box'><ul class='card-html left'>" +
+      "<li>Protect the train.</li>" +
+      "<li>Report the accident to adjacent stations and the Control Office.</li>" +
+      "<li>Render first aid to the injured.</li>" +
+      "<li>Examine the track carefully, jointly with responsible passengers, and record the results of the examination. Obtain their signatures on the record.</li>" +
+      "<li>Ensure that portions of the track, rails, fishplates, bolts, or other fittings that appear to have been tampered with are not touched or moved by anyone. These must be closely protected until the arrival of Civil and Police Authorities.</li>" +
+    "</ul></div>"
+
+},
+
+
+"Protection": {
+
+  "One Detonator":
+    "<div class='card-box'><ul class='card-html left'>" +
+      "<li>For testing of the detonator.</li>" +
+      "<li>During emergency, when no sufficient time is available.</li>" +
+    "</ul></div>",
+
+
+  "Three Detonators":
+    "<div class='card-box'><ul class='card-html left'>" +
+      "<li>To protect the train in <b>Automatic Section</b><br/>(90 + 90 + 10 metres)</li>" +
+      "<li>During <b>All Communication Failure (ACF)</b><br/>(250 + 250 + 10 metres)</li>" +
+      "<li>During <b>Engineering Block</b><br/>(Banner flag at 600 metres from obstruction, and 3 detonators at 600 + 10 + 10 metres from banner flag)</li>" +
+    "</ul></div>",
+
+
+  "Four Detonators":
+    "<div class='card-box'><ul class='card-html left'>" +
+      "<li>Normal protection of the train on <b>Single Line</b><br/>(600 + 600 + 10 + 10 metres)</li>" +
+      "<li>Normal protection of the train on <b>Double Line</b><br/>(600 + 600 + 10 + 10 metres)</li>" +
+      "<li>Adjacent line protection on <b>Double Line</b><br/>(600 + 600 + 10 + 10 metres)</li>" +
+      "<li>In <b>Automatic Section</b>, when the adjacent line is obstructed<br/>(600 + 600 + 10 + 10 metres)</li>" +
+    "</ul></div>"
+
+},
+
+"Duties of Loco Pilot in case of Detonator(s) burst (GR 3.78)": {
+
+  "":
+    "<div class='card-box'><ul class='card-html left'>" +
+      "<li>Reduce speed and ensure the train is under full control, ready to stop short of any obstruction.</li>" +
+      "<li>Note down the kilometre number, section, and time of the detonator burst.</li>" +
+      "<li>Whistle intermittently to warn staff.</li>" +
+      "<li>Follow the instructions of the staff who placed the detonator(s).</li>" +
+      "<li>If no staff is available, proceed cautiously up to <b>1.5 kilometres</b>. If no abnormality is noticed, pick up normal speed thereafter.</li>" +
+      "<li>Report the incident to the next station without fail.</li>" +
+    "</ul></div>"
+
+},
+
+"Duties of Loco Pilot in case of Foggy and Tempestuous weather": {
+
+  "":
+    "<div class='card-box'><ul class='card-html left'>" +
+      "<li>The Loco Pilot shall whistle frequently to warn the Gateman and road users while approaching LC gates.</li>" +
+      "<li>The Loco Pilot shall not exceed <b>60 kmph</b> if the Fog Signal Device is not provided or is not functioning, and shall not exceed <b>75 kmph</b> if the Fog Signal Device is provided and functioning.</li>" +
+      "<li>When visibility is impaired, the Loco Pilot shall use discretion and be prepared to stop short of any obstruction.</li>" +
+    "</ul></div>"
+
+},
+
+"Duties and Responsibilities of Loco Pilot in case of OHE failure (SR 17.09)": {
+
+  "SM shall issue Caution Order of 60 kmph during day and 30 kmph during night for the first train on healthy section":
+    "<div class='card-box'>" +
+      "<div class='card-line'><b>Duties of LP in case of abnormality on electric traction or when the train is stopped in the section</b></div>" +
+      "<div class='card-box'><ul class='card-html left'>" +
+        "<li>After receiving details of the abnormality, the decision regarding recharging of OHE shall be taken jointly by SCOR/DyCHC and TPC.</li>" +
+        "<li>If no defect is reported by the LP, then after resumption of OHE supply, the LP shall be instructed by the Controller to clear the section at <b>60 kmph (day) / 30 kmph (night)</b> with a sharp lookout for any abnormality on the train. <br/>For Ro-Ro trains, the speed shall not exceed <b>40 kmph</b> both during day and night.</li>" +
+        "<li>At the next station, the train shall be examined by TRD staff, SM, and TMR. If no abnormality is found, the train may resume normal speed.</li>" +
+      "</ul></div>" +
+    "</div>",
+
+
+  "":
+    "<div class='card-box'>" +
+      "<div class='card-line'><b>Duties of LP in case of OHE tripping / No tension:</b></div>" +
+      "<div class='card-box'><ul class='card-html left'>" +
+        "<li>Inform TPC / SCOR / DyCHC immediately.</li>" +
+        "<li>In case of <b>transient tripping</b>, resume normal traction but maintain a sharp lookout.</li>" +
+        "<li>Inform TMR about the OHE tripping and instruct him to maintain a sharp lookout.</li>" +
+        "<li>In case of <b>No Tension</b>, switch ON the flasher light and control the speed up to <b>60 kmph</b>. Be prepared to stop short of any obstruction and stop close to the emergency socket. Contact Control.</li>" +
+        "<li>If Control cannot be contacted, send the ALP with the TMR to examine the train.</li>" +
+        "<li>After the train has been checked, TMR/LP shall inform SCOR regarding any abnormality detected.</li>" +
+        "<li>If OHE supply is restored, the LP shall resume normal traction.</li>" +
+      "</ul></div>" +
+    "</div>"
+
+},
+
+"Tunnel Working": {
+        "Safe Operation of Trains inside the Tunnels": {
+          "":"<div class='card-box'><ul class='card-html left'><li>Application of rheostatic brakes is not permitted inside tunnels longer than 800 meters.</li><li>Whistle while approaching the ‘W/T’ engineering indicator when approaching a long tunnel.</li><li>Look back to ensure that the train is running safely and properly, and exchange all-right signals with the TMR.</li><li>Be alert on the run; keep the engine headlight and marker lights burning during night, foggy or tempestuous weather, and while entering and passing through tunnels.</li> <li>Never detach the locomotive from the formation in the block section without the permission of the TMR, and unless the load is secured by pinning the hand brakes to avoid rolling of the load.</li></ul></div>"
+        },
+        
+"Fire in Trains (inside the Tunnel)": {
+  "":
+    "<div class='card-box'><ul class='card-html left'>" +
+      "<li>Every effort must be made to stop the train before the tunnel, or run through the tunnel if necessary.</li>" +
+      "<li>Coach Attendants and TTEs should make all efforts to extinguish the fire.</li>" +
+      "<li>First aid should be rendered to the injured passengers.</li>" +
+      "<li>After completion of evacuation, the shutters shall be closed.</li>" +
+      "<li>Ensure tunnel illumination wherever provided.</li>" +
+      "<li>The portion behind the fire shall be detached first, and then the vehicle on fire.</li>" +
+      "<li>Use fire extinguishers.</li>" +
+      "<li>Evacuate passengers to a safer place.</li>" +
+      "<li>The Loco Pilot should apply his best judgement while handling such an eventuality inside a tunnel or on a bridge.</li>" +
+    "</ul>" +
+
+    "<div class='card-box'><div class='card-line'>" +
+      "<b>Note:</b> Fire extinguishers have been provided in the train engine, front/rear SLR of passenger trains, first class coaches, non-AC coaches, AC coaches, generator vans, pantry car, inspection carriages, trolley refuges in tunnels longer than 1 kilometre, Rail Maintenance Vans, tower wagons, etc., for emergency use." +
+    "</div></div></div>"
+},
+
+"Fire in Locomotive (inside the Tunnel)": {
+  "":
+    "<div class='card-box'>" +
+      "<ul class='card-html left'>" +
+        "<li>The train shall be stopped clear of the tunnel. The engine shall be shut down and the fire extinguished using the fire extinguishers available in the locomotive.</li>" +
+        "<li>Assistance/Relief engine should be called for through Tunnel Ventilation Control (wherever available), Central Control, or Station Masters at either end.</li>" +
+        "<li>The train shall be secured by applying the hand brakes and protected from the front and the rear.</li>" +
+        "<li>Counsel the passengers to remain patient.</li>" +
+      "</ul>" +
+
+      "<div class='card-box'><div class='card-line'><b>In case of longer duration of fire in the locomotive inside the tunnel and if unable to clear the tunnel:</b></div></div>" +
+
+      "<ul class='card-html left'>" +
+        "<li>Provide illumination by operating the switches provided inside tunnels, or through Tunnel Ventilation Control (wherever available).</li>" +
+        "<li>Assistance/Relief engine should be called for through Tunnel Ventilation Control (wherever available) or Central Control.</li>" +
+        "<li>The engine shall be shut down.</li>" +
+        "<li>Passengers shall be evacuated from the rear of the train and taken to a safer place.</li>" +
+        "<li>The fire shall be extinguished using fire extinguishers available in the train or inside the tunnel.</li>" +
+        "<li>The Station Master at either end shall be informed.</li>" +
+      "</ul>" +
+    "</div>"
+},
+
+"Derailment inside the Tunnel": {
+  "":
+    "<div class='card-box'><ul class='card-html left'>" +
+      "<li>On noticing a derailment, the train shall be stopped. Passengers from the affected coach shall be rescued to unaffected coach/coaches.</li>" +
+      "<li>The tunnel shall be illuminated by operating the switches provided inside the tunnel, or through Tunnel Ventilation Control (wherever available), and also with the help of plug-in type floodlights available in the TMR brake van.</li>" +
+      "<li>Summon all railway staff on duty/leave and Doctors on duty/leave for assistance in the rescue operation.</li>" +
+      "<li>Arm bands shall be supplied and worn by all staff and officers deployed in the rescue operation.</li>" +
+      "<li>Inform Section Control / Tunnel Ventilation Control (wherever available) about the accident with brief details such as: train number, engine number, position of coach/coaches involved, type of coach, nature of injuries, and whether assistance is required (Medical Van, ambulance, ART, doctors, porters, staff from adjacent nominated station, drinking water, transport for shifting the injured to the nearest Civil/Government/Railway hospital, etc.). Also inform whether an engine is required from the rear end to clear the rear portion.</li>" +
+      "<li>Evacuate passengers to safer coaches via the side footpaths or through vestibules.</li>" +
+      "<li>Dispatch injured passengers to the nearest hospital by the quickest possible means.</li>" +
+      "<li>The train shall be protected both in front and in the rear.</li>" +
+      "<li>All available clues leading to the cause of the derailment shall not be disturbed or touched.</li>" +
+      "<li>The unaffected front portion, if any, along with passengers, shall be dispatched to the station ahead only after taking Joint Observations.</li>" +
+      "<li>The load of the train shall be secured by pinning down the hand brakes.</li>" +
+      "<li>Passenger comfort and safekeeping of their belongings shall be ensured by the coach attendant, Train Superintendent and other railway staff.</li>" +
+      "<li>Record the details of passengers transported to various hospitals; this shall be maintained by the Train Superintendent.</li>" +
+      "<li>The portable field telephone shall be manned to provide supplementary information to Central Control / Tunnel Ventilation Control (wherever available) for dispatch of relief and rescue measures.</li>" +
+    "</ul></div>"
+},
+
+"Alarm Chain Pulling inside the Tunnel": {
+  "":
+    "<div class='card-box'><ul class='card-html left'>" +
+      "<li>On noticing a slight drop in vacuum/air pressure, the train shall be driven through the tunnel and stopped outside the tunnel portal.</li>" +
+      "<li>The Assistant Loco Pilot, TMR, TTE, and Coach Attendant shall ensure that the alarm chain apparatus is restored to the normal position.</li>" +
+      "<li>The reason for Alarm Chain Pulling shall be obtained from the passengers of the affected coach.</li>" +
+    "</ul></div>"
+}
+  }  
+    };
+
+
+async function loadAllData() {
+  const abs = await loadSystemData('Absolute Block System');
+  const ats = await loadSystemData('Automatic Block System');
+  const misc = await loadSystemData('Miscellaneous');
+
+  data["Absolute Block System"] = abs || ABS_DATA;
+  data["Automatic Block System"] = ats || ATS_DATA;
+  data["Miscellaneous"] = misc || MISC_DATA;
+
+  console.log('📦 Offline data ready');
+}
+
+    const data = {}; // will be filled from IndexedDB
+
+    (async function seedIndexedDBOnce(){
+  const existing = await loadSystemData('Absolute Block System');
+  if (existing) return; // already seeded
+
+  await saveSystemData('Absolute Block System', ABS_DATA);
+  await saveSystemData('Automatic Block System', ATS_DATA);
+  await saveSystemData('Miscellaneous', MISC_DATA);
+  console.log('✅ IndexedDB seeded (first run)');
+})();
+
+      await loadAllData();
+
+    const SELECTION_PAGE = el("selectionPage");
+    const SYSTEM_PAGE = el("systemPage");
+    const CIRC_GRID = el("circumstancesGrid");
+    const SUBMENU_GRID = el("subMenuGrid");
+    const AUTH_CARD = el("authorityCard");
+    const SYSTEM_MAIN = el("systemMain");
+    const PARENT_HEADING = el("parentHeading");
+    const PARENT_HEADING_TEXT = el("parentHeadingText");
+
+    function debounce(fn, wait = 120) {
+      let t = null;
+      return function(...args) {
+        clearTimeout(t);
+        t = setTimeout(() => fn.apply(this, args), wait);
+      };
+    }
+
+    function updateSubheaderOffset(){
+      try {
+        const headerEl = document.querySelector('header');
+        const subheaderEl = document.querySelector('.subheader');
+        if (!headerEl) return;
+        const headerRect = headerEl.getBoundingClientRect();
+        const subRect = subheaderEl ? subheaderEl.getBoundingClientRect() : { height: 0 };
+        const headerH = Math.ceil(headerRect.height || 0);
+        const subH = Math.ceil(subRect.height || 0);
+        if (subheaderEl) { subheaderEl.style.top = headerH + 'px'; subheaderEl.style.position = 'sticky'; subheaderEl.style.zIndex = 105; }
+        headerEl.style.position = 'sticky'; headerEl.style.top = '0px'; headerEl.style.zIndex = 110;
+        if (PARENT_HEADING) { PARENT_HEADING.style.top = (headerH + subH) + 'px'; PARENT_HEADING.style.position = 'sticky'; PARENT_HEADING.style.zIndex = 104; }
+        const viewportH = window.innerHeight || document.documentElement.clientHeight;
+        const available = Math.max(120, viewportH - headerH - subH - 12);
+        if (SYSTEM_MAIN) { SYSTEM_MAIN.style.height = (available + subH) + 'px'; SYSTEM_MAIN.style.overflowY = 'auto'; }
+        if (CIRC_GRID) { CIRC_GRID.style.maxHeight = 'none'; CIRC_GRID.style.overflowY = 'visible'; }
+        if (SUBMENU_GRID) { SUBMENU_GRID.style.maxHeight = 'none'; SUBMENU_GRID.style.overflowY = 'visible'; }
+        if (AUTH_CARD) {
+          const cardHeading = AUTH_CARD.querySelector('.sub-heading');
+          const cardHeadingH = cardHeading ? Math.ceil(cardHeading.getBoundingClientRect().height || 0) : 56;
+          const body = AUTH_CARD.querySelector('.card-body');
+          if (body) {
+            const bodyMax = Math.max(120, available - cardHeadingH - 24);
+            body.style.maxHeight = bodyMax + 'px';
+            body.style.overflowY = 'auto';
+            body.style.webkitOverflowScrolling = 'touch';
+          }
+          AUTH_CARD.style.maxHeight = Math.max(200, viewportH - headerH - 24) + 'px';
+        }
+      } catch (err) {
+        console.warn('updateSubheaderOffset error', err);
+      }
+    }
+
+    function setParentHeading(text) {
+      if (!PARENT_HEADING || !PARENT_HEADING_TEXT) return;
+      if (text) { PARENT_HEADING_TEXT.textContent = text; PARENT_HEADING.style.display = 'block'; }
+      else { PARENT_HEADING_TEXT.textContent = ''; PARENT_HEADING.style.display = 'none'; }
+    }
+
+    // Toggle background inertness (simple): mark selection/system pages aria-hidden and body scroll lock
+    function setBackgroundInert(isInert) {
+      try {
+        if (SELECTION_PAGE) SELECTION_PAGE.setAttribute('aria-hidden', String(isInert));
+        if (SYSTEM_PAGE) SYSTEM_PAGE.setAttribute('aria-hidden', String(isInert));
+        if (isInert) document.documentElement.classList.add('no-scroll'), document.body.classList.add('no-scroll');
+        else document.documentElement.classList.remove('no-scroll'), document.body.classList.remove('no-scroll');
+      } catch (e) { /* fail silently */ }
+    }
+    
+    
+
+    window.addEventListener('load', updateSubheaderOffset);
+    window.addEventListener('resize', debounce(updateSubheaderOffset, 130));
+
+    function loadCircumstances(){
+      setParentHeading(null);
+      clearChildren(CIRC_GRID);
+      const systemData = data[currentSystem] || {};
+      Object.keys(systemData).forEach(circ => {
+        const div = document.createElement("div");
+        div.className = "grid-item";
+        div.tabIndex = 0;
+        div.setAttribute("role", "button");
+        div.setAttribute("aria-controls","authorityCard");
+        div.setAttribute("aria-expanded","false");
+        div.textContent = circ;
+        div.onclick = () => showSubMenu(circ);
+        div.onkeydown = (e) => { if(e.key === "Enter" || e.key === " ") showSubMenu(circ); };
+        CIRC_GRID.appendChild(div);
+      });
+      CIRC_GRID.style.display = "grid";
+      SUBMENU_GRID.style.display = "none";
+      AUTH_CARD.style.display = "none";
+      SYSTEM_MAIN.scrollTop = 0;
+      updateSubheaderOffset();
+    }
+
+    function showSubMenu(circ){
+        currentCircumstance = circ;
+  if (window.__pushSubmenuState) window.__pushSubmenuState(circ);
+
+      if (circ === "Signal Failure" || circ === "Shunting" || circ === "Tunnel Working" || circ === "Failure of Gate Stop Signal") {
+  setParentHeading(circ);
+} else {
+  setParentHeading(null);
+}
+      const subData = data[currentSystem] && data[currentSystem][circ];
+      if ( circ === "TIC on Single Line" || circ === "TIC on Double Line" || !subData || typeof subData !== "object" || isLeafObject(subData) ) {
+        openedFromSubmenu = false; showAuthority(circ, true); return;
+      }
+      clearChildren(SUBMENU_GRID);
+      Object.keys(subData).forEach(sub => {
+        const div = document.createElement("div");
+        div.className = "grid-item";
+        div.tabIndex = 0;
+        div.setAttribute("role", "button");
+        div.setAttribute("aria-controls","authorityCard");
+        div.setAttribute("aria-expanded","false");
+        div.textContent = sub;
+        div.onclick = () => { openedFromSubmenu = true; showAuthority(sub); };
+        div.onkeydown = (e) => { if(e.key === "Enter" || e.key === " ") { openedFromSubmenu = true; showAuthority(sub); } };
+        SUBMENU_GRID.appendChild(div);
+      });
+      CIRC_GRID.style.display = "none";
+      SUBMENU_GRID.style.display = "grid";
+      AUTH_CARD.style.display = "none";
+      updateSubheaderOffset();
+      SYSTEM_MAIN.scrollTop = 0;
+      setTimeout(()=>{ const first = SUBMENU_GRID.querySelector('.grid-item'); if(first) first.focus(); },80);
+    }
+
+    function renderStringOrHtml(val){
+      if (looksLikeHtml(val)) return `<div class="card-html">${val}</div>`;
+      const parts = String(val).split('\n').map(p => p.trim());
+      let out = '';
+      parts.forEach(line => {
+        if (line.toLowerCase() === 'or') out += `<p class="or-text" style="text-align:center;margin:0;">${escapeHtml(line)}</p>`;
+        else out += `<p style="margin:0 0 6px 0;text-align:center;">${escapeHtml(line)}</p>`;
+      });
+      return out;
+    }
+
+    // small counter for heading ids
+    let __authorityHeadingCounter = 0;
+
+    function showAuthority(sub, direct = false) {
+      let subData;
+      if (direct) subData = data[currentSystem] && data[currentSystem][sub];
+      else subData = data[currentSystem] && data[currentSystem][currentCircumstance] && data[currentSystem][currentCircumstance][sub];
+
+      const parentVisible = (!direct && currentCircumstance &&
+          (currentCircumstance === "Signal Failure" || currentCircumstance === "Shunting"));
+
+      let html = "";
+      const shouldSuppressInnerHeading = parentVisible && (sub === "Signal Failure" || sub === "Shunting");
+
+      // create a unique heading id and set aria-labelledby on the card for screen readers
+      const headingId = 'authority-heading-' + (Date.now().toString(36)) + '-' + (__authorityHeadingCounter++);
+      if (!shouldSuppressInnerHeading) {
+        html += `<div id="${headingId}" class="sub-heading sub-heading-small">${escapeHtml(sub)}</div>`;
+      } else {
+        // include a visually-hidden heading to keep aria-labelledby meaningful
+        html += `<div id="${headingId}" class="sub-heading sub-heading-small hidden-subheading-spacer" aria-hidden="true"></div>`;
+      }
+
+      html += `<div class="card-body" tabindex="0" role="region" aria-live="polite">`;
+
+      if (typeof subData === "string") {
+        html += renderStringOrHtml(subData);
+      }
+      else if (Array.isArray(subData)) {
+        const anyHtml = subData.some(item => looksLikeHtml(item));
+        if (anyHtml) {
+          subData.forEach(item => {
+            if (looksLikeHtml(item)) html += `<div class="card-html">${item}</div>`;
+            else html += renderStringOrHtml(String(item));
+          });
+        } else {
+          const hasOr = subData.some(v => String(v).toLowerCase() === "or");
+          if (currentCircumstance === "TSL working" || /TSL working/i.test(sub)) {
+            html += `<ul>`;
+            subData.forEach(v => {
+              const text = String(v);
+              if (text.toLowerCase().includes("authority")) html += `<li><strong>${escapeHtml(text)}</strong></li>`;
+              else html += `<li>${escapeHtml(text)}</li>`;
+            });
+            html += `</ul>`;
+          } else if (hasOr) {
+            html += `<div style="display:flex;flex-direction:column;gap:8px;align-items:center;">`;
+            subData.forEach(v => {
+              const text = String(v);
+              if (text.toLowerCase() === "or") html += `<p class="or-text" style="margin:0;">${escapeHtml(text)}</p>`;
+              else html += `<p class="card-line" style="margin:0;text-align:center;">${escapeHtml(text)}</p>`;
+            });
+            html += `</div>`;
+          } else {
+            html += `<ul>`;
+            subData.forEach(v => html += `<li>${escapeHtml(String(v))}</li>`);
+            html += `</ul>`;
+          }
+        }
+      }
+      else if (typeof subData === "object" && subData !== null) {
+        const innerKeys = Object.keys(subData);
+        innerKeys.forEach(key => {
+          const isOnlyInnerKey = innerKeys.length === 1;
+          html += `<div style="margin:18px 0;text-align:center;">`;
+          if (key !== "" && !isOnlyInnerKey) {
+            html += `<h4>${escapeHtml(key)}</h4>`;
+          }
+          const val = subData[key];
+          if (typeof val === "string") {
+            html += renderStringOrHtml(val);
+          } else if (Array.isArray(val)) {
+            const anyHtmlNested = val.some(item => looksLikeHtml(item));
+            if (anyHtmlNested) {
+              val.forEach(item => {
+                if (looksLikeHtml(item)) html += `<div class="card-html">${item}</div>`;
+                else html += renderStringOrHtml(String(item));
+              });
+            } else {
+              const hasOrNested = val.some(v => String(v).toLowerCase() === "or");
+              if (hasOrNested) {
+                html += `<div style="display:flex;flex-direction:column;gap:8px;align-items:center;">`;
+                val.forEach(item => {
+                  const text = String(item);
+                  if (text.toLowerCase() === "or") html += `<p class="or-text" style="margin:0;">${escapeHtml(text)}</p>`;
+                  else html += `<p class="card-line" style="margin:0;text-align:center;">${escapeHtml(text)}</p>`;
+                });
+                html += `</div>`;
+              } else {
+                html += `<ul>`;
+                val.forEach(item => html += `<li>${escapeHtml(String(item))}</li>`);
+                html += `</ul>`;
+              }
+            }
+          } else if (typeof val === "object" && val !== null) {
+            html += `<div style="display:flex;flex-direction:column;gap:8px;margin-top:8px;">`;
+            Object.keys(val).forEach(subKey => {
+              const v = val[subKey];
+              if (typeof v === "string") {
+                html += `<p style="margin:0;text-align:center;"><strong>${escapeHtml(subKey)}:</strong> ${escapeHtml(String(v))}</p>`;
+              } else if (Array.isArray(v)) {
+                html += `<p style="margin:0;text-align:center;"><strong>${escapeHtml(subKey)}:</strong> ${escapeHtml(v.join(", "))}</p>`;
+              } else {
+                html += `<p style="margin:0;text-align:center;"><strong>${escapeHtml(subKey)}:</strong> ${escapeHtml(String(v))}</p>`;
+              }
+            });
+            html += `</div>`;
+          } else {
+            html += `<p>${escapeHtml(String(val))}</p>`;
+          }
+          html += `</div>`;
+        });
+      } else {
+        html += `<p>No data available</p>`;
+      }
+
+      html += `</div>`;
+      AUTH_CARD.innerHTML = html;
+
+      // set aria-labelledby for screen readers (use the heading id created above)
+      try {
+        AUTH_CARD.setAttribute('aria-labelledby', headingId);
+      } catch (e) {}
+
+      // theme class
+      AUTH_CARD.classList.remove('abs','auto','misc');
+      if (currentSystem === "Absolute Block System") AUTH_CARD.classList.add('abs');
+      else if (currentSystem === "Automatic Block System") AUTH_CARD.classList.add('auto');
+      else if (currentSystem === "Miscellaneous") AUTH_CARD.classList.add('misc');
+
+      // show dialog safely and mark background inert
+      AUTH_CARD.style.flexDirection = 'column';
+      AUTH_CARD.style.display = "flex";
+      AUTH_CARD.setAttribute("aria-hidden", "false");
+           if (window.__pushAuthorityState) window.__pushAuthorityState(sub);
+
+      setBackgroundInert(true);
+
+      updateSubheaderOffset();
+      SYSTEM_MAIN.scrollTop = Math.max(0, SYSTEM_MAIN.scrollTop - 1);
+      setTimeout(() => { SYSTEM_MAIN.scrollTop = Math.max(0, SYSTEM_MAIN.scrollTop + 1); }, 20);
+      SUBMENU_GRID.style.display = "none";
+      CIRC_GRID.style.display = "none";
+
+      const bodyEl = AUTH_CARD.querySelector('.card-body');
+      setTimeout(() => {
+        if (bodyEl) try { bodyEl.focus(); } catch (e) {}
+        const activeControls = document.querySelectorAll('[aria-controls="authorityCard"]');
+        activeControls.forEach(c => c.setAttribute('aria-expanded','true'));
+      }, 80);
+
+      if (BACK_BTN) BACK_BTN.style.display = 'flex';
+      if (BACK_BTN) BACK_BTN.focus();
+
+      const focusTrap = (e) => {
+        if (!AUTH_CARD || AUTH_CARD.style.display === "none") return;
+        const root = AUTH_CARD;
+        const focusable = root.querySelectorAll('a,button,input,textarea,select,[tabindex]:not([tabindex="-1"])');
+        const arr = Array.prototype.slice.call(focusable);
+        if (arr.length === 0) {
+          if (e.key === 'Tab' && document.activeElement === document.body) { e.preventDefault(); try { bodyEl.focus(); } catch (err) {} }
+          return;
+        }
+        const first = arr[0], last = arr[arr.length - 1];
+        if (e.key === 'Tab') {
+          if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+          else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+        }
+      };
+
+      document.removeEventListener('keydown', window.__authFocusTrapHandler);
+      window.__authFocusTrapHandler = function(e){ focusTrap(e); };
+      document.addEventListener('keydown', window.__authFocusTrapHandler);
+    }
+
+    let currentSystem = "";
+    let currentCircumstance = "";
+    let openedFromSubmenu = false;
+       // --------- History / Android back-button friendly behavior ---------
+// call this once on startup to create the initial history state
+(function setupHistoryNavigation(){
+  // Normalize initial state
+  if (!history.state) {
+    history.replaceState({ screen: 'selection' }, '', location.pathname + location.search);
+  }
+
+  // push a state when we move to the system page
+  const pushSystemState = (sysName) => {
+    try {
+      history.pushState({ screen: 'system', system: sysName }, '', '#system');
+    } catch(e) { /* ignore */ }
+  };
+
+  // push a state when we show a submenu (parent)
+  const pushSubmenuState = (parentKey) => {
+    try {
+      history.pushState({ screen: 'submenu', system: currentSystem, parent: parentKey }, '', '#submenu');
+    } catch(e) { /* ignore */ }
+  };
+
+  // push a state when we show an authority/card dialog
+  const pushAuthorityState = (authorityKey) => {
+    try {
+      history.pushState({ screen: 'authority', system: currentSystem, authority: authorityKey, parent: currentCircumstance }, '', '#authority');
+    } catch(e) { /* ignore */ }
+  };
+
+  // When user presses hardware back, popstate fires; handle nav instead of letting app close.
+  window.addEventListener('popstate', (evt) => {
+    const s = (evt && evt.state) || {};
+    // If state is missing, fall back to current visible UI
+    const screen = s.screen || (document.getElementById('systemPage').style.display !== 'none' ? 'system' : 'selection');
+
+    // If authority is open -> close card first
+    const authVisible = AUTH_CARD && AUTH_CARD.style.display && AUTH_CARD.style.display !== 'none';
+
+    if (screen === 'authority' && authVisible) {
+      // This is a pop to authority — nothing to do. (rare)
+      return;
+    }
+
+    if (authVisible) {
+      // If card currently open, close it instead of exiting
+      goBack(); // your existing function hides authority card and restores previous grid
+      return;
+    }
+
+    // If submenu is open, go back to parent grid
+    if (document.getElementById('subMenuGrid').style.display !== 'none') {
+      goBack();
+      return;
+    }
+
+    // If system page visible, but we're popping to selection -> go home
+    if (document.getElementById('systemPage').style.display !== 'none' && (screen === 'selection' || !s.screen)) {
+      goBack(); // returns to selection
+      return;
+    }
+
+    // otherwise default behaviour: let browser handle (which may close app)
+  });
+
+  // Expose helpers so we can call them from your UI state transitions
+  window.__pushSystemState = pushSystemState;
+  window.__pushSubmenuState = pushSubmenuState;
+  window.__pushAuthorityState = pushAuthorityState;
+
+  // Double-back-to-exit fallback if already at selection screen
+  let lastBackAtRoot = 0;
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Backspace' || e.key === 'Escape') {
+      // don't treat these as exit on mobile hardware (Android uses popstate)
+    }
+  });
+  // If Android sends no popstate and actually tries to close, we can't intercept that reliably,
+  // but history management above will prevent most accidental closes.
+})();
+
+    function loadCircumstancesWrapper(){
+      try { loadCircumstances(); } catch(e){ console.error('loadCircumstances failed', e); }
+    }
+
+function selectSystem(system){
+  // ✅ validate system first
+  const index = systems.indexOf(system);
+  if(index === -1){
+    console.warn("Invalid system:", system);
+    return;
+  }
+
+  // ✅ sync both
+  currentSystem = system;
+  currentIndex = index;
+
+  updateSystemUI();
+
+  /* remove active from all tabs */
+  document.querySelectorAll(".sys-tab").forEach(tab=>{
+    tab.classList.remove("active");
+  });
+
+  /* activate selected tab */
+  const tabMap = {
+    "Absolute Block System": ".sys-tab.abs",
+    "Automatic Block System": ".sys-tab.auto",
+    "Miscellaneous": ".sys-tab.misc"
+  };
+
+  const selectedTab = document.querySelector(tabMap[system]);
+  if(selectedTab) selectedTab.classList.add("active");
+
+  /* switch pages */
+  SELECTION_PAGE.style.display = "none";
+  SYSTEM_PAGE.style.display = "block";
+
+  const subheader = document.querySelector('.subheader');
+  if(subheader) subheader.style.display = 'flex';
+
+  /* load system data */
+  loadCircumstancesWrapper();
+  SYSTEM_MAIN.scrollTop = 0;
+
+  /* rebuild side menu */
+  buildMenu();
+
+  /* history */
+  if(window.__pushSystemState){
+    __pushSystemState(system);
+  }
+}
+    function goBack(){
+      if (AUTH_CARD && AUTH_CARD.style.display && AUTH_CARD.style.display !== "none") {
+        AUTH_CARD.style.display = "none";
+        AUTH_CARD.setAttribute("aria-hidden", "true");
+        setBackgroundInert(false);
+        const activeControls = document.querySelectorAll('[aria-controls=\"authorityCard\"]');
+        activeControls.forEach(c => c.setAttribute('aria-expanded','false'));
+        if (window.__authFocusTrapHandler) { document.removeEventListener('keydown', window.__authFocusTrapHandler); window.__authFocusTrapHandler = null; }
+        if (openedFromSubmenu) {
+          SUBMENU_GRID.style.display = "grid";
+          setTimeout(()=>{ const first = SUBMENU_GRID.querySelector('.grid-item'); if(first) first.focus(); },80);
+        } else {
+          CIRC_GRID.style.display = "grid";
+          setTimeout(()=>{ const first = CIRC_GRID.querySelector('.grid-item'); if(first) first.focus(); },80);
+        }
+        openedFromSubmenu = false;
+        return;
+      }
+
+      if (SUBMENU_GRID && SUBMENU_GRID.style.display && SUBMENU_GRID.style.display !== "none") {
+        SUBMENU_GRID.style.display = "none";
+        CIRC_GRID.style.display = "grid";
+        setTimeout(()=>{ const first = CIRC_GRID.querySelector('.grid-item'); if(first) first.focus(); },80);
+        openedFromSubmenu = false;
+        setParentHeading(null);
+        return;
+      }
+
+      if (SYSTEM_PAGE && SYSTEM_PAGE.style.display && SYSTEM_PAGE.style.display !== "none") {
+        SYSTEM_PAGE.style.display = "none";
+        SYSTEM_PAGE.setAttribute("aria-hidden", "true");
+        SELECTION_PAGE.style.display = "block";
+        const subheader = document.querySelector('.subheader');
+        if (subheader) subheader.style.display = 'none';
+        if (BACK_BTN) BACK_BTN.style.display = 'none';
+        setTimeout(()=>{ const firstBlock = document.querySelector('.block'); if(firstBlock) firstBlock.blur(); },80);
+        currentSystem = "";
+        currentCircumstance = "";
+        openedFromSubmenu = false;
+        setParentHeading(null);
+        return;
+      }
+
+      SELECTION_PAGE.style.display = "block";
+      const subheaderFallback = document.querySelector('.subheader');
+      if (subheaderFallback) subheaderFallback.style.display = 'none';
+      if (BACK_BTN) BACK_BTN.style.display = 'none';
+    }
+
+    document.addEventListener('keydown', function(e){ if (e.key === 'Escape') { e.preventDefault(); goBack(); return; } });
+
+    // safe click-outside handler
+    document.addEventListener('click', function(e){
+      if (!AUTH_CARD || AUTH_CARD.style.display === "none") return;
+      if (!AUTH_CARD.contains(e.target) && !(backBtnSafe && backBtnSafe.contains(e.target))) {
+        goBack();
+      }
+    }, true);
+
+    function openMenu(){
+      const overlay = document.getElementById('overlay'), side = document.getElementById('sideMenu');
+      if (!side || !overlay) return;
+      side.classList.add('open'); side.setAttribute('aria-hidden','false');
+      overlay.classList.add('show'); overlay.setAttribute('aria-hidden','false');
+      buildMenu();
+      setTimeout(()=>{ const first = side.querySelector('button:not([disabled])'); if(first) first.focus(); },60);
+    }
+    function closeMenu(){
+      const overlay = document.getElementById('overlay'), side = document.getElementById('sideMenu');
+      if (!side || !overlay) return;
+      side.classList.remove('open'); side.setAttribute('aria-hidden','true');
+      overlay.classList.remove('show'); overlay.setAttribute('aria-hidden','true');
+      const menuBtn = document.getElementById('menuBtn'); if(menuBtn) menuBtn.focus();
+    }
+    function goHomeFromMenu(){
+      closeMenu();
+      const sel = document.getElementById('selectionPage'), sys = document.getElementById('systemPage');
+      if (sel && sys) { sel.style.display = 'block'; sys.style.display = 'none'; }
+      currentSystem = '';
+      currentCircumstance = '';
+      openedFromSubmenu = false;
+      setParentHeading(null);
+      const subheader = document.querySelector('.subheader'); if (subheader) subheader.style.display='none';
+      if (BACK_BTN) BACK_BTN.style.display='none';
+    }
+
+    function buildMenu(){
+      const listEl = document.getElementById('menuList'), currSysEl = document.getElementById('menuCurrentSystem'), noteEl = document.getElementById('menuSystemNote');
+      if (!listEl || !currSysEl) return;
+      listEl.innerHTML = '';
+      if (!currentSystem || !data || !data[currentSystem]) {
+        currSysEl.textContent = '—';
+        if (noteEl) { noteEl.style.display = 'block'; noteEl.textContent = 'Select a system from the main screen to see its subfolders here.'; }
+        return;
+      }
+      currSysEl.textContent = currentSystem;
+      if (noteEl) noteEl.style.display = 'none';
+      const systemData = data[currentSystem] || {};
+      Object.keys(systemData).forEach(parentKey => {
+        const parentVal = systemData[parentKey];
+        const li = document.createElement('li');
+        li.className = 'menu-parent';
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.textContent = parentKey;
+        btn.setAttribute('aria-expanded','false');
+
+        const parentIsLeaf = (typeof parentVal === 'string') || Array.isArray(parentVal) || isLeafObject(parentVal);
+
+        if (parentIsLeaf) {
+          btn.onclick = () => {
+            setParentHeading(null);
+            currentCircumstance = parentKey;
+            openedFromSubmenu = false;
+            closeMenu();
+            showAuthority(parentKey, true);
+          };
+          btn.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); btn.click(); } };
+          li.appendChild(btn);
+          listEl.appendChild(li);
+          return;
+        }
+
+        btn.onclick = () => {
+          showSubMenu(parentKey);
+          const subheader = document.querySelector('.subheader'); if (subheader) subheader.style.display='flex';
+          if (BACK_BTN) BACK_BTN.style.display='flex';
+          li.classList.toggle('open');
+          const opened = li.classList.contains('open');
+          btn.setAttribute('aria-expanded', String(opened));
+          closeMenu();
+          setTimeout(buildMenu, 80);
+        };
+        btn.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); btn.click(); } };
+
+        li.appendChild(btn);
+
+        const ul = document.createElement('ul'); ul.className = 'submenu-list';
+        Object.keys(parentVal || {}).forEach(childKey => {
+          const childVal = parentVal[childKey];
+          const childLi = document.createElement('li');
+          const childBtn = document.createElement('button');
+          childBtn.type = 'button';
+          childBtn.textContent = childKey;
+
+          const childIsLeaf = (typeof childVal === 'string') || Array.isArray(childVal) || isLeafObject(childVal);
+
+          if (childIsLeaf) {
+            childBtn.onclick = () => {
+              showSubMenu(parentKey);
+              openedFromSubmenu = true;
+              currentCircumstance = parentKey;
+              closeMenu();
+              setTimeout(()=> { showAuthority(childKey); }, 60);
+            };
+            childBtn.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); childBtn.click(); } };
+            childLi.appendChild(childBtn);
+            ul.appendChild(childLi);
+            return;
+          }
+
+          if (typeof childVal === 'object' && childVal !== null) {
+            childBtn.onclick = () => {
+              childLi.classList.toggle('open');
+              li.classList.add('open');
+              const opened = childLi.classList.contains('open');
+              childBtn.setAttribute('aria-expanded', String(opened));
+            };
+            childBtn.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); childBtn.click(); } };
+            childLi.appendChild(childBtn);
+
+            const nestedUL = document.createElement('ul');
+            Object.keys(childVal).forEach(level3Key => {
+              const nli = document.createElement('li');
+              const nbtn = document.createElement('button');
+              nbtn.type = 'button';
+              nbtn.textContent = level3Key;
+              nbtn.onclick = () => {
+                showSubMenu(parentKey);
+                openedFromSubmenu = true;
+                currentCircumstance = parentKey;
+                closeMenu();
+                setTimeout(()=> { showAuthority(level3Key); }, 60);
+              };
+              nbtn.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); nbtn.click(); } };
+              nli.appendChild(nbtn);
+              nestedUL.appendChild(nli);
+            });
+            childLi.appendChild(nestedUL);
+            ul.appendChild(childLi);
+            return;
+          }
+
+          childBtn.disabled = true;
+          childBtn.setAttribute('aria-disabled','true');
+          childLi.appendChild(childBtn);
+          ul.appendChild(childLi);
+        });
+
+        li.appendChild(ul);
+        listEl.appendChild(li);
+      });
+    }
+
+
+    // Open real home page (index.html) when the side-menu Home button is clicked
+document.getElementById('menuHomeBtn').addEventListener('click', function (e) {
+  // prefer a same-origin relative navigation so it works offline / in PWA
+  window.location.href = './index.html';
+});
+
+    window.selectSystem = selectSystem;
+    window.goBack = goBack;
+    window.openMenu = openMenu;
+    window.closeMenu = closeMenu;
+    window.buildMenu = buildMenu;
+
+    window.addEventListener('load', function(){
+      const subheader = document.querySelector('.subheader');
+      if (subheader) { subheader.style.display = 'none'; subheader.setAttribute('aria-hidden', 'true'); }
+      updateSubheaderOffset();
+      setTimeout(()=>{ const first = document.querySelector('.block'); if(first) first.setAttribute('tabindex','0'); }, 40);
+    });
+
+  } catch (err) {
+    console.error('Fatal script error:', err);
+    alert('A script error occurred. Open DevTools Console (F12) and paste the error into chat so I can debug.');
+  }
+})();
+
+
+
+/* Simple toast message function */
+function showToast(message) {
+  const toast = document.createElement('div');
+  toast.textContent = message;
+  toast.style.position = 'fixed';
+  toast.style.bottom = '20px';
+  toast.style.left = '50%';
+  toast.style.transform = 'translateX(-50%)';
+  toast.style.background = '#1976d2'; // accent blue
+  toast.style.color = 'white';
+  toast.style.padding = '10px 18px';
+  toast.style.borderRadius = '8px';
+  toast.style.fontSize = '14px';
+  toast.style.zIndex = '9999';
+  toast.style.opacity = '0';
+  toast.style.transition = 'opacity 0.5s ease';
+  toast.style.boxShadow = '0 2px 8px rgba(0,0,0,0.3)';
+  document.body.appendChild(toast);
+
+  // Fade in
+  requestAnimationFrame(() => (toast.style.opacity = '1'));
+
+  // Fade out and remove after 3 seconds
+  setTimeout(() => {
+    toast.style.opacity = '0';
+    setTimeout(() => toast.remove(), 500);
+  }, 3000);
+}
+
+
+
+
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/documents4runningstaff/sw.js')
+    .then(reg => console.log('SW registered with scope:', reg.scope))
+    .catch(err => console.error('SW registration failed:', err));
+} else {
+  console.warn('Service workers not supported in this browser.');
+}
+</script>
+<footer class="app-footer">
+© <span class="footer-year"></span> Combined Crew Lobby · Madgaon. All Rights Reserved
+</footer>
+<script>
+  document.querySelectorAll(".footer-year").forEach(el => {
+    el.textContent = new Date().getFullYear();
+  });
+  
+  
+  
+  function goLibraryHome(){
+  window.location.href = './index.html';
+}
+
+const systems = [
+  "Absolute Block System",
+  "Automatic Block System",
+  "Miscellaneous"
+];
+
+let currentIndex = 0;
+
+
+function updateSystemUI(){
+  currentSystem = systems[currentIndex];  // ✅ always correct
+  const btn = document.getElementById("currentSystemBtn");
+  if(btn) btn.textContent = currentSystem;
+}
+
+function prevSystem(){
+  currentIndex = (currentIndex - 1 + systems.length) % systems.length;
+  updateSystemUI();
+  selectSystem(currentSystem);
+}
+
+function nextSystem(){
+  currentIndex = (currentIndex + 1) % systems.length;
+  updateSystemUI();
+  selectSystem(currentSystem);
+}
+</script>
+
+
+
+</body>
+</html>
