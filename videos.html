@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<title>Videos</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600&display=swap" rel="stylesheet">
+
+<style>
+.font-rajdhani {
+  font-family: 'Rajdhani', sans-serif;
+}
+
+.video-card {
+  position: relative;
+  height: 96px;
+  background: linear-gradient(135deg, #ffffff, #f1f5f9);
+  border-radius: 18px;
+
+  box-shadow:
+    0 2px 0 rgba(255,255,255,0.9) inset,
+    0 12px 20px rgba(0,0,0,0.12),
+    0 24px 48px rgba(0,0,0,0.18);
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  transition:0.15s;
+  text-decoration:none;
+  color:#0f172a;
+}
+
+/* Accent line */
+.video-card::before{
+  content:"";
+  position:absolute;
+  top:0;
+  left:0;
+  height:5px;
+  width:100%;
+  background:var(--accent);
+}
+
+/* Hover (desktop only) */
+@media (hover:hover){
+  .video-card:hover{
+    transform:translateY(-6px);
+  }
+}
+
+/* Touch effect */
+.video-card:active{
+  transform:scale(0.97);
+}
+
+.video-title{
+  font-size:20px;
+  font-weight:700;
+  letter-spacing:.5px;
+}
+</style>
+
+</head>
+
+<body class="bg-gray-50 text-gray-800">
+
+<!-- HEADER -->
+<header class="sticky top-0 z-50 relative
+  bg-gradient-to-r from-blue-900 via-blue-700 to-blue-900
+  text-white shadow-md">
+
+  <div class="relative px-4 pt-3 pb-5 sm:pb-4">
+
+    <!-- CENTERED TITLE -->
+    <div class="text-center max-w-3xl mx-auto">
+      <h1 class="font-rajdhani text-xl sm:text-3xl md:text-4xl leading-tight font-extrabold">
+        Digital Library
+        <span class="text-yellow-300">for</span>
+        Running Staff
+      </h1>
+
+      <h2 class="font-rajdhani text-3xl sm:text-4xl md:text-5xl font-extrabold mt-2">
+        Videos
+      </h2>
+
+      
+    </div>
+
+    <!-- HAMBURGER (lower on mobile) -->
+    <div class="absolute bottom-2 sm:bottom-3 right-4">
+      <button id="hamburgerBtn"
+        class="bg-gradient-to-b from-blue-900 via-blue-500 to-blue-900 
+               hover:from-blue-800 hover:to-blue-950 
+               text-white p-2 rounded-md 
+               border border-blue-950 
+               shadow-lg 
+               focus:outline-none focus:ring-2 focus:ring-blue-900">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"
+          viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M4 6h16M4 12h16M4 18h16"></path>
+        </svg>
+      </button>
+
+      <div id="dropdownMenu"
+        class="hidden absolute right-0 mt-2 bg-white border border-blue-800 shadow-lg z-50 rounded-md w-52">
+      <a href="index.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Home</a>
+      <a href="latest.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Latest Circulars</a>
+      <a href="so_lobby_selector.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Shed Order</a>
+      <a href="safetycircular.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Safety Circular</a>
+      <a href="counselling.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Counselling Topic</a>
+      <a href="gsr.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">G&amp;SR</a>
+      <a href="wtt.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">WTT</a>
+      <a href="accidentmanual.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Accident Manual</a>
+      <a href="krabooks.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">KRA Books</a>
+      <a href="miscellaneous.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Miscellaneous Books</a>
+      <a href="tsd.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">TSD</a>
+      <a href="operating.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Operating</a>
+      <a href="abnormal.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Abnormal Working</a>
+      <a href="directory.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Phone Directory</a>
+    </div>
+  </div>
+
+</div>
+</header>
+
+
+
+<!-- TITLE -->
+<p class="mt-6 text-xl font-bold text-blue-900 text-center">
+  Select Video Category
+</p>
+
+<!-- GRID -->
+<div class="flex justify-center mt-6">
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 w-full max-w-5xl px-4">
+
+    <!-- LOCO -->
+    <a href="videos_loco.html" class="video-card" style="--accent:#2563eb;">
+      <div class="video-title">🚆 LOCO VIDEOS</div>
+    </a>
+
+    <!-- C&W -->
+    <a href="videos_cw.html" class="video-card" style="--accent:#16a34a;">
+      <div class="video-title">🔧 C&amp;W VIDEOS</div>
+    </a>
+
+    <!-- TRAFFIC -->
+    <a href="videos_traffic.html" class="video-card" style="--accent:#dc2626;">
+      <div class="video-title">🚦 TRAFFIC VIDEOS</div>
+    </a>
+
+    <!-- ROAD -->
+    <a href="videos_road.html" class="video-card" style="--accent:#d97706;">
+      <div class="video-title">🛣️ ROAD LEARNING</div>
+    </a>
+
+    <!-- OTHERS -->
+    <a href="videos_others.html" class="video-card" style="--accent:#7c3aed;">
+      <div class="video-title">📁 OTHERS</div>
+    </a>
+
+  </div>
+</div>
+
+</body>
+</html>
