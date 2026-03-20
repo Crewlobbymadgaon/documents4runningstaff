@@ -63,10 +63,27 @@ body {
 .section.active{display:block;}
 
 .thumb{
+  display:flex;
+  align-items:center;   /* 🔥 ADD THIS */
+  gap:12px;
   background:#fff;
   border-radius:12px;
-  overflow:hidden;
-  box-shadow:0 8px 18px rgba(0,0,0,0.12);
+  padding:8px;
+  box-shadow:0 4px 10px rgba(0,0,0,0.1);
+  transition:0.15s;
+  border-bottom:1px solid #e5e7eb;
+}
+
+.thumb:active{
+  transform:scale(0.97);
+  background:#f1f5f9;
+}
+
+.thumb img{
+  width:130px;
+  height:75px;
+  object-fit:cover;
+  border-radius:8px;
 }
 
 #navBtn {
@@ -84,6 +101,17 @@ body {
   transform: scale(0.95);
   filter: brightness(0.95);
 }
+
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  line-height: 1.2;   /* improves readability */
+  max-height: 2.4em;  /* keeps height consistent */
+}
+
+
 </style>
 </head>
 
@@ -189,7 +217,7 @@ body {
 <div id="loco" class="section p-4">
 <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 max-w-xl mx-auto">
 
-<div class="lobby-card" style="--accent:#16a34a;" onclick="show('diesel','Diesel Loco')">
+<div class="lobby-card" style="--accent:#16a34a;" onclick="show('dieselMenu','Diesel Loco')">
   <div class="lobby-title">🚆 DIESEL</div>
 </div>
 
@@ -198,6 +226,28 @@ body {
 </div>
 
 </div>
+</div>
+
+<!-- ================= DIESEL ================= -->
+<div id="dieselMenu" class="section p-4">
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 max-w-xl mx-auto">
+
+    <div class="lobby-card" style="--accent:#f59e0b;"
+         onclick="show('alco','ALCO Loco')">
+      <div class="lobby-title">🚆 ALCO</div>
+    </div>
+
+    <div class="lobby-card" style="--accent:#7c3aed;"
+         onclick="show('hhp','HHP Loco')">
+      <div class="lobby-title">🚆 HHP</div>
+    </div>
+
+    <div class="lobby-card" style="--accent:#2d43bd;"
+         onclick="show('wdg','WDG 4G/6G')">
+      <div class="lobby-title">🚆 WDG 4G/6G</div>
+    </div>
+
+  </div>
 </div>
 
 <!-- ================= ELECTRIC ================= -->
@@ -214,6 +264,11 @@ body {
       <div class="lobby-title">⚡ THREE PHASE</div>
     </div>
 
+    <div class="lobby-card" style="--accent:#7c3aed;"
+         onclick="show('wag12','WAG 12')">
+      <div class="lobby-title">⚡ WAG 12</div>
+    </div>
+
   </div>
 </div>
 
@@ -223,35 +278,49 @@ body {
 
 
 
-<!-- ================= DIESEL VIDEOS ================= -->
-<div id="diesel" class="section p-4">
-<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+<!-- ================= ALCO ================= -->
+<div id="alco" class="section p-4">
+  <div class="flex flex-col gap-3 max-w-2xl mx-auto"></div>
 </div>
+
+<!-- ================= HHP ================= -->
+<div id="hhp" class="section p-4">
+  <div class="flex flex-col gap-3 max-w-2xl mx-auto"></div>
+</div>
+
+<!-- ================= WDG ================= -->
+<div id="wdg" class="section p-4">
+  <div class="flex flex-col gap-3 max-w-2xl mx-auto"></div>
 </div>
 
 <!-- ================= CONVENTIONAL ================= -->
 <div id="conventional" class="section p-4">
-  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"></div>
+<div class="flex flex-col gap-3 max-w-2xl mx-auto"></div>
 </div>
 
 <!-- ================= THREE PHASE ================= -->
 <div id="three" class="section p-4">
-  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"></div>
+<div class="flex flex-col gap-3 max-w-2xl mx-auto"></div>
+</div>
+
+<!-- ================= WAG12 ================= -->
+<div id="wag12" class="section p-4">
+  <div class="flex flex-col gap-3 max-w-2xl mx-auto"></div>
 </div>
 
 <!-- ================= TRAFFIC ================= -->
 <div id="traffic" class="section p-4">
-  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"></div>
+<div class="flex flex-col gap-3 max-w-2xl mx-auto"></div>
 </div>
 
 <!-- ================= C&W ================= -->
 <div id="cw" class="section p-4">
-  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"></div>
+<div class="flex flex-col gap-3 max-w-2xl mx-auto"></div>
 </div>
 
 <!-- ================= ROAD ================= -->
 <div id="road" class="section p-4">
-  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"></div>
+<div class="flex flex-col gap-3 max-w-2xl mx-auto"></div>
 </div>
 
 
@@ -323,10 +392,14 @@ function getTitle(id){
   const titles = {
     main: "Videos",
     loco: "Loco Videos",
-    diesel: "Diesel Loco",
     electric: "Electric Loco",
     conventional: "Conventional Loco",
     three: "Three Phase",
+    alco: "ALCO Loco",
+    hhp: "HHP Loco",
+    wdg: "WDG 4G/6G",
+    wag12: "WAG 12",
+    dieselMenu: "Diesel Loco",
 
     // 🔥 ADD THESE
     traffic: "Traffic Videos",
@@ -454,8 +527,29 @@ document.addEventListener("keydown", (e) => {
 });
 
 const videoLibrary = {
-  diesel: [
-    { id: "dQw4w9WgXcQ", title: "Diesel Basics", desc: "Intro to diesel loco" }
+
+  alco: [
+    { id: "xxx", title: "ALCO", desc: "..." }
+  ],
+
+  hhp: [
+
+    { id: "brTs0zKfaNM", title: "HHP Loco", desc: "Introduction & General Arrangement" },
+    { id: "U5U2tZi4Em4", title: "HHP Loco", desc: "Fuel Oil System" },
+    { id: "cNWkDI799PM", title: "HHP Loco", desc: "Fuel Oil System - Animation" },
+    { id: "9S1WmReeRmM", title: "HHP Loco", desc: "Lube Oil System" },
+    { id: "QKK2IMVbeNI", title: "HHP Loco", desc: "Cooling Water System" },
+    { id: "gvGpodAsDUg", title: "HHP Loco", desc: "Forced Air System" },
+    { id: "wQLLagM74AM", title: "HHP Loco", desc: "Cranking to Motoring & Dynamic Braking - Animation" },
+    { id: "TwXiPpLozRM", title: "HHP Loco", desc: "Power Distribution" },
+    { id: "z5id3ba1Kb4", title: "HHP Loco", desc: "Undergear - Parts & Location" },
+    { id: "A-cFW6C1ZHA", title: "HHP Loco", desc: "MR Pressure - Trouble Shooting" },
+    { id: "ReEjbxnAvso", title: "HHP Loco", desc: "MR Pressure - Trouble Shooting" },
+    { id: "k_5tJ_dvt_4", title: "HHP Loco", desc: "Dead Loco - Set up" }
+  ],
+
+  wdg: [
+    { id: "xxx", title: "WDG", desc: "..." }
   ],
 
   conventional: [
@@ -465,6 +559,10 @@ const videoLibrary = {
 
   three: [
     { id: "dQw4w9WgXcQ", title: "3 Phase Basics", desc: "Intro" }
+  ],
+
+  wag12: [
+    { id: "xxx", title: "WAG 12", desc: "..." }
   ],
 
 traffic: [
@@ -494,7 +592,7 @@ road: [
 
 
 function renderVideos(sectionId, videos){
-  const container = document.querySelector(`#${sectionId} .grid`);
+  const container = document.querySelector(`#${sectionId} > div`);
 
   // 🔥 SAFETY CHECK (VERY IMPORTANT)
   if(!container){
@@ -512,29 +610,35 @@ function renderVideos(sectionId, videos){
     return;
   }
 
-  container.innerHTML = videos.map(v => `
-    <div onclick="openVideo('${v.id}')"
-         class="thumb cursor-pointer relative group hover:scale-[1.03] transition">
+container.innerHTML = videos.map(v => `
+  <div onclick="openVideo('${v.id}')"
+       class="thumb cursor-pointer">
 
-      <img src="https://img.youtube.com/vi/${v.id}/hqdefault.jpg"
-           onerror="this.src='https://via.placeholder.com/320x180?text=No+Preview'"
-           class="w-full">
+    <!-- THUMBNAIL -->
+    <div class="relative w-[130px] h-[75px]">
+      <img src="https://img.youtube.com/vi/${v.id}/hqdefault.jpg">
 
-      <!-- ▶ PLAY ICON -->
+      <!-- ▶ PLAY -->
       <div class="absolute inset-0 flex items-center justify-center">
-        <div class="bg-black/60 rounded-full p-3 group-hover:scale-110 transition">
+        <div class="bg-black/60 rounded-full p-1 text-white text-xs">
           ▶
         </div>
       </div>
-
-      <!-- TEXT -->
-      <div class="p-3 text-center">
-        <div class="font-bold text-sm">${v.title}</div>
-        <div class="text-xs text-gray-600 mt-1">${v.desc}</div>
-      </div>
-
     </div>
-  `).join("");
+
+    <!-- TEXT -->
+   <div class="flex-1">
+  <div class="font-semibold text-sm sm:text-base md:text-lg text-gray-900 leading-tight line-clamp-2">
+    ${v.desc}
+  </div>
+
+  <div class="text-sm sm:text-base text-gray-700 mt-1 leading-snug sm:leading-relaxed line-clamp-2">
+    ${v.title}
+  </div>
+</div>
+
+  </div>
+`).join("");
 }
 
 window.addEventListener("DOMContentLoaded", () => {
