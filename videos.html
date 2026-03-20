@@ -71,6 +71,7 @@ body {
 
 #navBtn {
   -webkit-tap-highlight-color: transparent; /* 🔥 removes blue flash */
+  background-image: linear-gradient(to bottom, #1e3a8a, #3b82f6, #1e3a8a);
 }
 
 #navBtn:focus {
@@ -78,8 +79,10 @@ body {
   box-shadow: none;
 }
 
+
 #navBtn:active {
   transform: scale(0.95);
+  filter: brightness(0.95);
 }
 </style>
 </head>
@@ -92,9 +95,8 @@ body {
 
     <div class="absolute bottom-2 sm:bottom-3 left-4">
   <button id="navBtn"
-  class="bg-gradient-to-b from-blue-900 via-blue-500 to-blue-900 
-         hover:from-blue-800 hover:to-blue-950 
-         text-white p-2 rounded-md 
+
+  class="text-white p-2 rounded-md 
          border border-blue-950 
          shadow-lg 
          focus:outline-none focus:ring-0 active:outline-none">
@@ -376,9 +378,8 @@ document.querySelectorAll(".footer-year").forEach(el => {
   el.textContent = new Date().getFullYear();
 });
 
-
 navBtn.addEventListener("click", () => {
-  navBtn.blur(); // 🔥 removes focus after click
+  navBtn.blur();
 });
 </script>
 </body>
