@@ -55,8 +55,10 @@ body {
 }
 
 .lobby-title{
-  font-size:20px;
-  font-weight:700;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 20px;   /* keep your smaller size */
+  font-weight: 700;
+  letter-spacing: 0.5px;
 }
 
 .section{display:none;}
@@ -325,17 +327,26 @@ body {
 
 
 
-<div id="videoModal" onclick="closeVideo()"
+<div id="videoModal"
      class="hidden fixed inset-0 bg-black/80 flex items-center justify-center z-50">
 
-  <!-- 🔥 STOP CLICK PROPAGATION -->
-  <div class="relative w-[90%] max-w-3xl" onclick="event.stopPropagation()">
-    
+  <div class="relative w-[90%] max-w-3xl">
+
     <!-- CLOSE BUTTON -->
-    <button onclick="closeVideo()" class="absolute -top-10 right-0 text-white text-2xl">✕</button>
+    <button onclick="closeVideo()"
+      class="absolute -top-10 right-0 text-white text-3xl font-bold">
+      ✕
+    </button>
+
+    <!-- LOADER -->
+    <div id="videoLoader"
+      class="absolute inset-0 flex items-center justify-center text-white text-lg font-semibold">
+      Loading video...
+    </div>
 
     <!-- VIDEO -->
-    <iframe id="videoFrame" class="w-full aspect-video rounded-lg max-h-[80vh]"
+    <iframe id="videoFrame"
+      class="w-full aspect-video rounded-lg max-h-[80vh]"
       src="" frameborder="0"
       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
       allowfullscreen>
@@ -507,18 +518,32 @@ navBtn.addEventListener("click", () => {
 
 <script>
 function openVideo(id){
-  document.getElementById("videoModal").classList.remove("hidden");
-  document.getElementById("videoFrame").src =
-    "https://www.youtube.com/embed/" + id + "?autoplay=1";
 
-  document.body.style.overflow = "hidden"; // ✅ ADD
+  document.getElementById("videoModal").classList.remove("hidden");
+
+  // SHOW loader
+  document.getElementById("videoLoader").style.display = "flex";
+
+  const iframe = document.getElementById("videoFrame");
+
+  iframe.src = "https://www.youtube.com/embed/" + id + "?autoplay=1";
+
+  // HIDE loader after load
+  iframe.onload = () => {
+    document.getElementById("videoLoader").style.display = "none";
+  };
+
+  document.body.style.overflow = "hidden";
 }
 
 function closeVideo(){
   document.getElementById("videoModal").classList.add("hidden");
   document.getElementById("videoFrame").src = "";
 
-  document.body.style.overflow = ""; // ✅ ADD
+  // reset loader
+  document.getElementById("videoLoader").style.display = "flex";
+
+  document.body.style.overflow = "";
 }
 
 
@@ -626,8 +651,7 @@ container.innerHTML = videos.map(v => `
       </div>
     </div>
 
-    <!-- TEXT -->
-  <div class="flex-1">
+    <div class="flex-1">
 
   <!-- DESC (make clearly bold on all devices) -->
   <div class="font-bold text-base sm:text-base md:text-lg text-gray-900 leading-tight line-clamp-2">
