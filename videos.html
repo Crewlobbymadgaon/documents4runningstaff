@@ -627,14 +627,18 @@ container.innerHTML = videos.map(v => `
     </div>
 
     <!-- TEXT -->
-   <div class="flex-1">
-  <div class="font-semibold text-sm sm:text-base md:text-lg text-gray-900 leading-tight line-clamp-2">
+  <div class="flex-1">
+
+  <!-- DESC (make clearly bold on all devices) -->
+  <div class="font-bold text-base sm:text-base md:text-lg text-gray-900 leading-tight line-clamp-2">
     ${v.desc}
   </div>
 
+  <!-- TITLE -->
   <div class="text-sm sm:text-base text-gray-700 mt-1 leading-snug sm:leading-relaxed line-clamp-2">
     ${v.title}
   </div>
+
 </div>
 
   </div>
