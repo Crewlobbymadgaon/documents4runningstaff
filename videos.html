@@ -164,25 +164,25 @@ body {
 
 <!-- ================= MAIN ================= -->
 <div id="main" class="section active p-4">
-<div class="grid grid-cols-1 sm:grid-cols-2 gap-5 max-w-5xl mx-auto">
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 max-w-6xl lg:max-w-7xl mx-auto">
 
-<div class="lobby-card" style="--accent:#2563eb;" onclick="show('loco','Loco Videos')">
-  <div class="lobby-title">🚆 LOCO VIDEOS</div>
-</div>
+    <div class="lobby-card" style="--accent:#2563eb;" onclick="show('loco','Loco Videos')">
+      <div class="lobby-title">🚆 LOCO VIDEOS</div>
+    </div>
 
-<div class="lobby-card" style="--accent:#dc2626;">
-  <div class="lobby-title">🚦 TRAFFIC VIDEOS</div>
-</div>
+    <div class="lobby-card" style="--accent:#dc2626;" onclick="show('traffic','Traffic Videos')">
+      <div class="lobby-title">🚦 TRAFFIC VIDEOS</div>
+    </div>
 
-<div class="lobby-card" style="--accent:#16a34a;">
-  <div class="lobby-title">🔧 C&W VIDEOS</div>
-</div>
+    <div class="lobby-card" style="--accent:#16a34a;" onclick="show('cw','C&W Videos')">
+      <div class="lobby-title">🔧 C&W VIDEOS</div>
+    </div>
 
-<div class="lobby-card" style="--accent:#d97706;">
-  <div class="lobby-title">🛣️ ROAD LEARNING</div>
-</div>
+    <div class="lobby-card" style="--accent:#d97706;" onclick="show('road','Road Learning')">
+      <div class="lobby-title">🛣️ ROAD LEARNING</div>
+    </div>
 
-</div>
+  </div>
 </div>
 
 <!-- ================= LOCO ================= -->
@@ -202,58 +202,94 @@ body {
 
 <!-- ================= ELECTRIC ================= -->
 <div id="electric" class="section p-4">
-<div class="grid grid-cols-1 sm:grid-cols-2 gap-5 max-w-xl mx-auto">
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 max-w-xl mx-auto">
 
-<div class="lobby-card" style="--accent:#f59e0b;" onclick="show('conventional','Conventional Loco')">
-  <div class="lobby-title">⚡ CONVENTIONAL</div>
+    <div class="lobby-card" style="--accent:#f59e0b;"
+         onclick="show('conventional','Conventional Loco')">
+      <div class="lobby-title">⚡ CONVENTIONAL</div>
+    </div>
+
+    <div class="lobby-card" style="--accent:#7c3aed;"
+         onclick="show('three','Three Phase')">
+      <div class="lobby-title">⚡ THREE PHASE</div>
+    </div>
+
+  </div>
 </div>
 
-<div class="lobby-card" style="--accent:#7c3aed;" onclick="show('three','Three Phase')">
-  <div class="lobby-title">⚡ THREE PHASE</div>
-</div>
 
-</div>
-</div>
+
+
+
+
 
 <!-- ================= DIESEL VIDEOS ================= -->
 <div id="diesel" class="section p-4">
 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-
-<a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank" class="thumb">
-  <img src="https://img.youtube.com/vi/dQw4w9WgXcQ/hqdefault.jpg">
-  <div class="p-2 text-sm font-bold text-center">Diesel Basics</div>
-</a>
-
 </div>
 </div>
 
 <!-- ================= CONVENTIONAL ================= -->
-<div id="conventional" class="section p-4 text-center font-bold">
-Add Conventional Videos
+<div id="conventional" class="section p-4">
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"></div>
 </div>
 
 <!-- ================= THREE PHASE ================= -->
-<div id="three" class="section p-4 text-center font-bold">
-Add Three Phase Videos
+<div id="three" class="section p-4">
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"></div>
 </div>
 
+<!-- ================= TRAFFIC ================= -->
+<div id="traffic" class="section p-4">
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"></div>
+</div>
+
+<!-- ================= C&W ================= -->
+<div id="cw" class="section p-4">
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"></div>
+</div>
+
+<!-- ================= ROAD ================= -->
+<div id="road" class="section p-4">
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"></div>
+</div>
+
+
+
+<div id="videoModal" onclick="closeVideo()"
+     class="hidden fixed inset-0 bg-black/80 flex items-center justify-center z-50">
+
+  <!-- 🔥 STOP CLICK PROPAGATION -->
+  <div class="relative w-[90%] max-w-3xl" onclick="event.stopPropagation()">
+    
+    <!-- CLOSE BUTTON -->
+    <button onclick="closeVideo()" class="absolute -top-10 right-0 text-white text-2xl">✕</button>
+
+    <!-- VIDEO -->
+    <iframe id="videoFrame" class="w-full aspect-video rounded-lg max-h-[80vh]"
+      src="" frameborder="0"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowfullscreen>
+    </iframe>
+
+  </div>
+</div>
 <script>
 let historyStack = ['main'];
 
 /* ---------------- NAVIGATION ---------------- */
 
 function show(section, title){
+  closeVideo(); 
+
   document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
   document.getElementById(section).classList.add('active');
 
-  if(title){
-    document.getElementById("pageTitle").innerText = title;
-  }
+  // 🔥 ALWAYS use central title system
+  document.getElementById("pageTitle").innerText = getTitle(section);
 
   if(historyStack[historyStack.length - 1] !== section){
     historyStack.push(section);
-
-    // ✅ ADD THIS LINE (CRITICAL)
     window.history.pushState({section: section}, '', '');
   }
 
@@ -261,6 +297,14 @@ function show(section, title){
 }
 
 function goBack(){
+
+  // 🔥 If video open → close it first
+  const modal = document.getElementById("videoModal");
+  if(!modal.classList.contains("hidden")){
+    closeVideo();
+    return;
+  }
+
   if(historyStack.length > 1){
     historyStack.pop();
 
@@ -282,7 +326,12 @@ function getTitle(id){
     diesel: "Diesel Loco",
     electric: "Electric Loco",
     conventional: "Conventional Loco",
-    three: "Three Phase"
+    three: "Three Phase",
+
+    // 🔥 ADD THESE
+    traffic: "Traffic Videos",
+    cw: "C&W Videos",
+    road: "Road Learning"
   };
   return titles[id] || "Videos";
 }
@@ -380,6 +429,120 @@ document.querySelectorAll(".footer-year").forEach(el => {
 
 navBtn.addEventListener("click", () => {
   navBtn.blur();
+});
+</script>
+
+<script>
+function openVideo(id){
+  document.getElementById("videoModal").classList.remove("hidden");
+  document.getElementById("videoFrame").src =
+    "https://www.youtube.com/embed/" + id + "?autoplay=1";
+
+  document.body.style.overflow = "hidden"; // ✅ ADD
+}
+
+function closeVideo(){
+  document.getElementById("videoModal").classList.add("hidden");
+  document.getElementById("videoFrame").src = "";
+
+  document.body.style.overflow = ""; // ✅ ADD
+}
+
+
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") closeVideo();
+});
+
+const videoLibrary = {
+  diesel: [
+    { id: "dQw4w9WgXcQ", title: "Diesel Basics", desc: "Intro to diesel loco" }
+  ],
+
+  conventional: [
+    { id: "3JZ_D3ELwOQ", title: "Conventional Intro", desc: "Overview" },
+    { id: "kxopViU98Xo", title: "Control System", desc: "Operations" }
+  ],
+
+  three: [
+    { id: "dQw4w9WgXcQ", title: "3 Phase Basics", desc: "Intro" }
+  ],
+
+traffic: [
+  {
+    id: "3JZ_D3ELwOQ",
+    title: "Signal Basics",
+    desc: "Understanding railway signals"
+  }
+],
+
+cw: [
+  {
+    id: "kxopViU98Xo",
+    title: "Brake System",
+    desc: "Air brake working"
+  }
+],
+
+road: [
+  {
+    id: "dQw4w9WgXcQ",
+    title: "Route Learning",
+    desc: "Track and route knowledge"
+  }
+]
+};
+
+
+function renderVideos(sectionId, videos){
+  const container = document.querySelector(`#${sectionId} .grid`);
+
+  // 🔥 SAFETY CHECK (VERY IMPORTANT)
+  if(!container){
+    console.warn("Container not found for:", sectionId);
+    return;
+  }
+
+  // 🔥 EMPTY CHECK (optional but good)
+  if(!videos || videos.length === 0){
+    container.innerHTML = `
+      <div class="col-span-full text-center text-gray-500 font-semibold py-10">
+        No videos available
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = videos.map(v => `
+    <div onclick="openVideo('${v.id}')"
+         class="thumb cursor-pointer relative group hover:scale-[1.03] transition">
+
+      <img src="https://img.youtube.com/vi/${v.id}/hqdefault.jpg"
+           onerror="this.src='https://via.placeholder.com/320x180?text=No+Preview'"
+           class="w-full">
+
+      <!-- ▶ PLAY ICON -->
+      <div class="absolute inset-0 flex items-center justify-center">
+        <div class="bg-black/60 rounded-full p-3 group-hover:scale-110 transition">
+          ▶
+        </div>
+      </div>
+
+      <!-- TEXT -->
+      <div class="p-3 text-center">
+        <div class="font-bold text-sm">${v.title}</div>
+        <div class="text-xs text-gray-600 mt-1">${v.desc}</div>
+      </div>
+
+    </div>
+  `).join("");
+}
+
+window.addEventListener("DOMContentLoaded", () => {
+
+  Object.keys(videoLibrary).forEach(section => {
+    renderVideos(section, videoLibrary[section]);
+  });
+
 });
 </script>
 </body>
