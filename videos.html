@@ -79,12 +79,12 @@ body {
 
     <div class="absolute bottom-2 sm:bottom-3 left-4">
   <button id="navBtn"
-    class="bg-gradient-to-b from-blue-900 via-blue-500 to-blue-900 
-           hover:from-blue-800 hover:to-blue-950 
-           text-white p-2 rounded-md 
-           border border-blue-950 
-           shadow-lg 
-           focus:outline-none">
+  class="bg-gradient-to-b from-blue-900 via-blue-500 to-blue-900 
+         hover:from-blue-800 hover:to-blue-950 
+         text-white p-2 rounded-md 
+         border border-blue-950 
+         shadow-lg 
+         focus:outline-none focus:ring-0 active:outline-none">
 
     <!-- ICON WILL CHANGE -->
     <svg id="navIcon" class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"
@@ -361,6 +361,11 @@ window.addEventListener("DOMContentLoaded", updateNavButton);
 /* Footer year */
 document.querySelectorAll(".footer-year").forEach(el => {
   el.textContent = new Date().getFullYear();
+});
+
+
+navBtn.addEventListener("click", () => {
+  navBtn.blur(); // 🔥 removes focus after click
 });
 </script>
 </body>
