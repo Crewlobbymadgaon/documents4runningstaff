@@ -7,18 +7,23 @@
 <title>Videos</title>
 
 <script src="https://cdn.tailwindcss.com"></script>
-
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600&display=swap" rel="stylesheet">
 
 <style>
-.font-rajdhani {
-  font-family: 'Rajdhani', sans-serif;
+  :root {
+  --footer-height: 48px;
 }
 
-.video-card {
+body {
+  padding-bottom: var(--footer-height);
+}
+.font-rajdhani { font-family: 'Rajdhani', sans-serif; }
+
+/* SAME AS SHED ORDER CARD */
+.lobby-card {
   position: relative;
   height: 96px;
-  background: linear-gradient(135deg, #ffffff, #f1f5f9);
+  background: linear-gradient(135deg,#fff,#f1f5f9);
   border-radius: 18px;
 
   box-shadow:
@@ -30,13 +35,12 @@
   align-items:center;
   justify-content:center;
 
-  transition:0.15s;
+  transition:.12s;
   text-decoration:none;
   color:#0f172a;
 }
 
-/* Accent line */
-.video-card::before{
+.lobby-card::before{
   content:"";
   position:absolute;
   top:0;
@@ -46,51 +50,65 @@
   background:var(--accent);
 }
 
-/* Hover (desktop only) */
-@media (hover:hover){
-  .video-card:hover{
-    transform:translateY(-6px);
-  }
+.lobby-card:active{
+  transform:scale(0.96);
 }
 
-/* Touch effect */
-.video-card:active{
-  transform:scale(0.97);
-}
-
-.video-title{
+.lobby-title{
   font-size:20px;
   font-weight:700;
-  letter-spacing:.5px;
+}
+
+.section{display:none;}
+.section.active{display:block;}
+
+.thumb{
+  background:#fff;
+  border-radius:12px;
+  overflow:hidden;
+  box-shadow:0 8px 18px rgba(0,0,0,0.12);
 }
 </style>
-
 </head>
 
 <body class="bg-gray-50 text-gray-800">
 
-<!-- HEADER -->
-<header class="sticky top-0 z-50 relative
-  bg-gradient-to-r from-blue-900 via-blue-700 to-blue-900
-  text-white shadow-md">
+<header class="sticky top-0 z-50 bg-gradient-to-r from-blue-900 via-blue-700 to-blue-900 text-white shadow-md">
 
   <div class="relative px-4 pt-3 pb-5 sm:pb-4">
 
-    <!-- CENTERED TITLE -->
+    <div class="absolute bottom-2 sm:bottom-3 left-4">
+  <button id="navBtn"
+    class="bg-gradient-to-b from-blue-900 via-blue-500 to-blue-900 
+           hover:from-blue-800 hover:to-blue-950 
+           text-white p-2 rounded-md 
+           border border-blue-950 
+           shadow-lg 
+           focus:outline-none">
+
+    <!-- ICON WILL CHANGE -->
+    <svg id="navIcon" class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"
+      viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round"
+        d="M3 9.75L12 3l9 6.75v9.75A1.5 1.5 0 0 1 19.5 21h-3.75V13.5h-7.5V21H4.5A1.5 1.5 0 0 1 3 19.5V9.75Z"/>
+    </svg>
+
+  </button>
+</div>
+
+    <!-- 🔹 TITLE -->
     <div class="text-center max-w-3xl mx-auto">
       <h1 class="font-rajdhani text-xl sm:text-3xl md:text-4xl leading-tight font-extrabold">
-        Digital Library
-        <span class="text-yellow-300">for</span>
-        Running Staff
+        Digital Library <span class="text-yellow-300">for</span> Running Staff
       </h1>
 
-      <h2 class="font-rajdhani text-3xl sm:text-4xl md:text-5xl font-extrabold mt-2">
+      <h2 id="pageTitle"
+          class="font-rajdhani text-3xl sm:text-4xl md:text-5xl font-extrabold mt-2">
         Videos
       </h2>
-
-      
     </div>
 
+    <!-- 🔹 HAMBURGER (RIGHT - SAME STYLE) -->
     <!-- HAMBURGER (lower on mobile) -->
     <div class="absolute bottom-2 sm:bottom-3 right-4">
       <button id="hamburgerBtn"
@@ -126,47 +144,204 @@
     </div>
   </div>
 
-</div>
+  </div>
 </header>
 
+<!-- ================= MAIN ================= -->
+<div id="main" class="section active p-4">
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-5 max-w-5xl mx-auto">
 
-
-<!-- TITLE -->
-<p class="mt-6 text-xl font-bold text-blue-900 text-center">
-  Select Video Category
-</p>
-
-<!-- GRID -->
-<div class="flex justify-center mt-6">
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 w-full max-w-5xl px-4">
-
-    <!-- LOCO -->
-    <a href="videos_loco.html" class="video-card" style="--accent:#2563eb;">
-      <div class="video-title">🚆 LOCO VIDEOS</div>
-    </a>
-
-    <!-- C&W -->
-    <a href="videos_cw.html" class="video-card" style="--accent:#16a34a;">
-      <div class="video-title">🔧 C&amp;W VIDEOS</div>
-    </a>
-
-    <!-- TRAFFIC -->
-    <a href="videos_traffic.html" class="video-card" style="--accent:#dc2626;">
-      <div class="video-title">🚦 TRAFFIC VIDEOS</div>
-    </a>
-
-    <!-- ROAD -->
-    <a href="videos_road.html" class="video-card" style="--accent:#d97706;">
-      <div class="video-title">🛣️ ROAD LEARNING</div>
-    </a>
-
-    <!-- OTHERS -->
-    <a href="videos_others.html" class="video-card" style="--accent:#7c3aed;">
-      <div class="video-title">📁 OTHERS</div>
-    </a>
-
-  </div>
+<div class="lobby-card" style="--accent:#2563eb;" onclick="show('loco','Loco Videos')">
+  <div class="lobby-title">🚆 LOCO VIDEOS</div>
 </div>
 
+<div class="lobby-card" style="--accent:#dc2626;">
+  <div class="lobby-title">🚦 TRAFFIC VIDEOS</div>
+</div>
+
+<div class="lobby-card" style="--accent:#16a34a;">
+  <div class="lobby-title">🔧 C&W VIDEOS</div>
+</div>
+
+<div class="lobby-card" style="--accent:#d97706;">
+  <div class="lobby-title">🛣️ ROAD LEARNING</div>
+</div>
+
+</div>
+</div>
+
+<!-- ================= LOCO ================= -->
+<div id="loco" class="section p-4">
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-5 max-w-xl mx-auto">
+
+<div class="lobby-card" style="--accent:#16a34a;" onclick="show('diesel','Diesel Loco')">
+  <div class="lobby-title">🚆 DIESEL</div>
+</div>
+
+<div class="lobby-card" style="--accent:#2563eb;" onclick="show('electric','Electric Loco')">
+  <div class="lobby-title">⚡ ELECTRIC</div>
+</div>
+
+</div>
+</div>
+
+<!-- ================= ELECTRIC ================= -->
+<div id="electric" class="section p-4">
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-5 max-w-xl mx-auto">
+
+<div class="lobby-card" style="--accent:#f59e0b;" onclick="show('conventional','Conventional Loco')">
+  <div class="lobby-title">⚡ CONVENTIONAL</div>
+</div>
+
+<div class="lobby-card" style="--accent:#7c3aed;" onclick="show('three','Three Phase')">
+  <div class="lobby-title">⚡ THREE PHASE</div>
+</div>
+
+</div>
+</div>
+
+<!-- ================= DIESEL VIDEOS ================= -->
+<div id="diesel" class="section p-4">
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+
+<a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank" class="thumb">
+  <img src="https://img.youtube.com/vi/dQw4w9WgXcQ/hqdefault.jpg">
+  <div class="p-2 text-sm font-bold text-center">Diesel Basics</div>
+</a>
+
+</div>
+</div>
+
+<!-- ================= CONVENTIONAL ================= -->
+<div id="conventional" class="section p-4 text-center font-bold">
+Add Conventional Videos
+</div>
+
+<!-- ================= THREE PHASE ================= -->
+<div id="three" class="section p-4 text-center font-bold">
+Add Three Phase Videos
+</div>
+
+<script>
+let historyStack = ['main'];
+
+function show(section, title){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.getElementById(section).classList.add('active');
+
+  if(title){
+    document.getElementById("pageTitle").innerText = title;
+  }
+
+  if(historyStack[historyStack.length - 1] !== section){
+    historyStack.push(section);
+  }
+
+  updateNavButton(); // 🔥 ADD THIS
+}
+
+function goBack(){
+  if(historyStack.length > 1){
+    historyStack.pop();
+
+    let prev = historyStack[historyStack.length - 1];
+
+    document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(prev).classList.add('active');
+
+    document.getElementById("pageTitle").innerText = getTitle(prev);
+
+    updateNavButton(); // 🔥 ADD THIS
+  }
+}
+
+function getTitle(id){
+  const titles = {
+    main: "Videos",
+    loco: "Loco Videos",
+    diesel: "Diesel Loco",
+    electric: "Electric Loco",
+    conventional: "Conventional Loco",
+    three: "Three Phase"
+  };
+  return titles[id] || "Videos";
+}
+
+
+const btn = document.getElementById("hamburgerBtn");
+const menu = document.getElementById("dropdownMenu");
+
+/* Toggle menu */
+btn.addEventListener("click", (e) => {
+  e.stopPropagation(); // prevent outside click trigger
+  menu.classList.toggle("hidden");
+});
+
+/* Close when clicking outside */
+document.addEventListener("click", (e) => {
+  if (!menu.contains(e.target) && !btn.contains(e.target)) {
+    menu.classList.add("hidden");
+  }
+});
+
+/* Close when clicking any menu item */
+menu.querySelectorAll("a").forEach(link => {
+  link.addEventListener("click", () => {
+    menu.classList.add("hidden");
+  });
+});
+
+/* Close on ESC key (desktop) */
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") {
+    menu.classList.add("hidden");
+  }
+});
+
+</script>
+<footer
+  class="fixed bottom-0 left-0 w-full z-40
+         flex items-center justify-center
+         text-xs sm:text-sm
+         text-gray-700
+         bg-white
+         shadow-[0_-2px_8px_rgba(0,0,0,0.08)]
+         h-[var(--footer-height)]">
+© <span class="footer-year ml-1"></span>&nbsp;Combined Crew Lobby · Madgaon. All Rights Reserved
+
+</footer>
+<script>
+  document.querySelectorAll(".footer-year").forEach(el => {
+    el.textContent = new Date().getFullYear();
+  });
+</script>
+<script>
+const navBtn = document.getElementById("navBtn");
+const navIcon = document.getElementById("navIcon");
+
+function updateNavButton(){
+  if(historyStack.length === 1){
+    // HOME ICON
+    navIcon.innerHTML = `
+      <path stroke-linecap="round" stroke-linejoin="round"
+      d="M3 9.75L12 3l9 6.75v9.75A1.5 1.5 0 0 1 19.5 21h-3.75V13.5h-7.5V21H4.5A1.5 1.5 0 0 1 3 19.5V9.75Z"/>
+    `;
+
+    navBtn.onclick = () => {
+      window.location.href = "index.html";
+    };
+
+  } else {
+    // BACK ICON
+    navIcon.innerHTML = `
+      <path stroke-linecap="round" stroke-linejoin="round"
+      d="M15 18l-6-6 6-6"/>
+    `;
+
+    navBtn.onclick = goBack;
+  }
+}
+updateNavButton();
+</script>
 </body>
 </html>
