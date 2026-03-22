@@ -201,7 +201,7 @@ body {
     </div>
 
     <div class="lobby-card" style="--accent:#dc2626;" onclick="show('traffic','Traffic Videos')">
-      <div class="lobby-title">🚦 TRAFFIC VIDEOS</div>
+      <div class="lobby-title">🚦 OPERATING & SAFETY  VIDEOS</div>
     </div>
 
     <div class="lobby-card" style="--accent:#16a34a;" onclick="show('cw','C&W Videos')">
@@ -413,7 +413,7 @@ function getTitle(id){
     dieselMenu: "Diesel Loco",
 
     // 🔥 ADD THESE
-    traffic: "Traffic Videos",
+    traffic: "Operating & Safety Videos",
     cw: "C&W Videos",
     road: "Road Learning"
   };
@@ -554,7 +554,16 @@ document.addEventListener("keydown", (e) => {
 const videoLibrary = {
 
   alco: [
-    { id: "xxx", title: "ALCO", desc: "..." }
+    { id: "qsIEXTNWY-o", title: "WDG 3A", desc: "Front Electrical Control Panel - WDG 3A" },
+    { id: "9QbXZAKF0qA", title: "WDG 3A", desc: "IRAB Pneumatic Panel - WDG 3A" },
+    { id: "CFH9EyQ2RIM", title: "WDG 3A", desc: "IRAB Pneumatic Panel - WDG 3A" },
+    { id: "t4oTE55TmQw", title: "WDG 3A", desc: "Engine Room Equipments - WDG 3A" },
+    { id: "FXPYk62oRus", title: "WDG 3A", desc: "Undergear Equipments - WDG 3A" },
+    { id: "clbiXoUcHO8", title: "WDM 3A", desc: "Undergear Equipments - WDM 3A" },
+    { id: "vbQKExLPCbk", title: "WDM 3A", desc: "MR Charging System - WDM 3A" },
+    { id: "wmBvvMCDu90", title: "WDG 3A", desc: "Loco Pilot Cab - Overview" },
+    { id: "uxofs0c8ekE", title: "WDG 3A", desc: "Engine Starting Procedure" },
+    { id: "CagqmggfcsQ", title: "WDG 3A", desc: "Engine Not Cranking - Trouble Shooting" },
   ],
 
   hhp: [
@@ -567,6 +576,7 @@ const videoLibrary = {
     { id: "gvGpodAsDUg", title: "HHP Loco", desc: "Forced Air System" },
     { id: "wQLLagM74AM", title: "HHP Loco", desc: "Cranking to Motoring & Dynamic Braking - Animation" },
     { id: "TwXiPpLozRM", title: "HHP Loco", desc: "Power Distribution" },
+    { id: "YyDHHZzuWbo", title: "HHP Loco", desc: "Uppergear - Parts & Location" },
     { id: "z5id3ba1Kb4", title: "HHP Loco", desc: "Undergear - Parts & Location" },
     { id: "A-cFW6C1ZHA", title: "HHP Loco", desc: "MR Pressure - Trouble Shooting" },
     { id: "ReEjbxnAvso", title: "HHP Loco", desc: "MR Pressure - Trouble Shooting" },
@@ -583,31 +593,117 @@ const videoLibrary = {
   wdg: [
     { id: "ajOr4HkiQik", title: "WDG 4G Loco", desc: "Loco Pilot Cabin" },
     { id: "I7x2-FtyAvE", title: "WDG 4G Loco", desc: "Engine Cab" },
+    { id: "Vwy0Kt1qAJU", title: "WDG 4G Loco", desc: "Blower Cab" },
+    { id: "CYK3LtKN5Q8", title: "WDG 4G Loco", desc: "Auxiliary Cab" },
+    { id: "fxG-gzJBqZs", title: "WDG 4G Loco", desc: "Radiator Cab" },
+    { id: "Z34Cpkuytkc", title: "WDG 4G Loco", desc: "Undergear Equipments" },
     { id: "fCklt11PqiA", title: "WDG 4G Loco", desc: "Engine Cranking Procedure" },
     { id: "Eh9woI-1sE0", title: "WDG 4G Loco", desc: "Cab Changing Procedure" },
-    { id: "h-7P_58CHsQ", title: "WDG 4G Loco", desc: "Cab Changing Procedure" }
+    { id: "h-7P_58CHsQ", title: "WDG 4G Loco", desc: "Cab Changing Procedure" },
+    { id: "wjWQgVCSE4s", title: "WDG 6G Loco", desc: "Undergear Equipments - WDG 6G" },
+    { id: "CcuXwCWIBeU", title: "WDG 6G Loco", desc: "Radiator Cab - WDG 6G" },
+    { id: "9B6-cjvFk18", title: "WDG 6G Loco", desc: "Operator Cab WDG 4G vs WDG 6G" },
+    { id: "CcuXwCWIBeU", title: "WDG 4G Loco", desc: "Isolation of Traction Motor & Speed Sensor" },
+    { id: "CTbbcqzgrVY", title: "WDG 4G/6G Loco", desc: "TFT Display Operations - Part 1" },
+    { id: "kJbCoC_S78s", title: "WDG 4G/6G Loco", desc: "TFT Display Operations - Part 2" },
+    { id: "sq2_hMNSQxk", title: "WDG 4G/6G Loco", desc: "TFT Display Operations - Part 3" },
+    { id: "GG6TveemTHc", title: "WDG 4G/6G Loco", desc: "Alerter Reset or Isolation Procedure" },
+    { id: "I7DG8eYS0vM", title: "WDG 4G/6G Loco", desc: "Penalty Recovering Procedure" },
+    { id: "J3T_Byl40lI", title: "WDG 4G/6G Loco", desc: "BP Pressure not Building Up - Trouble Shooting" },
+    { id: "kY6qc-a0A14", title: "WDG 4G/6G Loco", desc: "Engine Unable to Load - Trouble Shooting" },
+    { id: "OqOevwmMfqU", title: "WDG 4G/6G Loco", desc: "Engine Not Cranking - Trouble Shooting" },
+    { id: "N1AIXTajxXk", title: "WDG 4G/6G Loco", desc: "Working of Dead Locomotive" },
+    { id: "mMWIX6p6t8s", title: "WDG 4G/6G Loco", desc: "Brake System Fail - Working Procedure" }
+],
+
+  conventional: [
+    { id: "G4IX0Dog-WE", title: "WAG 7", desc: "Under Frame Mechanical Parts - 1" },
+    { id: "nNWE94JP0Wg", title: "WAG 7", desc: "Under Frame Mechanical Parts - 2" },
+    { id: "WLulpXh_fTM", title: "WAG 7", desc: "Cab Changing Procedure - SU" },
+    { id: "83inOR3vgwA", title: "WAG 7", desc: "Cab Changing Procedure - MU" },
+    { id: "Ue8p-PwbdQY", title: "WAG 7", desc: "Manual Control of GR" },
+    { id: "6swSqR_2sK4", title: "WAG 7", desc: "Moisture Drain Out Points" },
     
   ],
 
-  conventional: [
-    { id: "3JZ_D3ELwOQ", title: "Conventional Intro", desc: "Overview" },
-    { id: "kxopViU98Xo", title: "Control System", desc: "Operations" }
-  ],
-
   three: [
-    { id: "dQw4w9WgXcQ", title: "3 Phase Basics", desc: "Intro" }
+    { id: "WxTUnIFkYcg", title: "Three Phase Loco", desc: "Cab Overview" },
+    { id: "GXFVY2NKdhA", title: "Three Phase Loco", desc: "Panel A" },
+    { id: "pAb2huPbF9o", title: "Three Phase Loco", desc: "Panel B" },
+    { id: "AWesNIMkEDQ", title: "Three Phase Loco", desc: "Panel C" },
+    { id: "iaXZVxpuRNc", title: "Three Phase Loco", desc: "Panel D" },
+    { id: "5RSDhKaWJyg", title: "Three Phase Loco", desc: "ALP Emergency Valve (RS Valve)" },
+    { id: "3ZmYOqE4hbs", title: "Three Phase Loco", desc: "Loco Roof Equipment" },
+    { id: "ZblBcXq-ADI", title: "Three Phase Loco", desc: "Underframe Mechanical Parts - 1" },
+    { id: "yBtdoI-M__Q", title: "Three Phase Loco", desc: "Underframe Mechanical Parts - 2" },
+    { id: "yk4KB71ICAI", title: "Three Phase Loco", desc: "Underframe Mechanical Parts - 3" },
+    { id: "Dt_YOcSCHv8", title: "Three Phase Loco", desc: "SB1 Panel" },
+    { id: "RSB_iOBeji4", title: "Three Phase Loco", desc: "SB2 Panel" },
+    { id: "Azcv-CdXSTw", title: "Three Phase Loco", desc: "HB1 Panel" },
+    { id: "uqY2ibKOyqA", title: "Three Phase Loco", desc: "HB2 Panel" },
+    { id: "KgWli7XH5p4", title: "Three Phase Loco", desc: "Different COCs on E70 Pneumatic Panel" },
+    { id: "0U43oCBzOx8", title: "Three Phase Loco", desc: "Different COCs on CCB Pneumatic Panel" },
+    { id: "_LYLCUMub7E", title: "Three Phase Loco", desc: "Panto Selector Switch" },
+    { id: "7BiGwWbNHU4", title: "Three Phase Loco", desc: "Different Pressure Switches in E70 Pneumatic Panel" },
+    { id: "6n6iuXI6rGs", title: "Three Phase Loco", desc: "Different Pressure Switches in CCB Pneumatic Panel" },
+    { id: "P0Ghi4bDJB8", title: "Three Phase Loco", desc: "Medha Make DDU" },
+    { id: "TMz9SB2283U", title: "Three Phase Loco", desc: "ARC Make DDU" },
+    { id: "Or_5CzaK0C8", title: "Three Phase Loco", desc: "Bombardier Make DDU" },
+    { id: "RyLWredvqUw", title: "Three Phase Loco", desc: "Siemens Make DDU" },
+    { id: "5oBBf5sD2wg", title: "Three Phase Loco", desc: "Resetting of Different types of MCB" },
+    { id: "CQm37jJaSTU", title: "Three Phase Loco", desc: "ECPSW" },
+    { id: "6BJ2KijBvEE", title: "Three Phase Loco", desc: "OCR 78 Relay & Trouble Shooting" },
+    { id: "UuS5SfGNaD8", title: "WAP 7", desc: "Modifications (Add.BLDJ, BPVG, HLC Lamp)" },
+    { id: "Gw3kCv1rG4g", title: "Three Phase Loco", desc: "Three Phase Machine Room Blower" },
+    { id: "Fus3qIfgrPw", title: "WAG 9-MU", desc: "LSRPT Lamp" },
+    { id: "OXO4ckPhmYE", title: "Three Phase Loco", desc: "A9 Handle Operation - E70" },
+    { id: "lpZTl5eWTHk", title: "Three Phase Loco", desc: "Cab Changing Procedure - SU" },
+    { id: "W_HaAIUKt4g", title: "Three Phase Loco", desc: "VCD Reset Procedure" },
+    { id: "Q9zWe4G44kc", title: "Three Phase Loco", desc: "BP Overcharge Cycle (LPO) " },
+    { id: "6N9QbH24JKY", title: "Three Phase Loco", desc: "Procedure to check & use of CO2 type fire extinguisher" },
+    { id: "6swSqR_2sK4", title: "Three Phase Loco", desc: "Moisture Drain Out Points" },
+    { id: "nn1oX0j1o5I", title: "WAG 9/7", desc: "VCU Resetting Procedure" },
+    { id: "-_NWrF37lRE", title: "WAG 9-MU", desc: "VCU Resetting Procedure - MU" },
+    { id: "XGBCkCzI57I", title: "WAG 9-MU", desc: "Energisation of WAG 9 - MU" },
+    { id: "LJCdJiNb7RY", title: "WAG 9-MU", desc: "Trailing Mode Opertaion" },
+    { id: "hdN4kfGD5ic", title: "WAG 9-MU", desc: "Fault Detection in Siemens DDU in MU" },
+    { id: "wdHMJZHaSEg", title: "Three Phase Loco", desc: "Banking Mode Setup" },
+    { id: "W49MGul3AXM", title: "Three Phase Loco", desc: "PTDC Operation -Knorr Brake System" },
+    { id: "il8KhPv6eC0", title: "Three Phase Loco", desc: "Inching Mode Operation" },
+    { id: "Pm7tXJow1fY", title: "Three Phase Loco", desc: "Towed Dead Procedure" },
+    { id: "HIDHOdusPq4", title: "Three Phase Loco", desc: "Attaching of Loco with Load" },
+    { id: "RyBvZJbnqCg", title: "Three Phase Loco", desc: "BPEMS Operation" },
+    { id: "9PKt8GjBPco", title: "Three Phase Loco", desc: "Loco Grounding" },
+    { id: "UeLyB65LFB4", title: "WAP 7", desc: "Siemens Make Hotel Load Converter" },
+    { id: "kMB_8krkGFQ", title: "WAG 9-MU", desc: "Key Points to Observe During MU Operation" },
+    { id: "hwlwjK00B6E", title: "Three Phase Loco", desc: "F1001P1 - Fault in Brake Electronics - Trouble Shooting " },
+    { id: "qvq04DtEv1Q", title: "Three Phase Loco", desc: "F0103P1 - Low Pressure Panto/Faulty Panto (CCB2) - Trouble Shooting " },
+    { id: "WsVFifx49n8", title: "Three Phase Loco", desc: "F0103P1 - Low Pressure Panto/Faulty Panto (EP70) - Trouble Shooting " },
+    { id: "KmnLVsCXUIk", title: "Three Phase Loco", desc: "F0108P1 - Primary Over Current - Trouble Shooting " },
+    { id: "AX6IDuaWVzE", title: "Three Phase Loco", desc: "F0102P1 - VCB Stuck in Off Position - Trouble Shooting " },
+    { id: "qvq04DtEv1Q", title: "Three Phase Loco", desc: "F0901P1 - Battery Voltage Too Low - Trouble Shooting " },
+    { id: "_XOWGZ7hBgE", title: "Three Phase Loco", desc: "F0601P1 - Disturbance in Processor BUR1 - Trouble Shooting " },
+    { id: "9iplo_t83c4", title: "Three Phase Loco", desc: "F0107P2 - Demanded Speed can not be achieved - Trouble Shooting " },
+    { id: "1ymKKfrj9Yc", title: "Three Phase Loco", desc: "Fault in Harmonic Filter - Trouble Shooting " },
+    { id: "MtcrEPbKkyo", title: "Three Phase Loco", desc: "BP Not Charging or Not Maintaining - Trouble Shooting " },
+    { id: "qnyBKDEkeWI", title: "Three Phase Loco", desc: "Standard Instructions - 1 " },
+    { id: "Ij0s3Cqu5ZE", title: "Three Phase Loco", desc: "Standard Instructions - 2 " },
+    { id: "LXKS1zbELQo", title: "Three Phase Loco", desc: "Standard Instructions - 3 " },
+    { id: "2V6MUzPHDAo", title: "Three Phase Loco", desc: "Message Displays in Cab Display Unit " },
+    { id: "8QJ-iVfav_c", title: "Three Phase Loco", desc: "BP Continuity Test " },
+    
   ],
+  
 
   wag12: [
     { id: "xxx", title: "WAG 12", desc: "..." }
   ],
 
 traffic: [
-  {
-    id: "3JZ_D3ELwOQ",
-    title: "Signal Basics",
-    desc: "Understanding railway signals"
-  }
+  
+    { id: "9BAeawdDo7w", title: "Safety", desc: "Maximum Speed Limits at YY & Y aspect of the signals by LP" },
+    { id: "CpDdF7Tr630", title: "Safety", desc: "Securing of load in Station/Yard" },
+  
 ],
 
 cw: [
