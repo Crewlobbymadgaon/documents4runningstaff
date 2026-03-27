@@ -5,9 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <title>Digital Library for Running Staff</title>
 
-<link rel="manifest" href="/documents4runningstaff/manifest.json" />
-<link rel="apple-touch-icon" href="/documents4runningstaff/icon-192.png" />
-
+<link rel="manifest" href="/manifest.json" />
+<link rel="apple-touch-icon" href="/icon-192.png" />
 <!-- Font performance -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -527,8 +526,7 @@ document.querySelectorAll(".menu-card").forEach(card => {
       <script>
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
-    navigator.serviceWorker
-      .register("/documents4runningstaff/sw.js")
+    navigator.serviceWorker.register("/sw.js")
       .then(reg => {
         console.log("Service Worker registered", reg.scope);
       })
