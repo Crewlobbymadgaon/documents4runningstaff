@@ -94,6 +94,10 @@ class="px-5 py-2 text-sm font-semibold border-b-4 border-transparent text-gray-6
 <option value="wtt_a">WTT Part A</option>
 <option value="wtt_b">WTT Part B</option>
 </select>
+<select id="headingType" class="border p-2 rounded hidden">
+  <option value="cs">Correction Slip</option>
+  <option value="addendum">Addendum</option>
+</select>
 
 <select id="year" class="border p-2 rounded" onchange="autoSuggestNumber()">
 </select>
@@ -355,10 +359,13 @@ where("year","==",Number(year.value))
 
 if(category.value==="correction_slip"){
 
+if(!headingType.value) return;
+
 q = query(
 collection(db,"documents"),
 where("category","==","correction_slip"),
-where("section","==",section.value)
+where("section","==",section.value),
+where("headingType","==",headingType.value) // ✅ ADD THIS
 );
 
 }
@@ -437,8 +444,14 @@ if(data.category==="safety_circular") return data.circularNo;
 
 if(data.category==="counselling") return data.monthYear;
 
-if(data.category==="correction_slip")
-return "CS "+String(data.slipNo).padStart(2,"0");
+if(data.category==="correction_slip"){
+
+  if(data.headingType === "addendum"){
+    return "Addendum No. " + data.slipNo;
+  }
+
+  return "CS " + String(data.slipNo).padStart(2,"0");
+}
 
 return "";
 
@@ -1018,6 +1031,8 @@ sectionValue = section.value;
 
 slipNoValue = Number(numberPart);
 
+var headingTypeValue = headingType.value; // ✅ ADD THIS
+
 }
 
 
@@ -1028,7 +1043,7 @@ const newDoc = await addDoc(collection(db,"documents"),{
 category: category.value,
 lobby: lobbyValue,
 section: sectionValue,
-
+headingType: category.value === "correction_slip" ? headingTypeValue : null,
 orderNo: orderNoValue,
 circularNo: circularNoValue,
 monthYear: monthYearValue,
@@ -1090,6 +1105,7 @@ btn.classList.remove("opacity-60");
 
 window.updateForm = function(){
 
+headingType.classList.add("hidden");
 lobby.classList.add("hidden");
 section.classList.add("hidden");
 month.classList.add("hidden");
@@ -1101,7 +1117,11 @@ lobby.classList.remove("hidden");
 }
 
 if(category.value==="correction_slip"){
-section.classList.remove("hidden");
+  section.classList.remove("hidden");
+  headingType.classList.remove("hidden");
+
+  // ✅ AUTO DEFAULT
+  headingType.value = "cs";
 }
 
 if(category.value==="counselling"){
@@ -1198,6 +1218,18 @@ await window.setLatest(latestDocId);
 closeLatestModal();
 
 };
+
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+
+  const heading = document.getElementById("headingType");
+
+  if(heading){
+    heading.addEventListener("change", () => {
+      autoSuggestNumber();
+    });
+  }
 
 });
 
