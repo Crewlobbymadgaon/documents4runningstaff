@@ -240,7 +240,7 @@ select.custom-select-center {
     WTT Part A
   </span>
   <span class="block text-2xl sm:text-3xl md:text-4xl font-semibold tracking-wide opacity-90">
-    Correction Slips
+    Correction Slips & Addendum
   </span>
 </h2>
 
@@ -290,7 +290,17 @@ select.custom-select-center {
 <main class="pb-[calc(var(--footer-height)+16px)]">
 
 <section class="px-4 mt-8">
-  <div id="counsellingTopicList" class="grid gap-4 max-w-2xl mx-auto"></div>
+  <!-- 🔵 CORRECTION SLIPS -->
+<h3 class="text-lg font-semibold text-blue-700 text-center mb-2">
+Correction Slips
+</h3>
+<div id="csList" class="grid gap-4 max-w-2xl mx-auto mb-6"></div>
+
+<!-- 🟢 ADDENDUM -->
+<h3 class="text-lg font-semibold text-green-700 text-center mb-2">
+Addendum No.
+</h3>
+<div id="addList" class="grid gap-4 max-w-2xl mx-auto"></div>
 </section>
 
 
@@ -351,90 +361,116 @@ document.addEventListener("keydown", (e) => {
 
 
   
-
 async function loadGsrCorrectionSlips() {
-  const list = document.getElementById("counsellingTopicList");
-  list.innerHTML = "<p class='text-center'>Loading...</p>";
+
+  const csList = document.getElementById("csList");
+  const addList = document.getElementById("addList");
+
+  csList.innerHTML = "Loading...";
+  addList.innerHTML = "";
 
   try {
-    const q = query(
-  collection(db, "documents"),
-  where("category", "==", "correction_slip"),
-  where("section", "==", "wtt_a")
-);
 
-  
+    const q = query(
+      collection(db, "documents"),
+      where("category", "==", "correction_slip"),
+      where("section", "==", "wtt_a")
+    );
 
     const snapshot = await getDocs(q);
 
     if (snapshot.empty) {
-      list.innerHTML =
-        "<p class='text-center text-red-600 font-semibold'>No Correction Slips available</p>";
+      csList.innerHTML = "No data";
+      addList.innerHTML = "";
       return;
     }
 
-    // 🔹 Sort by slip number (latest first)
-    const docs = snapshot.docs
-      .map(d => d.data())
-      .sort((a, b) => (b.slipNo || 0) - (a.slipNo || 0));
+    const cs = [];
+    const add = [];
 
-    list.innerHTML = "";
+    snapshot.forEach(d => {
+      const data = d.data();
 
-    for (const data of docs) {
-      const card = document.createElement("div");
-      card.className = "shed-card cursor-pointer";
-      card.onclick = () => openCorrectionSlip(data.filePath);
+      if (data.headingType === "addendum") {
+        add.push(data);
+      } else {
+        cs.push(data);
+      }
+    });
 
-      card.innerHTML = `
-  <div class="flex items-start justify-between gap-3">
-    <div class="flex-1 min-w-0">
-      <div class="shed-title">
-        📘 Correction Slip No. ${String(data.slipNo).padStart(2, "0")}
-      </div>
-      <div class="shed-desc line-clamp-3">
-        ${data.description || "G&SR Correction Slip"}
-      </div>
-    </div>
-    <div class="shed-btn shrink-0 self-end">
-      View
-    </div>
-  </div>
-`;
+    // Sort latest first
+    cs.sort((a, b) => (b.slipNo || 0) - (a.slipNo || 0));
+    add.sort((a, b) => (b.slipNo || 0) - (a.slipNo || 0));
 
-      list.appendChild(card);
-    }
+    renderCards(cs, csList, "cs");
+    renderCards(add, addList, "add");
 
   } catch (err) {
-    console.error("Error loading G&SR Correction Slips:", err);
-    list.innerHTML =
-      "<p class='text-center text-red-600 font-semibold'>Error loading data</p>";
+    console.error(err);
+    csList.innerHTML = "Error loading";
   }
-  
-  // 🔹 Attach touch feedback AFTER cards are rendered
-document.querySelectorAll(".shed-card").forEach(card => {
+}
+function renderCards(data, container, type) {
 
-  let isTouch = false;
+  container.innerHTML = "";
 
-  card.addEventListener("touchstart", () => {
-    isTouch = true;
-    card.classList.add("touch-active");
-  }, { passive: true });
+  if (data.length === 0) {
+    container.innerHTML = `<p class="text-center text-gray-500">No ${type === "cs" ? "Correction Slips" : "Addendum"} available</p>`;
+    return;
+  }
 
-  card.addEventListener("touchend", () => {
-    card.classList.remove("touch-active");
-  });
+  data.forEach(item => {
 
-  card.addEventListener("touchcancel", () => {
-    card.classList.remove("touch-active");
-  });
+    const title =
+      type === "add"
+        ? `📗 Addendum No. ${String(item.slipNo).padStart(2, "0")}`
+        : `📘 Correction Slip No. ${String(item.slipNo).padStart(2, "0")}`;
 
-  card.addEventListener("click", () => {
-    if (isTouch) isTouch = false;
-  });
+    const color = type === "add" ? "green" : "blue";
 
+    const card = document.createElement("div");
+    card.className = "shed-card cursor-pointer";
+    card.onclick = () => openCorrectionSlip(item.filePath);
+
+    card.innerHTML = `
+      <div class="flex items-start justify-between gap-3">
+        <div class="flex-1 min-w-0">
+          <div class="shed-title text-${color}-700">
+            ${title}
+          </div>
+          <div class="shed-desc">
+            ${item.description || ""}
+          </div>
+        </div>
+        <div class="shed-btn">
+          View
+        </div>
+      </div>
+    `;
+
+    container.appendChild(card);
+    let isTouch = false;
+
+card.addEventListener("touchstart", () => {
+  isTouch = true;
+  card.classList.add("touch-active");
+}, { passive: true });
+
+card.addEventListener("touchend", () => {
+  card.classList.remove("touch-active");
 });
 
+card.addEventListener("touchcancel", () => {
+  card.classList.remove("touch-active");
+});
+
+card.addEventListener("click", () => {
+  if (isTouch) isTouch = false;
+});
+  });
 }
+  
+  
 
 
 const urlCache = {};
