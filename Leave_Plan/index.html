@@ -26,6 +26,8 @@
 <script type="module">
 
 import { auth } from "./common.js";
+import { alpList } from "./alpData.js";
+
 import { signInWithEmailAndPassword }
 from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
@@ -38,16 +40,28 @@ window.login = async ()=>{
     return;
   }
 
+  // ✅ Check from ALP list
+  const userData = alpList.find(u => u.empNo === emp);
+
+  if(!userData){
+    alert("Not authorized");
+    return;
+  }
+
   const email = "emp" + emp.padStart(3,"0") + "@alp.com";
 
   try{
-    // 🔥 DEFAULT PASSWORD (same for all or predefined)
+
     await signInWithEmailAndPassword(auth, email, "123456");
 
-    location.href = "home.html";
+    // ✅ STORE USER DATA (VERY IMPORTANT)
+    localStorage.setItem("alpUser", JSON.stringify(userData));
+
+    // 👉 Redirect to main page
+    location.href = "apply.html";
 
   }catch(e){
-    alert("Invalid Employee No or not registered");
+    alert("Login failed");
   }
 };
 
