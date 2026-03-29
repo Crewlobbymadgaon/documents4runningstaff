@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Leave Chart</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<style>
+body { font-family: system-ui; }
+
+.table-container {
+  overflow-x: auto;
+  background: white;
+}
+
+.sticky-col {
+  position: sticky;
+  left: 0;
+  z-index: 10;
+  background: #ffffff;
+  min-width: 120px;
+  text-align: left;
+  padding-left: 10px;
+  border-right: 2px solid #e5e7eb;
+}
+
+.sticky-header {
+  position: sticky;
+  top: 0;
+  background: #f1f5f9;
+  z-index: 5;
+}
+
+table {
+  border-collapse: separate;
+  border-spacing: 0;
+}
+</style>
+</head>
+
+<body class="bg-gradient-to-br from-blue-50 to-blue-100 min-h-screen p-3">
+
+<!-- HEADER -->
+<div class="bg-white rounded-2xl shadow p-4 mb-3 text-center">
+  <div class="text-xl font-bold text-blue-700">Leave Planning</div>
+  <div class="text-sm text-gray-600">ALP (MAO)</div>
+
+  <select id="monthSelect"
+  class="mt-3 p-2 rounded-xl border shadow text-sm"></select>
+</div>
+
+<div class="text-center text-xs text-gray-600 mb-2">
+  Tap any date to view leave applications
+</div>
+
+<div class="table-container bg-white rounded-2xl shadow">
+  <table id="table" class="text-xs w-full"></table>
+</div>
+
+<!-- POPUP -->
+<div id="popup" class="fixed inset-0 bg-black/40 hidden items-center justify-center">
+  <div class="bg-white rounded-xl p-4 w-80 max-h-[80vh] overflow-auto">
+    <div id="popupTitle" class="font-bold mb-2"></div>
+    <div id="popupList" class="text-sm mb-3"></div>
+
+    <button onclick="closePopup()"
+      class="w-full bg-gray-500 text-white p-2 rounded">
+      Close
+    </button>
+  </div>
+</div>
+
+<script type="module">
+
+import { db } from "./common.js";
+import { collection, getDocs }
+from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+let allLeaves = {};
+let employees = [];
+
+let today = new Date();
+today.setHours(0,0,0,0);
+
+let maxDate = new Date();
+maxDate.setDate(today.getDate() + 60);
+
+// LOAD DATA
+async function loadData(){
+
+  const snap = await getDocs(collection(db,"leaves"));
+
+  let empMap = {};
+  allLeaves = {};
+
+  snap.forEach(d=>{
+    let bookings = d.data().bookings || [];
+
+    bookings.sort((a,b)=>a.time-b.time);
+
+    allLeaves[d.id] = bookings;
+
+    bookings.forEach(b=>{
+      if(!empMap[b.emp] || b.time < empMap[b.emp]){
+        empMap[b.emp] = b.time;
+      }
+    });
+  });
+
+  employees = Object.keys(empMap).sort((a,b)=>empMap[a]-empMap[b]);
+}
+
+// MONTH OPTIONS (ONLY WITHIN RANGE)
+function buildMonthOptions(){
+
+  const select = document.getElementById("monthSelect");
+  select.innerHTML = "";
+
+  let temp = new Date(today.getFullYear(), today.getMonth(), 1);
+
+  while(temp <= maxDate){
+
+    const value = `${temp.getFullYear()}-${String(temp.getMonth()+1).padStart(2,"0")}`;
+    const name = temp.toLocaleString("default",{month:"long",year:"numeric"});
+
+    const opt = document.createElement("option");
+    opt.value = value;
+    opt.textContent = name;
+
+    select.appendChild(opt);
+
+    temp.setMonth(temp.getMonth() + 1);
+  }
+}
+
+// GET VALID DATES (IMPORTANT)
+function getValidDates(year, mon){
+
+  let dates = [];
+
+  let d = new Date(year, mon, 1);
+
+  while(d.getMonth() === mon){
+
+    if(d >= today && d <= maxDate){
+      dates.push(new Date(d));
+    }
+
+    d.setDate(d.getDate()+1);
+  }
+
+  return dates;
+}
+
+// RENDER TABLE
+function renderTable(year, mon){
+
+  const validDates = getValidDates(year, mon);
+
+  const table = document.getElementById("table");
+  table.innerHTML = "";
+
+  // HEADER
+  let header = `<tr class="sticky-header">`;
+  header += `<th class="sticky-col bg-gray-50 border p-2"></th>`;
+
+  validDates.forEach(d=>{
+    header += `
+      <th onclick="showDetails('${d.toISOString()}')"
+      class="border p-2 cursor-pointer hover:bg-blue-100">
+      ${d.getDate()}
+      </th>`;
+  });
+
+  header += `</tr>`;
+  table.innerHTML += header;
+
+  // ROWS
+  employees.forEach(emp=>{
+
+    let row = `<tr>`;
+
+    row += `
+      <td class="sticky-col border p-2 font-semibold text-blue-700">
+        ${emp}
+      </td>`;
+
+    validDates.forEach(d=>{
+
+      const ds = d.toISOString().split("T")[0];
+      const bookings = allLeaves[ds] || [];
+
+      const index = bookings.findIndex(b=>b.emp===emp);
+      let cell = index !== -1 ? (index + 1) : "";
+
+      row += `<td class="border text-center p-1 font-semibold">${cell}</td>`;
+    });
+
+    row += `</tr>`;
+    table.innerHTML += row;
+  });
+}
+
+// POPUP
+window.showDetails = (iso)=>{
+
+  const dateObj = new Date(iso);
+  const ds = iso.split("T")[0];
+
+  const bookings = allLeaves[ds] || [];
+
+  popup.classList.remove("hidden");
+  popup.classList.add("flex");
+
+  popupTitle.innerText = "Applications on " + dateObj.toDateString();
+
+  let html="";
+
+  bookings.forEach((b,i)=>{
+    html += `
+      <div class="flex justify-between border-b py-1">
+        <span>${i+1}. ${b.emp}</span>
+      </div>`;
+  });
+
+  if(!html) html="<div>No applications</div>";
+
+  popupList.innerHTML = html;
+};
+
+// CLOSE
+window.closePopup = ()=>{
+  popup.classList.add("hidden");
+};
+
+// CHANGE
+monthSelect.onchange = ()=>{
+  const [y,m] = monthSelect.value.split("-");
+  renderTable(parseInt(y), parseInt(m)-1);
+};
+
+// INIT
+await loadData();
+buildMonthOptions();
+monthSelect.onchange();
+
+</script>
+</body>
+</html>
