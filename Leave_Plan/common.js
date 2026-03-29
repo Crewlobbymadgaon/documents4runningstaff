@@ -28,13 +28,13 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// 🔥 KEEP USER LOGGED IN (IMPORTANT)
-setPersistence(auth, browserLocalPersistence);
+// 🔥 KEEP USER LOGGED IN
+setPersistence(auth, browserLocalPersistence)
+  .catch(() => console.log("Persistence failed"));
 
 // 🔐 AUTH CHECK FUNCTION
 export function checkAuth(callback) {
 
-  // Optional: show loading (if you add loader in HTML)
   const loader = document.getElementById("loading");
   if (loader) loader.style.display = "block";
 
@@ -42,15 +42,15 @@ export function checkAuth(callback) {
 
     if (user) {
 
-      // hide loader
       if (loader) loader.style.display = "none";
-
       callback(user);
 
     } else {
 
-      // redirect silently (no alert)
-      window.location.replace("index.html");
+      // prevent redirect loop
+      if (!window.location.pathname.includes("index.html")) {
+        window.location.replace("index.html");
+      }
 
     }
 
@@ -60,9 +60,9 @@ export function checkAuth(callback) {
 
 // 🚪 LOGOUT FUNCTION
 export function logout() {
-  signOut(auth).then(() => {
-    window.location.replace("index.html");
-  });
+  signOut(auth)
+    .then(() => window.location.replace("index.html"))
+    .catch(() => alert("Logout failed"));
 }
 
 // 🔁 EXPORT
