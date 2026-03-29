@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Apply Leave</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<style>
+body { font-family: system-ui; }
+
+.nav-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: white;
+  color: #374151;
+  font-size: 22px;
+  font-weight: bold;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.nav-btn:active {
+  transform: scale(0.9);
+}
+</style>
+</head>
+
+<body class="bg-gradient-to-br from-blue-50 to-blue-100 min-h-screen p-3">
+
+<!-- HEADER -->
+<div class="bg-white rounded-2xl shadow p-4 mb-3 text-center">
+  <div class="text-xl font-bold text-blue-700">Leave Planning</div>
+  <div id="userInfo" class="text-sm text-gray-700 mt-1"></div>
+</div>
+
+<!-- MONTH NAV -->
+<div class="grid grid-cols-3 items-center mb-3">
+
+  <div class="flex justify-start">
+    <button id="prevBtn" onclick="prevMonth()" class="nav-btn">
+      ◀
+    </button>
+  </div>
+
+  <div id="monthTitle"
+  class="text-center font-semibold text-gray-700 tracking-wide"></div>
+
+  <div class="flex justify-end">
+    <button id="nextBtn" onclick="nextMonth()" class="nav-btn">
+      ▶
+    </button>
+  </div>
+
+</div>
+
+<!-- CALENDAR -->
+<div id="calendar" class="bg-white rounded-xl shadow p-2"></div>
+
+<!-- APPLY -->
+<button id="applyBtn"
+class="w-full bg-blue-600 text-white p-3 rounded-xl shadow mt-3">
+Apply Selected Dates
+</button>
+
+<script type="module">
+
+import { db, checkAuth } from "./common.js";
+import {
+  doc, getDoc, runTransaction,
+  collection, getDocs
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+let currentUser="";
+let selectedDates=[];
+let usedLeaves=0;
+let allLeaves={};
+let currentMonthIndex=0;
+let months=[];
+
+let today = new Date();
+today.setHours(0,0,0,0);
+
+let maxDate = new Date();
+maxDate.setDate(today.getDate() + 60);
+
+// AUTH
+checkAuth(async user=>{
+  currentUser = user.email.split("@")[0];
+  userInfo.innerText = `Employee: ${currentUser}`;
+
+  await loadUser();
+  await loadAllLeaves();
+
+  setupMonths();
+  renderCalendar();
+});
+
+// USER
+async function loadUser(){
+  const snap = await getDoc(doc(db,"users",currentUser));
+  usedLeaves = snap.exists()?snap.data().used||0:0;
+}
+
+// LOAD LEAVES
+async function loadAllLeaves(){
+  const snap = await getDocs(collection(db,"leaves"));
+  allLeaves={};
+
+  snap.forEach(d=>{
+    allLeaves[d.id]=d.data().bookings||[];
+  });
+}
+
+// SET MONTHS (ONLY WITHIN 60 DAYS)
+function setupMonths(){
+
+  months=[];
+  let temp = new Date(today.getFullYear(), today.getMonth(), 1);
+
+  while(temp <= maxDate){
+    months.push(new Date(temp));
+    temp.setMonth(temp.getMonth() + 1);
+  }
+}
+
+// NAVIGATION
+window.nextMonth = ()=>{
+  if(currentMonthIndex < months.length - 1){
+    currentMonthIndex++;
+    renderCalendar();
+  }
+};
+
+window.prevMonth = ()=>{
+  if(currentMonthIndex > 0){
+    currentMonthIndex--;
+    renderCalendar();
+  }
+};
+
+// ARROWS
+function updateArrows(){
+  prevBtn.classList.toggle("invisible", currentMonthIndex === 0);
+  nextBtn.classList.toggle("invisible", currentMonthIndex === months.length - 1);
+}
+
+// RENDER
+function renderCalendar(){
+
+  const date = months[currentMonthIndex];
+
+  monthTitle.innerText =
+    date.toLocaleString('default',{month:'long',year:'numeric'});
+
+  calendar.innerHTML="";
+
+  const grid=document.createElement("div");
+  grid.className="grid grid-cols-7 gap-2 text-center";
+
+  const days=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+
+  days.forEach(d=>{
+    const el=document.createElement("div");
+    el.className="text-xs font-bold";
+    el.innerText=d;
+    grid.appendChild(el);
+  });
+
+  let d=new Date(date);
+  const m=d.getMonth();
+
+  for(let i=0;i<d.getDay();i++){
+    grid.appendChild(document.createElement("div"));
+  }
+
+  while(d.getMonth()===m){
+
+    const ds=d.toISOString().split("T")[0];
+    const bookings=allLeaves[ds]||[];
+    const count = bookings.length;
+
+    const isUser = bookings.find(b=>b.emp===currentUser);
+    const isSelected = selectedDates.includes(ds);
+
+    const box=document.createElement("div");
+    box.className="p-2 rounded-xl cursor-pointer text-sm font-semibold";
+
+    const currentDate = new Date(ds);
+
+    // DISABLE OUTSIDE RANGE
+    if(currentDate < today || currentDate > maxDate){
+      box.classList.add("bg-gray-200","text-gray-400");
+    }
+    else if(isUser){
+      box.classList.add("bg-blue-500","text-white");
+    }
+    else if(isSelected){
+      box.classList.add("bg-purple-500","text-white");
+    }
+    else if(count < 5){
+      box.classList.add("bg-green-200");
+    }
+    else if(count === 5){
+      box.classList.add("bg-red-500","text-white");
+    }
+    else{
+      box.classList.add("bg-orange-400","text-white");
+    }
+
+    let label = count < 5 ? (5-count) : "W"+(count-5);
+
+    box.innerHTML = `
+      <div>${d.getDate()}</div>
+      <div class="text-[10px]">${label}</div>
+    `;
+
+    box.onclick = async ()=>{
+
+      if(currentDate < today || currentDate > maxDate) return;
+
+      if(isUser){
+        if(!confirm("Cancel leave?")) return;
+        await cancelLeave(ds);
+        await refresh();
+        return;
+      }
+
+      if(selectedDates.includes(ds)){
+        selectedDates = selectedDates.filter(x=>x!==ds);
+      } else {
+
+        if(usedLeaves + selectedDates.length + 1 > 6){
+          alert("Max 6 leaves");
+          return;
+        }
+
+        const tempDates = [...selectedDates, ds];
+
+        if(getSlots(tempDates) > 2){
+          alert("Max 2 slots");
+          return;
+        }
+
+        selectedDates.push(ds);
+      }
+
+      renderCalendar();
+    };
+
+    grid.appendChild(box);
+    d.setDate(d.getDate()+1);
+  }
+
+  calendar.appendChild(grid);
+  updateArrows();
+}
+
+// APPLY
+applyBtn.onclick = async ()=>{
+
+  if(selectedDates.length===0){
+    alert("Select dates");
+    return;
+  }
+
+  try{
+    await runTransaction(db, async (t)=>{
+
+      const userRef = doc(db,"users",currentUser);
+      const userSnap = await t.get(userRef);
+
+      let used = userSnap.exists() ? userSnap.data().used || 0 : 0;
+
+      let refs=[], snaps=[];
+
+      for(let date of selectedDates){
+        const ref = doc(db,"leaves",date);
+        refs.push(ref);
+        snaps.push(await t.get(ref));
+      }
+
+      for(let i=0;i<selectedDates.length;i++){
+
+        let bookings = snaps[i].exists()
+          ? snaps[i].data().bookings || []
+          : [];
+
+        bookings.push({ emp: currentUser, time: Date.now() });
+
+        t.set(refs[i], { bookings });
+        used++;
+      }
+
+      t.set(userRef, { used });
+
+    });
+
+    alert("Applied Successfully");
+    selectedDates=[];
+
+    await refresh();
+
+  }catch(e){
+    alert(e.message || e);
+  }
+};
+
+// CANCEL
+async function cancelLeave(date){
+
+  const userRef = doc(db,"users",currentUser);
+  const dayRef = doc(db,"leaves",date);
+
+  await runTransaction(db, async (t)=>{
+
+    const userSnap = await t.get(userRef);
+    const daySnap = await t.get(dayRef);
+
+    let bookings = daySnap.data().bookings || [];
+
+    const index = bookings.findIndex(b=>b.emp===currentUser);
+    if(index !== -1) bookings.splice(index,1);
+
+    let used=userSnap.exists()?userSnap.data().used||0:0;
+
+    t.set(dayRef,{bookings});
+    t.set(userRef,{used:used-1});
+  });
+
+  alert("Cancelled");
+}
+
+// REFRESH
+async function refresh(){
+  await loadUser();
+  await loadAllLeaves();
+  renderCalendar();
+}
+
+// SLOT LOGIC
+function getSlots(dates){
+
+  if(dates.length === 0) return 0;
+
+  const sorted = dates.slice().sort();
+  let slots = 1;
+
+  for(let i=1;i<sorted.length;i++){
+
+    const prev = new Date(sorted[i-1]);
+    prev.setDate(prev.getDate()+1);
+
+    if(prev.toISOString().split("T")[0] !== sorted[i]){
+      slots++;
+    }
+  }
+
+  return slots;
+}
+
+</script>
+</body>
+</html>
