@@ -4,9 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes">
     <title>Accident Manual Correction Slips</title>
-    <link rel="manifest" href="/documents4runningstaff/manifest.json" />
+    <link rel="manifest" href="/manifest.json" />
     <link rel="icon" href="/documents4runningstaff/favicon.ico" />
-    <link rel="apple-touch-icon" href="/documents4runningstaff/icon-192.png" />
+    <link rel="apple-touch-icon" href="/icon-192.png" />
     <meta name="theme-color" content="#1f2937" />
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600&display=swap" rel="stylesheet" />
     <link rel="preconnect" href="https://firebasestorage.googleapis.com">
@@ -462,7 +462,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-   navigator.serviceWorker.register('/documents4runningstaff/sw.js')
+   navigator.serviceWorker.register('/sw.js')
       .then(reg => console.log("Service Worker registered:", reg))
       .catch(err => console.log("Service Worker registration failed:", err));
   });
