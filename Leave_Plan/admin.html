@@ -2,23 +2,45 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Dashboard</title>
 <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
 <body class="bg-gray-100 p-4">
 
-<div class="max-w-md mx-auto bg-white p-6 rounded-xl shadow">
+<div class="max-w-4xl mx-auto">
 
-<h2 class="font-bold mb-4">Admin Panel</h2>
+  <!-- HEADER -->
+  <div class="bg-white p-4 rounded-xl shadow mb-4 flex justify-between items-center">
+    <h2 class="text-lg font-bold text-blue-700">Admin Dashboard</h2>
+    <button onclick="logout()" class="text-red-500 text-sm">Logout</button>
+  </div>
 
-<input id="emp" placeholder="Employee No" class="w-full p-2 border mb-2">
-<input id="pass" placeholder="Password" class="w-full p-2 border mb-3">
+  <!-- ADD USER -->
+  <div class="bg-white p-4 rounded-xl shadow mb-4">
+    <h3 class="font-semibold mb-2">Add Employee</h3>
 
-<button onclick="createUser()" class="bg-green-600 text-white w-full p-2 rounded">
-Create User
-</button>
+    <input id="emp" placeholder="Employee No"
+      class="w-full p-2 border rounded mb-2">
 
-<p id="msg"></p>
+    <input id="pass" placeholder="Password"
+      class="w-full p-2 border rounded mb-2">
+
+    <button onclick="createUser()"
+      class="w-full bg-green-600 text-white p-2 rounded">
+      Create User
+    </button>
+
+    <p id="msg" class="text-sm mt-2"></p>
+  </div>
+
+  <!-- LEAVE LIST -->
+  <div class="bg-white p-4 rounded-xl shadow">
+    <h3 class="font-semibold mb-3">Leave Requests</h3>
+
+    <div id="list" class="space-y-2"></div>
+
+  </div>
 
 </div>
 
@@ -27,44 +49,133 @@ Create User
 import { auth, db } from "./common.js";
 import { alpList } from "./alpData.js";
 
-import { createUserWithEmailAndPassword }
-from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import {
+  createUserWithEmailAndPassword
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-import { doc, setDoc }
-from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import {
+  collection, getDocs, doc, runTransaction, setDoc
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-if(localStorage.getItem("admin")!=="true"){
-  location.href="admin-login.html";
+// 🔐 protect page
+if(localStorage.getItem("admin") !== "true"){
+  location.href = "admin-login.html";
 }
 
+// 🚪 logout
+window.logout = ()=>{
+  localStorage.removeItem("admin");
+  location.href = "admin-login.html";
+};
+
+// ➕ CREATE USER
 window.createUser = async ()=>{
 
-  const user = alpList.find(u=>u.empNo===emp.value);
+  const empNo = emp.value.trim();
+  const password = pass.value.trim();
+
+  const user = alpList.find(u=>u.empNo===empNo);
+
   if(!user){
-    msg.innerText="Invalid";
+    msg.innerText = "Invalid employee";
     return;
   }
 
-  const email="emp"+emp.value+"@alp.com";
+  const email = "emp"+empNo+"@alp.com";
 
   try{
 
-    await createUserWithEmailAndPassword(auth,email,pass.value);
+    await createUserWithEmailAndPassword(auth,email,password);
 
-    await setDoc(doc(db,"users","emp"+emp.value),{
+    await setDoc(doc(db,"users","emp"+empNo),{
       name:user.name,
       slot:user.slot,
       used:0,
       firstLogin:true
     });
 
-    msg.innerText="Created";
+    msg.innerText = "User created";
 
-  }catch{
-    msg.innerText="Exists or error";
+  }catch(e){
+    msg.innerText = "Already exists or error";
   }
 };
 
+// 📊 LOAD LEAVES
+async function loadLeaves(){
+
+  const snap = await getDocs(collection(db,"leaves"));
+
+  list.innerHTML = "";
+
+  snap.forEach(docSnap=>{
+
+    const date = docSnap.id;
+    const bookings = docSnap.data().bookings || [];
+
+    bookings.forEach(b=>{
+
+      const user = alpList.find(u=>"emp"+u.empNo===b.emp);
+
+      const div = document.createElement("div");
+      div.className = "border p-2 rounded flex justify-between items-center";
+
+      div.innerHTML = `
+        <div>
+          <div class="font-semibold">${user?.name || b.emp}</div>
+          <div class="text-xs text-gray-500">${date} | Slot ${user?.slot}</div>
+          <div class="text-sm">${b.status}</div>
+        </div>
+
+        <div class="space-x-2">
+          <button onclick="approve('${date}','${b.emp}')"
+            class="bg-green-600 text-white px-2 py-1 rounded text-xs">
+            Approve
+          </button>
+
+          <button onclick="reject('${date}','${b.emp}')"
+            class="bg-red-600 text-white px-2 py-1 rounded text-xs">
+            Reject
+          </button>
+        </div>
+      `;
+
+      list.appendChild(div);
+
+    });
+
+  });
+}
+
+await loadLeaves();
+
+// 🔄 UPDATE STATUS
+window.updateStatus = async (date, emp, status)=>{
+
+  const ref = doc(db,"leaves",date);
+
+  await runTransaction(db, async (t)=>{
+
+    const snap = await t.get(ref);
+    let bookings = snap.data().bookings || [];
+
+    bookings = bookings.map(b=>{
+      if(b.emp === emp){
+        return {...b, status};
+      }
+      return b;
+    });
+
+    t.set(ref,{bookings});
+  });
+
+  loadLeaves();
+};
+
+window.approve = (d,e)=>updateStatus(d,e,"approved");
+window.reject = (d,e)=>updateStatus(d,e,"rejected");
+
 </script>
+
 </body>
 </html>
