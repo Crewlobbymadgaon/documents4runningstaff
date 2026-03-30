@@ -21,7 +21,7 @@ body { font-family: system-ui; }
   left: 0;
   z-index: 10;
   background: #ffffff;
-  min-width: 120px;
+  min-width: 150px;
   text-align: left;
   padding-left: 10px;
   border-right: 2px solid #e5e7eb;
@@ -34,10 +34,6 @@ body { font-family: system-ui; }
   z-index: 5;
 }
 
-table {
-  border-collapse: separate;
-  border-spacing: 0;
-}
 </style>
 </head>
 
@@ -45,7 +41,13 @@ table {
 
 <!-- HEADER -->
 <div class="bg-white rounded-2xl shadow p-4 mb-3 text-center">
-  <div class="text-xl font-bold text-blue-700">Leave Planning</div>
+
+  <div class="flex justify-between items-center mb-2">
+    <button onclick="location.href='apply.html'" class="text-blue-600 text-sm">⬅ Back</button>
+    <button onclick="logout()" class="text-red-500 text-sm">Logout</button>
+  </div>
+
+  <div class="text-xl font-bold text-blue-700">Leave Chart</div>
   <div class="text-sm text-gray-600">ALP (MAO)</div>
 
   <select id="monthSelect"
@@ -53,7 +55,7 @@ table {
 </div>
 
 <div class="text-center text-xs text-gray-600 mb-2">
-  Tap any date to view leave applications
+  Tap date to view details
 </div>
 
 <div class="table-container bg-white rounded-2xl shadow">
@@ -76,6 +78,8 @@ table {
 <script type="module">
 
 import { db } from "./common.js";
+import { alpList } from "./alpData.js";
+
 import { collection, getDocs }
 from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
@@ -88,7 +92,13 @@ today.setHours(0,0,0,0);
 let maxDate = new Date();
 maxDate.setDate(today.getDate() + 60);
 
-// LOAD DATA
+// LOGOUT
+window.logout = ()=>{
+  localStorage.removeItem("alpUser");
+  location.href="index.html";
+};
+
+// LOAD
 async function loadData(){
 
   const snap = await getDocs(collection(db,"leaves"));
@@ -97,6 +107,7 @@ async function loadData(){
   allLeaves = {};
 
   snap.forEach(d=>{
+
     let bookings = d.data().bookings || [];
 
     bookings.sort((a,b)=>a.time-b.time);
@@ -113,66 +124,49 @@ async function loadData(){
   employees = Object.keys(empMap).sort((a,b)=>empMap[a]-empMap[b]);
 }
 
-// MONTH OPTIONS (ONLY WITHIN RANGE)
+// MONTH
 function buildMonthOptions(){
-
-  const select = document.getElementById("monthSelect");
-  select.innerHTML = "";
 
   let temp = new Date(today.getFullYear(), today.getMonth(), 1);
 
   while(temp <= maxDate){
 
-    const value = `${temp.getFullYear()}-${String(temp.getMonth()+1).padStart(2,"0")}`;
+    const val = `${temp.getFullYear()}-${String(temp.getMonth()+1).padStart(2,"0")}`;
     const name = temp.toLocaleString("default",{month:"long",year:"numeric"});
 
-    const opt = document.createElement("option");
-    opt.value = value;
-    opt.textContent = name;
+    monthSelect.innerHTML += `<option value="${val}">${name}</option>`;
 
-    select.appendChild(opt);
-
-    temp.setMonth(temp.getMonth() + 1);
+    temp.setMonth(temp.getMonth()+1);
   }
 }
 
-// GET VALID DATES (IMPORTANT)
+// VALID DATES
 function getValidDates(year, mon){
 
-  let dates = [];
+  let dates=[];
+  let d=new Date(year,mon,1);
 
-  let d = new Date(year, mon, 1);
-
-  while(d.getMonth() === mon){
-
-    if(d >= today && d <= maxDate){
-      dates.push(new Date(d));
-    }
-
+  while(d.getMonth()===mon){
+    if(d>=today && d<=maxDate) dates.push(new Date(d));
     d.setDate(d.getDate()+1);
   }
 
   return dates;
 }
 
-// RENDER TABLE
+// RENDER
 function renderTable(year, mon){
 
   const validDates = getValidDates(year, mon);
 
-  const table = document.getElementById("table");
-  table.innerHTML = "";
+  table.innerHTML="";
 
   // HEADER
   let header = `<tr class="sticky-header">`;
-  header += `<th class="sticky-col bg-gray-50 border p-2"></th>`;
+  header += `<th class="sticky-col border p-2"></th>`;
 
   validDates.forEach(d=>{
-    header += `
-      <th onclick="showDetails('${d.toISOString()}')"
-      class="border p-2 cursor-pointer hover:bg-blue-100">
-      ${d.getDate()}
-      </th>`;
+    header += `<th onclick="showDetails('${d.toISOString()}')" class="border p-2 cursor-pointer">${d.getDate()}</th>`;
   });
 
   header += `</tr>`;
@@ -181,11 +175,15 @@ function renderTable(year, mon){
   // ROWS
   employees.forEach(emp=>{
 
+    const empNo = emp.replace("emp","");
+    const user = alpList.find(u=>u.empNo===empNo);
+
     let row = `<tr>`;
 
     row += `
       <td class="sticky-col border p-2 font-semibold text-blue-700">
-        ${emp}
+        ${user?.name || emp} <br>
+        <span class="text-[10px] text-gray-500">Slot ${user?.slot}</span>
       </td>`;
 
     validDates.forEach(d=>{
@@ -193,53 +191,65 @@ function renderTable(year, mon){
       const ds = d.toISOString().split("T")[0];
       const bookings = allLeaves[ds] || [];
 
-      const index = bookings.findIndex(b=>b.emp===emp);
-      let cell = index !== -1 ? (index + 1) : "";
+      const b = bookings.find(x=>x.emp===emp);
 
-      row += `<td class="border text-center p-1 font-semibold">${cell}</td>`;
+      let cell = "";
+
+      if(b){
+        if(b.status==="approved"){
+          cell = "🟢";
+        }
+        else if(b.status==="pending"){
+          cell = "🟡";
+        }
+        else{
+          cell = "⚫";
+        }
+      }
+
+      row += `<td class="border text-center p-1">${cell}</td>`;
     });
 
     row += `</tr>`;
     table.innerHTML += row;
+
   });
 }
 
 // POPUP
 window.showDetails = (iso)=>{
 
-  const dateObj = new Date(iso);
   const ds = iso.split("T")[0];
-
   const bookings = allLeaves[ds] || [];
 
   popup.classList.remove("hidden");
   popup.classList.add("flex");
 
-  popupTitle.innerText = "Applications on " + dateObj.toDateString();
+  popupTitle.innerText = new Date(iso).toDateString();
 
   let html="";
 
   bookings.forEach((b,i)=>{
+
+    const empNo = b.emp.replace("emp","");
+    const user = alpList.find(u=>u.empNo===empNo);
+
     html += `
       <div class="flex justify-between border-b py-1">
-        <span>${i+1}. ${b.emp}</span>
+        <span>${i+1}. ${user?.name}</span>
+        <span>${b.status}</span>
       </div>`;
   });
 
-  if(!html) html="<div>No applications</div>";
-
-  popupList.innerHTML = html;
+  popupList.innerHTML = html || "No data";
 };
 
-// CLOSE
-window.closePopup = ()=>{
-  popup.classList.add("hidden");
-};
+window.closePopup = ()=> popup.classList.add("hidden");
 
 // CHANGE
 monthSelect.onchange = ()=>{
   const [y,m] = monthSelect.value.split("-");
-  renderTable(parseInt(y), parseInt(m)-1);
+  renderTable(+y, +m-1);
 };
 
 // INIT
