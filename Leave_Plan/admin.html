@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 p-4">
+
+<div class="max-w-md mx-auto bg-white p-6 rounded-xl shadow">
+
+<h2 class="font-bold mb-4">Admin Panel</h2>
+
+<input id="emp" placeholder="Employee No" class="w-full p-2 border mb-2">
+<input id="pass" placeholder="Password" class="w-full p-2 border mb-3">
+
+<button onclick="createUser()" class="bg-green-600 text-white w-full p-2 rounded">
+Create User
+</button>
+
+<p id="msg"></p>
+
+</div>
+
+<script type="module">
+
+import { auth, db } from "./common.js";
+import { alpList } from "./alpData.js";
+
+import { createUserWithEmailAndPassword }
+from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+import { doc, setDoc }
+from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+if(localStorage.getItem("admin")!=="true"){
+  location.href="admin-login.html";
+}
+
+window.createUser = async ()=>{
+
+  const user = alpList.find(u=>u.empNo===emp.value);
+  if(!user){
+    msg.innerText="Invalid";
+    return;
+  }
+
+  const email="emp"+emp.value+"@alp.com";
+
+  try{
+
+    await createUserWithEmailAndPassword(auth,email,pass.value);
+
+    await setDoc(doc(db,"users","emp"+emp.value),{
+      name:user.name,
+      slot:user.slot,
+      used:0,
+      firstLogin:true
+    });
+
+    msg.innerText="Created";
+
+  }catch{
+    msg.innerText="Exists or error";
+  }
+};
+
+</script>
+</body>
+</html>
