@@ -10,28 +10,28 @@
    - Safe updates with cache versioning
    ========================================================= */
 
-const CACHE_NAME = 'library-cache-v5';
+const CACHE_NAME = 'library-cache-v6';
 const RUNTIME    = 'library-runtime-v5';
-const BASE       = '/documents4runningstaff';
+const BASE = '';
 
 /* ---------- FILES REQUIRED TO BOOT THE APP ---------- */
 /* ⚠️ Every file listed here MUST exist */
 const PRECACHE_URLS = [
-  `${BASE}/`,
-  `${BASE}/index.html`,
-  `${BASE}/offline.html`,
-  `${BASE}/latest.html`,
-  `${BASE}/safetycircular.html`,
-  `${BASE}/counselling.html`,
-  `${BASE}/wtt.html`,
-  `${BASE}/gsr.html`,
-  `${BASE}/krabooks.html`,
-  `${BASE}/tsd.html`,
-  `${BASE}/operating.html`,
-  `${BASE}/manifest.json`,
-  `${BASE}/favicon.ico`,
-  `${BASE}/icon-192.png`,
-  `${BASE}/icon-512.png`
+  `/`,
+  `/index.html`,
+  `/offline.html`,
+  `/latest.html`,
+  `/safetycircular.html`,
+  `/counselling.html`,
+  `/wtt.html`,
+  `/gsr.html`,
+  `/krabooks.html`,
+  `/tsd.html`,
+  `/operating.html`,
+  `/manifest.json`,
+  `/favicon.ico`,
+  `/icon-192.png`,
+  `/icon-512.png`
 ];
 
 /* ---------- INSTALL ---------- */
