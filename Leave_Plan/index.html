@@ -1,67 +1,85 @@
 <!DOCTYPE html>
 <html>
 <head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Login</title>
 <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body class="bg-gradient-to-br from-blue-50 to-blue-100 h-screen flex items-center justify-center">
+<body class="bg-gradient-to-br from-blue-50 to-blue-100 min-h-screen flex items-center justify-center p-4">
 
-<div class="bg-white p-6 rounded-2xl shadow w-80 text-center">
+<div class="bg-white p-6 rounded-2xl shadow w-full max-w-sm text-center">
 
   <h2 class="text-xl font-bold text-blue-700 mb-4">
     Leave Planning<br>ALP (MAO)
   </h2>
 
-  <input id="empNo" placeholder="Enter Employee No"
+  <input id="empNo" placeholder="Employee No"
+    class="w-full p-3 border rounded-xl mb-3 text-center">
+
+  <input id="password" type="password" placeholder="Password"
     class="w-full p-3 border rounded-xl mb-4 text-center">
 
   <button onclick="login()"
     class="w-full bg-blue-600 text-white p-3 rounded-xl">
-    Continue
+    Login
   </button>
+
+  <p id="msg" class="text-red-500 mt-3 text-sm"></p>
 
 </div>
 
 <script type="module">
 
-import { auth } from "./common.js";
+import { auth, db } from "./common.js";
 import { alpList } from "./alpData.js";
 
 import { signInWithEmailAndPassword }
 from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
+import { doc, getDoc }
+from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
 window.login = async ()=>{
 
-  const emp = document.getElementById("empNo").value.trim();
+  const emp = empNo.value.trim();
+  const pass = password.value.trim();
 
-  if(!emp){
-    alert("Enter Employee No");
+  if(!emp || !pass){
+    msg.innerText = "Enter details";
     return;
   }
 
-  // ✅ Check from ALP list
-  const userData = alpList.find(u => u.empNo === emp);
-
+  const userData = alpList.find(u=>u.empNo===emp);
   if(!userData){
-    alert("Not authorized");
+    msg.innerText = "Not authorized";
     return;
   }
 
-  const email = "emp" + emp.padStart(3,"0") + "@alp.com";
+  const email = "emp"+emp.padStart(3,"0")+"@alp.com";
+  const userId = "emp"+emp;
 
   try{
 
-    await signInWithEmailAndPassword(auth, email, "123456");
+    await signInWithEmailAndPassword(auth,email,pass);
 
-    // ✅ STORE USER DATA (VERY IMPORTANT)
-    localStorage.setItem("alpUser", JSON.stringify(userData));
+    const snap = await getDoc(doc(db,"users",userId));
 
-    // 👉 Redirect to main page
-    location.href = "apply.html";
+    if(!snap.exists()){
+      msg.innerText = "Contact admin";
+      return;
+    }
 
-  }catch(e){
-    alert("Login failed");
+    localStorage.setItem("alpUser",JSON.stringify(userData));
+
+    if(snap.data().firstLogin){
+      location.href="change-password.html";
+    }else{
+      location.href="apply.html";
+    }
+
+  }catch{
+    msg.innerText = "Invalid login";
   }
 };
 
