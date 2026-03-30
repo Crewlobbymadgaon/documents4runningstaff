@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="flex items-center justify-center min-h-screen bg-gray-100">
+
+<div class="bg-white p-6 rounded-xl shadow w-80 text-center">
+
+<h2 class="font-bold mb-4">Admin Login</h2>
+
+<input id="u" placeholder="Username" class="w-full p-2 border mb-2">
+<input id="p" type="password" placeholder="Password" class="w-full p-2 border mb-3">
+
+<button onclick="login()" class="bg-blue-600 text-white w-full p-2 rounded">
+Login
+</button>
+
+<p id="m" class="text-red-500 text-sm mt-2"></p>
+
+</div>
+
+<script>
+
+function login(){
+  if(u.value==="admin" && p.value==="admin123"){
+    localStorage.setItem("admin","true");
+    location.href="admin.html";
+  }else{
+    m.innerText="Wrong";
+  }
+}
+
+</script>
+</body>
+</html>
