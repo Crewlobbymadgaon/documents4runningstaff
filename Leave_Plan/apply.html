@@ -16,19 +16,11 @@ body { font-family: system-ui; }
   height: 36px;
   border-radius: 50%;
   background: white;
-  color: #374151;
   font-size: 22px;
-  font-weight: bold;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-}
-
-.nav-btn:active {
-  transform: scale(0.9);
 }
 </style>
 </head>
@@ -36,29 +28,41 @@ body { font-family: system-ui; }
 <body class="bg-gradient-to-br from-blue-50 to-blue-100 min-h-screen p-3">
 
 <!-- HEADER -->
-<div class="bg-white rounded-2xl shadow p-4 mb-3 text-center">
-  <div class="text-xl font-bold text-blue-700">Leave Planning</div>
-  <div id="userInfo" class="text-sm text-gray-700 mt-1"></div>
+<div class="bg-white rounded-2xl shadow p-4 mb-3">
+
+  <!-- TOP BAR -->
+  <div class="flex justify-between items-center mb-2">
+    <button onclick="goHome()" class="text-blue-600 text-sm font-semibold">
+      ⬅ Back
+    </button>
+
+    <button onclick="logoutUser()" class="text-red-500 text-sm font-semibold">
+      Logout
+    </button>
+  </div>
+
+  <!-- TITLE -->
+  <div class="text-center">
+    <div class="text-xl font-bold text-blue-700">
+      Leave Planning
+    </div>
+
+    <div id="userInfo" class="text-sm text-gray-700 mt-1"></div>
+  </div>
+
+  <!-- VIEW CHART -->
+  <button onclick="goChart()"
+    class="w-full mt-3 bg-green-600 text-white p-2 rounded-xl text-sm">
+    📊 View Leave Chart
+  </button>
+
 </div>
 
-<!-- MONTH NAV -->
+<!-- NAV -->
 <div class="grid grid-cols-3 items-center mb-3">
-
-  <div class="flex justify-start">
-    <button id="prevBtn" onclick="prevMonth()" class="nav-btn">
-      ◀
-    </button>
-  </div>
-
-  <div id="monthTitle"
-  class="text-center font-semibold text-gray-700 tracking-wide"></div>
-
-  <div class="flex justify-end">
-    <button id="nextBtn" onclick="nextMonth()" class="nav-btn">
-      ▶
-    </button>
-  </div>
-
+  <button onclick="prevMonth()" class="nav-btn">◀</button>
+  <div id="monthTitle" class="text-center font-semibold"></div>
+  <button onclick="nextMonth()" class="nav-btn">▶</button>
 </div>
 
 <!-- CALENDAR -->
@@ -66,17 +70,22 @@ body { font-family: system-ui; }
 
 <!-- APPLY -->
 <button id="applyBtn"
-class="w-full bg-blue-600 text-white p-3 rounded-xl shadow mt-3">
+class="w-full bg-blue-600 text-white p-3 rounded-xl mt-3">
 Apply Selected Dates
 </button>
 
 <script type="module">
 
-import { db, checkAuth } from "./common.js";
+import { auth, db, checkAuth } from "./common.js";
+import { alpList } from "./alpData.js";
+
 import {
   doc, getDoc, runTransaction,
   collection, getDocs
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+import { signOut }
+from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
 let currentUser="";
 let selectedDates=[];
@@ -91,10 +100,15 @@ today.setHours(0,0,0,0);
 let maxDate = new Date();
 maxDate.setDate(today.getDate() + 60);
 
-// AUTH
+// 🔐 AUTH
 checkAuth(async user=>{
+
   currentUser = user.email.split("@")[0];
-  userInfo.innerText = `Employee: ${currentUser}`;
+
+  const empNo = currentUser.replace("emp","");
+  const userData = alpList.find(u=>u.empNo===empNo);
+
+  userInfo.innerText = `👤 ${userData?.name} (Slot ${userData?.slot})`;
 
   await loadUser();
   await loadAllLeaves();
@@ -103,71 +117,64 @@ checkAuth(async user=>{
   renderCalendar();
 });
 
+// 🔙 BACK
+window.goHome = ()=>{
+  location.href = "index.html";
+};
+
+// 🚪 LOGOUT
+window.logoutUser = ()=>{
+  localStorage.removeItem("alpUser");
+  signOut(auth).then(()=>{
+    location.href = "index.html";
+  });
+};
+
+// 📊 VIEW CHART
+window.goChart = ()=>{
+  location.href = "view.html";
+};
+
 // USER
 async function loadUser(){
   const snap = await getDoc(doc(db,"users",currentUser));
   usedLeaves = snap.exists()?snap.data().used||0:0;
 }
 
-// LOAD LEAVES
+// LEAVES
 async function loadAllLeaves(){
   const snap = await getDocs(collection(db,"leaves"));
   allLeaves={};
-
   snap.forEach(d=>{
     allLeaves[d.id]=d.data().bookings||[];
   });
 }
 
-// SET MONTHS (ONLY WITHIN 60 DAYS)
+// MONTHS
 function setupMonths(){
-
   months=[];
   let temp = new Date(today.getFullYear(), today.getMonth(), 1);
-
   while(temp <= maxDate){
     months.push(new Date(temp));
-    temp.setMonth(temp.getMonth() + 1);
+    temp.setMonth(temp.getMonth()+1);
   }
 }
 
-// NAVIGATION
-window.nextMonth = ()=>{
-  if(currentMonthIndex < months.length - 1){
-    currentMonthIndex++;
-    renderCalendar();
-  }
-};
+// NAV
+window.nextMonth=()=>{ if(currentMonthIndex<months.length-1){currentMonthIndex++;renderCalendar();}};
+window.prevMonth=()=>{ if(currentMonthIndex>0){currentMonthIndex--;renderCalendar();}};
 
-window.prevMonth = ()=>{
-  if(currentMonthIndex > 0){
-    currentMonthIndex--;
-    renderCalendar();
-  }
-};
-
-// ARROWS
-function updateArrows(){
-  prevBtn.classList.toggle("invisible", currentMonthIndex === 0);
-  nextBtn.classList.toggle("invisible", currentMonthIndex === months.length - 1);
-}
-
-// RENDER
+// CALENDAR
 function renderCalendar(){
 
   const date = months[currentMonthIndex];
-
-  monthTitle.innerText =
-    date.toLocaleString('default',{month:'long',year:'numeric'});
+  monthTitle.innerText = date.toLocaleString('default',{month:'long',year:'numeric'});
 
   calendar.innerHTML="";
-
   const grid=document.createElement("div");
   grid.className="grid grid-cols-7 gap-2 text-center";
 
-  const days=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
-
-  days.forEach(d=>{
+  ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"].forEach(d=>{
     const el=document.createElement("div");
     el.className="text-xs font-bold";
     el.innerText=d;
@@ -177,17 +184,16 @@ function renderCalendar(){
   let d=new Date(date);
   const m=d.getMonth();
 
-  for(let i=0;i<d.getDay();i++){
-    grid.appendChild(document.createElement("div"));
-  }
+  for(let i=0;i<d.getDay();i++) grid.appendChild(document.createElement("div"));
 
   while(d.getMonth()===m){
 
     const ds=d.toISOString().split("T")[0];
     const bookings=allLeaves[ds]||[];
-    const count = bookings.length;
 
-    const isUser = bookings.find(b=>b.emp===currentUser);
+    const approvedCount = bookings.filter(b=>b.status==="approved").length;
+
+    const userBooking = bookings.find(b=>b.emp===currentUser);
     const isSelected = selectedDates.includes(ds);
 
     const box=document.createElement("div");
@@ -195,39 +201,54 @@ function renderCalendar(){
 
     const currentDate = new Date(ds);
 
-    // DISABLE OUTSIDE RANGE
+    // COLORS
     if(currentDate < today || currentDate > maxDate){
       box.classList.add("bg-gray-200","text-gray-400");
     }
-    else if(isUser){
-      box.classList.add("bg-blue-500","text-white");
+    else if(userBooking){
+
+      if(userBooking.status==="approved"){
+        box.classList.add("bg-green-600","text-white");
+      }
+      else if(userBooking.status==="pending"){
+        box.classList.add("bg-yellow-400");
+      }
+      else{
+        box.classList.add("bg-gray-400","text-white");
+      }
+
     }
     else if(isSelected){
       box.classList.add("bg-purple-500","text-white");
     }
-    else if(count < 5){
+    else if(approvedCount < 5){
       box.classList.add("bg-green-200");
     }
-    else if(count === 5){
+    else{
       box.classList.add("bg-red-500","text-white");
     }
-    else{
-      box.classList.add("bg-orange-400","text-white");
-    }
 
-    let label = count < 5 ? (5-count) : "W"+(count-5);
+    let label = approvedCount < 5 ? (5-approvedCount) : "Full";
 
     box.innerHTML = `
       <div>${d.getDate()}</div>
       <div class="text-[10px]">${label}</div>
     `;
 
+    // CLICK
     box.onclick = async ()=>{
 
       if(currentDate < today || currentDate > maxDate) return;
 
-      if(isUser){
+      if(userBooking){
+
+        if(userBooking.status==="approved"){
+          alert("Approved leave cannot be cancelled");
+          return;
+        }
+
         if(!confirm("Cancel leave?")) return;
+
         await cancelLeave(ds);
         await refresh();
         return;
@@ -242,9 +263,7 @@ function renderCalendar(){
           return;
         }
 
-        const tempDates = [...selectedDates, ds];
-
-        if(getSlots(tempDates) > 2){
+        if(getSlots([...selectedDates, ds]) > 2){
           alert("Max 2 slots");
           return;
         }
@@ -260,7 +279,6 @@ function renderCalendar(){
   }
 
   calendar.appendChild(grid);
-  updateArrows();
 }
 
 // APPLY
@@ -271,71 +289,57 @@ applyBtn.onclick = async ()=>{
     return;
   }
 
-  try{
-    await runTransaction(db, async (t)=>{
+  await runTransaction(db, async (t)=>{
 
-      const userRef = doc(db,"users",currentUser);
-      const userSnap = await t.get(userRef);
+    const userRef = doc(db,"users",currentUser);
+    const userSnap = await t.get(userRef);
 
-      let used = userSnap.exists() ? userSnap.data().used || 0 : 0;
+    let used = userSnap.exists()?userSnap.data().used||0:0;
 
-      let refs=[], snaps=[];
+    for(let date of selectedDates){
 
-      for(let date of selectedDates){
-        const ref = doc(db,"leaves",date);
-        refs.push(ref);
-        snaps.push(await t.get(ref));
-      }
+      const ref = doc(db,"leaves",date);
+      const snap = await t.get(ref);
 
-      for(let i=0;i<selectedDates.length;i++){
+      let bookings = snap.exists()?snap.data().bookings||[]:[];
 
-        let bookings = snaps[i].exists()
-          ? snaps[i].data().bookings || []
-          : [];
+      bookings.push({
+        emp: currentUser,
+        time: Date.now(),
+        status: "pending"
+      });
 
-        bookings.push({ emp: currentUser, time: Date.now() });
+      t.set(ref,{bookings});
+      used++;
+    }
 
-        t.set(refs[i], { bookings });
-        used++;
-      }
+    t.set(userRef,{used});
+  });
 
-      t.set(userRef, { used });
-
-    });
-
-    alert("Applied Successfully");
-    selectedDates=[];
-
-    await refresh();
-
-  }catch(e){
-    alert(e.message || e);
-  }
+  alert("Applied");
+  selectedDates=[];
+  refresh();
 };
 
 // CANCEL
 async function cancelLeave(date){
 
-  const userRef = doc(db,"users",currentUser);
-  const dayRef = doc(db,"leaves",date);
-
   await runTransaction(db, async (t)=>{
+
+    const userRef = doc(db,"users",currentUser);
+    const dayRef = doc(db,"leaves",date);
 
     const userSnap = await t.get(userRef);
     const daySnap = await t.get(dayRef);
 
     let bookings = daySnap.data().bookings || [];
+    bookings = bookings.filter(b=>b.emp!==currentUser);
 
-    const index = bookings.findIndex(b=>b.emp===currentUser);
-    if(index !== -1) bookings.splice(index,1);
-
-    let used=userSnap.exists()?userSnap.data().used||0:0;
+    let used=userSnap.data().used||0;
 
     t.set(dayRef,{bookings});
     t.set(userRef,{used:used-1});
   });
-
-  alert("Cancelled");
 }
 
 // REFRESH
@@ -345,24 +349,15 @@ async function refresh(){
   renderCalendar();
 }
 
-// SLOT LOGIC
+// SLOT
 function getSlots(dates){
-
-  if(dates.length === 0) return 0;
-
-  const sorted = dates.slice().sort();
-  let slots = 1;
-
-  for(let i=1;i<sorted.length;i++){
-
-    const prev = new Date(sorted[i-1]);
+  dates.sort();
+  let slots=1;
+  for(let i=1;i<dates.length;i++){
+    const prev=new Date(dates[i-1]);
     prev.setDate(prev.getDate()+1);
-
-    if(prev.toISOString().split("T")[0] !== sorted[i]){
-      slots++;
-    }
+    if(prev.toISOString().split("T")[0]!==dates[i]) slots++;
   }
-
   return slots;
 }
 
