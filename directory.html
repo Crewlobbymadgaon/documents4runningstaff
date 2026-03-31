@@ -187,6 +187,36 @@
         font-size: 16px;
       }
     }
+
+    .header {
+  position: sticky;
+  top: 0;
+  background: #f4f4f9;
+  z-index: 1000;
+  padding: 10px 0;
+  transition: all 0.3s ease;
+}
+
+/* SHRINKED HEADER */
+.header.shrink {
+  padding: 5px 0;
+}
+
+/* Logo shrink */
+.header.shrink .logo img {
+  max-width: 60px;
+}
+
+/* Title shrink */
+.header.shrink h1 {
+  font-size: 16px;
+}
+
+/* Search shrink */
+.header.shrink input {
+  padding: 8px;
+  font-size: 14px;
+}
   </style>
 </head>
 <body>
@@ -264,6 +294,16 @@
         alert('Sharing is not supported in this browser.');
       }
     }
+
+    window.addEventListener("scroll", function () {
+  const header = document.querySelector(".header");
+
+  if (window.scrollY > 50) {
+    header.classList.add("shrink");
+  } else {
+    header.classList.remove("shrink");
+  }
+});            
   </script>
 </body>
 </html>
