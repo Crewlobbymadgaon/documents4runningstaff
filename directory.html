@@ -314,11 +314,27 @@ window.addEventListener("scroll", function () {
 
   const hasResults = document.getElementById("directory").children.length > 0;
 
+  // ❌ Do nothing if keyboard open
+  if (isKeyboardOpen) {
+    header.classList.remove("shrink");
+    return;
+  }
+
   if (window.scrollY > 120 && hasResults) {
     header.classList.add("shrink");
   } else {
     header.classList.remove("shrink");
   }
+});
+
+        let isKeyboardOpen = false;
+
+window.addEventListener("resize", () => {
+  const screenHeight = window.screen.height;
+  const currentHeight = window.innerHeight;
+
+  // If height reduces significantly → keyboard open
+  isKeyboardOpen = currentHeight < screenHeight * 0.75;
 });
   </script>
 </body>
