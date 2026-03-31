@@ -1,4 +1,4 @@
-const directoryData = [
+window.directoryData = [
   {
     "name": "Lobby Mangalore Central",
     "designation": "Lobby MAQ",
