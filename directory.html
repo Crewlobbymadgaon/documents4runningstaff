@@ -188,34 +188,45 @@
       }
     }
 
-    .header {
+/* HEADER BASE */
+.header {
   position: sticky;
   top: 0;
   background: #f4f4f9;
   z-index: 1000;
-  padding: 10px 0;
-  transition: all 0.3s ease;
+  padding: 12px 0;
+  transition: all 0.25s ease;
 }
 
-/* SHRINKED HEADER */
+/* SHRINK (SUBTLE) */
 .header.shrink {
-  padding: 5px 0;
+  padding: 6px 0;
 }
 
-/* Logo shrink */
+/* Slight logo shrink only */
+.header .logo img {
+  max-width: 90px;
+  transition: all 0.25s ease;
+}
+
 .header.shrink .logo img {
-  max-width: 60px;
+  max-width: 70px;
 }
 
-/* Title shrink */
-.header.shrink h1 {
+/* KEEP TEXT SAME (important for readability) */
+.header h1 {
+  font-size: 20px;
+}
+
+/* Slight input adjust */
+.header.shrink input {
+  padding: 10px;
   font-size: 16px;
 }
 
-/* Search shrink */
-.header.shrink input {
-  padding: 8px;
-  font-size: 14px;
+/* Add clean shadow when scrolling */
+.header.shrink {
+  box-shadow: 0 3px 10px rgba(0,0,0,0.08);
 }
   </style>
 </head>
@@ -297,14 +308,13 @@
       }
     }
 
-    window.addEventListener("scroll", function () {
+window.addEventListener("scroll", function () {
   const header = document.querySelector(".header");
-
-  if (!header) return; // safety
+  if (!header) return;
 
   const hasResults = document.getElementById("directory").children.length > 0;
 
-  if (window.scrollY > 50 && hasResults) {
+  if (window.scrollY > 120 && hasResults) {
     header.classList.add("shrink");
   } else {
     header.classList.remove("shrink");
