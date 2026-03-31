@@ -227,7 +227,7 @@
             <p>${p.designation}</p>
             <p class="phone">${p.phone}</p>
             <div class="actions">
-              ${showCall ? `<a href="tel:${p.phone.replace(/\D/g,'')}" class="call-btn">📞 Call</a>` : ""}
+              ${showCall ? `<a href="tel:${p.phone.toString().replace(/\D/g,'')}" class="call-btn">📞 Call</a>` : ""}
               <a href="#" class="share-btn" onclick="shareContact('${p.name}', '${p.designation}', '${p.phone}')">🔗 Share</a>
             </div>
           </div>
