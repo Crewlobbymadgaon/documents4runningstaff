@@ -489,13 +489,10 @@ const storage = getStorage(app);
    =============================== */
 window.openLatest = async (filePath) => {
 
-  const win = window.open("", "_blank"); // 👈 no "about:blank"
-
   try {
     const url = await getDownloadURL(ref(storage, filePath));
-    win.location.href = url; // 👈 direct assign (faster feel)
+    window.open(url, "_blank"); // 👈 open AFTER URL ready
   } catch {
-    win.close();
     alert("Unable to open document");
   }
 
