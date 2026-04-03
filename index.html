@@ -494,12 +494,13 @@ window.addEventListener("DOMContentLoaded", () => {
 </footer>
 
 <script>
+window.addEventListener("DOMContentLoaded", () => {
+
+  // ✅ FIXED: footer year inside DOMContentLoaded
   document.querySelectorAll(".footer-year").forEach(el => {
     el.textContent = new Date().getFullYear();
   });
-  
-  
-window.addEventListener("DOMContentLoaded", () => {
+
   const intro = document.getElementById("intro-screen");
   const app = document.getElementById("app");
 
@@ -514,7 +515,6 @@ window.addEventListener("DOMContentLoaded", () => {
   sessionStorage.setItem("introShown", "true");
 
   setTimeout(() => {
-    // Smooth fade + slight zoom
     intro.classList.add("fade-out");
     app.style.opacity = "1";
 
@@ -522,29 +522,39 @@ window.addEventListener("DOMContentLoaded", () => {
       intro.remove();
     }, 600);
 
-  }, 1100); // slightly faster
+  }, 1100);
+
 });
 </script>
-      <script>
-document.querySelectorAll(".menu-card").forEach(card => {
+<script>
+window.addEventListener("DOMContentLoaded", () => {
 
-  // TOUCH START → show feedback immediately
-  card.addEventListener("touchstart", () => {
-    card.classList.add("touch-active");
-  }, { passive: true });
+  document.querySelectorAll(".menu-card").forEach(card => {
 
-  // TOUCH END → snap back, then let click/open happen
-  card.addEventListener("touchend", () => {
+    card.addEventListener("touchstart", () => {
+      card.classList.add("touch-active");
+    }, { passive: true });
+
+    card.addEventListener("touchend", () => {
+  setTimeout(() => {
     card.classList.remove("touch-active");
+  }, 120); // 👈 slight delay so user sees effect
+});
+
+    card.addEventListener("touchcancel", () => {
+      card.classList.remove("touch-active");
+    });
+
   });
 
-  // SAFETY
-  card.addEventListener("touchcancel", () => {
-    card.classList.remove("touch-active");
+  document.querySelectorAll("a.menu-card").forEach(link => {
+    link.addEventListener("click", () => {
+      document.body.style.opacity = "0.92";
+    });
   });
 
 });
-      </script>
+</script>
       <script>
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
@@ -560,12 +570,6 @@ if ("serviceWorker" in navigator) {
 
 
 </script>
-<script>
-document.querySelectorAll("a.menu-card").forEach(link => {
-  link.addEventListener("click", function () {
-    document.body.style.opacity = "0.92";
-  });
-});
-</script>
+
   </body>
     </html>
