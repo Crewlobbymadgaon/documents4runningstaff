@@ -268,6 +268,10 @@ html, body {
     flex: initial;
   }
 }
+
+#dropdownMenu {
+  overscroll-behavior: contain;
+}
     </style>
   </head>
   <body class="bg-gray-50 text-gray-800 min-h-screen">
@@ -352,7 +356,7 @@ html, body {
   <!-- Dropdown menu (now correctly aligned below hamburger) -->
    <div id="dropdownMenu"
      class="hidden absolute right-0 mt-2 bg-white border border-blue-800 shadow-lg z-50 rounded-md w-52
-            max-h-[70vh] overflow-y-auto">
+            max-h-[70vh] overflow-y-auto overscroll-contain">
       <a href="/" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Home</a>
       <a href="latest.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Latest Circulars</a>
       <a href="safetycircular.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Safety Circular</a>
