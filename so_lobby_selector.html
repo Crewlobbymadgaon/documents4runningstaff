@@ -155,7 +155,7 @@
     <div class="flex justify-center gap-3 py-2 sm:py-3">
 
       <!-- Home Button -->
-      <button onclick="window.location.href='/documents4runningstaff/index.html'"
+      <button onclick="window.location.href='/index.html'"
               title="Go to Home"
               class="flex items-center gap-2 
                      text-xs sm:text-sm font-bold text-white 
@@ -253,17 +253,18 @@ document.addEventListener("touchstart", function(){}, {passive:true});
 </footer>
 
 <script>
+window.addEventListener("DOMContentLoaded", () => {
+
+  // ✅ Footer year fix
   document.querySelectorAll(".footer-year").forEach(el => {
     el.textContent = new Date().getFullYear();
   });
 
-  
-  
-  
+});
 
-
+// ✅ Service worker (keep separate)
 if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("/documents4runningstaff/sw.js");
+  navigator.serviceWorker.register("/sw.js");
 }
 </script>
      
