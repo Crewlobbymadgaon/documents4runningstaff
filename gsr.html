@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>G&amp;SR</title>
 
-  <link rel="manifest" href="/documents4runningstaff/manifest.json" />
-  <link rel="icon" href="/documents4runningstaff/favicon.ico" />
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="icon" href="/favicon.ico" />
   <meta name="theme-color" content="#1f2937" />
   <link rel="preconnect" href="https://www.gstatic.com">
   <link rel="preconnect" href="https://firebasestorage.googleapis.com">
@@ -188,6 +188,10 @@ window.getDownloadURL = getDownloadURL;
     min-height: 34px;
   }
 }
+
+#dropdownMenu {
+  overscroll-behavior: contain;
+}
   </style>
 </head>
 
@@ -233,9 +237,10 @@ window.getDownloadURL = getDownloadURL;
         </svg>
       </button>
 
-       <div id="dropdownMenu"
-        class="hidden absolute right-0 mt-2 bg-white border border-blue-800 shadow-lg z-50 rounded-md w-52">
-      <a href="index.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Home</a>
+      <div id="dropdownMenu"
+            class="hidden absolute right-0 mt-2 bg-white border border-blue-800 shadow-lg z-50 rounded-md w-52
+            max-h-[70vh] overflow-y-auto overscroll-contain">
+      <a href="/" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Home</a>
       <a href="latest.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Latest Circulars</a>
       <a href="so_lobby_selector.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Shed Order</a>
       <a href="safetycircular.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Safety Circular</a>
@@ -325,13 +330,14 @@ window.getDownloadURL = getDownloadURL;
 </footer>
 
 <script>
+window.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll(".footer-year").forEach(el => {
     el.textContent = new Date().getFullYear();
   });
-  
+});
+</script>
 
-
-  
+<script>
   
   const hamburgerBtn = document.getElementById("hamburgerBtn");
   const dropdownMenu = document.getElementById("dropdownMenu");
@@ -429,8 +435,7 @@ document.querySelectorAll(".lobby-card").forEach(card => {
 
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker
-      .register('/documents4runningstaff/sw.js')
+    navigator.serviceWorker.register('/sw.js')
       .then(() => console.log("Service Worker registered"))
       .catch(err => console.log("Service Worker failed", err));
   });
