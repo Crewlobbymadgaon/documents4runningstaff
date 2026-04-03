@@ -228,11 +228,11 @@
   // 🔴 THIS LINE IS CRITICAL
   window.openLatest = function (filePath) {
 
-  const win = window.open("about:blank", "_blank");
+  const win = window.open("", "_blank"); // 👈 opens instantly
 
   getDownloadURL(ref(storage, filePath))
     .then(url => {
-      win.location.replace(url);
+      win.location.href = url;
     })
     .catch(err => {
       win.close();
@@ -241,6 +241,8 @@
     });
 
 };
+
+
 </script>
 
 <script>
