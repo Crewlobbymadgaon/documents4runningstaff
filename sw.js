@@ -183,28 +183,22 @@ if (url.hostname === "firebasestorage.googleapis.com") {
 
     const runtime = await caches.open(RUNTIME);
 
-    const cached = await runtime.match(req);
-    if (cached) return cached;
+  const cached = await runtime.match(req);
+if (cached) return cached;
 
-    try {
+try {
+  const res = await fetch(req);
 
-      const res = await fetch(req);
+  if (res.ok) {
+    runtime.put(req, res.clone());
+    limitCache(RUNTIME, 60);
+  }
 
-      if (res.ok) {
-        runtime.put(req, res.clone());
-        limitCache(RUNTIME, 60);
-      }
+  return res;
 
-      return res;
-
-    } catch {
-
-      const cached = await runtime.match(req);
-      if (cached) return cached;
-
-      return new Response("PDF unavailable offline", { status: 504 });
-
-    }
+} catch {
+  return cached || new Response("PDF unavailable offline", { status: 504 });
+}
 
   })());
 
