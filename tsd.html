@@ -713,7 +713,49 @@ window.addEventListener("DOMContentLoaded", () => {
 
 <script>
 
+function applyTouchFeedback(element, onTap) {
 
+  let startX = 0;
+  let startY = 0;
+  let isScrolling = false;
+  let touchStartTime = 0;
+
+  element.addEventListener("touchstart", (e) => {
+    const touch = e.touches[0];
+    startX = touch.clientX;
+    startY = touch.clientY;
+    isScrolling = false;
+    touchStartTime = Date.now();
+
+    element.classList.add("touch-active");
+  }, { passive: true });
+
+  element.addEventListener("touchmove", (e) => {
+    const touch = e.touches[0];
+
+    if (
+      Math.abs(touch.clientX - startX) > 10 ||
+      Math.abs(touch.clientY - startY) > 10
+    ) {
+      isScrolling = true;
+      element.classList.remove("touch-active");
+    }
+  }, { passive: true });
+
+  element.addEventListener("touchend", () => {
+    element.classList.remove("touch-active");
+
+    const pressDuration = Date.now() - touchStartTime;
+
+    if (isScrolling || pressDuration < 120) return;
+
+    if (onTap) onTap();
+  });
+
+  element.addEventListener("touchcancel", () => {
+    element.classList.remove("touch-active");
+  });
+}
 /* ===============================
    HAMBURGER MENU
 =============================== */
@@ -786,7 +828,7 @@ function goBackToMain() {
 
   mainMenu.classList.remove("hidden");
 
-  pageTitle.textContent = "Miscellaneous Books";
+  pageTitle.textContent = "TSD";
 
   headerBackBtn.classList.add("hidden");
   quickMenu.classList.add("hidden");
@@ -800,79 +842,63 @@ headerBackBtn.addEventListener("click", goBackToMain);
 /* ===============================
    MAIN MENU CARDS (data-main)
 =============================== */
-
+const urlCache = {};
 document.querySelectorAll(".lobby-card[data-file]").forEach(card => {
 
   const filePath = card.dataset.file;
+  let touchHandled = false;
+  let lastTapTime = 0;
+async function openFile() {
 
-  async function openFile() {
-    try {
-      const url = await getDownloadURL(
+  const now = Date.now();
+  if (now - lastTapTime < 400) return;
+  lastTapTime = now;
+
+  try {
+
+    card.style.opacity = "0.6";
+    card.style.pointerEvents = "none";
+
+    if (!urlCache[filePath]) {
+      urlCache[filePath] = await getDownloadURL(
         ref(window.storage, filePath)
       );
-      window.open(url, "_blank", "noopener");
-    } catch {
-      alert("Unable to open document");
     }
+
+    const url = urlCache[filePath];
+
+    const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+    if (isMobile) {
+      window.location.replace(url);
+    } else {
+      window.open(url, "_blank");
+    }
+
+  } catch {
+    alert("Unable to open document");
+  } finally {
+    card.style.opacity = "1";
+    card.style.pointerEvents = "auto";
   }
+}
+  applyTouchFeedback(card, () => {
+    touchHandled = true;
+    openFile();
+  });
 
-  // touch interaction
-  applyTouchFeedback(card, openFile);
-
-  // mouse click (desktop only)
-  card.addEventListener("click", e => {
-    if (e.pointerType === "touch") return;
+  card.addEventListener("click", (e) => {
+    if (touchHandled) {
+      e.preventDefault();
+      touchHandled = false;
+      return;
+    }
     openFile();
   });
 
 });
 
-/* ===============================
-   FILE CARDS (data-file)
-=============================== */
 
-function applyTouchFeedback(element, onTap) {
-
-  let startX = 0;
-  let startY = 0;
-  let isScrolling = false;
-  let touchStartTime = 0;
-
-  element.addEventListener("touchstart", (e) => {
-    const touch = e.touches[0];
-    startX = touch.clientX;
-    startY = touch.clientY;
-    isScrolling = false;
-    touchStartTime = Date.now();
-
-    element.classList.add("touch-active");
-  }, { passive: true });
-
-  element.addEventListener("touchmove", (e) => {
-    const touch = e.touches[0];
-    const diffX = Math.abs(touch.clientX - startX);
-    const diffY = Math.abs(touch.clientY - startY);
-
-    if (diffX > 10 || diffY > 10) {
-      isScrolling = true;
-      element.classList.remove("touch-active");
-    }
-  }, { passive: true });
-
-  element.addEventListener("touchend", () => {
-    element.classList.remove("touch-active");
-
-    const pressDuration = Date.now() - touchStartTime;
-
-    if (isScrolling || pressDuration < 120) return;
-
-    if (onTap) onTap();
-  });
-
-  element.addEventListener("touchcancel", () => {
-    element.classList.remove("touch-active");
-  });
-}
 
 
 
