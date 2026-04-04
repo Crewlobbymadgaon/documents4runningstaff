@@ -454,16 +454,15 @@ for (const data of docs) {
 
    
 async function openCounselling(filePath) {
-  const win = window.open("about:blank", "_blank");
 
   try {
     const url = await getDownloadURL(ref(window.storage, filePath));
-    win.location.href = url;
+    window.open(url, "_blank"); // ✅ open AFTER URL ready
   } catch (err) {
-    win.close();
     alert("Unable to open document");
     console.error(err);
   }
+
 }
 // 🔹 Year selector handler
 function highlightSelectedYear() {
