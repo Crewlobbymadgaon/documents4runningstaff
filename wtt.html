@@ -391,26 +391,22 @@ document.querySelectorAll(".lobby-card").forEach(card => {
   }, { passive: true });
 
   // TOUCH END
-  card.addEventListener("touchend", () => {
+ card.addEventListener("touchend", () => {
 
-    card.classList.remove("touch-active");
+  card.classList.remove("touch-active");
 
-    setTimeout(async () => {
+  setTimeout(async () => {
 
-      const win = window.open("", "_blank");
+    try {
+      const url = await getDownloadURL(ref(window.storage, filePath));
+      window.open(url, "_blank");
+    } catch {
+      alert("Unable to open document");
+    }
 
-      try {
-        const url = await getDownloadURL(ref(window.storage, filePath));
-        win.location.href = url;
-      } catch {
-        win.close();
-        alert("Unable to open document");
-      }
+  }, 0);
 
-    }, 0);
-
-  });
-
+});
   // TOUCH CANCEL
   card.addEventListener("touchcancel", () => {
     card.classList.remove("touch-active");
@@ -419,22 +415,19 @@ document.querySelectorAll(".lobby-card").forEach(card => {
   // DESKTOP CLICK
   card.addEventListener("click", async () => {
 
-    if (isTouch) {
-      isTouch = false;
-      return;
-    }
+  if (isTouch) {
+    isTouch = false;
+    return;
+  }
 
-    const win = window.open("", "_blank");
+  try {
+    const url = await getDownloadURL(ref(window.storage, filePath));
+    window.open(url, "_blank");
+  } catch {
+    alert("Unable to open document");
+  }
 
-    try {
-      const url = await getDownloadURL(ref(window.storage, filePath));
-      win.location.href = url;
-    } catch {
-      win.close();
-      alert("Unable to open document");
-    }
-
-  });
+});
 
 });
 </script>
