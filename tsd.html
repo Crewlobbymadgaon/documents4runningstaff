@@ -743,14 +743,13 @@ function applyTouchFeedback(element, onTap) {
   }, { passive: true });
 
   element.addEventListener("touchend", () => {
-    element.classList.remove("touch-active");
+  element.classList.remove("touch-active");
 
-    const pressDuration = Date.now() - touchStartTime;
+  if (isScrolling) return;
 
-    if (isScrolling || pressDuration < 120) return;
-
-    if (onTap) onTap();
-  });
+  // 🔥 remove delay check → instant response
+  if (onTap) onTap();
+});
 
   element.addEventListener("touchcancel", () => {
     element.classList.remove("touch-active");
