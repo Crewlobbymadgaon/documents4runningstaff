@@ -490,25 +490,20 @@ document.querySelectorAll(".lobby-card[data-file]").forEach(card => {
   }, { passive: true });
 
   card.addEventListener("touchend", async () => {
-    card.classList.remove("touch-active");
+  card.classList.remove("touch-active");
 
-    if (isScrolling) return; // 🚫 Do NOT open if scroll detected
+  if (isScrolling) return;
 
-   const win = window.open("", "_blank");
+  try {
+    const url = await getDownloadURL(
+      ref(window.storage, filePath)
+    );
 
-try {
-  const url = await getDownloadURL(
-    ref(window.storage, filePath)
-  );
-
-  win.location.href = url;
-
-} catch {
-  win.close();
-  alert("Unable to open document");
-}
-    
-  });
+    window.open(url, "_blank");
+  } catch {
+    alert("Unable to open document");
+  }
+});
 
   card.addEventListener("touchcancel", () => {
     card.classList.remove("touch-active");
@@ -520,17 +515,13 @@ try {
 
   card.addEventListener("click", async () => {
 
-  const win = window.open("", "_blank");
-
   try {
     const url = await getDownloadURL(
       ref(window.storage, filePath)
     );
 
-    win.location.href = url;
-
+    window.open(url, "_blank");
   } catch {
-    win.close();
     alert("Unable to open document");
   }
 
