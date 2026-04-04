@@ -412,20 +412,12 @@ list.appendChild(card);
 
 async function openSafetyCircular(filePath) {
 
-  const win = window.open("about:blank", "_blank");
-
   try {
-
     const url = await getDownloadURL(ref(window.storage, filePath));
-
-    win.location.replace(url);
-
+    window.open(url, "_blank"); // ✅ open AFTER URL ready
   } catch (err) {
-
-    win.close();
     alert("Unable to open Safety Circular");
     console.error(err);
-
   }
 
 }
