@@ -896,7 +896,47 @@ window.addEventListener("DOMContentLoaded", () => {
 
 <script>
 
+function applyTouchFeedback(element, onTap) {
 
+  let startX = 0;
+  let startY = 0;
+  let isScrolling = false;
+  let touchStartTime = 0;
+
+  element.addEventListener("touchstart", (e) => {
+    const touch = e.touches[0];
+    startX = touch.clientX;
+    startY = touch.clientY;
+    isScrolling = false;
+    touchStartTime = Date.now();
+    element.classList.add("touch-active");
+  }, { passive: true });
+
+  element.addEventListener("touchmove", (e) => {
+    const touch = e.touches[0];
+    if (
+      Math.abs(touch.clientX - startX) > 10 ||
+      Math.abs(touch.clientY - startY) > 10
+    ) {
+      isScrolling = true;
+      element.classList.remove("touch-active");
+    }
+  }, { passive: true });
+
+  element.addEventListener("touchend", () => {
+    element.classList.remove("touch-active");
+
+    const pressDuration = Date.now() - touchStartTime;
+
+    if (isScrolling || pressDuration < 120) return;
+
+    if (onTap) onTap();
+  });
+
+  element.addEventListener("touchcancel", () => {
+    element.classList.remove("touch-active");
+  });
+}
 /* ===============================
    HAMBURGER MENU
 =============================== */
@@ -987,82 +1027,44 @@ headerBackBtn.addEventListener("click", goBackToMain);
 document.querySelectorAll(".lobby-card[data-file]").forEach(card => {
 
   const filePath = card.dataset.file;
+  let touchHandled = false; // ✅ key fix
 
   async function openFile() {
-
-    const win = window.open("", "_blank");
-
     try {
       const url = await getDownloadURL(
         ref(window.storage, filePath)
       );
 
-      win.location.href = url;
+      const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+      if (isMobile) {
+        window.location.replace(url);   // mobile
+      } else {
+        window.open(url, "_blank", "noopener"); // desktop
+      }
 
     } catch {
-      win.close();
       alert("Unable to open document");
     }
-
   }
 
-  applyTouchFeedback(card, openFile);
+  /* TOUCH */
+  applyTouchFeedback(card, () => {
+    touchHandled = true;
+    openFile();
+  });
 
-  card.addEventListener("click", e => {
-    if ("ontouchstart" in window) return;
+  /* CLICK */
+  card.addEventListener("click", (e) => {
+    if (touchHandled) {
+      e.preventDefault();  // ✅ stops duplicate trigger
+      touchHandled = false;
+      return;
+    }
     openFile();
   });
 
 });
-/* ===============================
-   FILE CARDS (data-file)
-=============================== */
-
-function applyTouchFeedback(element, onTap) {
-
-  let startX = 0;
-  let startY = 0;
-  let isScrolling = false;
-  let touchStartTime = 0;
-
-  element.addEventListener("touchstart", (e) => {
-    const touch = e.touches[0];
-    startX = touch.clientX;
-    startY = touch.clientY;
-    isScrolling = false;
-    touchStartTime = Date.now();
-
-    element.classList.add("touch-active");
-  }, { passive: true });
-
-  element.addEventListener("touchmove", (e) => {
-    const touch = e.touches[0];
-    const diffX = Math.abs(touch.clientX - startX);
-    const diffY = Math.abs(touch.clientY - startY);
-
-    if (diffX > 10 || diffY > 10) {
-      isScrolling = true;
-      element.classList.remove("touch-active");
-    }
-  }, { passive: true });
-
-  element.addEventListener("touchend", () => {
-    element.classList.remove("touch-active");
-
-    const pressDuration = Date.now() - touchStartTime;
-
-    if (isScrolling || pressDuration < 120) return;
-
-    if (onTap) onTap();
-  });
-
-  element.addEventListener("touchcancel", () => {
-    element.classList.remove("touch-active");
-  });
-}
-
-
-
 
 
 document.querySelectorAll(".lobby-card[data-main]").forEach(card => {
