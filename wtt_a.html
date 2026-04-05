@@ -483,6 +483,16 @@ card.addEventListener("click", () => {
 const urlCache = {};
    
 async function openCorrectionSlip(filePath) {
+
+  const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+  let newTab = null;
+
+  // 🔥 open instantly (desktop)
+  if (!isMobile) {
+    newTab = window.open("about:blank", "_blank");
+  }
+
   try {
 
     if (!urlCache[filePath]) {
@@ -491,9 +501,20 @@ async function openCorrectionSlip(filePath) {
       );
     }
 
-    window.open(urlCache[filePath], "_blank", "noopener");
+    const url = urlCache[filePath];
+
+    if (isMobile) {
+      window.location.href = url; // ✅ best for mobile
+    } else {
+      if (newTab) {
+        newTab.location.replace(url); // ✅ smooth
+      } else {
+        window.location.href = url;
+      }
+    }
 
   } catch (err) {
+    if (newTab) newTab.close();
     alert("Unable to open document");
     console.error(err);
   }
