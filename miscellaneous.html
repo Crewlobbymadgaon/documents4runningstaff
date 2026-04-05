@@ -1030,23 +1030,32 @@ document.querySelectorAll(".lobby-card[data-file]").forEach(card => {
   let touchHandled = false; // ✅ key fix
 
   async function openFile() {
-    try {
-      const url = await getDownloadURL(
-        ref(window.storage, filePath)
-      );
 
-      const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+  const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
-      if (isMobile) {
-        window.location.replace(url);   // mobile
-      } else {
-        window.open(url, "_blank", "noopener"); // desktop
-      }
+  let newTab = null;
 
-    } catch {
-      alert("Unable to open document");
-    }
+  // 🔥 open tab immediately (desktop only)
+  if (!isMobile) {
+    newTab = window.open("", "_blank", "noopener");
   }
+
+  try {
+    const url = await getDownloadURL(
+      ref(window.storage, filePath)
+    );
+
+    if (isMobile) {
+      window.location.href = url;   // smooth mobile
+    } else {
+      newTab.location.replace(url); // no about:blank visible
+    }
+
+  } catch {
+    if (newTab) newTab.close();
+    alert("Unable to open document");
+  }
+}
 
   /* TOUCH */
   applyTouchFeedback(card, () => {
