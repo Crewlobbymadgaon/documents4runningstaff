@@ -452,17 +452,46 @@ for (const data of docs) {
   }
 }
 
-   
+const urlCache = {};
+
 async function openCounselling(filePath) {
 
+  const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+  let newTab = null;
+
+  // 🔥 Open instantly (desktop)
+  if (!isMobile) {
+    newTab = window.open("about:blank", "_blank");
+  }
+
   try {
-    const url = await getDownloadURL(ref(window.storage, filePath));
-    window.open(url, "_blank"); // ✅ open AFTER URL ready
+
+    if (!urlCache[filePath]) {
+      urlCache[filePath] = await getDownloadURL(
+        ref(window.storage, filePath)
+      );
+    }
+
+    const url = urlCache[filePath];
+
+    if (isMobile) {
+      // ✅ BEST for mobile
+      window.location.href = url;
+    } else {
+      // ✅ BEST for desktop
+      if (newTab) {
+        newTab.location.replace(url);
+      } else {
+        window.location.href = url;
+      }
+    }
+
   } catch (err) {
+    if (newTab) newTab.close();
     alert("Unable to open document");
     console.error(err);
   }
-
 }
 // 🔹 Year selector handler
 function highlightSelectedYear() {
