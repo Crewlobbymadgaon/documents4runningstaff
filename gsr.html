@@ -372,58 +372,76 @@ window.addEventListener("DOMContentLoaded", () => {
   });
 
 
+const urlCache = {};
+
+
 document.querySelectorAll(".lobby-card").forEach(card => {
 
   const filePath = card.dataset.file;
   if (!filePath) return;
 
-  let isTouch = false;
+  let newTab = null;
+  let touchTriggered = false;
 
-  // TOUCH START
+  // 🔥 TOUCH START
   card.addEventListener("touchstart", () => {
-    isTouch = true;
+    touchTriggered = true;
     card.classList.add("touch-active");
   }, { passive: true });
 
-  // TOUCH END
-  card.addEventListener("touchend", () => {
-
-  card.classList.remove("touch-active");
-
-  setTimeout(async () => {
+  // 🔥 TOUCH END (MOBILE OPEN)
+  card.addEventListener("touchend", async () => {
+    card.classList.remove("touch-active");
 
     try {
-      const url = await getDownloadURL(ref(window.storage, filePath));
-      window.open(url, "_blank");
+      if (!urlCache[filePath]) {
+        urlCache[filePath] = await getDownloadURL(
+          ref(window.storage, filePath)
+        );
+      }
+
+      window.open(urlCache[filePath], "_blank");
+
     } catch {
       alert("Unable to open document");
     }
 
-  }, 0);
-
-});
-
-  // TOUCH CANCEL
-  card.addEventListener("touchcancel", () => {
-    card.classList.remove("touch-active");
+    // reset after slight delay
+    setTimeout(() => touchTriggered = false, 300);
   });
 
-  // DESKTOP CLICK
-card.addEventListener("click", async () => {
+  // 🔥 TOUCH CANCEL
+  card.addEventListener("touchcancel", () => {
+    card.classList.remove("touch-active");
+    touchTriggered = false;
+  });
 
-  if (isTouch) {
-    isTouch = false;
-    return;
-  }
+  // 🔥 CLICK (DESKTOP ONLY SAFE)
+  card.addEventListener("click", async () => {
 
-  try {
-    const url = await getDownloadURL(ref(window.storage, filePath));
-    window.open(url, "_blank");
-  } catch {
-    alert("Unable to open document");
-  }
+    if (touchTriggered) return; // ✅ FULL protection
 
-});
+    newTab = window.open("about:blank", "_blank");
+
+    try {
+      if (!urlCache[filePath]) {
+        urlCache[filePath] = await getDownloadURL(
+          ref(window.storage, filePath)
+        );
+      }
+
+      if (newTab) {
+        newTab.location.replace(urlCache[filePath]);
+      } else {
+        window.location.href = urlCache[filePath];
+      }
+
+    } catch {
+      if (newTab) newTab.close();
+      alert("Unable to open document");
+    }
+
+  });
 
 });
 
