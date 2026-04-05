@@ -385,14 +385,57 @@ async function loadGsrCorrectionSlips() {
       .map(d => d.data())
       .sort((a, b) => (b.slipNo || 0) - (a.slipNo || 0));
 
+    
     list.innerHTML = "";
 
     for (const data of docs) {
-      const card = document.createElement("div");
-      card.className = "shed-card cursor-pointer";
-      card.onclick = () => openCorrectionSlip(data.filePath);
 
-      card.innerHTML = `
+  const card = document.createElement("div");
+  card.className = "shed-card cursor-pointer";
+
+  let touchHandled = false;
+
+  // 🔥 TOUCH PREFETCH (smart loading)
+  card.addEventListener("touchstart", () => {
+
+  touchHandled = true;
+  card.classList.add("touch-active");
+
+  const encodedPath = encodeURIComponent(data.filePath);
+
+  // ✅ avoid duplicate prefetch
+  if (!document.querySelector(`link[data-prefetch="${encodedPath}"]`)) {
+    const link = document.createElement("link");
+    link.rel = "prefetch";
+    link.href =
+      "https://firebasestorage.googleapis.com/v0/b/doc4runningstaff-d000b.firebasestorage.app/o/" +
+      encodedPath +
+      "?alt=media";
+
+    link.setAttribute("data-prefetch", encodedPath);
+    document.head.appendChild(link);
+  }
+
+}, { passive: true, once: true });
+
+  // 🔥 TOUCH END
+  card.addEventListener("touchend", () => {
+    card.classList.remove("touch-active");
+
+    setTimeout(() => touchHandled = false, 300);
+  });
+
+  card.addEventListener("touchcancel", () => {
+    card.classList.remove("touch-active");
+  });
+
+  // 🔥 CLICK (desktop + fallback)
+  card.addEventListener("click", () => {
+  openCorrectionSlip(data.filePath);
+});
+
+  // 🔥 UI (unchanged)
+  card.innerHTML = `
   <div class="flex items-start justify-between gap-3">
     <div class="flex-1 min-w-0">
       <div class="shed-title">
@@ -406,10 +449,10 @@ async function loadGsrCorrectionSlips() {
       View
     </div>
   </div>
-`;
+  `;
 
-      list.appendChild(card);
-    }
+  list.appendChild(card);
+}
 
   } catch (err) {
     console.error("Error loading G&SR Correction Slips:", err);
@@ -418,44 +461,50 @@ async function loadGsrCorrectionSlips() {
   }
   
   // 🔹 Attach touch feedback AFTER cards are rendered
-document.querySelectorAll(".shed-card").forEach(card => {
 
-  let isTouch = false;
 
-  card.addEventListener("touchstart", () => {
-    isTouch = true;
-    card.classList.add("touch-active");
-  }, { passive: true });
 
-  card.addEventListener("touchend", () => {
-    card.classList.remove("touch-active");
-  });
-
-  card.addEventListener("touchcancel", () => {
-    card.classList.remove("touch-active");
-  });
-
-  card.addEventListener("click", () => {
-    if (isTouch) isTouch = false;
-  });
-
-});
-
-}
 
 
 
    
+const urlCache = {};
+
 async function openCorrectionSlip(filePath) {
 
+  const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+  let newTab = null;
+
+  // 🔥 open instantly (desktop only)
+  if (!isMobile) {
+    newTab = window.open("about:blank", "_blank");
+  }
+
   try {
-    const url = await getDownloadURL(ref(window.storage, filePath));
-    window.open(url, "_blank"); // ✅ correct
+    if (!urlCache[filePath]) {
+      urlCache[filePath] = await getDownloadURL(
+        ref(window.storage, filePath)
+      );
+    }
+
+    const url = urlCache[filePath];
+
+    if (isMobile) {
+      window.location.replace(url); // ✅ smooth mobile
+    } else {
+      if (!newTab || newTab.closed) {
+        window.location.href = url; // fallback
+      } else {
+        newTab.location.replace(url); // ✅ no blank flash
+      }
+    }
+
   } catch (err) {
+    if (newTab) newTab.close();
     alert("Unable to open document");
     console.error(err);
   }
-
 }
 
 
