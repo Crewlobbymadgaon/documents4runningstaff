@@ -446,6 +446,16 @@ document.querySelectorAll(".shed-card").forEach(card => {
 const urlCache = {};
    
 async function openCorrectionSlip(filePath) {
+
+  const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+  let newTab = null;
+
+  // 🔥 Open instantly (desktop only)
+  if (!isMobile) {
+    newTab = window.open("about:blank", "_blank");
+  }
+
   try {
 
     if (!urlCache[filePath]) {
@@ -454,9 +464,22 @@ async function openCorrectionSlip(filePath) {
       );
     }
 
-    window.open(urlCache[filePath], "_blank", "noopener");
+    const url = urlCache[filePath];
+
+    if (isMobile) {
+      // ✅ BEST for mobile
+      window.location.href = url;
+    } else {
+      // ✅ BEST for desktop
+      if (newTab) {
+        newTab.location.replace(url);
+      } else {
+        window.location.href = url;
+      }
+    }
 
   } catch (err) {
+    if (newTab) newTab.close();
     alert("Unable to open document");
     console.error(err);
   }
