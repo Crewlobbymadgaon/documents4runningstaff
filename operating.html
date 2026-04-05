@@ -225,20 +225,36 @@
   const app = initializeApp(firebaseConfig);
   const storage = getStorage(app);
 
-  // 🔴 THIS LINE IS CRITICAL
-  window.openLatest = function (filePath) {
+  // 🔥 FINAL HYBRID VERSION (BEST)
+window.openLatest = async function (filePath) {
 
-  const win = window.open("", "_blank"); // 👈 opens instantly
+  const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
-  getDownloadURL(ref(storage, filePath))
-    .then(url => {
-      win.location.href = url;
-    })
-    .catch(err => {
-      win.close();
-      alert("Document not found");
-      console.error(err);
-    });
+  let newTab = null;
+
+  // ✅ Open tab only on desktop (prevents popup block)
+  if (!isMobile) {
+    newTab = window.open("", "_blank", "noopener");
+  }
+
+  try {
+    const url = await getDownloadURL(ref(storage, filePath));
+
+    if (isMobile) {
+      // ✅ Mobile → same tab (no history issues)
+      window.location.href = url;
+    } else {
+      // ✅ Desktop → load into opened tab
+      newTab.location.replace(url); // 🔥 smoother than href
+    }
+
+  } catch (err) {
+
+    if (newTab) newTab.close();
+
+    alert("Document not found");
+    console.error(err);
+  }
 
 };
 
