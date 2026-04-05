@@ -471,7 +471,41 @@ document.querySelectorAll(".lobby-card[data-file]").forEach(card => {
 
   const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
-  /* ================= MOBILE ================= */
+  async function openFile() {
+
+    let newTab = null;
+
+    // 🔥 open instantly (desktop only)
+    if (!isMobile) {
+      newTab = window.open("about:blank", "_blank");
+    }
+
+    try {
+      if (!urlCache[filePath]) {
+        urlCache[filePath] = await getDownloadURL(
+          ref(window.storage, filePath)
+        );
+      }
+
+      const url = urlCache[filePath];
+
+      if (isMobile) {
+        window.location.replace(url);
+      } else {
+        if (!newTab) {
+          window.location.href = url; // fallback
+        } else {
+          newTab.location.replace(url);
+        }
+      }
+
+    } catch {
+      if (newTab) newTab.close();
+      alert("Unable to open document");
+    }
+  }
+
+  /* ================= TOUCH ================= */
   card.addEventListener("touchstart", (e) => {
     const t = e.touches[0];
     startX = t.clientX;
@@ -492,58 +526,30 @@ document.querySelectorAll(".lobby-card[data-file]").forEach(card => {
     }
   }, { passive: true });
 
-  card.addEventListener("touchend", async () => {
+  card.addEventListener("touchend", () => {
     card.classList.remove("touch-active");
     if (isScrolling) return;
 
     touchHandled = true;
 
-    try {
-      if (!urlCache[filePath]) {
-        urlCache[filePath] = await getDownloadURL(
-          ref(window.storage, filePath)
-        );
-      }
-
-      // ✅ MOBILE FIX (no history bug)
-      if (isMobile) {
-        window.location.replace(urlCache[filePath]);
-      } else {
-        window.open(urlCache[filePath], "_blank", "noopener");
-      }
-
-    } catch {
-      alert("Unable to open document");
-    }
+    // 🔥 smoother UI
+    requestAnimationFrame(openFile);
   });
 
-  /* ================= DESKTOP ================= */
-  card.addEventListener("click", async (e) => {
+  /* ================= CLICK ================= */
+  card.addEventListener("click", (e) => {
 
     if (touchHandled) {
       e.preventDefault();
+      touchHandled = false;
       return;
     }
 
-    try {
-      if (!urlCache[filePath]) {
-        urlCache[filePath] = await getDownloadURL(
-          ref(window.storage, filePath)
-        );
-      }
-
-      if (isMobile) {
-        window.location.replace(urlCache[filePath]);
-      } else {
-        window.open(urlCache[filePath], "_blank", "noopener");
-      }
-
-    } catch {
-      alert("Unable to open document");
-    }
+    openFile();
   });
 
 });
+
 
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
