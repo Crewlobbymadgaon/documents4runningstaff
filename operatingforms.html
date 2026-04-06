@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Operating Forms</title>
+
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="icon" href="/favicon.ico" />
+  <link rel="preconnect" href="https://firebasestorage.googleapis.com">
+  <link rel="dns-prefetch" href="https://firebasestorage.googleapis.com"> 
+  <meta name="theme-color" content="#1f2937" />
+
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+<style>
+body { background:#f9fafb; }
+:root {
+  --header-height: 88px;
+}
+html {
+  overflow-y: scroll;  /* always reserve scrollbar space */
+}
+.font-rajdhani { font-family: 'Rajdhani', sans-serif; }
+
+/* ===== SHED CARD STYLE ===== */
+.shed-card {
+  background: linear-gradient(135deg, #ffffff, #f8fafc);
+  border-radius: 16px;
+  border-left: 6px solid #1d4ed8;
+  padding: 14px 16px;
+  box-shadow: 0 10px 22px rgba(0,0,0,.12);
+  cursor: pointer;
+  transition: .2s;
+}
+.shed-card:hover {
+  transform: translateY(-3px);
+}
+.shed-title {
+  font-size: 15px;
+  font-weight: 800;
+  color: #1e3a8a;
+}
+.shed-desc {
+  font-size: 14px;
+  color: #374151;
+}
+.shed-btn {
+  color: #1d4ed8;
+  font-size: 12px;
+  font-weight: 700;
+
+  border: 1.5px solid #1d4ed8;
+  padding: 2px 8px;
+  border-radius: 6px;
+
+  background: transparent;
+
+  pointer-events: none;
+}
+.subheader {
+  position: sticky;
+  top: var(--header-offset);   /* dynamic value */
+  z-index: 45;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  background: #ffffff;
+  padding: 10px 12px;
+
+  border-bottom: 1px solid #ddd;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+#systemTitle {
+  font-size: 1.1rem;
+  font-weight: 800;
+  text-align: center;
+  flex: 1;
+
+  color: #1e3a8a; /* ✅ same as shed-title */
+}
+#mainHeader {
+  position: sticky;
+  top: 0;
+  z-index: 9999;
+}
+.shed-card.touch-active {
+  transform: scale(0.96);
+  box-shadow:
+    inset 0 3px 8px rgba(0,0,0,0.22),
+    0 6px 14px rgba(0,0,0,0.18);
+}
+ #dropdownMenu {
+  overscroll-behavior: contain;
+}
+
+
+
+  </style>
+</head>
+
+<body class="bg-gray-50 text-gray-800">
+
+<!-- HEADER -->
+<header id="mainHeader"
+ class="sticky top-0 z-[9999]
+         bg-gradient-to-r from-blue-900 via-blue-700 to-blue-900
+         text-white shadow-md">
+
+  <div class="relative px-4 pt-3 pb-5 sm:pb-4">
+
+    <!-- CENTERED TITLE -->
+    <div class="text-center max-w-3xl mx-auto">
+      <h1 class="font-rajdhani text-xl sm:text-3xl md:text-4xl leading-tight font-extrabold">
+        Digital Library
+        <span class="text-yellow-300">for</span>
+        Running Staff
+      </h1>
+
+<h2 id="pageTitle"
+    class="font-rajdhani
+           text-[clamp(22px,6vw,28px)]
+           sm:text-4xl md:text-5xl
+           font-extrabold mt-2
+           whitespace-nowrap overflow-hidden text-ellipsis
+           text-center">
+  Operating Forms
+</h2>
+ 
+
+      
+    </div>
+
+
+<!-- BACK BUTTON (LEFT) -->
+<div id="headerBackBtn" class="hidden absolute bottom-2 sm:bottom-3 left-4">
+  
+  <button class="header-btn bg-gradient-to-b from-blue-900 via-blue-500 to-blue-900 
+           hover:from-blue-800 hover:to-blue-950 
+           text-white p-2 rounded-md 
+           border border-blue-950 
+           shadow-lg 
+           focus:outline-none focus:ring-2 focus:ring-blue-900">
+
+    <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"
+      viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round"
+        d="M15 19l-7-7 7-7" />
+    </svg>
+
+  </button>
+</div>
+    <!-- HAMBURGER (lower on mobile) -->
+    <div class="absolute bottom-2 sm:bottom-3 right-4">
+      <button id="hamburgerBtn"
+        class="bg-gradient-to-b from-blue-900 via-blue-500 to-blue-900 
+               hover:from-blue-800 hover:to-blue-950 
+               text-white p-2 rounded-md 
+               border border-blue-950 
+               shadow-lg 
+               focus:outline-none focus:ring-2 focus:ring-blue-900">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"
+          viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M4 6h16M4 12h16M4 18h16"></path>
+        </svg>
+      </button>
+
+      <div id="dropdownMenu"
+     class="hidden absolute right-0 mt-2 bg-white border border-blue-800 shadow-lg z-[999] rounded-md w-52
+            max-h-[70vh] overflow-y-auto overscroll-contain text-sm">
+
+  <a href="/" class="block px-4 py-2 text-sm text-blue-900 hover:bg-blue-100">Home</a>
+  <a href="latest.html" class="block px-4 py-2 text-sm text-blue-900 hover:bg-blue-100">Latest Circulars</a>
+  <a href="so_lobby_selector.html" class="block px-4 py-2 text-sm text-blue-900 hover:bg-blue-100">Shed Order</a>
+  <a href="safetycircular.html" class="block px-4 py-2 text-sm text-blue-900 hover:bg-blue-100">Safety Circular</a>
+  <a href="counselling.html" class="block px-4 py-2 text-sm text-blue-900 hover:bg-blue-100">Counselling Topic</a>
+  <a href="gsr.html" class="block px-4 py-2 text-sm text-blue-900 hover:bg-blue-100">G&amp;SR</a>
+  <a href="wtt.html" class="block px-4 py-2 text-sm text-blue-900 hover:bg-blue-100">WTT</a>
+  <a href="accidentmanual.html" class="block px-4 py-2 text-sm text-blue-900 hover:bg-blue-100">Accident Manual</a>
+  <a href="correction.html" class="block px-4 py-2 text-sm text-blue-900 hover:bg-blue-100">Correction Slips</a>
+  <a href="tsd.html" class="block px-4 py-2 text-sm text-blue-900 hover:bg-blue-100">TSD</a>
+  <a href="krabooks.html" class="block px-4 py-2 text-sm text-blue-900 hover:bg-blue-100">KRA Books</a>
+  <a href="miscellaneous.html" class="block px-4 py-2 text-sm text-blue-900 hover:bg-blue-100">Miscellaneous Books</a>
+  <a href="operating.html" class="block px-4 py-2 text-sm text-blue-900 hover:bg-blue-100">Operating</a>
+  <a href="abnormal.html" class="block px-4 py-2 text-sm text-blue-900 hover:bg-blue-100">Abnormal Working</a>
+  <a href="videos.html" class="block px-4 py-2 text-sm text-blue-900 hover:bg-blue-100">Videos</a>
+  <a href="directory.html" class="block px-4 py-2 text-sm text-blue-900 hover:bg-blue-100">Phone Directory</a>
+</div>
+
+</div>
+</header>
+
+<!-- MAIN -->
+<main class="max-w-3xl mx-auto px-3 space-y-3">
+
+<!-- SUBHEADER (LIKE ABNORMAL WORKING) -->
+<div class="subheader">
+
+  <!-- LEFT ARROW -->
+  <!-- LEFT -->
+<button id="prevSystem"
+  class="bg-gradient-to-b from-blue-900 via-blue-500 to-blue-900 
+         hover:from-blue-800 hover:to-blue-950 
+         text-white p-2 rounded-md 
+         border border-blue-950 
+         shadow-lg">
+  <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2"
+    viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round"
+      d="M15 19l-7-7 7-7"/>
+  </svg>
+</button>
+
+  <!-- TITLE -->
+  <h2 id="systemTitle">Absolute Block System</h2>
+
+  <!-- RIGHT ARROW -->
+ <button id="nextSystem"
+  class="bg-gradient-to-b from-blue-900 via-blue-500 to-blue-900 
+         hover:from-blue-800 hover:to-blue-950 
+         text-white p-2 rounded-md 
+         border border-blue-950 
+         shadow-lg">
+  <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2"
+    viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round"
+      d="M9 5l7 7-7 7"/>
+  </svg>
+</button>
+
+</div>
+
+  <!-- CARDS -->
+  <div id="formsContainer" class="space-y-3"></div>
+
+</main>
+
+<script>
+/* DATA */
+const DATA = {
+  "Absolute Block System": [
+    { id: 'T/369(3b)', title:'Authority to Pass Signals in ON or Defective Position', desc:'Authority to Pass Signals in ON or Defective Position', file:'forms/t369.webp' },
+    { id: 'T/C 1425', title:'PLCT - UP', desc:'Paper Line Clear Ticket - UP', file:'forms/tc1425.webp' },
+    { id: 'T/D 1425', title:'PLCT - DN', desc:'Paper Line Clear Ticket - DN', file:'forms/td1425.webp' },
+    { id: 'T/806', title:'Shunting Order', desc:'Shunting Order', file:'forms/t806.webp' },
+    { id: 'T/509', title:'Authority to Receive a Train on an Obstructed Line', desc:'Authority to Receive a Train on an Obstructed Line', file:'forms/t509.webp' },
+    { id: 'T/510', title:'Authority to Receive a Train on a Non-signalled Line', desc:'Authority to Receive a Train on a Non-Signalled Line', file:'forms/t510.jpg' },
+    { id: 'T/511', title:'Authority to Start from a Non-signalled Line', desc:'Authority to Start from a Non-Signalled Line', file:'forms/t511.webp' },
+    { id: 'T/512', title:'Authority to Start from a Line with Common Starter Signal', desc:'Authority to Start from a Line with Common Starter Signal', file:'forms/t512.webp' },
+    { id: 'T/A 602', title:'Authority to Proceed for Relief Engine/Train into an Occupied Block Section', desc:'Authority to Proceed for Relief Engine/Train into an Occupied Block Section', file:'forms/ta602.webp' },
+    { id: 'T/B 602', title:'Authority for Opening Communication during TIC on Single Line Section', desc:'Authority for Opening Communication during Total Interruption of Communication (TIC) on Single Line Section', file:'forms/tb602.webp' },
+    { id: 'T/C 602', title:'Authority for Working of Train during TIC on Double Line Section', desc:'Authority for Working of Train during Total Interruption of Communication (TIC) on Double Line Section', file:'forms/tc602.webp' },
+    { id: 'T/D 602', title:'Authority for TSL working on Double Line Section', desc:'Authority fir Temporary Single Line (TSL) working on Double Line Section', file:'forms/td602.webp' },
+    { id: 'T/E 602', title:'Line Clear Enquiry Message', desc:'Line Clear Enquiry Message - asking Line Clear for despatch of trains during Total Failure of Communication on Single Line Section', file:'forms/te602.webp' },
+    { id: 'T/F 602', title:'Conditional Line Clear Message', desc:'Condtional Line Clear Message', file:'forms/tf602.webp' },
+    { id: 'T/G 602', title:'Conditional Line Clear Ticket - UP', desc:'Condtional Line Clear Ticket - UP', file:'forms/tg602.webp' },
+    { id: 'T/H 602', title:'Conditional Line Clear Ticket - DN', desc:'Condtional Line Clear Ticket - DN', file:'forms/th602.webp' },
+    { id: 'T/609', title:'Written Permission by TMR to Loco Pilot to Proceed to next Station from Mid-section', desc:'Written Permission by TMR to Loco Pilot to Proceed to next Station from Mid-section', file:'forms/t609.webp' },
+    { id: 'T 409', title:'Caution Order', desc:'Caution Order', file:'forms/t409.webp' },
+    { id: 'T/A 409', title:'NIL Caution Order', desc:'NIL Caution Order', file:'forms/ta409.webp' },
+    { id: 'T/B 409', title:'Reminder Caution Order', desc:'Reminder Caution Order', file:'forms/tb409.webp' }
+  ],
+  "Automatic Block Section": [
+   
+    { id: 'T/A 912', title:'Authority to Pass Automatic/Semi-Automatic/Manual Stop Signal/Gate Stop Signals', desc:'Authority to Pass Automatic/Semi-Automatic/Manual Stop Signal/Gate Stop Signals', file:'forms/ta912.webp' },
+    { id: 'T/B 912', title:'Authority for Working of Trains during TIC/Obstruction on Line in Automatic Block System', desc:'Authority for Working of Trains during Total Interruption of Communication (TIC)/Obstruction on Line in Automatic Block System', file:'forms/tb912.pdf' },
+    { id: 'T/C 912', title:'Authority to Proceed for Relief Engine/Train into an Automatic Block Signalling Section', desc:'Authority to Proceed for Relief Engine/Train into an Automatic Block Signalling Section', file:'forms/tc912.webp' },
+    { id: 'T/D 912', title:'Authority for Working of Trains during Prolonged Signal Failure in Automatic Block System', desc:'Authority for Working of Trains during Prolonged Signal Failure in Automatic Block System', file:'forms/td912.webp' },
+    { id: 'T/E 912', title:'Authority for TSL on Double Line in Automatic Block System', desc:'Authority for Temporary Single Line (TSL) Working on Double Line in Automatic Block System', file:'forms/te912.pdf' }
+    
+  ]
+};
+
+/* RENDER */
+const urlCache = {};
+
+function renderAuthorities(system){
+  const container = document.getElementById("formsContainer");
+  container.innerHTML = "";
+
+  DATA[system].forEach(item => {
+
+    const card = document.createElement("div");
+    card.className = "shed-card";
+
+    card.innerHTML = `
+      <div class="flex items-start justify-between gap-3">
+        <div class="flex-1 min-w-0">
+          <div class="shed-title">${item.id}</div>
+          <div class="shed-desc">${item.title}</div>
+        </div>
+
+        <div class="shed-btn shrink-0 self-end pointer-events-none">
+          View
+        </div>
+      </div>
+    `;
+
+    let touchTriggered = false;
+
+    // ✅ TOUCH START
+    card.addEventListener("touchstart", () => {
+      touchTriggered = true;
+      card.classList.add("touch-active");
+    }, { passive: true });
+
+    // ✅ TOUCH END (MOBILE → SAME TAB)
+    card.addEventListener("touchend", () => {
+      card.classList.remove("touch-active");
+
+      try {
+        if (!urlCache[item.file]) {
+          urlCache[item.file] = item.file;
+        }
+
+        window.location.href = urlCache[item.file];
+
+      } catch {
+        alert("Unable to open document");
+      }
+
+      setTimeout(() => touchTriggered = false, 300);
+    });
+
+    // ✅ TOUCH CANCEL
+    card.addEventListener("touchcancel", () => {
+      card.classList.remove("touch-active");
+      touchTriggered = false;
+    });
+
+    // ✅ DESKTOP CLICK (BEST UX)
+    card.addEventListener("click", () => {
+      if (touchTriggered) return;
+
+      try {
+        if (!urlCache[item.file]) {
+          urlCache[item.file] = item.file;
+        }
+
+        const newTab = window.open(urlCache[item.file], "_blank");
+
+        // fallback if blocked
+        if (!newTab) {
+          window.location.href = urlCache[item.file];
+        }
+
+      } catch {
+        alert("Unable to open document");
+      }
+    });
+
+    container.appendChild(card);
+  });
+}
+/* HAMBURGER */
+const btn = document.getElementById("hamburgerBtn");
+const menu = document.getElementById("dropdownMenu");
+
+btn.onclick = (e) => {
+  e.stopPropagation();
+  menu.classList.toggle("hidden");
+};
+
+document.onclick = (e) => {
+  if (!menu.contains(e.target) && !btn.contains(e.target)) {
+    menu.classList.add("hidden");
+  }
+};
+
+/* INIT */
+document.addEventListener("DOMContentLoaded", () => {
+updateSystem();
+});
+
+const SYSTEMS = [
+  "Absolute Block System",
+  "Automatic Block Section"
+];
+
+let currentIndex = 0;
+
+function updateSystem() {
+  const system = SYSTEMS[currentIndex];
+  document.getElementById("systemTitle").textContent = system;
+  renderAuthorities(system);
+}
+
+// LEFT
+document.getElementById("prevSystem").onclick = () => {
+  currentIndex = (currentIndex - 1 + SYSTEMS.length) % SYSTEMS.length;
+  updateSystem();
+};
+
+// RIGHT
+document.getElementById("nextSystem").onclick = () => {
+  currentIndex = (currentIndex + 1) % SYSTEMS.length;
+  updateSystem();
+};
+
+function setHeaderOffset() {
+  const header = document.getElementById("mainHeader");
+  const height = header.offsetHeight;
+  document.documentElement.style.setProperty("--header-offset", height + "px");
+}
+
+// Run on load
+window.addEventListener("load", setHeaderOffset);
+
+// Run on resize (mobile rotation etc.)
+window.addEventListener("resize", setHeaderOffset);
+
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("/sw.js")
+      .then(() => console.log("SW registered"))
+      .catch(err => console.log("SW failed", err));
+  });
+}
+</script>
+<footer
+  class="fixed bottom-0 left-0 w-full z-40
+         flex items-center justify-center
+         text-xs sm:text-sm
+         text-gray-700
+         bg-white
+         shadow-[0_-2px_8px_rgba(0,0,0,0.08)]
+         h-[var(--footer-height)]">
+© <span class="footer-year ml-1"></span>&nbsp;Combined Crew Lobby · Madgaon. All Rights Reserved
+
+</footer>
+
+<script>
+window.addEventListener("DOMContentLoaded", () => {
+  document.querySelectorAll(".footer-year").forEach(el => {
+    el.textContent = new Date().getFullYear();
+  });
+});
+</script>
+</body>
+</html>
