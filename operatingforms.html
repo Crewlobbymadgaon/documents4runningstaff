@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://firebasestorage.googleapis.com">
   <link rel="dns-prefetch" href="https://firebasestorage.googleapis.com"> 
   <meta name="theme-color" content="#1f2937" />
-
+  
   <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
 <style>
@@ -92,6 +92,10 @@ html {
   box-shadow:
     inset 0 3px 8px rgba(0,0,0,0.22),
     0 6px 14px rgba(0,0,0,0.18);
+}
+
+.shed-card {
+  -webkit-tap-highlight-color: transparent;
 }
  #dropdownMenu {
   overscroll-behavior: contain;
@@ -300,76 +304,69 @@ function renderAuthorities(system){
       </div>
     `;
 
-    let touchTriggered = false;
+   
+let startY = 0;
+let moved = false;
 
-    // ✅ TOUCH START
-    card.addEventListener("touchstart", () => {
-      touchTriggered = true;
-      card.classList.add("touch-active");
-    }, { passive: true });
+// TOUCH START
+card.addEventListener("touchstart", (e) => {
+  moved = false;
+  startY = e.touches[0].clientY;
+  card.classList.add("touch-active");
+}, { passive: true });
 
-    // ✅ TOUCH END (MOBILE → SAME TAB)
-    card.addEventListener("touchend", () => {
-      card.classList.remove("touch-active");
-
-      try {
-        if (!urlCache[item.file]) {
-          urlCache[item.file] = item.file;
-        }
-
-        window.location.href = urlCache[item.file];
-
-      } catch {
-        alert("Unable to open document");
-      }
-
-      setTimeout(() => touchTriggered = false, 300);
-    });
-
-    // ✅ TOUCH CANCEL
-    card.addEventListener("touchcancel", () => {
-      card.classList.remove("touch-active");
-      touchTriggered = false;
-    });
-
-    // ✅ DESKTOP CLICK (BEST UX)
-    card.addEventListener("click", () => {
-      if (touchTriggered) return;
-
-      try {
-        if (!urlCache[item.file]) {
-          urlCache[item.file] = item.file;
-        }
-
-        const newTab = window.open(urlCache[item.file], "_blank");
-
-        // fallback if blocked
-        if (!newTab) {
-          window.location.href = urlCache[item.file];
-        }
-
-      } catch {
-        alert("Unable to open document");
-      }
-    });
-
-    container.appendChild(card);
-  });
-}
-/* HAMBURGER */
-const btn = document.getElementById("hamburgerBtn");
-const menu = document.getElementById("dropdownMenu");
-
-btn.onclick = (e) => {
-  e.stopPropagation();
-  menu.classList.toggle("hidden");
-};
-
-document.onclick = (e) => {
-  if (!menu.contains(e.target) && !btn.contains(e.target)) {
-    menu.classList.add("hidden");
+// TOUCH MOVE
+card.addEventListener("touchmove", (e) => {
+  if (Math.abs(e.touches[0].clientY - startY) > 10) {
+    moved = true;
   }
-};
+}, { passive: true });
+
+// TOUCH END
+card.addEventListener("touchend", () => {
+  card.classList.remove("touch-active");
+
+  if (moved) return; // ❌ scrolling → do nothing
+
+  openFile(item.file);
+});
+
+// DESKTOP CLICK ONLY
+card.addEventListener("click", (e) => {
+  // ignore if it's a touch device
+  if ("ontouchstart" in window) return;
+
+  openFile(item.file);
+});
+container.appendChild(card);
+
+  }); // ✅ CLOSE LOOP
+} // ✅ CLOSE FUNCTION
+
+// COMMON FUNCTION
+function openFile(file) {
+  console.log("Opening:", file);
+
+  try {
+    if (!urlCache[file]) {
+      urlCache[file] = file;
+    }
+
+    const isTouchDevice = window.matchMedia("(pointer: coarse)").matches;
+
+    if (isTouchDevice) {
+      window.location.href = urlCache[file];
+    } else {
+      const newTab = window.open(urlCache[file], "_blank");
+      if (!newTab) {
+        window.location.href = urlCache[file];
+      }
+    }
+
+  } catch {
+    alert("Unable to open document");
+  }
+}
 
 /* INIT */
 document.addEventListener("DOMContentLoaded", () => {
@@ -439,6 +436,22 @@ window.addEventListener("DOMContentLoaded", () => {
     el.textContent = new Date().getFullYear();
   });
 });
+
+/* HAMBURGER */
+const btn = document.getElementById("hamburgerBtn");
+const menu = document.getElementById("dropdownMenu");
+
+btn.onclick = (e) => {
+  e.stopPropagation();
+  menu.classList.toggle("hidden");
+};
+
+document.onclick = (e) => {
+  if (!menu.contains(e.target) && !btn.contains(e.target)) {
+    menu.classList.add("hidden");
+  }
+};
+
 </script>
 </body>
 </html>
