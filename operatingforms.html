@@ -14,9 +14,12 @@
   <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
 <style>
-body { background:#f9fafb; }
+body { background:#f9fafb; 
+       
+}
 :root {
   --header-height: 88px;
+  --footer-height: 48px;
 }
 html {
   overflow-y: scroll;  /* always reserve scrollbar space */
@@ -199,7 +202,7 @@ html {
 </header>
 
 <!-- MAIN -->
-<main class="max-w-3xl mx-auto px-3 space-y-3">
+<main class="max-w-3xl mx-auto px-3 space-y-3 pb-[calc(var(--footer-height)+12px)]">
 
 <!-- SUBHEADER (LIKE ABNORMAL WORKING) -->
 <div class="subheader">
