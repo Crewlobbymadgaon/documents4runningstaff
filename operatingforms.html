@@ -34,10 +34,14 @@ html {
   padding: 14px 16px;
   box-shadow: 0 10px 22px rgba(0,0,0,.12);
   cursor: pointer;
-  transition: .2s;
+  transition: transform 0.08s ease;
+  will-change: transform;
 }
 .shed-card:hover {
   transform: translateY(-3px);
+}
+.shed-card:active {
+  transform: scale(0.98);
 }
 .shed-title {
   font-size: 15px;
@@ -312,7 +316,11 @@ function renderAuthorities(system){
     `;
 
    
-card.onclick = () => openFile(item.file);
+card.onclick = () => {
+  setTimeout(() => {
+    openFile(item.file);
+  }, 80); // 🔥 same effect as Firebase delay
+};
 container.appendChild(card);
 
   }); // ✅ CLOSE LOOP
