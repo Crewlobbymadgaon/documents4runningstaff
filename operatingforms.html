@@ -313,31 +313,43 @@ function renderAuthorities(system){
 
    
 let isTouch = false;
+let moved = false;
+let startY = 0;
 
-// TOUCH START → visual only
-card.addEventListener("touchstart", () => {
+// TOUCH START
+card.addEventListener("touchstart", (e) => {
   isTouch = true;
+  moved = false;
+  startY = e.touches[0].clientY;
   card.classList.add("touch-active");
 }, { passive: true });
 
-// TOUCH END → remove effect + open
+// TOUCH MOVE → detect scroll
+card.addEventListener("touchmove", () => {
+  moved = true; // ✅ ANY movement = scroll
+}, { passive: true });
+
+// TOUCH END
 card.addEventListener("touchend", (e) => {
   card.classList.remove("touch-active");
 
-  e.preventDefault(); // ✅ IMPORTANT (prevents click after touch)
+  if (moved) return; // ✅ SCROLL → DO NOTHING
 
+  e.preventDefault();
   openFile(item.file);
 });
 
-// TOUCH CANCEL → remove effect
+// TOUCH CANCEL
 card.addEventListener("touchcancel", () => {
   card.classList.remove("touch-active");
 });
 
 // DESKTOP CLICK
-card.addEventListener("click", () => {
-  if (isTouch) {
+card.addEventListener("click", (e) => {
+  if (isTouch || moved) {
     isTouch = false;
+    moved = false;
+    e.preventDefault(); // ✅ BLOCK ghost click
     return;
   }
   openFile(item.file);
