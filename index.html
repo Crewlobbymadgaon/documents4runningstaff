@@ -625,7 +625,14 @@ let deferredPrompt = null;
 window.addEventListener('beforeinstallprompt', (e) => {
   e.preventDefault();
   deferredPrompt = e;
+
   console.log("Install available ✅");
+
+  // ✅ SHOW popup immediately when install is ready
+  const popup = document.getElementById("install-popup");
+  if (popup && !isAppInstalled()) {
+    popup.classList.remove("hidden");
+  }
 });
 
 // ✅ Check installed
@@ -638,15 +645,13 @@ window.addEventListener("DOMContentLoaded", () => {
 
   if (isAppInstalled()) return;
 
+  // fallback: show after delay if no prompt event
   setTimeout(() => {
     const popup = document.getElementById("install-popup");
-
-    // Show only if install possible OR fallback needed
-    if (popup && (deferredPrompt || isMobile())) {
+    if (popup && !deferredPrompt) {
       popup.classList.remove("hidden");
     }
-
-  }, 2000);
+  }, 3000);
 
 });
 
