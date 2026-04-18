@@ -10,8 +10,8 @@
    - Safe updates with cache versioning
    ========================================================= */
 
-const CACHE_NAME = 'library-cache-v7';
-const RUNTIME    = 'library-runtime-v6';
+const CACHE_NAME = 'library-cache-v8';
+const RUNTIME    = 'library-runtime-v7';
 const BASE = '';
 
 /* ---------- FILES REQUIRED TO BOOT THE APP ---------- */
