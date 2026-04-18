@@ -31,7 +31,7 @@ const PRECACHE_URLS = [
   `/manifest.json`,
   `/favicon.ico`,
   `/icon-192.png`,
-  `/icon-512.png`
+  `/icon_512.png`
 ];
 
 /* ---------- INSTALL ---------- */
