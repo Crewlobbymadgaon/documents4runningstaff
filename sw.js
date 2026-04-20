@@ -10,8 +10,8 @@
    - Safe updates with cache versioning
    ========================================================= */
 
-const CACHE_NAME = 'library-cache-v10';
-const RUNTIME    = 'library-runtime-v10';
+const CACHE_NAME = 'library-cache-v11';
+const RUNTIME    = 'library-runtime-v11';
 const BASE = '';
 
 /* ---------- FILES REQUIRED TO BOOT THE APP ---------- */
@@ -31,7 +31,7 @@ const PRECACHE_URLS = [
   `/manifest.json`,
   `/favicon.ico`,
   `/icon-192.png`,
-  `/icon_512.png`
+  `/icon-512.png`
 ];
 
 /* ---------- INSTALL ---------- */
