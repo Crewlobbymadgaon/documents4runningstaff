@@ -521,18 +521,19 @@ navBtn.addEventListener("click", () => {
 </script>
 
 <script>
-function openVideo(id){
+function openVideo(video){
 
   document.getElementById("videoModal").classList.remove("hidden");
-
-  // SHOW loader
   document.getElementById("videoLoader").style.display = "flex";
 
   const iframe = document.getElementById("videoFrame");
 
-  iframe.src = "https://www.youtube.com/embed/" + id + "?autoplay=1";
+  if(video.startsWith("http")){
+    iframe.src = video;   // Google Drive preview link
+  } else {
+    iframe.src = "https://www.youtube.com/embed/" + video + "?autoplay=1";
+  }
 
-  // HIDE loader after load
   iframe.onload = () => {
     document.getElementById("videoLoader").style.display = "none";
   };
@@ -735,9 +736,14 @@ cw: [
 
 road: [
   {
-    id: "dQw4w9WgXcQ",
-    title: "Route Learning",
-    desc: "Track and route knowledge"
+    id: "https://drive.google.com/file/d/1r0Q8BDkCdVjBBkURQ2-QR6axQgl1pmpQ/preview",
+    title: "ROHA - CHIPLUN",
+    desc: "Road Learning Video"
+  },
+  {
+    id: "https://drive.google.com/file/d/1cdK65nqxMFX3Bk2VXkxbKQ1nXkRLrX3i/preview",
+    title: "CHIPLUN - RATNAGIRI",
+    desc: "Road Learning Video"
   }
 ]
 };
