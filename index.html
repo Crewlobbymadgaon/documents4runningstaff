@@ -720,5 +720,16 @@ function showManualInstallGuide() {
   }
 }
 </script>
+      <script>
+window.addEventListener("DOMContentLoaded", () => {
+  document.querySelectorAll('.menu-card').forEach(card => {
+    card.addEventListener('click', () => {
+      gtag('event', 'menu_click', {
+        menu_name: card.querySelector('.menu-title')?.innerText || 'Unknown'
+      });
+    });
+  });
+});
+</script>
   </body>
     </html>
