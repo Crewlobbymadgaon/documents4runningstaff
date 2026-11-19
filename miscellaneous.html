@@ -1,0 +1,1253 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Miscellaneous Books</title>
+
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="icon" href="/favicon.ico" />
+  <meta name="theme-color" content="#1f2937" />
+  <link rel="preconnect" href="https://firebasestorage.googleapis.com">
+  <link rel="dns-prefetch" href="https://firebasestorage.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
+import { getStorage, ref, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-storage.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyD4BfU5OKhKFynJMVC2k4qFEgmeDhLlSIM",
+  authDomain: "doc4runningstaff-d000b.firebaseapp.com",
+  projectId: "doc4runningstaff-d000b",
+  storageBucket: "doc4runningstaff-d000b.firebasestorage.app",
+  messagingSenderId: "34983733068",
+  appId: "1:34983733068:web:bbe8a3d902eecaab8bd1e9"
+};
+
+const app = initializeApp(firebaseConfig);
+const storage = getStorage(app);
+
+// expose globally
+window.storage = storage;
+window.ref = ref;
+window.getDownloadURL = getDownloadURL;
+</script>
+
+
+  <style>
+    /* ===============================
+   BASE
+   =============================== */
+.font-rajdhani { font-family: 'Rajdhani', sans-serif; }
+
+:root { --footer-height: 48px; }
+body { padding-bottom: var(--footer-height); }
+
+/* ===============================
+   LOBBY CARD (BASE / TABLET)
+   =============================== */
+.lobby-card {
+  position: relative;
+  height: 78px;
+  padding: 8px 6px;
+  border-radius: 14px;
+
+  background: linear-gradient(135deg, #ffffff, #f1f5f9);
+  box-shadow:
+    inset 0 2px 0 rgba(255,255,255,0.9),
+    0 12px 20px rgba(0,0,0,0.12),
+    0 24px 48px rgba(0,0,0,0.18);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+  overflow: hidden;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+.lobby-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 5px;
+  width: 100%;
+  background: var(--accent);
+}
+
+/* ===============================
+   TITLE (BASE / TABLET)
+   =============================== */
+.lobby-title {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: 0.4px;
+  color: #0f172a;
+  line-height: 1.2;
+  text-align: center;
+}
+
+/* ===============================
+   DESKTOP HOVER
+   =============================== */
+@media (hover: hover) and (pointer: fine) {
+  .lobby-card:hover {
+    transform: translateY(-6px);
+    box-shadow:
+      inset 0 2px 0 rgba(255,255,255,0.9),
+      0 18px 34px rgba(0,0,0,0.18),
+      0 36px 60px rgba(0,0,0,0.26);
+  }
+}
+
+/* ===============================
+   TOUCH FEEDBACK
+   =============================== */
+.lobby-card.touch-active {
+  transform: scale(0.96);
+  box-shadow:
+    inset 0 3px 8px rgba(0,0,0,0.18),
+    0 6px 14px rgba(0,0,0,0.16);
+  background: rgba(59,130,246,0.06);
+}
+
+/* ===============================
+   GROUP WRAPPER
+   =============================== */
+.gsr-group {
+  background: #f8fafc;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 12px;
+}
+
+.gsr-divider {
+  height: 2px;
+  width: 60%;
+  margin: 6px auto 10px;
+  background: linear-gradient(to right, transparent, #1e40af, transparent);
+}
+
+.gsr-group-title {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 22px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  color: #1e3a8a;
+  text-align: center;
+  line-height: 1.2;
+  min-height: 44px;
+}
+
+/* ===============================
+   MOBILE (≤ 480px)
+   =============================== */
+@media (max-width: 480px) {
+
+ 
+
+  .gsr-group {
+    padding: 6px;
+  }
+
+  .gsr-group-title {
+    font-size: 15px;
+    min-height: 32px;
+  }
+
+  .gsr-divider {
+    margin: 3px auto 5px;
+  }
+}
+
+/* ===============================
+   DESKTOP (≥ 1024px)
+   =============================== */
+@media (min-width: 1024px) {
+
+  .lobby-card {
+    height: auto;
+    min-height: 90px;
+    padding: 10px 8px;
+  }
+
+  .lobby-title {
+    font-size: 18px;
+    line-height: 1.25;
+  }
+}
+
+/* ===============================
+   MOBILE CARD – INDEX STYLE
+   =============================== */
+@media (max-width: 480px) {
+
+  .lobby-card {
+    height: 68px;
+    padding: 6px;
+    border-radius: 14px;
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,0.9),
+      0 6px 14px rgba(0,0,0,0.14),
+      0 14px 28px rgba(0,0,0,0.18);
+  }
+
+  .lobby-title {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    text-align: center;
+  }
+
+  .title-main {
+    font-size: 16px;
+    font-weight: 800;
+    line-height: 1.15;
+    color: #0f172a;
+
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .title-sub {
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+    color: #475569;
+    text-transform: uppercase;
+  }
+}
+/* MAIN CATEGORY CARD */
+.main-card {
+  background: linear-gradient(135deg,#ffffff,#f1f5f9);
+  padding: 14px;
+  border-radius: 14px;
+  text-align: center;
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.12);
+  transition: 0.2s;
+}
+
+.main-card.active {
+  background: linear-gradient(to right,#1e40af,#2563eb);
+  color: white;
+}
+
+/* SUB MENU PILLS */
+.sub-btn {
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: #e2e8f0;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.sub-btn.active {
+  background: #1e40af;
+  color: white;
+}
+
+.quick-btn {
+  width: 100%;
+  padding: 6px 4px;
+  border-radius: 999px;
+  background: #e2e8f0;
+  font-weight: 700;
+  font-size: 12px;
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+.quick-btn.active {
+  background: linear-gradient(to right,#1e40af,#2563eb);
+  color: white;
+  box-shadow: 0 4px 12px rgba(37,99,235,0.3);
+}
+
+#dropdownMenu {
+  overscroll-behavior: contain;
+}
+  </style>
+</head>
+
+<body class="bg-gray-50 text-gray-800">
+
+<!-- HEADER -->
+<header id="mainHeader" class="sticky top-0 z-50 relative
+  bg-gradient-to-r from-blue-900 via-blue-700 to-blue-900
+  text-white shadow-md">
+
+  <div class="relative px-4 pt-3 pb-5 sm:pb-4">
+
+    <!-- CENTERED TITLE -->
+    <div class="text-center max-w-3xl mx-auto">
+      <h1 class="font-rajdhani text-xl sm:text-3xl md:text-4xl leading-tight font-extrabold">
+        Digital Library
+        <span class="text-yellow-300">for</span>
+        Running Staff
+      </h1>
+
+<h2 id="pageTitle"
+    class="font-rajdhani
+           text-[clamp(22px,6vw,28px)]
+           sm:text-4xl md:text-5xl
+           font-extrabold mt-2
+           whitespace-nowrap overflow-hidden text-ellipsis
+           text-center">
+  Miscellaneous Books
+</h2>
+
+      
+    </div>
+
+
+<!-- BACK BUTTON (LEFT) -->
+<div id="headerBackBtn" class="hidden absolute bottom-2 sm:bottom-3 left-4">
+  
+  <button class="header-btn bg-gradient-to-b from-blue-900 via-blue-500 to-blue-900 
+           hover:from-blue-800 hover:to-blue-950 
+           text-white p-2 rounded-md 
+           border border-blue-950 
+           shadow-lg 
+           focus:outline-none focus:ring-2 focus:ring-blue-900">
+
+    <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"
+      viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round"
+        d="M15 19l-7-7 7-7" />
+    </svg>
+
+  </button>
+</div>
+    <!-- HAMBURGER (lower on mobile) -->
+    <div class="absolute bottom-2 sm:bottom-3 right-4">
+      <button id="hamburgerBtn"
+        class="bg-gradient-to-b from-blue-900 via-blue-500 to-blue-900 
+               hover:from-blue-800 hover:to-blue-950 
+               text-white p-2 rounded-md 
+               border border-blue-950 
+               shadow-lg 
+               focus:outline-none focus:ring-2 focus:ring-blue-900">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"
+          viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M4 6h16M4 12h16M4 18h16"></path>
+        </svg>
+      </button>
+
+      <div id="dropdownMenu"
+     class="hidden absolute right-0 mt-2 bg-white border border-blue-800 shadow-lg z-50 rounded-md w-52
+            max-h-[70vh] overflow-y-auto overscroll-contain">
+      <a href="/" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Home</a>
+      <a href="latest.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Latest Circulars</a>
+      <a href="so_lobby_selector.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Shed Order</a>
+      <a href="safetycircular.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Safety Circular</a>
+      <a href="counselling.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Counselling Topic</a>
+      <a href="gsr.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">G&amp;SR</a>
+      <a href="wtt.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">WTT</a>
+      <a href="https://firebasestorage.googleapis.com/v0/b/doc4runningstaff-d000b.firebasestorage.app/o/documents%2Faccident_manual%2FAccident_Manaul_2021.pdf?alt=media&token=9e4d555e-5cf4-489d-a57e-6327597ed62a"
+   target="_blank"
+   class="block px-4 py-2 text-blue-900 hover:bg-blue-100">
+  Accident Manual
+</a>
+      <a href="correction.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Correction Slips</a>
+      <a href="krabooks.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">KRA Books</a>
+      <a href="tsd.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">TSD</a>
+      <a href="operating.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Operating</a>
+      <a href="abnormal.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Abnormal Working</a>
+      <a href="operatingforms.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Operating Forms</a>
+      <a href="videos.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Videos</a>
+      <a href="directory.html" class="block px-4 py-2 text-blue-900 hover:bg-blue-100">Phone Directory</a>
+    </div>
+  </div>
+
+</div>
+</header>
+
+<div id="quickMenu"
+     class="hidden sticky top-[var(--header-height)] z-40 bg-white shadow-sm border-b">
+
+  <div class="max-w-3xl mx-auto px-3 py-2 grid grid-cols-5 gap-2">
+    <button class="quick-btn" data-main="diesel">Diesel</button>
+    <button class="quick-btn" data-main="electric">Electric</button>
+    <button class="quick-btn" data-main="cw">C&W</button>
+    <button class="quick-btn" data-main="memu">MEMU</button>
+    <button class="quick-btn" data-main="vb">VB</button>
+  </div>
+</div>
+
+<div id="mainMenu" class="flex justify-center mt-3 pb-4">
+  <div class="w-full max-w-3xl px-3 space-y-4">
+
+    <div class="gsr-group">
+      <div class="gsr-group-title">📚 Categories</div>
+      <div class="gsr-divider"></div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+
+        <div class="lobby-card" style="--accent:#2563eb"
+             data-main="diesel">
+          <div class="lobby-title">🚆 Diesel Loco</div>
+        </div>
+
+        <div class="lobby-card" style="--accent:#dc2626"
+             data-main="electric">
+          <div class="lobby-title">⚡ Electric Loco</div>
+        </div>
+
+        <div class="lobby-card" style="--accent:#16a34a"
+             data-main="cw">
+          <div class="lobby-title">🛠 C & W</div>
+        </div>
+
+        <div class="lobby-card" style="--accent:#7c3aed"
+             data-main="memu">
+          <div class="lobby-title">🚈 MEMU</div>
+        </div>
+
+        <div class="lobby-card" style="--accent:#f59e0b"
+             data-main="vb">
+          <div class="lobby-title">🚄 Vande Bharat</div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<div class="w-full max-w-3xl mx-auto px-3 mt-3 hidden" id="subMenuContainer">
+
+<div class="flex flex-wrap gap-2" id="subMenu"></div>
+</div>
+
+<div class="flex justify-center mt-1 pb-4">
+
+<div class="w-full max-w-3xl px-3 space-y-1">
+
+
+<div class="content-section hidden" id="diesel">
+<div class="gsr-group">
+  <div class="gsr-group-title">📘 Conventional Loco</div>
+  <div class="gsr-divider"></div>
+
+ <div class="grid grid-cols-2 sm:grid-cols-2 gap-5">
+
+
+
+    <div class="lobby-card"
+     style="--accent:#2563eb"
+     data-file="documents/reading_materials/diesel/ALCO_Mechanical.pdf">
+    <div class="lobby-title">
+        <span class="title-main">Alco Loco – Part 1</span>
+        <span class="title-sub">Mechanical</span>
+    </div>
+    </div>
+
+
+    <div class="lobby-card"
+     style="--accent:#2563eb"
+     data-file="documents/reading_materials/diesel/ALCO_Electrical.pdf">
+    <div class="lobby-title">
+        <span class="title-main">Alco Loco – Part 2</span>
+        <span class="title-sub">Electrical</span>
+   </div>
+   </div>
+   
+ </div></div>
+
+
+<div class="gsr-group">
+  <div class="gsr-group-title">📘 HHP Loco</div>
+  <div class="gsr-divider"></div>
+
+ <div class="grid grid-cols-2 sm:grid-cols-2 gap-5">
+
+
+
+<div class="lobby-card"
+     style="--accent:#2563eb"
+     data-file="documents/reading_materials/diesel/HHP_hindi.pdf">
+ <div class="lobby-title">
+  <span class="title-main">HHP Loco – (CR)</span>
+  <span class="title-sub">Hindi</span>
+</div>
+</div>
+
+<div class="lobby-card"
+     style="--accent:#2563eb"
+     data-file="documents/reading_materials/diesel/HHP_english.pdf">
+ <div class="lobby-title">
+  <span class="title-main">HHP Loco – (SR)</span>
+  <span class="title-sub">English</span>
+</div>
+</div>
+
+  </div>
+</div>
+
+<div class="gsr-group">
+  <div class="gsr-group-title">📘 WDG 4G/6G</div>
+  <div class="gsr-divider"></div>
+
+ <div class="grid grid-cols-2 sm:grid-cols-2 gap-5">
+
+<div class="lobby-card"
+     style="--accent:#2563eb"
+     data-file="documents/wdg4g_6g/6g.pdf">
+<div class="lobby-title">
+  <span class="title-main">Hand Book</span>
+  <span class="title-sub">English</span>
+</div>
+</div>
+
+<div class="lobby-card"
+     style="--accent:#2563eb"
+     data-file="documents/wdg4g_6g/wdg4g.pdf">
+<div class="lobby-title">
+  <span class="title-main">Study Material</span>
+  <span class="title-sub">Hindi</span>
+</div>
+</div>
+
+<div class="lobby-card"
+     style="--accent:#2563eb"
+     data-file="documents/wdg4g_6g/booklet.pdf">
+<div class="lobby-title">
+  <span class="title-main">Loco Pilot Booklet</span>
+  </div>
+</div>
+
+  <div class="lobby-card"
+     style="--accent:#2563eb"
+     data-file="documents/wdg4g_6g/6g1.pdf">
+<div class="lobby-title">
+  <span class="title-main">Training Material</span>
+ 
+
+  
+</div>
+</div>
+
+ </div></div></div>
+<!-- ================= ELECTRIC ================= -->
+
+
+<div class="content-section hidden" id="electric">
+<div class="gsr-group">
+  <div class="gsr-group-title">📕  Conventional Loco</div>
+  <div class="gsr-divider"></div>
+
+  <div class="grid grid-cols-2 sm:grid-cols-2 gap-5">
+    <!-- Electric Book 1 -->
+<div class="lobby-card" style="--accent:#dc2626"
+     data-file="documents/reading_materials/traction/WAG-7_english.pdf">
+  <div class="lobby-title">
+    <span class="title-main">Conventional Loco</span>
+    <span class="title-sub">English (KYN)</span>
+  </div>
+</div>
+
+
+ <div class="lobby-card" style="--accent:#dc2626"
+     data-file="documents/reading_materials/traction/WAG-7_Hindi.pdf">
+  <div class="lobby-title">
+    <span class="title-main">Conventional Loco</span>
+    <span class="title-sub">Hindi (KYN)</span>
+  </div>
+</div>
+
+
+<div class="lobby-card" style="--accent:#dc2626"
+     data-file="documents/reading_materials/traction/WAG-7_E-Location.pdf">
+  <div class="lobby-title">
+    <span class="title-main">Conventional Loco</span>
+    <span class="title-sub">E-Location</span>
+  </div>
+</div>
+
+
+<div class="lobby-card" style="--accent:#dc2626"
+     data-file="documents/reading_materials/traction/WAG-5_hindi_bsl.pdf">
+  <div class="lobby-title">
+    <span class="title-main">Conventional Loco</span>
+    <span class="title-sub">Hindi (BSL)</span>
+  </div>
+</div>
+</div></div>
+
+
+<div class="gsr-group">
+ 
+  <div class="gsr-group-title">📕  3 Phase Loco</div>
+  <div class="gsr-divider"></div>
+  
+    <div class="grid grid-cols-2 sm:grid-cols-2 gap-5">
+  <div class="lobby-card" style="--accent:#16a34a"
+     data-file="documents/reading_materials/traction/3_Phase_English.pdf">
+  <div class="lobby-title">
+    <span class="title-main">3 Phase Loco</span>
+    <span class="title-sub">English (BSL)</span>
+  </div>
+</div>
+   
+ 
+ <div class="lobby-card" style="--accent:#16a34a"
+     data-file="documents/reading_materials/traction/3_Phase_KYN_hindi.pdf">
+  <div class="lobby-title">
+    <span class="title-main">3 Phase Loco</span>
+    <span class="title-sub">Hindi (KYN)</span>
+  </div>
+</div>
+
+
+
+<div class="lobby-card" style="--accent:#16a34a"
+     data-file="documents/reading_materials/traction/3_Phase_Operations.pdf">
+  <div class="lobby-title">
+    <span class="title-main">3 Phase Loco</span>
+    <span class="title-sub">Operations</span>
+  </div>
+</div>
+
+
+<div class="lobby-card" style="--accent:#16a34a"
+     data-file="documents/reading_materials/traction/WAG-9_E_Location.pdf">
+  <div class="lobby-title">
+    <span class="title-main">3 Phase Loco</span>
+    <span class="title-sub">E-Location</span>
+  </div>
+</div>
+
+  </div>
+</div>
+
+
+<div class="gsr-group">
+ 
+  <div class="gsr-group-title">📕  WAG 12 Loco</div>
+  <div class="gsr-divider"></div>
+  
+    <div class="grid grid-cols-2 sm:grid-cols-2 gap-5">
+  <div class="lobby-card" style="--accent:#2563eb"
+     data-file="documents/reading_materials/traction/wag12_English.pdf">
+  <div class="lobby-title">
+    <span class="title-main">WAG 12 - Handbook</span>
+    <span class="title-sub">English</span>
+  </div>
+</div>
+
+  <div class="lobby-card" style="--accent:#2563eb"
+     data-file="documents/reading_materials/traction/wag12_Hindi.pdf">
+  <div class="lobby-title">
+    <span class="title-main">WAG 12 - Handbook</span>
+    <span class="title-sub">Hindi</span>
+  </div>
+</div>
+ </div>
+</div>
+
+
+
+</div>
+
+
+ 
+ <div class="content-section hidden" id="memu">
+  
+  <div class="gsr-group">
+  <div class="gsr-group-title">📕  Conventional MEMU</div>
+  <div class="gsr-divider"></div>
+
+  <div class="grid grid-cols-2 sm:grid-cols-2 gap-5">
+    <!-- Electric Book 1 -->
+<div class="lobby-card" style="--accent:#7c3aed"
+     data-file="documents/memu/conventional/kra.pdf">
+  <div class="lobby-title">
+    <span class="title-main">Conventional MEMU</span>
+    <span class="title-sub">English (KR)</span>
+  </div>
+</div>
+
+
+<div class="lobby-card" style="--accent:#7c3aed"
+     data-file="documents/memu/conventional/tsd.pdf">
+  <div class="lobby-title">
+    <span class="title-main">Conventional MEMU</span>
+    <span class="title-sub">Hindi (WR)</span>
+  </div>
+</div>
+  
+  
+  
+  <div class="lobby-card" style="--accent:#7c3aed"
+     data-file="documents/memu/conventional/location.pdf">
+  <div class="lobby-title">
+    <span class="title-main">Conventional MEMU</span>
+    <span class="title-sub">Location</span>
+  </div>
+</div>
+
+
+<div class="lobby-card" style="--accent:#7c3aed"
+     data-file="documents/memu/conventional/er.pdf">
+  <div class="lobby-title">
+    <span class="title-main">Conventional MEMU</span>
+    <span class="title-sub">English (ER)</span>
+  </div>
+</div></div></div>
+
+
+<div class="gsr-group">
+  <div class="gsr-group-title">📕  3 Phase MEMU (Bombardier)</div>
+  <div class="gsr-divider"></div>
+
+  <div class="grid grid-cols-2 sm:grid-cols-2 gap-5">
+    <!-- Electric Book 1 -->
+<div class="lobby-card" style="--accent:#dc2626"
+     data-file="documents/memu/3phase/BT3.pdf">
+  <div class="lobby-title">
+    <span class="title-main">3 Phase - BT</span>
+    <span class="title-sub">English (KR)</span>
+  </div>
+</div>
+
+
+<div class="lobby-card" style="--accent:#dc2626"
+     data-file="documents/memu/3phase/BT2.pdf">
+  <div class="lobby-title">
+    <span class="title-main">3 Phase - BT</span>
+    <span class="title-sub">English (CR)</span>
+  </div>
+</div>
+
+
+  </div>
+</div>
+
+<div class="gsr-group">
+  <div class="gsr-group-title">📕  3 Phase MEMU (Medha)</div>
+  <div class="gsr-divider"></div>
+
+  <div class="grid grid-cols-2 sm:grid-cols-2 gap-5">
+    <!-- Electric Book 1 -->
+<div class="lobby-card" style="--accent:#7c3aed"
+     data-file="documents/memu/3phase/medha3.pdf">
+  <div class="lobby-title">
+    <span class="title-main">3 Phase - Medha</span>
+    <span class="title-sub">English (VR)</span>
+  </div>
+</div>
+
+
+<div class="lobby-card" style="--accent:#7c3aed"
+     data-file="documents/memu/3phase/medha_tsd.pdf">
+  <div class="lobby-title">
+    <span class="title-main">3 Phase - Medha</span>
+    <span class="title-sub">Hindi (VR)</span>
+  </div>
+</div>
+
+<div class="lobby-card" style="--accent:#7c3aed"
+     data-file="documents/memu/3phase/medha4.pdf">
+  <div class="lobby-title">
+    <span class="title-main">3 Phase - Medha</span>
+    <span class="title-sub">English (KURLA)</span>
+  </div>
+</div>
+
+<div class="lobby-card" style="--accent:#7c3aed"
+     data-file="documents/memu/3phase/3phase.pdf">
+  <div class="lobby-title">
+    <span class="title-main">3 Phase - Medha</span>
+    <span class="title-sub">English (BSL)</span>
+  </div>
+</div>
+
+
+  </div>
+</div>
+
+
+
+</div>
+
+<div class="content-section hidden" id="cw">
+<div class="gsr-group">
+  <div class="gsr-group-title">📕  C & W</div>
+  <div class="gsr-divider"></div>
+
+  <div class="grid grid-cols-2 sm:grid-cols-2 gap-5">
+    <!-- Electric Book 1 -->
+<div class="lobby-card" style="--accent:#16a34a"
+     data-file="documents/c&w/c_w_english.pdf">
+  <div class="lobby-title">
+    <span class="title-main">C & W Hand Book</span>
+    <span class="title-sub">English (SWR)</span>
+  </div>
+</div>
+
+
+<div class="lobby-card" style="--accent:#16a34a"
+     data-file="documents/c&w/c_w_bsl.pdf">
+  <div class="lobby-title">
+    <span class="title-main">C & W Hand Book</span>
+    <span class="title-sub">Hindi (BSL)</span>
+  </div>
+</div>
+
+
+  </div>
+</div>
+
+
+</div>
+
+
+<div class="content-section hidden" id="vb">
+
+  <!-- ALSTOM SECTION -->
+  <div class="gsr-group">
+    <div class="gsr-group-title">📕 Vande Bharat (Alstom)</div>
+    <div class="gsr-divider"></div>
+
+    <div class="grid grid-cols-2 sm:grid-cols-2 gap-5">
+
+      <!-- Add Alstom PDF cards here after uploading to Firebase -->
+
+      <div class="lobby-card" style="--accent:#11dc1c"
+     data-file="documents/vb/Alstom/book1.pptx">
+  <div class="lobby-title">
+    <span class="title-main">Vande Bharat</span>
+    <span class="title-sub">Presentation</span>
+  </div>
+      </div>
+      
+      <div class="lobby-card" style="--accent:#11dc1c"
+           data-file="documents/vb/Alstom/book1.pdf">
+        <div class="lobby-title">
+          <span class="title-main">Vande Bharat</span>
+          <span class="title-sub">pdf</span>
+        </div>
+      </div>
+
+      <div class="lobby-card" style="--accent:#11dc1c"
+           data-file="documents/vb/Alstom/book2.pdf">
+        <div class="lobby-title">
+          <span class="title-main">Vande Bharat</span>
+          <span class="title-sub">Operations</span>
+        </div>
+      </div>
+      
+
+    </div>
+  </div>
+
+
+  <!-- MEDHA SECTION -->
+  <div class="gsr-group">
+    <div class="gsr-group-title">📕 Vande Bharat (Medha)</div>
+    <div class="gsr-divider"></div>
+
+    <div class="grid grid-cols-2 sm:grid-cols-2 gap-5">
+
+      <div class="lobby-card" style="--accent:#f59e0b"
+           data-file="documents/vb/lpmanual.pdf">
+        <div class="lobby-title">
+          <span class="title-main">Vande Bharat</span>
+          <span class="title-sub">English</span>
+        </div>
+      </div>
+
+      <div class="lobby-card" style="--accent:#f59e0b"
+           data-file="documents/vb/vb_Manual.pdf">
+        <div class="lobby-title">
+          <span class="title-main">Vande Bharat - Manual</span>
+          <span class="title-sub">English</span>
+        </div>
+      </div>
+
+      <div class="lobby-card" style="--accent:#f59e0b"
+           data-file="documents/vb/vb_english.pdf">
+        <div class="lobby-title">
+          <span class="title-main">Vande Bharat</span>
+          <span class="title-sub">English (BRC)</span>
+        </div>
+      </div>
+
+      <div class="lobby-card" style="--accent:#f59e0b"
+           data-file="documents/vb/tsd3.pdf">
+        <div class="lobby-title">
+          <span class="title-main">Vande Bharat</span>
+          <span class="title-sub">Hindi (BRC)</span>
+        </div>
+      </div>
+
+      <div class="lobby-card" style="--accent:#f59e0b"
+           data-file="documents/vb/vb_hindi.pdf">
+        <div class="lobby-title">
+          <span class="title-main">Vande Bharat</span>
+          <span class="title-sub">Hindi (VR)</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+
+
+<footer
+  class="fixed bottom-0 left-0 w-full z-40
+         flex items-center justify-center
+         text-xs sm:text-sm
+         text-gray-700
+         bg-white
+         shadow-[0_-2px_8px_rgba(0,0,0,0.08)]
+         h-[var(--footer-height)]">
+© <span class="footer-year ml-1"></span>&nbsp;Combined Crew Lobby · Madgaon. All Rights Reserved
+
+</footer>
+
+<script>
+window.addEventListener("DOMContentLoaded", () => {
+  document.querySelectorAll(".footer-year").forEach(el => {
+    el.textContent = new Date().getFullYear();
+  });
+});
+</script>
+
+<script>
+
+function applyTouchFeedback(element, onTap) {
+
+  let startX = 0;
+  let startY = 0;
+  let isScrolling = false;
+  let touchStartTime = 0;
+
+  element.addEventListener("touchstart", (e) => {
+    const touch = e.touches[0];
+    startX = touch.clientX;
+    startY = touch.clientY;
+    isScrolling = false;
+    touchStartTime = Date.now();
+    element.classList.add("touch-active");
+  }, { passive: true });
+
+  element.addEventListener("touchmove", (e) => {
+    const touch = e.touches[0];
+    if (
+      Math.abs(touch.clientX - startX) > 10 ||
+      Math.abs(touch.clientY - startY) > 10
+    ) {
+      isScrolling = true;
+      element.classList.remove("touch-active");
+    }
+  }, { passive: true });
+
+  element.addEventListener("touchend", () => {
+  element.classList.remove("touch-active");
+
+  if (isScrolling) return;
+
+  if (onTap) onTap();
+});
+
+  element.addEventListener("touchcancel", () => {
+    element.classList.remove("touch-active");
+  });
+}
+/* ===============================
+   HAMBURGER MENU
+=============================== */
+const hamburgerBtn = document.getElementById("hamburgerBtn");
+const dropdownMenu = document.getElementById("dropdownMenu");
+
+hamburgerBtn?.addEventListener("click", e => {
+  e.stopPropagation();
+  dropdownMenu.classList.toggle("hidden");
+});
+
+document.addEventListener("click", e => {
+  if (
+    dropdownMenu &&
+    !dropdownMenu.contains(e.target) &&
+    !hamburgerBtn.contains(e.target)
+  ) {
+    dropdownMenu.classList.add("hidden");
+  }
+});
+
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape") dropdownMenu.classList.add("hidden");
+});
+
+
+/* ===============================
+   SECTION CONTROL
+=============================== */
+
+const mainMenu = document.getElementById("mainMenu");
+const sections = document.querySelectorAll(".content-section");
+const headerBackBtn = document.getElementById("headerBackBtn");
+const quickMenu = document.getElementById("quickMenu");
+const quickButtons = document.querySelectorAll(".quick-btn");
+const pageTitle = document.getElementById("pageTitle");
+
+const sectionTitles = {
+  diesel: "Diesel Loco Books",
+  electric: "Electric Loco Books",
+  cw: "C&W Books",
+  memu: "MEMU Books",
+  vb: "Vande Bharat Books"
+};
+
+function openSection(sectionId) {
+
+  mainMenu.classList.add("hidden");
+
+  sections.forEach(s => s.classList.add("hidden"));
+
+  const selected = document.getElementById(sectionId);
+  if (selected) selected.classList.remove("hidden");
+
+  pageTitle.textContent = sectionTitles[sectionId] || "Miscellaneous Books";
+
+  quickButtons.forEach(btn => {
+    btn.classList.toggle("active", btn.dataset.main === sectionId);
+  });
+
+  headerBackBtn.classList.remove("hidden");
+  quickMenu.classList.remove("hidden");
+
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function goBackToMain() {
+
+  sections.forEach(s => s.classList.add("hidden"));
+
+  mainMenu.classList.remove("hidden");
+
+  pageTitle.textContent = "Miscellaneous Books";
+
+  headerBackBtn.classList.add("hidden");
+  quickMenu.classList.add("hidden");
+
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+headerBackBtn.addEventListener("click", goBackToMain);
+
+
+/* ===============================
+   MAIN MENU CARDS (data-main)
+=============================== */
+
+document.querySelectorAll(".lobby-card[data-file]").forEach(card => {
+
+  const filePath = card.dataset.file;
+  let touchHandled = false; // ✅ key fix
+
+  
+
+async function openFile() {
+
+  const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+  let newTab = null;
+
+  // Open tab immediately on desktop
+  if (!isMobile) {
+    newTab = window.open("about:blank", "_blank");
+  }
+
+  try {
+
+    const url = await getDownloadURL(
+      ref(window.storage, filePath)
+    );
+
+    // Open PDF directly
+    if (isMobile) {
+      window.location.href = url;
+    } else if (newTab) {
+      newTab.location.href = url;
+      newTab.opener = null;
+    } else {
+      window.location.href = url;
+    }
+
+  } catch (error) {
+
+    if (newTab) newTab.close();
+
+    alert("Unable to open document. Please try again.");
+
+    console.error(error);
+  }
+}
+
+
+
+  /* TOUCH */
+  applyTouchFeedback(card, () => {
+    touchHandled = true;
+    openFile();
+  });
+
+  /* CLICK */
+  card.addEventListener("click", (e) => {
+    if (touchHandled) {
+      e.preventDefault();  // ✅ stops duplicate trigger
+      touchHandled = false;
+      return;
+    }
+    openFile();
+  });
+
+});
+
+
+
+/* ===============================
+   FILE OPENING (PDF / PPTX)
+=============================== */
+
+document.querySelectorAll(".lobby-card[data-file]").forEach(card => {
+
+  const filePath = card.dataset.file;
+
+  card.addEventListener("click", async () => {
+
+    if (card.dataset.opening === "true") return;
+    card.dataset.opening = "true";
+
+    const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+    let newTab = null;
+
+    if (!isMobile) {
+      newTab = window.open("about:blank", "_blank");
+    }
+
+    try {
+
+      const url = await getDownloadURL(
+        ref(window.storage, filePath)
+      );
+
+      if (isMobile) {
+        window.location.href = url;
+      } else if (newTab) {
+        newTab.location.href = url;
+        newTab.opener = null;
+      } else {
+        window.location.href = url;
+      }
+
+    } catch (error) {
+
+      if (newTab) newTab.close();
+
+      card.dataset.opening = "false";
+
+      alert("Unable to open document. Please try again.");
+      console.error(error);
+
+    }
+
+  });
+
+});
+
+
+/* ===============================
+   MAIN MENU CARDS (data-main)
+   SINGLE CLICK HANDLER
+=============================== */
+
+document.querySelectorAll(".lobby-card[data-main]").forEach(card => {
+
+  card.addEventListener("click", () => {
+    openSection(card.dataset.main);
+  });
+
+});
+
+
+/* ===============================
+   QUICK MENU BUTTONS
+=============================== */
+
+quickButtons.forEach(btn => {
+
+  btn.addEventListener("click", () => {
+    openSection(btn.dataset.main);
+  });
+
+});
+
+
+/* ===============================
+   BACK BUTTON
+=============================== */
+
+const backBtn = headerBackBtn.querySelector("button");
+
+backBtn.addEventListener("click", goBackToMain);
+
+function setHeaderHeight() {
+  const header = document.getElementById("mainHeader");
+  const height = header.offsetHeight;
+  document.documentElement.style.setProperty("--header-height", height + "px");
+}
+
+window.addEventListener("load", setHeaderHeight);
+window.addEventListener("resize", setHeaderHeight);
+
+
+document.querySelectorAll(".lobby-card[data-file]").forEach(card => {
+
+  const filePath = card.dataset.file;
+
+  const link = document.createElement("link");
+  link.rel = "prefetch";
+  link.href =
+    "https://firebasestorage.googleapis.com/v0/b/doc4runningstaff-d000b.firebasestorage.app/o/" +
+    encodeURIComponent(filePath) +
+    "?alt=media";
+
+  document.head.appendChild(link);
+
+});
+
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("/sw.js")
+      .then(reg => console.log("Service Worker registered"))
+      .catch(err => console.log("Service Worker failed", err));
+  });
+}
+</script>
+
+</body>
+</html>
